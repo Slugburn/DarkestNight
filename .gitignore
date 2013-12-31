@@ -1,0 +1,16 @@
+/*.dotCover
+/*.suo
+/*.user
+/Assemblies
+/packages
+*crunch*
+/*.aps
+/*.eto
+/*.user
+[Bb]in
+[Dd]ebug
+[Rr]elease
+*/obj
+*.received.*
+UpgradeLog.*
+_UpgradeReport_Files/*
