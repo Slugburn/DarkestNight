@@ -16,5 +16,7 @@ namespace Slugburn.DarkestNight.Rules
 
         void AddBlight(IBlight blight);
         void RemoveBlight(IBlight blight);
+        void Add<T>(T item);
+        void Remove<T>(T item);
     }
 }

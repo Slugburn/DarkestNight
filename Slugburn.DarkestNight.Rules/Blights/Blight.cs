@@ -1,10 +1,21 @@
 ﻿namespace Slugburn.DarkestNight.Rules.Blights
 {
-    public abstract class Blight : IBlight
+    public enum Blight
     {
-        public string Name { get; protected set; }
-        public int Might { get; protected set; }
-        public abstract void Defend(IHero hero);
-
+        Confusion,
+        Corruption,
+        Curse,
+        DarkFog,
+        Desecration,
+        EvilPresence,
+        Lich,
+        Spies,
+        Shades,
+        Shroud,
+        Skeletons,
+        Taint,
+        UnholyAura,
+        Vampire,
+        Zombies
     }
 }

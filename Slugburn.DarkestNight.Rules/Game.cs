@@ -1,6 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Extensions;
+using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules
 {
@@ -12,19 +14,32 @@ namespace Slugburn.DarkestNight.Rules
 
         public ICollection<IEvent> Events { get; set; }
 
-        public ICollection<IMap> Maps { get; set; }
+        public IList<IMap> Maps { get; set; }
+        private List<IMap> MapsDiscard { get; set; }
 
         public Necromancer Necromancer { get; set; }
         public int Darkness { get; set; }
+        public IEnumerable<IHero> AvailableHeroes { get; set; }
+
+        public Game()
+        {
+            MapsDiscard = new List<IMap>();
+        }
 
         private IMap DrawMapCard()
         {
-            throw new NotImplementedException();
+            if (!Maps.Any())
+            {
+                Maps = MapsDiscard.Shuffle();
+                MapsDiscard = new List<IMap>();
+            }
+            var map = Maps.Draw();
+            return map;
         }
 
         private void DiscardMapCard(IMap map)
         {
-            throw new NotImplementedException();
+            MapsDiscard.Add(map);
         }
 
         public void CreateBlights(Location location, int count)
@@ -38,7 +53,7 @@ namespace Slugburn.DarkestNight.Rules
             var map = DrawMapCard();
             foreach (var location in locations)
             {
-                var blightType = map.GetBlightType(location);
+                var blightType = map.GetBlight(location);
                 var blight = new BlightFactory().Create(blightType);
                 var space = Board[location];
                 space.AddBlight(blight);

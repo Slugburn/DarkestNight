@@ -1,6 +1,8 @@
-﻿namespace Slugburn.DarkestNight.Rules.Blights
+﻿using Slugburn.DarkestNight.Rules.Heroes;
+
+namespace Slugburn.DarkestNight.Rules.Blights
 {
-    class UnholyAura : Blight
+    class UnholyAura : BlightImpl
     {
         public UnholyAura() 
         {

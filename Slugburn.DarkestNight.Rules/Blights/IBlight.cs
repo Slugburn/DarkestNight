@@ -1,4 +1,6 @@
-﻿namespace Slugburn.DarkestNight.Rules.Blights
+﻿using Slugburn.DarkestNight.Rules.Heroes;
+
+namespace Slugburn.DarkestNight.Rules.Blights
 {
     public interface IBlight
     {

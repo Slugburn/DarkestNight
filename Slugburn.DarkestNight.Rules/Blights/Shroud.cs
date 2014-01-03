@@ -1,6 +1,8 @@
-﻿namespace Slugburn.DarkestNight.Rules.Blights
+﻿using Slugburn.DarkestNight.Rules.Heroes;
+
+namespace Slugburn.DarkestNight.Rules.Blights
 {
-    public class Shroud : Blight
+    public class Shroud : BlightImpl
     {
         public Shroud() 
         {

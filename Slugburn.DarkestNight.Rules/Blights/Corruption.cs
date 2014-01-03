@@ -1,6 +1,8 @@
-﻿namespace Slugburn.DarkestNight.Rules.Blights
+﻿using Slugburn.DarkestNight.Rules.Heroes;
+
+namespace Slugburn.DarkestNight.Rules.Blights
 {
-    public class Corruption : Blight
+    public class Corruption : BlightImpl
     {
         public Corruption() 
         {

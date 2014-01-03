@@ -1,11 +1,15 @@
 ﻿namespace Slugburn.DarkestNight.Rules
 {
-    public enum SearchResult
+    public enum Find
     {
         BottledMagic,
         Key,
         SupplyCache,
         TreasureChest,
         Waystone,
+        ForgottenShrine,
+        VanishingDust,
+        Epiphany,
+        Artifact
     }
 }

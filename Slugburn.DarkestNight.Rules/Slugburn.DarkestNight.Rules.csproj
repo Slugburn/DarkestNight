@@ -40,9 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Blights\Blight.cs" />
+    <Compile Include="ActionType.cs" />
+    <Compile Include="Blights\BlightImpl.cs" />
     <Compile Include="Blights\BlightFactory.cs" />
-    <Compile Include="Blights\BlightType.cs" />
+    <Compile Include="Blights\Blight.cs" />
     <Compile Include="Blights\Confusion.cs" />
     <Compile Include="Blights\Corruption.cs" />
     <Compile Include="Blights\Curse.cs" />
@@ -56,17 +57,47 @@
     <Compile Include="Blights\Undead.cs" />
     <Compile Include="Blights\UnholyAura.cs" />
     <Compile Include="Board.cs" />
+    <Compile Include="BonusType.cs" />
     <Compile Include="Die.cs" />
+    <Compile Include="Extensions\CardExtensions.cs" />
+    <Compile Include="Heroes\Impl\Acolyte.cs" />
+    <Compile Include="Heroes\Impl\Druid.cs" />
+    <Compile Include="Heroes\Impl\Knight.cs" />
+    <Compile Include="Heroes\Impl\Priest.cs" />
+    <Compile Include="Heroes\Impl\Prince.cs" />
+    <Compile Include="Heroes\Impl\Rogue.cs" />
+    <Compile Include="Heroes\Impl\Scholar.cs" />
+    <Compile Include="Heroes\Impl\Seer.cs" />
+    <Compile Include="Heroes\Impl\Wizard.cs" />
+    <Compile Include="Map.cs" />
+    <Compile Include="Powers\IPowerEffect.cs" />
+    <Compile Include="Trigger.cs" />
+    <Compile Include="TriggeredAction.cs" />
+    <Compile Include="TriggeredEffect.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameFactory.cs" />
+    <Compile Include="Heroes\Hero.cs" />
+    <Compile Include="Heroes\HeroState.cs" />
+    <Compile Include="Heroes\IHero.cs" />
     <Compile Include="IEvent.cs" />
-    <Compile Include="IHero.cs" />
     <Compile Include="IMap.cs" />
+    <Compile Include="ISource.cs" />
     <Compile Include="ISpace.cs" />
     <Compile Include="Location.cs" />
+    <Compile Include="LocationAction.cs" />
     <Compile Include="Necromancer.cs" />
+    <Compile Include="Powers\Action.cs" />
+    <Compile Include="Powers\Bonus.cs" />
+    <Compile Include="Powers\IPower.cs" />
+    <Compile Include="Powers\Power.cs" />
+    <Compile Include="Powers\PowerType.cs" />
+    <Compile Include="Powers\Stash.cs" />
+    <Compile Include="Powers\Tactic.cs" />
+    <Compile Include="Powers\TacticType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchResult.cs" />
+    <Compile Include="RollBonus.cs" />
+    <Compile Include="RollType.cs" />
+    <Compile Include="Find.cs" />
     <Compile Include="Spaces\Castle.cs" />
     <Compile Include="Spaces\Forest.cs" />
     <Compile Include="Spaces\Monastery.cs" />
@@ -75,6 +106,7 @@
     <Compile Include="Spaces\Space.cs" />
     <Compile Include="Spaces\Swamp.cs" />
     <Compile Include="Spaces\Village.cs" />
+    <Compile Include="TargetType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

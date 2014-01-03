@@ -1,6 +1,8 @@
-﻿namespace Slugburn.DarkestNight.Rules.Blights
+﻿using Slugburn.DarkestNight.Rules.Heroes;
+
+namespace Slugburn.DarkestNight.Rules.Blights
 {
-    public class Undead : Blight
+    public class Undead : BlightImpl
     {
         public int FightTarget { get; set; }
         public int EvadeTarget { get; set; }
