@@ -8,14 +8,10 @@ namespace Slugburn.DarkestNight.Rules
 {
     public class GameFactory
     {
-        private readonly BlightFactory _blightFactory;
         private readonly IEnumerable<IHero> _availableHeroes;
 
-        public GameFactory(
-            BlightFactory blightFactory,
-            IEnumerable<IHero> availableHeroes)
+        public GameFactory(IEnumerable<IHero> availableHeroes)
         {
-            _blightFactory = blightFactory;
             _availableHeroes = availableHeroes;
         }
 
