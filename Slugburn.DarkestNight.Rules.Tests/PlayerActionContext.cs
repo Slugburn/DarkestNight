@@ -35,13 +35,13 @@ namespace Slugburn.DarkestNight.Rules.Tests
             return this;
         }
 
-        public PlayerActionContext ChoosesBlight(params BlightType[] blights)
+        public PlayerActionContext ChoosesBlight(params Blight[] blights)
         {
             _player.SetBlightChoice(blights);
             return this;
         }
 
-        public PlayerActionContext AssignRollToBlight(int roll, BlightType blight)
+        public PlayerActionContext AssignRollToBlight(int roll, Blight blight)
         {
             _player.SetBlightRollAssignment(blight, roll);
             return this;

@@ -8,7 +8,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
     public class SpaceExpectation
     {
         private readonly ISpace _space;
-        private readonly List<BlightType> _expectedBlights = new List<BlightType>();
+        private readonly List<Blight> _expectedBlights = new List<Blight>();
 
         public SpaceExpectation(ISpace space)
         {
@@ -26,7 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
             return this;
         }
 
-        public SpaceExpectation Blights(params BlightType[] blights)
+        public SpaceExpectation Blights(params Blight[] blights)
         {
             _expectedBlights.AddRange(blights);
             return this;

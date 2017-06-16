@@ -2,9 +2,9 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights.Implementations
 {
-    public class Shroud : Blight
+    public class Shroud : BlightBase
     {
-        public Shroud() : base(BlightType.Shroud)
+        public Shroud() : base(Blight.Shroud)
         {
             Name = "Shroud";
             EffectText = "Other types of blights at the location of a Shroud cannot be destroyed (the Shroud must be destroyed first.)";

@@ -42,9 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionType.cs" />
-    <Compile Include="Blights\Blight.cs" />
+    <Compile Include="Blights\BlightBase.cs" />
     <Compile Include="Blights\BlightFactory.cs" />
-    <Compile Include="Blights\BlightType.cs" />
+    <Compile Include="Blights\Blight.cs" />
     <Compile Include="Blights\Implementations\Confusion.cs" />
     <Compile Include="Blights\Implementations\Corruption.cs" />
     <Compile Include="Blights\Implementations\Curse.cs" />

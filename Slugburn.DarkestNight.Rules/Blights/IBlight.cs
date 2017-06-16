@@ -4,7 +4,7 @@ namespace Slugburn.DarkestNight.Rules.Blights
 {
     public interface IBlight
     {
-        BlightType Type { get; }
+        Blight Type { get; }
         string Name { get; }
         int Might { get; }
         string EffectText { get; }

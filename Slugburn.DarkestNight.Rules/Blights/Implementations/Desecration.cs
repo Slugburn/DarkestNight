@@ -2,9 +2,9 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights.Implementations
 {
-    class Desecration : Blight
+    class Desecration : BlightBase
     {
-        public Desecration() :base(BlightType.Desecration)
+        public Desecration() :base(Blight.Desecration)
         {
             Name = "Desecration";
             EffectText = "The Darkness increases one extra point at the start of each Necromancer turn.";

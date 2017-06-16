@@ -2,9 +2,9 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights.Implementations
 {
-    class Spies : Blight, ISource
+    class Spies : BlightBase, ISource
     {
-        public Spies() : base(BlightType.Spies)
+        public Spies() : base(Blight.Spies)
         {
             Name = "Spies";
             EffectText = "At the end of each turn in the affected location, a hero loses 1 Secrecy.";

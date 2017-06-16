@@ -10,18 +10,18 @@ namespace Slugburn.DarkestNight.Rules.Tests
     {
         private readonly Dictionary<string, bool> _usePowerResponse;
         private readonly Queue<int> _upcomingRolls;
-        private readonly List<Tuple<BlightType, int>> _blightRollAssignments;
+        private readonly List<Tuple<Blight, int>> _blightRollAssignments;
 
         private string _tacticChoice;
         private int _dieCountChoice;
-        private BlightType[] _blightChoice;
+        private Blight[] _blightChoice;
         private List<int> _lastRoll;
 
         public FakePlayer()
         {
             _usePowerResponse = new Dictionary<string, bool>();
             _upcomingRolls = new Queue<int>();
-            _blightRollAssignments = new List<Tuple<BlightType, int>>();
+            _blightRollAssignments = new List<Tuple<Blight, int>>();
         }
 
         public bool AskUsePower(string name, string description)
@@ -94,22 +94,22 @@ namespace Slugburn.DarkestNight.Rules.Tests
                 yield return _upcomingRolls.Dequeue();
         }
 
-        public void SetBlightChoice(BlightType[] blights)
+        public void SetBlightChoice(Blight[] blights)
         {
             _blightChoice = blights;
         }
 
-        public void SetBlightRollAssignment(BlightType blight, int roll)
+        public void SetBlightRollAssignment(Blight blight, int roll)
         {
             _blightRollAssignments.Add(Tuple.Create(blight, roll));
         }
 
-        public List<BlightType> ChooseBlights(List<BlightType> choices, int count)
+        public List<Blight> ChooseBlights(List<Blight> choices, int count)
         {
             return choices.Intersect(_blightChoice).ToList();
         }
 
-        public int AssignRollToBlight(BlightType blight, List<int> rolls)
+        public int AssignRollToBlight(Blight blight, List<int> rolls)
         {
             var assignment = _blightRollAssignments.FirstOrDefault(x => x.Item1 == blight && rolls.Contains(x.Item2));
             if (assignment == null)

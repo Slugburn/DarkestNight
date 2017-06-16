@@ -11,7 +11,7 @@ namespace Slugburn.DarkestNight.Rules
         Tactic ChooseTactic(IEnumerable<Tactic> choices);
         int ChooseDieCount(params int[] choices);
         IEnumerable<int> RollDice(int count);
-        List<BlightType> ChooseBlights(List<BlightType> choices, int count);
-        int AssignRollToBlight(BlightType blight, List<int> rolls);
+        List<Blight> ChooseBlights(List<Blight> choices, int count);
+        int AssignRollToBlight(Blight blight, List<int> rolls);
     }
 }

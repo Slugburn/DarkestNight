@@ -175,30 +175,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class FinalRest : Tactic
-        {
-            public FinalRest() : base(TacticType.Fight)
-            {
-                Name = "Final Rest";
-                StartingPower = true;
-                Text = "Fight with 2d or 3d. If any die comes up a 1, lose 1 Grace.";
-                base.GetDieCount = ChooseDieCount;
-            }
-
-            private int ChooseDieCount()
-            {
-                return Hero.Player.ChooseDieCount(2, 3);
-            }
-
-            internal override IEnumerable<int> RollDice(int count)
-            {
-                var roll = base.RollDice(count).ToList();
-                if (roll.Any(x=>x==1))
-                    Hero.LoseGrace();
-                return roll;
-            }
-        }
-
         class FadeToBlack : Bonus, IDieBonus
         {
             public FadeToBlack()
@@ -228,6 +204,30 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             public override void Activate()
             {
                 throw new System.NotImplementedException();
+            }
+        }
+
+        class FinalRest : Tactic
+        {
+            public FinalRest() : base(TacticType.Fight)
+            {
+                Name = "Final Rest";
+                StartingPower = true;
+                Text = "Fight with 2d or 3d. If any die comes up a 1, lose 1 Grace.";
+                base.GetDieCount = ChooseDieCount;
+            }
+
+            private int ChooseDieCount()
+            {
+                return Hero.Player.ChooseDieCount(2, 3);
+            }
+
+            internal override IEnumerable<int> RollDice(int count)
+            {
+                var roll = base.RollDice(count).ToList();
+                if (roll.Any(x => x == 1))
+                    Hero.LoseGrace();
+                return roll;
             }
         }
 

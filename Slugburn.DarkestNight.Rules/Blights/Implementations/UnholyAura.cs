@@ -2,9 +2,9 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights.Implementations
 {
-    class UnholyAura : Blight
+    class UnholyAura : BlightBase
     {
-        public UnholyAura() : base(BlightType.UnholyAura)
+        public UnholyAura() : base(Blight.UnholyAura)
         {
             Name = "Unholy Aura";
             EffectText = "While a hero is in the affected location, he rolls one few die when fighting (to a minimum of 1).";

@@ -2,9 +2,9 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights.Implementations
 {
-    public class EvilPresence : Blight
+    public class EvilPresence : BlightBase
     {
-        public EvilPresence() : base(BlightType.EvilPresence)
+        public EvilPresence() : base(Blight.EvilPresence)
         {
             Name = "Evil Presence";
             EffectText = "While a hero is in the affected location, he rolls one fewer die when eluding (to a minimum of 1).";

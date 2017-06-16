@@ -23,15 +23,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenSpace(Location.Swamp,
-                    x => x.Blight(BlightType.Skeletons, BlightType.Shades, BlightType.Lich))
+                    x => x.Blight(Blight.Skeletons, Blight.Shades, Blight.Lich))
                 .GivenHero("Acolyte", x => x.Power("Call to Death").Location(Location.Swamp).Secrecy(6))
                 .WhenPlayerTakesAction("Call to Death",
                     player => player
-                        .ChoosesBlight(BlightType.Skeletons, BlightType.Lich)
+                        .ChoosesBlight(Blight.Skeletons, Blight.Lich)
                         .Rolls(5, 6)
-                        .AssignRollToBlight(6, BlightType.Lich)
-                        .AssignRollToBlight(5, BlightType.Skeletons))
-                .ThenSpace(Location.Swamp, x => x.Blights(BlightType.Shades))
+                        .AssignRollToBlight(6, Blight.Lich)
+                        .AssignRollToBlight(5, Blight.Skeletons))
+                .ThenSpace(Location.Swamp, x => x.Blights(Blight.Shades))
                 .ThenHero("Acolyte", x => x.Secrecy(4));
         }
 
@@ -40,15 +40,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenSpace(Location.Swamp,
-                    x => x.Blight(BlightType.Skeletons, BlightType.Shades))
+                    x => x.Blight(Blight.Skeletons, Blight.Shades))
                 .GivenHero("Acolyte", x => x.Power("Call to Death", "Final Rest").Location(Location.Swamp).Secrecy(6))
                 .WhenPlayerTakesAction("Call to Death",
                     player => player
                         .ChoosesTactic("Final Rest").ChoosesNumberOfDice(3)
                         .Rolls(5, 2,3, 1)
-                        .AssignRollToBlight(5, BlightType.Shades)
-                        .AssignRollToBlight(3, BlightType.Skeletons))
-                .ThenSpace(Location.Swamp, x => x.Blights(BlightType.Skeletons))
+                        .AssignRollToBlight(5, Blight.Shades)
+                        .AssignRollToBlight(3, Blight.Skeletons))
+                .ThenSpace(Location.Swamp, x => x.Blights(Blight.Skeletons))
                 .ThenHero("Acolyte", x => x
                 .Grace(1) // loses Grace from failing to kill Skeletons and rolling a 1 with Final Rest
                 .Secrecy(4)); // loses 2 Secrecy from making 2 attacks
@@ -58,7 +58,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void DarkVeil_IgnoreBlightEffects()
         {
             new TestScenario()
-                .GivenSpace(Location.Swamp, x => x.Blight(BlightType.Spies))
+                .GivenSpace(Location.Swamp, x => x.Blight(Blight.Spies))
                 .GivenHero("Acolyte", x => x.Power("Dark Veil").Location(Location.Swamp))
                 .WhenHeroUsesBonusAction("Acolyte", "Dark Veil")
                 .WhenHeroEndsTurn("Acolyte")
@@ -70,7 +70,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void DarkVeil_IgnoreBlightDefense()
         {
             new TestScenario()
-                .GivenSpace(Location.Swamp, x => x.Blight(BlightType.Spies))
+                .GivenSpace(Location.Swamp, x => x.Blight(Blight.Spies))
                 .GivenHero("Acolyte", x => x.Power("Dark Veil").Location(Location.Swamp).Secrecy(7))
                 .WhenHeroAttacksBlight("Acolyte", player=>player.Rolls(1).UsePower("Dark Veil"))
                 .ThenHero("Acolyte", x => x.Secrecy(6)) // loses Secrecy for making attack, but not for Spies defense
@@ -81,7 +81,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void DeathMask_IgnoreSecrecyLossForAttacking()
         {
             new TestScenario()
-                .GivenSpace(Location.Swamp, x => x.Blight(BlightType.Spies))
+                .GivenSpace(Location.Swamp, x => x.Blight(Blight.Spies))
                 .GivenHero("Acolyte", x => x.Power("Death Mask").Location(Location.Swamp).Secrecy(7))
                 .WhenHeroAttacksBlight("Acolyte", player => player.Rolls(1))
                 .ThenHero("Acolyte", x => x.Secrecy(6)); // loses Secrecy for Spies defense, but not for making attack
@@ -108,7 +108,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             new TestScenario()
                 .GivenDarkness(darkness)
                 .GivenHero("Acolyte", x => x.Power("Fade to Black").Location(Location.Monastery))
-                .GivenSpace(Location.Monastery, x => x.Blight(BlightType.Skeletons))
+                .GivenSpace(Location.Monastery, x => x.Blight(Blight.Skeletons))
                 .WhenHeroAttacksBlight("Acolyte", x => x.Rolls(rolls))
                 .ThenPlayer(x => x.LastRoll(expectedDice));
         }
@@ -121,7 +121,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             new TestScenario()
                 .GivenDarkness(20)
                 .GivenHero("Acolyte", x => x.Power("Fade to Black", "Final Rest").Location(Location.Monastery))
-                .GivenSpace(Location.Monastery, x => x.Blight(BlightType.Skeletons))
+                .GivenSpace(Location.Monastery, x => x.Blight(Blight.Skeletons))
                 .WhenHeroAttacksBlight("Acolyte", x => x.ChoosesTactic("Final Rest").ChoosesNumberOfDice(3).Rolls(rolls))
                 .ThenPlayer(x => x.LastRoll(expectedDice));
         }
@@ -168,13 +168,21 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .ThenHero("Acolyte", x => x.CanMoveTo(Location.Monastery));
         }
 
+//        [Test]
+//        public void FalseOrders()
+//        {
+//            new TestScenario()
+//                .GivenHero("Acolyte", x=>x.Power("False Orders").Location(Location.Village))
+//                .GivenSpace(Location.Village, x=>x.BlightBase())
+//        }
+
         [TestCase(2, new[] {1,5})]
         [TestCase(3, new[] {1,1,6})]
         public void FinalRest(int count, int[] rolls)
         {
             new TestScenario()
                 .GivenHero("Acolyte", x => x.Power("Final Rest").Location(Location.Village).Grace(3).Secrecy(7))
-                .GivenSpace(Location.Village, x => x.Blight(BlightType.Corruption))
+                .GivenSpace(Location.Village, x => x.Blight(Blight.Corruption))
                 .WhenHeroAttacksBlight("Acolyte",
                     player => player.ChoosesTactic("Final Rest").ChoosesNumberOfDice(count).Rolls(rolls))
                 .ThenSpace(Location.Village, x => x.NoBlights())

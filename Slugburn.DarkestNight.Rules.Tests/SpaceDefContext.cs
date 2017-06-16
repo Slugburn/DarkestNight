@@ -12,10 +12,10 @@ namespace Slugburn.DarkestNight.Rules.Tests
             _space = space;
         }
 
-        public SpaceDefContext Blight(params BlightType[] blightTypes)
+        public SpaceDefContext Blight(params Blight[] blights)
         {
             var factory= new BlightFactory();
-            foreach (var blight in blightTypes)
+            foreach (var blight in blights)
             {
                 _space.AddBlight(factory.Create(blight));
             }

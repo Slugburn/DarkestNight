@@ -1,22 +1,21 @@
-﻿using Slugburn.DarkestNight.Rules.Heroes;
-
-namespace Slugburn.DarkestNight.Rules.Blights
+﻿namespace Slugburn.DarkestNight.Rules.Blights
 {
-    public abstract class Blight : IBlight
+    public enum Blight
     {
-        public BlightType Type { get; }
-
-        protected Blight(BlightType type)
-        {
-            Type = type;
-        }
-
-        public string Name { get; protected set; }
-        public int Might { get; protected set; }
-        public string EffectText { get; protected set; }
-        public string DefenseText { get; protected set; }
-
-        public abstract void Defend(Hero hero);
-
+        Confusion,
+        Corruption,
+        Curse,
+        DarkFog,
+        Desecration,
+        EvilPresence,
+        Lich,
+        Spies,
+        Shades,
+        Shroud,
+        Skeletons,
+        Taint,
+        UnholyAura,
+        Vampire,
+        Zombies
     }
 }
