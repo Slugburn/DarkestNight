@@ -72,6 +72,7 @@
     <Compile Include="Heroes\Impl\Scholar.cs" />
     <Compile Include="Heroes\Impl\Seer.cs" />
     <Compile Include="Heroes\Impl\Wizard.cs" />
+    <Compile Include="IDieBonus.cs" />
     <Compile Include="IgnoreBlightEffect.cs" />
     <Compile Include="IPlayer.cs" />
     <Compile Include="Maps\Map.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Powers\IBonusAction.cs" />
     <Compile Include="Powers\IPowerEffect.cs" />
     <Compile Include="Powers\PowerNotUsableException.cs" />
+    <Compile Include="RollContext.cs" />
     <Compile Include="Stash.cs" />
     <Compile Include="Triggers\GameTrigger.cs" />
     <Compile Include="Triggers\HeroTrigger.cs" />

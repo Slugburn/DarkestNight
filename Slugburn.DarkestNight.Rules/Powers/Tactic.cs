@@ -50,10 +50,18 @@ namespace Slugburn.DarkestNight.Rules.Powers
             if (!IsUsable())
                 throw new PowerNotUsableException(this);
             var baseDieCount = GetDieCount();
-            var adjustedDieCount = baseDieCount;
+            var adjustedDieCount = AdjustDieCount(baseDieCount);
             var roll = RollDice(adjustedDieCount);
             var result = roll.Max();
             return result;
+        }
+
+        private int AdjustDieCount(int baseDieCount)
+        {
+            var context = new RollContext(baseDieCount);
+            var dieBonuses = Hero.GetPowers<IDieBonus>().ToList();
+            dieBonuses.ForEach(x=>x.ModifyDice(context));
+            return context.DieCount;
         }
 
         internal virtual IEnumerable<int> RollDice(int count)

@@ -243,6 +243,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             _stash.RemoveBySource<T>(name);
         }
+
+        public IEnumerable<T> GetPowers<T>()
+        {
+            return Powers.Where(x=>x is T).Cast<T>();
+        }
     }
 
 }

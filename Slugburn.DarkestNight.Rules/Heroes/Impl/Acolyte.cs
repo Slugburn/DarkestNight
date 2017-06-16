@@ -122,6 +122,30 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
+        class DeathMask : Bonus, ITriggerHandler
+        {
+            public DeathMask()
+            {
+                Name = "Death Mask";
+                Text =
+                    "You may choose not to lose Secrecy for attacking a blight (including use of the Call to Death power) or for starting your turn at the Necromancer's location.";
+            }
+
+            public override void Learn()
+            {
+                base.Learn();
+                Hero.Triggers.Register(this, HeroTrigger.LoseSecrecy);
+            }
+
+            public void HandleTrigger(TriggerContext context, string tag)
+            {
+                if (!IsUsable()) return;
+                var sourceName = context.SourceName;
+                if (sourceName == "Attack" || sourceName == "Necromancer")
+                    context.Cancel = true;
+            }
+        }
+
         class FalseLife : Bonus, IBonusAction
         {
             public FalseLife()
@@ -175,12 +199,21 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class FadeToBlack : Bonus
+        class FadeToBlack : Bonus, IDieBonus
         {
             public FadeToBlack()
             {
                 Name = "Fade to Black";
                 Text = "+1 die in fights when Darkness is 10 or more. Another +1 die in fights when Darkness is 20 or more.";
+            }
+
+            public void ModifyDice(RollContext context)
+            {
+                if (!IsUsable()) return;
+                if (Hero.Game.Darkness >= 10)
+                    context.DieCount++;
+                if (Hero.Game.Darkness >= 20)
+                    context.DieCount++;
             }
         }
 
@@ -213,30 +246,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             {
                 Name = "Leech Life";
                 Text = "Exhaust while not at the Monastery to fight with 3 dice. Gain 1 Grace (up to default) if you roll 2 successes. You may not enter the Monastery while this power is exhausted.";
-            }
-        }
-
-        class DeathMask : Bonus, ITriggerHandler
-        {
-            public DeathMask()
-            {
-                Name = "Death Mask";
-                Text =
-                    "You may choose not to lose Secrecy for attacking a blight (including use of the Call to Death power) or for starting your turn at the Necromancer's location.";
-            }
-
-            public override void Learn()
-            {
-                base.Learn();
-                Hero.Triggers.Register(this, HeroTrigger.LoseSecrecy);
-            }
-
-            public void HandleTrigger(TriggerContext context, string tag)
-            {
-                if (!IsUsable()) return;
-                var sourceName = context.SourceName;
-                if (sourceName == "Attack" || sourceName == "Necromancer")
-                    context.Cancel = true;
             }
         }
 

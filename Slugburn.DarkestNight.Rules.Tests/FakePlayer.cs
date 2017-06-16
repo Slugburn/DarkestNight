@@ -10,10 +10,12 @@ namespace Slugburn.DarkestNight.Rules.Tests
     {
         private readonly Dictionary<string, bool> _usePowerResponse;
         private readonly Queue<int> _upcomingRolls;
+        private readonly List<Tuple<BlightType, int>> _blightRollAssignments;
+
         private string _tacticChoice;
         private int _dieCountChoice;
         private BlightType[] _blightChoice;
-        private List<Tuple<BlightType, int>> _blightRollAssignments;
+        private List<int> _lastRoll;
 
         public FakePlayer()
         {
@@ -63,18 +65,31 @@ namespace Slugburn.DarkestNight.Rules.Tests
 
         public Tactic ChooseTactic(IEnumerable<Tactic> choices)
         {
-            return choices.Single(x=>x.Name==_tacticChoice);
+            var choice = choices.SingleOrDefault(x=>x.Name==_tacticChoice);
+            if (choice == null)
+                throw new Exception("No valid choice has been specified for IPlayer.ChooseTactic().");
+            return choice;
         }
 
         public int ChooseDieCount(params int[] choices)
         {
-            return choices.Single(x => x == _dieCountChoice);
+            var choice = choices.SingleOrDefault(x => x == _dieCountChoice);
+            if (choice == 0)
+                throw new Exception("No valid choice has been specified for IPlayer.ChooseDiceCount().");
+            return choice;
         }
 
         public IEnumerable<int> RollDice(int count)
         {
             if (count > _upcomingRolls.Count)
                 throw new Exception($"Rolling {count} dice but only {_upcomingRolls.Count} specified rolls are remaining.");
+            var roll = GenerateRolls(count).ToList();
+            _lastRoll = roll;
+            return roll;
+        }
+
+        private IEnumerable<int> GenerateRolls(int count)
+        {
             for (var i = 0; i < count; i++)
                 yield return _upcomingRolls.Dequeue();
         }
@@ -101,6 +116,11 @@ namespace Slugburn.DarkestNight.Rules.Tests
                 throw new Exception($"No valid roll has been specified for {blight}");
             _blightRollAssignments.Remove(assignment);
             return assignment.Item2;
+        }
+
+        public List<int> GetLastRoll()
+        {
+            return _lastRoll;
         }
     }
 }

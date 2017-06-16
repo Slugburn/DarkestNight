@@ -133,5 +133,19 @@ namespace Slugburn.DarkestNight.Rules.Tests
             hero.StartTurn();
             return this;
         }
+
+        public TestScenario ThenPlayer(Action<PlayerExpectation> expect)
+        {
+            var expectation = new PlayerExpectation(_player);
+            expect(expectation);
+            expectation.Verify();
+            return this;
+        }
+
+        public TestScenario GivenDarkness(int darkness)
+        {
+            _game.Darkness = darkness;
+            return this;
+        }
     }
 }

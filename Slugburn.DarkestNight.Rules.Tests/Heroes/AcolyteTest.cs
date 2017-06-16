@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Heroes
@@ -94,6 +95,35 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenNecromancerLocation(Location.Swamp)
                 .WhenHeroStartsTurn("Acolyte")
                 .ThenHero("Acolyte", x => x.Secrecy(7));
+        }
+
+        [TestCase(9,0)]
+        [TestCase(10,1)]
+        [TestCase(19,1)]
+        [TestCase(20,2)]
+        public void FadeToBlack(int darkness, int bonusDice)
+        {
+            var expectedDice = 1 + bonusDice;
+            var rolls = Enumerable.Repeat(6, expectedDice).ToArray();
+            new TestScenario()
+                .GivenDarkness(darkness)
+                .GivenHero("Acolyte", x => x.Power("Fade to Black").Location(Location.Monastery))
+                .GivenSpace(Location.Monastery, x => x.Blight(BlightType.Skeletons))
+                .WhenHeroAttacksBlight("Acolyte", x => x.Rolls(rolls))
+                .ThenPlayer(x => x.LastRoll(expectedDice));
+        }
+
+        [Test]
+        public void FadeToBlack_CombinedWith_FinalRest()
+        {
+            var expectedDice = 5;
+            var rolls = Enumerable.Repeat(6, expectedDice).ToArray();
+            new TestScenario()
+                .GivenDarkness(20)
+                .GivenHero("Acolyte", x => x.Power("Fade to Black", "Final Rest").Location(Location.Monastery))
+                .GivenSpace(Location.Monastery, x => x.Blight(BlightType.Skeletons))
+                .WhenHeroAttacksBlight("Acolyte", x => x.ChoosesTactic("Final Rest").ChoosesNumberOfDice(3).Rolls(rolls))
+                .ThenPlayer(x => x.LastRoll(expectedDice));
         }
 
         [Test]
