@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
 
 namespace Slugburn.DarkestNight.Rules.Spaces
@@ -44,6 +45,11 @@ namespace Slugburn.DarkestNight.Rules.Spaces
         public void Remove<T>(T item)
         {
             throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> GetBlights<T>() where T: IBlight
+        {
+            return _blights.Where(x=>x is T).Cast<T>();
         }
     }
 }

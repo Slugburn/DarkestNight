@@ -14,14 +14,8 @@ namespace Slugburn.DarkestNight.Rules
                 .ToDictionary(space => space.Location);
         }
 
-        public ISpace this[Location location]
-        {
-            get { return _spaces[location]; }
-        }
+        public ISpace this[Location location] => _spaces[location];
 
-        public IEnumerable<ISpace> Spaces
-        {
-            get { return _spaces.Values; }
-        }
+        public IEnumerable<ISpace> Spaces => _spaces.Values;
     }
 }

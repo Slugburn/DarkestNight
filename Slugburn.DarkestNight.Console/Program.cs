@@ -1,14 +1,14 @@
 ﻿using Ninject;
 using Slugburn.DarkestNight.Rules;
 
-namespace Slugburn.DarkestNight.Console
+namespace Slugburn.DarkestNight
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Bootstrapper.Configure();
-            var gameFactory = Bootstrapper.Kernel.Get<GameFactory>();
+            var kernel = Bootstrapper.Configure();
+            var gameFactory = kernel.Get<GameFactory>();
             var game = gameFactory.Create();
         }
     }

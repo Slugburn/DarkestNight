@@ -13,7 +13,13 @@ namespace Slugburn.DarkestNight.Rules
 
         public bool Auto { get; set; }
         public System.Action OnUse { get; set; }
-        public Func<IHero,bool> Restriction { get; set; }
-        public bool Active { get; set; }
+        public Func<Hero,bool> Restriction { get; set; }
+        public bool IsActive
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

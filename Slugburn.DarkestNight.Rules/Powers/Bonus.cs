@@ -1,9 +1,9 @@
 ﻿using System.Linq;
-using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Blights.Implementations;
 
 namespace Slugburn.DarkestNight.Rules.Powers
 {
-    abstract class Bonus : Power
+    public abstract class Bonus : Power
     {
         protected Bonus()
         {

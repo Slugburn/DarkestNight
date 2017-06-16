@@ -9,8 +9,7 @@
         bool Exhausted { get; }
         bool IsUsable();
 
-        void Activate();
-        void Deactivate();
+        void Learn();
         void Exhaust();
         void Refresh();
     }

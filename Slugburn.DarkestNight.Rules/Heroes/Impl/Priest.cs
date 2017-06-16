@@ -1,32 +1,20 @@
 ﻿using Slugburn.DarkestNight.Rules.Powers;
+using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 {
     public class Priest : Hero
     {
         public Priest()
+            : base(
+                "Priest", 6, 6, new Benediction(), new BlessingOfFaith(), new BlessingOfPiety(), new BlessingOfStrength(), new BlessingOfWisdom(), new Calm(),
+                new Censure(), new Intercession(), new Miracle(), new Sanctuary())
         {
-            Name = "Priest";
-            DefaultGrace = 6;
-            DefaultSecrecy = 6;
-            Powers = new IPower[]
-                     {
-                         new Benediction(), 
-                         new BlessingOfFaith(), 
-                         new BlessingOfPiety(), 
-                         new BlessingOfStrength(), 
-                         new BlessingOfWisdom(), 
-                         new Calm(), 
-                         new Censure(), 
-                         new Intercession(), 
-                         new Miracle(), 
-                         new Sanctuary(), 
-                     };
         }
 
         #region Powers
 
-        class Benediction : Action
+        class Benediction : ActionPower
         {
             public Benediction()
             {
@@ -37,17 +25,17 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
             public override void Activate()
             {
-                Hero.SelectTarget<IHero>(TargetType.Hero)
-                    .OnTarget(target =>
-                    {
-                        target.GainGrace(1, target.DefaultGrace);
-                        if (target.Grace > Hero.Grace)
-                            Hero.GainGrace(1);
-                    });
+//                Hero.SelectTarget<Hero>(TargetType.Hero)
+//                    .OnTarget(target =>
+//                    {
+//                        target.GainGrace(1, target.DefaultGrace);
+//                        if (target.Grace > Hero.Grace)
+//                            Hero.GainGrace(1);
+//                    });
             }
         }
 
-        class BlessingOfFaith : Action
+        class BlessingOfFaith : ActionPower
         {
             public BlessingOfFaith()
             {
@@ -59,31 +47,25 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
             public override void Activate()
             {
-                Hero.SelectTarget<IHero>(TargetType.Hero)
-                    .OnTarget(target =>
-                    {
-                        var effect = new TriggeredEffect(Trigger.Praying, ActiveText, h => h.GainGrace(1, h.DefaultGrace), this);
-                        target.Add(effect);
-                        Stash.Set(target, effect);
-                    });
+//                Hero.SelectTarget<Hero>(TargetType.Hero)
+//                    .OnTarget(target =>
+//                    {
+//                        var effect = new TriggeredEffect(this, Trigger.Praying, ActiveText, c => c.Hero.GainGrace(1, c.Hero.DefaultGrace));
+//                        target.Add(effect);
+//                        Stash.Add(target, effect);
+//                    });
             }
 
             public override void Deactivate()
             {
-                base.Deactivate();
-                var target = Stash.Get<IHero>();
-                var effect = Stash.Get<TriggeredEffect>();
-                target.Remove(effect);
+//                base.Deactivate();
+//                var target = Stash.Get<Hero>();
+//                var effect = Stash.Get<TriggeredEffect>();
+//                target.Remove(effect);
             }
-
-            protected override void SuspendEffects(bool isSuspended)
-            {
-                Stash.Get<TriggeredEffect>().Active = !isSuspended;
-            }
-
         }
 
-        class BlessingOfPiety : Action
+        class BlessingOfPiety : ActionPower
         {
             public BlessingOfPiety()
             {
@@ -94,27 +76,22 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
             public override void Activate()
             {
-                var space = Hero.GetSpace();
-                var effect = new TriggeredEffect(Trigger.Hiding, ActiveText, hero => hero.GainGrace(1, hero.DefaultGrace), this);
-                space.Add(effect);
-                Stash.Set(space, effect);
+//                var space = Hero.GetSpace();
+//                var effect = new TriggeredEffect(this, HeroTrigger.Hiding, ActiveText, c => c.Hero.GainGrace(1, c.Hero.DefaultGrace));
+//                space.Add(effect);
+//                Stash.Add(space, effect);
             }
 
             public override void Deactivate()
             {
-                base.Deactivate();
-                var space = Stash.Get<ISpace>();
-                var effect = Stash.Get<TriggeredEffect>();
-                space.Remove(effect);
-            }
-
-            protected override void SuspendEffects(bool isSuspended)
-            {
-                Stash.Get<TriggeredEffect>().Active = !isSuspended;
+//                base.Deactivate();
+//                var space = Stash.Get<ISpace>();
+//                var effect = Stash.Get<TriggeredEffect>();
+//                space.Remove(effect);
             }
         }
 
-        class BlessingOfStrength : Action
+        class BlessingOfStrength : ActionPower
         {
             public BlessingOfStrength()
             {
@@ -125,31 +102,25 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
             public override void Activate()
             {
-                Hero.SelectTarget<IHero>(TargetType.Hero)
-                    .OnTarget(target =>
-                    {
-                        var bonus = new RollBonus(RollType.Fight, BonusType.Dice, 1, this);
-                        target.Add(bonus);
-                        Stash.Set(target, bonus);
-                    });
+//                Hero.SelectTarget<Hero>(TargetType.Hero)
+//                    .OnTarget(target =>
+//                    {
+//                        var bonus = new RollBonus(RollType.Fight, BonusType.Dice, 1, this);
+//                        target.Add(bonus);
+//                        Stash.Add(target, bonus);
+//                    });
             }
 
             public override void Deactivate()
             {
                 base.Deactivate();
-                var target = Stash.Get<IHero>();
+                var target = Stash.Get<Hero>();
                 var bonus = Stash.Get<RollBonus>();
                 target.Remove(bonus);
             }
-
-            protected override void SuspendEffects(bool isSuspended)
-            {
-                Stash.Get<RollBonus>().Active = !isSuspended;
-            }
-
         }
 
-        class BlessingOfWisdom : Action
+        class BlessingOfWisdom : ActionPower
         {
             public BlessingOfWisdom()
             {
@@ -160,30 +131,22 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
             public override void Activate()
             {
-                Hero.SelectTarget<IHero>(TargetType.Hero)
-                    .OnTarget(target =>
-                    {
-                        var bonus = new RollBonus(RollType.Elude, BonusType.Dice, 1, this);
-                        target.Add(bonus);
-                        Stash.Set(target, bonus);
-                    });
+//                Hero.SelectTarget<Hero>(TargetType.Hero)
+//                    .OnTarget(target =>
+//                    {
+//                        var bonus = new RollBonus(RollType.Elude, BonusType.Dice, 1, this);
+//                        target.Add(bonus);
+//                        Stash.Add(target, bonus);
+//                    });
             }
 
             public override void Deactivate()
             {
                 base.Deactivate();
-                var target = Stash.Get<IHero>();
+                var target = Stash.Get<Hero>();
                 var bonus = Stash.Get<RollBonus>();
                 target.Remove(bonus);
             }
-
-            protected override void SuspendEffects(bool isSuspended)
-            {
-                if (!Active) return;
-                var bonus = Stash.Get<RollBonus>();
-                bonus.Active = isSuspended;
-            }
-
         }
 
         class Calm : Bonus
@@ -194,44 +157,36 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Heroes at your location may pray.";
             }
 
-            public override void Activate()
-            {
-                var space = Hero.GetSpace();
-                var action = new LocationAction(ActionType.Pray, this);
-                Stash.Set(space, action);
-                space.Add(action);
-            }
-
-            public override void Deactivate()
-            {
-                base.Deactivate();
-                var space = Stash.Get<ISpace>();
-                var action = Stash.Get<LocationAction>();
-                space.Remove(action);
-            }
-
-            protected override void SuspendEffects(bool isSuspended)
-            {
-                if (!Active) return;
-                var action = Stash.Get<LocationAction>();
-                action.Active = isSuspended;
-            }
-
+//            public override void Activate()
+//            {
+//                var space = Hero.GetSpace();
+//                var action = new LocationAction(ActionType.Pray, this);
+//                Stash.Set(space, action);
+//                space.Add(action);
+//            }
+//
+//            public override void Deactivate()
+//            {
+//                base.Deactivate();
+//                var space = Stash.Get<ISpace>();
+//                var action = Stash.Get<LocationAction>();
+//                space.Remove(action);
+//            }
         }
 
         class Censure : Tactic
         {
             public Censure()
-                : base(TacticType.Fight)
+                : base(TacticType.Fight,2)
             {
                 Name = "Censure";
                 Text = "Fight with 2d.";
             }
 
-            public override void Activate()
-            {
-                Hero.SetDice(RollType.Fight, 2);
-            }
+//            public override void Activate()
+//            {
+//                Hero.SetDice(RollType.Fight, 2);
+//            }
         }
 
         class Intercession : Bonus
@@ -241,11 +196,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Name = "Intercession";
                 StartingPower = true;
                 Text = "Whenever a hero at your location loses or spends Grace, they may spend your Grace instead.";
-            }
-
-            public override void Activate()
-            {
-                throw new System.NotImplementedException();
             }
         }
 
@@ -257,26 +207,26 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Spend 1 Grace to reroll any die roll you make. You may do this repeatedly.";
             }
 
-            public override void Activate()
-            {
-                var action = new TriggeredAction(Trigger.AfterRoll, Text,
-                    hero => hero.OfferReroll().OnReroll(x => hero.LoseGrace())) { Condition = hero => hero.Grace > 0 };
-                Hero.Add(action);
-                Stash.Set(action);
-            }
-
-            public override void Deactivate()
-            {
-                base.Deactivate();
-                var action = Stash.Get<TriggeredAction>();
-                Hero.Remove(action);
-            }
+//            public override void Activate()
+//            {
+//                var action = new TriggeredAction(Trigger.AfterRoll, Text,
+//                    hero => hero.OfferReroll().OnReroll(x => hero.LoseGrace())) { Condition = hero => hero.Grace > 0 };
+//                Hero.Add(action);
+//                Stash.Set(action);
+//            }
+//
+//            public override void Deactivate()
+//            {
+//                base.Deactivate();
+//                var action = Stash.Get<TriggeredAction>();
+//                Hero.Remove(action);
+//            }
         }
 
         class Sanctuary : Tactic
         {
             public Sanctuary()
-                : base(TacticType.Elude)
+                : base(TacticType.Elude, 4)
             {
                 Name = "Sanctuary";
                 StartingPower = true;
@@ -288,14 +238,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 return base.IsUsable() && Hero.State == HeroState.Eluding;
             }
 
-            public override void Activate()
-            {
-                Hero.SetDice(RollType.Elude, 4);
-            }
+//            public override void Activate()
+//            {
+//                Hero.SetDice(RollType.Elude, 4);
+//            }
 
             public override void OnSuccess()
             {
-                Hero.LoseSecrecy();
+//                Hero.LoseSecrecy();
             }
         }
         #endregion

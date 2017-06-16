@@ -1,7 +1,7 @@
 ﻿namespace Slugburn.DarkestNight.Rules.Powers
 {
-    interface IPowerEffect
+    public interface IPowerEffect
     {
-        bool Active { get; set; }
+        bool IsActive { get; }
     }
 }

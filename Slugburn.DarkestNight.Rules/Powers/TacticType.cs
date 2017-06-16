@@ -1,8 +1,11 @@
-﻿namespace Slugburn.DarkestNight.Rules.Powers
+﻿using System;
+
+namespace Slugburn.DarkestNight.Rules.Powers
 {
-    internal enum TacticType
+    [Flags]
+    public enum TacticType
     {
-        Fight,
-        Elude
+        Fight = 1,
+        Elude = 2
     }
 }

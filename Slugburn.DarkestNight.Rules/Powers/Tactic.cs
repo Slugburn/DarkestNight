@@ -1,11 +1,23 @@
-﻿using System.Linq;
-using Slugburn.DarkestNight.Rules.Blights;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Slugburn.DarkestNight.Rules.Blights.Implementations;
+using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Powers
 {
-    abstract class Tactic : Power
+    public abstract class Tactic : Power
     {
-        protected TacticType TacticType { get; set; }
+        public Func<int> GetDieCount { get; protected set; }
+
+        public static Tactic None(Hero hero) => new NoTactic(hero);
+
+        public TacticType TacticType { get; protected set; }
+
+        protected Tactic(TacticType tacticType, int dieCount) :this(tacticType)
+        {
+            GetDieCount = ()=>dieCount;
+        }
 
         protected Tactic(TacticType tacticType)
         {
@@ -19,6 +31,35 @@ namespace Slugburn.DarkestNight.Rules.Powers
             return base.IsUsable() && !Hero.GetBlights().Any(x => x is Confusion);
         }
 
-        public virtual void OnSuccess() { }
+        public virtual void OnSuccess()
+        {
+        }
+
+
+        private class NoTactic : Tactic
+        {
+            public NoTactic(Hero hero) : base(TacticType.Elude | TacticType.Fight, 1)
+            {
+                Name = "None";
+                Hero = hero;
+            }
+        }
+
+        public int GetResult()
+        {
+            if (!IsUsable())
+                throw new PowerNotUsableException(this);
+            var baseDieCount = GetDieCount();
+            var adjustedDieCount = baseDieCount;
+            var roll = RollDice(adjustedDieCount);
+            var result = roll.Max();
+            return result;
+        }
+
+        internal virtual IEnumerable<int> RollDice(int count)
+        {
+            var roll = Hero.Player.RollDice(count);
+            return roll;
+        }
     }
 }

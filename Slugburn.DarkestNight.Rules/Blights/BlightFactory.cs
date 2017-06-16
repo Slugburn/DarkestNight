@@ -1,45 +1,46 @@
 using System;
+using Slugburn.DarkestNight.Rules.Blights.Implementations;
 
 namespace Slugburn.DarkestNight.Rules.Blights
 {
     public class BlightFactory
     {
-        public IBlight Create(Blight blight)
+        public IBlight Create(BlightType blightType)
         {
-            switch (blight)
+            switch (blightType)
             {
-                case Blight.Confusion:
+                case BlightType.Confusion:
                     return new Confusion();
-                case Blight.Corruption:
+                case BlightType.Corruption:
                     return new Corruption();
-                case Blight.Curse:
+                case BlightType.Curse:
                     return new Curse();
-                case Blight.DarkFog:
+                case BlightType.DarkFog:
                     return new DarkFog();
-                case Blight.Desecration:
+                case BlightType.Desecration:
                     return new Desecration();
-                case Blight.EvilPresence:
+                case BlightType.EvilPresence:
                     return new EvilPresence();
-                case Blight.Lich:
-                    return new Undead("Lich", 5, 5, 5);
-                case Blight.Shades:
-                    return new Undead("Shades", 5, 3, 5);
-                case Blight.Shroud:
+                case BlightType.Lich:
+                    return new Undead(BlightType.Lich, "Lich", 5, 5, 5);
+                case BlightType.Shades:
+                    return new Undead(BlightType.Shades, "Shades", 5, 3, 5);
+                case BlightType.Shroud:
                     return new Shroud();
-                case Blight.Skeletons:
-                    return new Undead("Skeletons", 5, 4, 4);
-                case Blight.Spies:
+                case BlightType.Skeletons:
+                    return new Undead(BlightType.Skeletons, "Skeletons", 5, 4, 4);
+                case BlightType.Spies:
                     return new Spies();
-                case Blight.Taint:
+                case BlightType.Taint:
                     return new Taint();
-                case Blight.UnholyAura:
+                case BlightType.UnholyAura:
                     return new UnholyAura();
-                case Blight.Vampire:
-                    return new Undead("Vampire", 6, 4, 4);
-                case Blight.Zombies:
-                    return new Undead("Zombies", 5, 5, 3);
+                case BlightType.Vampire:
+                    return new Undead(BlightType.Vampire, "Vampire", 6, 4, 4);
+                case BlightType.Zombies:
+                    return new Undead(BlightType.Zombies, "Zombies", 5, 5, 3);
                 default:
-                    throw new ArgumentOutOfRangeException("blight", blight, "Unknown blight type");
+                    throw new ArgumentOutOfRangeException(nameof(blightType), blightType, "Unknown blight type");
             }
         }
     }

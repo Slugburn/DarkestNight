@@ -4,9 +4,12 @@ namespace Slugburn.DarkestNight.Rules.Blights
 {
     public interface IBlight
     {
-        string Name { get;  }
+        BlightType Type { get; }
+        string Name { get; }
         int Might { get; }
+        string EffectText { get; }
+        string DefenseText { get;  }
 
-        void Defend(IHero hero);
+        void Defend(Hero hero);
     }
 }

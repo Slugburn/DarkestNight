@@ -1,6 +1,5 @@
-﻿using System;
-using System.Linq;
-using Slugburn.DarkestNight.Rules.Blights;
+﻿using System.Linq;
+using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules
 {
@@ -17,22 +16,27 @@ namespace Slugburn.DarkestNight.Rules
 
         public void TakeTurn()
         {
-            _game.Darkness = IncreaseDarkness();
+            _game.IncreaseDarkness();
 
             // roll to detect and move
-            var movementRoll = Die.Roll();
-            var detected = _game.Heroes.Where(h => h.Location != Location.Monastery).Where(h => h.Secrecy < movementRoll).ToArray();
+            var movementRoll = _game.RollDie();
+            var detected = _game.Heroes.Where(h => h.Location != Location.Monastery).Where(h => h.Secrecy < movementRoll).ToList();
 
             var necromancerSpace = _game.Board[Location];
+            var rollLocation = necromancerSpace.MoveChart[movementRoll];
             if (!detected.Any())
             {
                 // move based on roll
-                Location = necromancerSpace.MoveChart[movementRoll];
+                Location = rollLocation;
             }
             else
             {
                 // move toward closest detected hero
-                throw new NotImplementedException();
+                var handled = _game.Triggers.Handle(GameTrigger.NecromancerDetectsHeroes);
+                // TODO: update to find closest
+                Location = handled
+                    ? detected.First().Location 
+                    : rollLocation;
             }
 
             var blightsCreated = 1;
@@ -42,24 +46,6 @@ namespace Slugburn.DarkestNight.Rules
                 blightsCreated++;
 
             _game.CreateBlights(Location, blightsCreated);
-        }
-
-        private int IncreaseDarkness()
-        {
-            var darkness = _game.Darkness;
-            
-            // increase darkness by one automatically
-            darkness++;
-
-            // increase darkness by number of descrations in play
-            darkness += _game.Board.Spaces.Sum(space => space.Blights.Count(blight => blight is Desecration));
-
-            if (darkness <= 30) 
-                return darkness;
-
-            // cap darkness at 30 but create a blight in the monastery for every darkness above 30
-            _game.CreateBlights(Location.Monastery, darkness - 30);
-            return 30;
         }
     }
 }

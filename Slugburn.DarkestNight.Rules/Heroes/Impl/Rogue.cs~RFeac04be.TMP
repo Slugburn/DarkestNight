@@ -1,0 +1,119 @@
+﻿using Slugburn.DarkestNight.Rules.Powers;
+
+namespace Slugburn.DarkestNight.Rules.Heroes.Impl
+{
+    public class Rogue : Hero
+    {
+        public Rogue()
+        {
+            Name = "Rogue";
+            DefaultGrace = 4;
+            DefaultSecrecy = 7;
+            Powers=new IPower[]
+                   {
+                       
+                   };
+        }
+    }
+
+    class Ambush:Tactic
+    {
+        public Ambush() : base(TacticType.Fight)
+        {
+            Name = "Ambush";
+            StartingPower = true;
+            Text = "Spend 1 Secrecy to fight with 3 dice.";
+        }
+
+        public override void Activate()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    class Contacts : Bonus
+    {
+        public Contacts()
+        {
+            Name = "Contacts";
+            StartingPower = true;
+            Text = "Exhaust at any time to gain 1 Secrecy (up to 7).";
+        }
+
+        public override void Activate()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    class Diversion : Action
+    {
+        public Diversion()
+        {
+            Name = "Diversion";
+            Text = "Spend 1 Secrecy to negate the effects of one blight in your location until the Necromancer ends a turn there.";
+        }
+
+        public override void Activate()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    class Eavesdrop : Action
+    {
+        public Eavesdrop()
+        {
+            Name = "Eavesdrop";
+            StartingPower = true;
+            Text = "Spend 1 Secrecy to search with 2 dice.";
+        }
+
+        public override void Activate()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    class Sabotage : Action
+    {
+        public Sabotage()
+        {
+            Name = "Sabotage";
+            Text = "Spend 1 Secrecy in the Necromancer's location to cause -1 Darkness.";
+        }
+
+        public override void Activate()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    class Sap : Bonus
+    {
+        public Sap()
+        {
+            Name = "Sap";
+            Text = "Exhaust during your turn to reduce the might of a blight in your location by 1 until your next turn.";
+        }
+
+        public override void Activate()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    class ShadowCloak : Bonus
+    {
+        public ShadowCloak()
+        {
+            Name = "Shadow Cloak";
+            Text = "+1 die when eluding.";
+        }
+
+        public override void Activate()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+}

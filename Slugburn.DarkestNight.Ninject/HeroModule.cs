@@ -8,15 +8,15 @@ namespace Slugburn.DarkestNight.Ninject
     {
         public override void Load()
         {
-            Bind<IHero>().To<Acolyte>();
-            Bind<IHero>().To<Druid>();
-            Bind<IHero>().To<Knight>();
-            Bind<IHero>().To<Priest>();
-            Bind<IHero>().To<Prince>();
-            Bind<IHero>().To<Rogue>();
-            Bind<IHero>().To<Scholar>();
-            Bind<IHero>().To<Seer>();
-            Bind<IHero>().To<Wizard>();
+            Bind<Hero>().To<Acolyte>();
+            Bind<Hero>().To<Druid>();
+            Bind<Hero>().To<Knight>();
+            Bind<Hero>().To<Priest>();
+            Bind<Hero>().To<Prince>();
+            Bind<Hero>().To<Rogue>();
+            Bind<Hero>().To<Scholar>();
+            Bind<Hero>().To<Seer>();
+            Bind<Hero>().To<Wizard>();
         }
     }
 }

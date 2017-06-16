@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Slugburn.DarkestNight.Rules</RootNamespace>
     <AssemblyName>Slugburn.DarkestNight.Rules</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,57 +42,65 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionType.cs" />
-    <Compile Include="Blights\BlightImpl.cs" />
-    <Compile Include="Blights\BlightFactory.cs" />
     <Compile Include="Blights\Blight.cs" />
-    <Compile Include="Blights\Confusion.cs" />
-    <Compile Include="Blights\Corruption.cs" />
-    <Compile Include="Blights\Curse.cs" />
-    <Compile Include="Blights\DarkFog.cs" />
-    <Compile Include="Blights\Desecration.cs" />
-    <Compile Include="Blights\EvilPresence.cs" />
+    <Compile Include="Blights\BlightFactory.cs" />
+    <Compile Include="Blights\BlightType.cs" />
+    <Compile Include="Blights\Implementations\Confusion.cs" />
+    <Compile Include="Blights\Implementations\Corruption.cs" />
+    <Compile Include="Blights\Implementations\Curse.cs" />
+    <Compile Include="Blights\Implementations\DarkFog.cs" />
+    <Compile Include="Blights\Implementations\Desecration.cs" />
+    <Compile Include="Blights\Implementations\EvilPresence.cs" />
     <Compile Include="Blights\IBlight.cs" />
-    <Compile Include="Blights\Shroud.cs" />
-    <Compile Include="Blights\Spies.cs" />
-    <Compile Include="Blights\Taint.cs" />
-    <Compile Include="Blights\Undead.cs" />
-    <Compile Include="Blights\UnholyAura.cs" />
+    <Compile Include="Blights\Implementations\Shroud.cs" />
+    <Compile Include="Blights\Implementations\Spies.cs" />
+    <Compile Include="Blights\Implementations\Taint.cs" />
+    <Compile Include="Blights\Implementations\Undead.cs" />
+    <Compile Include="Blights\Implementations\UnholyAura.cs" />
     <Compile Include="Board.cs" />
     <Compile Include="BonusType.cs" />
     <Compile Include="Die.cs" />
     <Compile Include="Extensions\CardExtensions.cs" />
+    <Compile Include="Heroes\HeroFactory.cs" />
     <Compile Include="Heroes\Impl\Acolyte.cs" />
     <Compile Include="Heroes\Impl\Druid.cs" />
     <Compile Include="Heroes\Impl\Knight.cs" />
+    <Compile Include="Heroes\Impl\PreventMovementEffect.cs" />
     <Compile Include="Heroes\Impl\Priest.cs" />
     <Compile Include="Heroes\Impl\Prince.cs" />
     <Compile Include="Heroes\Impl\Rogue.cs" />
     <Compile Include="Heroes\Impl\Scholar.cs" />
     <Compile Include="Heroes\Impl\Seer.cs" />
     <Compile Include="Heroes\Impl\Wizard.cs" />
-    <Compile Include="Map.cs" />
+    <Compile Include="IgnoreBlightEffect.cs" />
+    <Compile Include="IPlayer.cs" />
+    <Compile Include="Maps\Map.cs" />
+    <Compile Include="Maps\MapFactory.cs" />
+    <Compile Include="Powers\IAction.cs" />
+    <Compile Include="Powers\IBonusAction.cs" />
     <Compile Include="Powers\IPowerEffect.cs" />
-    <Compile Include="Trigger.cs" />
-    <Compile Include="TriggeredAction.cs" />
-    <Compile Include="TriggeredEffect.cs" />
+    <Compile Include="Powers\PowerNotUsableException.cs" />
+    <Compile Include="Stash.cs" />
+    <Compile Include="Triggers\GameTrigger.cs" />
+    <Compile Include="Triggers\HeroTrigger.cs" />
+    <Compile Include="Triggers\ITriggerRegistrar.cs" />
+    <Compile Include="Triggers\TriggerContext.cs" />
+    <Compile Include="Triggers\ITriggerHandler.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="GameFactory.cs" />
     <Compile Include="Heroes\Hero.cs" />
     <Compile Include="Heroes\HeroState.cs" />
-    <Compile Include="Heroes\IHero.cs" />
     <Compile Include="IEvent.cs" />
-    <Compile Include="IMap.cs" />
+    <Compile Include="Maps\IMap.cs" />
     <Compile Include="ISource.cs" />
     <Compile Include="ISpace.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="LocationAction.cs" />
     <Compile Include="Necromancer.cs" />
-    <Compile Include="Powers\Action.cs" />
+    <Compile Include="Powers\ActionPower.cs" />
     <Compile Include="Powers\Bonus.cs" />
     <Compile Include="Powers\IPower.cs" />
     <Compile Include="Powers\Power.cs" />
     <Compile Include="Powers\PowerType.cs" />
-    <Compile Include="Powers\Stash.cs" />
     <Compile Include="Powers\Tactic.cs" />
     <Compile Include="Powers\TacticType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -107,7 +116,9 @@
     <Compile Include="Spaces\Swamp.cs" />
     <Compile Include="Spaces\Village.cs" />
     <Compile Include="TargetType.cs" />
+    <Compile Include="Triggers\TriggerRegistry.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,32 +1,20 @@
 ﻿using Slugburn.DarkestNight.Rules.Powers;
+using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 {
     public class Prince : Hero
     {
         public Prince()
+            : base(
+                "Prince", 4, 3, new Chapel(), new DivineRight(), new Inspire(), new Loyalty(), new Rebellion(), new Resistance(), new SafeHouse(), new Scouts(),
+                new SecretPassage(), new Strategy())
         {
-            Name = "Prince";
-            DefaultGrace = 4;
-            DefaultSecrecy = 3;
-            Powers = new IPower[]
-                     {
-                         new Chapel(), 
-                         new DivineRight(), 
-                         new Inspire(), 
-                         new Loyalty(), 
-                         new Rebellion(),
-                         new Resistance(), 
-                         new SafeHouse(), 
-                         new Scouts(), 
-                         new SecretPassage(), 
-                         new Strategy(), 
-                     };
         }
 
         #region Powers
 
-        class Chapel : Action
+        class Chapel : ActionPower
         {
             public Chapel()
             {
@@ -40,23 +28,23 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 return base.IsUsable() && Hero.Secrecy > 0;
             }
 
-            public override void Activate()
-            {
-                var space = Hero.GetSpace();
-                var locationAction = new LocationAction(ActionType.Pray, this);
-                Stash.Set(space, locationAction);
-
-                space.Add(locationAction);
-                Hero.LoseSecrecy();
-            }
-
-            public override void Deactivate()
-            {
-                base.Deactivate();
-                var space = Stash.Get<ISpace>();
-                var locationAction = Stash.Get<LocationAction>();
-                space.Remove(locationAction);
-            }
+//            public override void Activate()
+//            {
+//                var space = Hero.GetSpace();
+//                var locationAction = new LocationAction(ActionType.Pray, this);
+//                Stash.Add(space, locationAction);
+//
+//                space.Add(locationAction);
+//                Hero.LoseSecrecy();
+//            }
+//
+//            public override void Deactivate()
+//            {
+//                base.Deactivate();
+//                var space = Stash.Get<ISpace>();
+//                var locationAction = Stash.Get<LocationAction>();
+//                space.Remove(locationAction);
+//            }
         }
         class DivineRight : Bonus
         {
@@ -66,23 +54,23 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "+1 to default Grace. Add 1 to each die when praying.";
             }
 
-            public override void Activate()
-            {
-                Hero.DefaultGrace++;
-                var bonus = new RollBonus(RollType.Pray, BonusType.Results, 1, this);
-                Hero.Add(bonus);
-                Stash.Set(bonus);
-            }
-
-            public override void Deactivate()
-            {
-                base.Deactivate();
-                Hero.DefaultGrace--;
-                var bonus = Stash.Get<RollBonus>();
-                Hero.Remove(bonus);
-            }
+//            public override void Activate()
+//            {
+//                Hero.DefaultGrace++;
+//                var bonus = new RollBonus(RollType.Pray, BonusType.Results, 1, this);
+//                Hero.Add(bonus);
+//                Stash.Set(bonus);
+//            }
+//
+//            public override void Deactivate()
+//            {
+//                base.Deactivate();
+//                Hero.DefaultGrace--;
+//                var bonus = Stash.Get<RollBonus>();
+//                Hero.Remove(bonus);
+//            }
         }
-        class Inspire : Action
+        class Inspire : ActionPower
         {
             public Inspire()
             {
@@ -94,23 +82,23 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
             public override void Activate()
             {
-                Hero.SelectTarget<IHero>(TargetType.Hero)
-                    .OnTarget(target =>
-                    {
-                        var bonus = new RollBonus(RollType.Any, BonusType.Dice, 3, this)
-                        {
-                            Auto = false,
-                            OnUse = () => Deactivate()
-                        };
-                        target.Add(bonus);
-                        Stash.Set(target, bonus);
-                    });
+//                Hero.SelectTarget<Hero>(TargetType.Hero)
+//                    .OnTarget(target =>
+//                    {
+//                        var bonus = new RollBonus(RollType.Any, BonusType.Dice, 3, this)
+//                        {
+//                            Auto = false,
+//                            OnUse = () => Deactivate()
+//                        };
+//                        target.Add(bonus);
+//                        Stash.Add(target, bonus);
+//                    });
             }
 
             public override void Deactivate()
             {
                 base.Deactivate();
-                var target = Stash.Get<IHero>();
+                var target = Stash.Get<Hero>();
                 var bonus = Stash.Get<RollBonus>();
                 target.Remove(bonus);
             }
@@ -124,23 +112,24 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "+1d when eluding.";
             }
 
-            public override void Activate()
-            {
-                var bonus = new RollBonus(RollType.Elude, BonusType.Dice, 1, this);
-                Hero.Add(bonus);
-                Stash.Set(bonus);
-            }
-
-            public override void Deactivate()
-            {
-                var bonus = Stash.Get<RollBonus>();
-                Hero.Remove(bonus);
-            }
+//            public override void Activate()
+//            {
+//                var bonus = new RollBonus(RollType.Elude, BonusType.Dice, 1, this);
+//                Hero.Add(bonus);
+//                Stash.Set(bonus);
+//            }
+//
+//            public override void Deactivate()
+//            {
+//                var bonus = Stash.Get<RollBonus>();
+//                Hero.Remove(bonus);
+//            }
         }
+
         class Rebellion : Tactic
         {
             public Rebellion()
-                : base(TacticType.Fight)
+                : base(TacticType.Fight, 3)
             {
                 Name = "Rebellion";
                 Text = "Fight with 3d when attacking a blight or the Necromancer";
@@ -151,12 +140,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 return base.IsUsable() && (Hero.State == HeroState.AttackingBlight || Hero.State == HeroState.AttackingNecromancer);
             }
 
-            public override void Activate()
-            {
-                Hero.SetDice(RollType.Fight, 3);
-            }
+//            public override void Activate()
+//            {
+//                Hero.SetDice(RollType.Fight, 3);
+//            }
         }
-        class Resistance : Action
+
+        class Resistance : ActionPower
         {
             public Resistance()
             {
@@ -171,24 +161,24 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 return base.IsUsable() && Hero.Secrecy > 0;
             }
 
-            public override void Activate()
-            {
-                Hero.LoseSecrecy();
-                var space = Hero.GetSpace();
-                var bonus = new RollBonus(RollType.Fight, BonusType.Dice, 1, this) { Restriction = hero => hero.State == HeroState.AttackingBlight };
-                space.Add(bonus);
-                Stash.Set(space, bonus);
-            }
-
-            public override void Deactivate()
-            {
-                base.Deactivate();
-                var space = Stash.Get<ISpace>();
-                var bonus = Stash.Get<RollBonus>();
-                space.Remove(bonus);
-            }
+//            public override void Activate()
+//            {
+//                Hero.LoseSecrecy();
+//                var space = Hero.GetSpace();
+//                var bonus = new RollBonus(RollType.Fight, BonusType.Dice, 1, this) { Restriction = hero => hero.State == HeroState.AttackingBlight };
+//                space.Add(bonus);
+//                Stash.Add(space, bonus);
+//            }
+//
+//            public override void Deactivate()
+//            {
+//                base.Deactivate();
+//                var space = Stash.Get<ISpace>();
+//                var bonus = Stash.Get<RollBonus>();
+//                space.Remove(bonus);
+//            }
         }
-        class SafeHouse : Action
+        class SafeHouse : ActionPower
         {
             public SafeHouse()
             {
@@ -199,24 +189,24 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
             public override void Activate()
             {
-                var space = Hero.GetSpace();
-                var effect = new TriggeredEffect(Trigger.EndOfTurn, "Gain 1 Secrecy (up to 5)", hero => hero.GainSecrecy(1, 5), this);
-                var bonus = new RollBonus(RollType.Elude, BonusType.Dice, 1, this);
-                space.Add(effect);
-                space.Add(bonus);
-                Stash.Set(space, effect, bonus);
+//                var space = Hero.GetSpace();
+//                var effect = new TriggeredEffect(this, HeroTrigger.EndOfTurn, "Gain 1 Secrecy (up to 5)", c => c.Hero.GainSecrecy(1, 5));
+//                var bonus = new RollBonus(RollType.Elude, BonusType.Dice, 1, this);
+//                space.Add(effect);
+//                space.Add(bonus);
+//                Stash.Add(space, effect, bonus);
             }
 
             public override void Deactivate()
             {
-                var space = Stash.Get<ISpace>();
-                var effect = Stash.Get<TriggeredEffect>();
-                var bonus = Stash.Get<ISpace>();
-                space.Remove(effect);
-                space.Remove(bonus);
+//                var space = Stash.Get<ISpace>();
+//                var effect = Stash.Get<TriggeredEffect>();
+//                var bonus = Stash.Get<ISpace>();
+//                space.Remove(effect);
+//                space.Remove(bonus);
             }
         }
-        class Scouts : Action
+        class Scouts : ActionPower
         {
             public Scouts()
             {
@@ -230,23 +220,23 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 return base.IsUsable() && Hero.Secrecy > 0;
             }
 
-            public override void Activate()
-            {
-                var space = Hero.GetSpace();
-                var bonus = new RollBonus(RollType.Search, BonusType.Dice, 1, this);
-                Stash.Set(space, bonus);
-                space.Add(bonus);
-                Hero.LoseSecrecy();
-            }
-
-            public override void Deactivate()
-            {
-                var space = Stash.Get<ISpace>();
-                var bonus = Stash.Get<RollBonus>();
-                space.Remove(bonus);
-            }
+//            public override void Activate()
+//            {
+//                var space = Hero.GetSpace();
+//                var bonus = new RollBonus(RollType.Search, BonusType.Dice, 1, this);
+//                Stash.Add(space, bonus);
+//                space.Add(bonus);
+//                Hero.LoseSecrecy();
+//            }
+//
+//            public override void Deactivate()
+//            {
+//                var space = Stash.Get<ISpace>();
+//                var bonus = Stash.Get<RollBonus>();
+//                space.Remove(bonus);
+//            }
         }
-        class SecretPassage : Action
+        class SecretPassage : ActionPower
         {
             public SecretPassage()
             {
@@ -256,18 +246,18 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
             public override void Activate()
             {
-                Hero.SelectTarget<Location>(TargetType.AdjacentLocation)
-                    .OnTarget(location =>
-                    {
-                        Hero.MoveTo(location);
-                        Hero.GainSecrecy(2, 5);
-                    });
+//                Hero.SelectTarget<Location>(TargetType.AdjacentLocation)
+//                    .OnTarget(location =>
+//                    {
+//                        Hero.MoveTo(location);
+//                        Hero.GainSecrecy(2, 5);
+//                    });
             }
         }
         class Strategy : Tactic
         {
             public Strategy()
-                : base(TacticType.Fight)
+                : base(TacticType.Fight, 2)
             {
                 Name = "Strategy";
                 StartingPower = true;
@@ -279,10 +269,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 return base.IsUsable() && (Hero.State == HeroState.Fighting || Hero.State == HeroState.AttackingBlight || Hero.State == HeroState.AttackingNecromancer);
             }
 
-            public override void Activate()
-            {
-                Hero.SetDice(RollType.Fight, 2);
-            }
+//            public override void Activate()
+//            {
+//                Hero.SetDice(RollType.Fight, 2);
+//            }
         }
 
         #endregion

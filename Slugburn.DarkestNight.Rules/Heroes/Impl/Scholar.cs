@@ -5,14 +5,129 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
     public class Scholar : Hero
     {
         public Scholar()
+            : base(
+                "Scholar", 4, 6, new FindWeakness(), new Foresight(), new Preparation(), new Thoroughness(), new AncientCharm(), new AncientDefense(),
+                new AncientSword(), new Counterspell(), new ForgottenSancutary(), new ResearchMaterials())
         {
-            Name = "Scholar";
-            DefaultGrace = 4;
-            DefaultSecrecy = 6;
-            Powers=new IPower[]
-                   {
-                       
-                   };
+        }
+
+        class FindWeakness : Tactic
+        {
+            public FindWeakness() : base(TacticType.Fight)
+            {
+                Name = "Find Weakness";
+                StartingPower = true;
+                Text = "Fight with 1 die. Before rolling, pick 1 die, and add 1 to its result.";
+            }
+        }
+
+        class Foresight : Tactic
+        {
+            public Foresight() : base(TacticType.Elude)
+            {
+                Name = "Foresight";
+                StartingPower = true;
+                Text = "Elude with 2 dice.";
+            }
+        }
+
+        class Preparation : Bonus
+        {
+            public Preparation()
+            {
+                Name = "Preparation";
+                StartingPower = true;
+                Text = "Exhaust after you make any die roll to reroll it.";
+            }
+        }
+
+        class Thoroughness: Bonus
+        {
+            public Thoroughness()
+            {
+                Name = "Thoroughness";
+                StartingPower = true;
+                Text = "If you search successfully, draw an extra card (but still keep only 1).";
+            }
+        }
+
+        class AncientCharm: ActionPower
+        {
+            public AncientCharm()
+            {
+                Name = "Ancient Charm";
+                Text = "Activate in your location.";
+                ActiveText = "When a hero has an event there, draw an extra card and discard 1.";
+            }
+
+            public override void Activate()
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        class AncientDefense: ActionPower
+        {
+            public AncientDefense()
+            {
+                Name = "Ancient Defense";
+                Text = "Activate in your location.";
+                ActiveText = "When a blight appears there, draw an extra card and discard 1.";
+            }
+
+            public override void Activate()
+            {
+                throw new System.NotImplementedException();
+            }
+
+        }
+
+        class AncientSword : Bonus
+        {
+            public AncientSword()
+            {
+                Name = "Ancient Sword";
+                Text = "+1 die in fights.";
+            }
+        }
+
+        class Counterspell : ActionPower
+        {
+            public Counterspell()
+            {
+                Name = "Counterspell";
+                Text = "Activate in your location.";
+                ActiveText = "The might of blights there is reduced by 1.";
+            }
+
+            public override void Activate()
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        class ForgottenSancutary : ActionPower
+        {
+            public ForgottenSancutary()
+            {
+                Name = "Forgotten Sanctuary";
+                Text = "Activate in your location.";
+                ActiveText = "Heroes gain +2 dice when eluding there.";
+            }
+
+            public override void Activate()
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        class ResearchMaterials : Bonus
+        {
+            public ResearchMaterials()
+            {
+                Name = "Research Materials";
+                Text = "+1 die in searches.";
+            }
         }
     }
 }
