@@ -23,15 +23,16 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "One hero at your location gains 1 Grace (up to default). If they now have more Grace than you, you gain 1 Grace.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
-//                Hero.SelectTarget<Hero>(TargetType.Hero)
-//                    .OnTarget(target =>
-//                    {
-//                        target.GainGrace(1, target.DefaultGrace);
-//                        if (target.Grace > Hero.Grace)
-//                            Hero.GainGrace(1);
-//                    });
+                //                Hero.SelectTarget<Hero>(TargetType.Hero)
+                //                    .OnTarget(target =>
+                //                    {
+                //                        target.GainGrace(1, target.DefaultGrace);
+                //                        if (target.Grace > Hero.Grace)
+                //                            Hero.GainGrace(1);
+                //                    });
+                return true;
             }
         }
 
@@ -45,15 +46,16 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "Gain an extra Grace (up to default) when praying.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
-//                Hero.SelectTarget<Hero>(TargetType.Hero)
-//                    .OnTarget(target =>
-//                    {
-//                        var effect = new TriggeredEffect(this, Trigger.Praying, ActiveText, c => c.Hero.GainGrace(1, c.Hero.DefaultGrace));
-//                        target.Add(effect);
-//                        Stash.Add(target, effect);
-//                    });
+                //                Hero.SelectTarget<Hero>(TargetType.Hero)
+                //                    .OnTarget(target =>
+                //                    {
+                //                        var effect = new TriggeredEffect(this, Trigger.Praying, ActiveText, c => c.Hero.GainGrace(1, c.Hero.DefaultGrace));
+                //                        target.Add(effect);
+                //                        Stash.Add(target, effect);
+                //                    });
+                return true;
             }
 
             public override void Deactivate()
@@ -74,12 +76,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "Gain 1 Grace (up to default) when hiding.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
-//                var space = Hero.GetSpace();
-//                var effect = new TriggeredEffect(this, HeroTrigger.Hiding, ActiveText, c => c.Hero.GainGrace(1, c.Hero.DefaultGrace));
-//                space.Add(effect);
-//                Stash.Add(space, effect);
+                //                var space = Hero.GetSpace();
+                //                var effect = new TriggeredEffect(this, HeroTrigger.Hiding, ActiveText, c => c.Hero.GainGrace(1, c.Hero.DefaultGrace));
+                //                space.Add(effect);
+                //                Stash.Add(space, effect);
+                return true;
             }
 
             public override void Deactivate()
@@ -100,15 +103,16 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "+1d in fights.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
-//                Hero.SelectTarget<Hero>(TargetType.Hero)
-//                    .OnTarget(target =>
-//                    {
-//                        var bonus = new RollBonus(RollType.Fight, BonusType.Dice, 1, this);
-//                        target.Add(bonus);
-//                        Stash.Add(target, bonus);
-//                    });
+                //                Hero.SelectTarget<Hero>(TargetType.Hero)
+                //                    .OnTarget(target =>
+                //                    {
+                //                        var bonus = new RollBonus(RollType.Fight, BonusType.Dice, 1, this);
+                //                        target.Add(bonus);
+                //                        Stash.Add(target, bonus);
+                //                    });
+                return true;
             }
 
             public override void Deactivate()
@@ -129,15 +133,16 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "+1d when eluding.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
-//                Hero.SelectTarget<Hero>(TargetType.Hero)
-//                    .OnTarget(target =>
-//                    {
-//                        var bonus = new RollBonus(RollType.Elude, BonusType.Dice, 1, this);
-//                        target.Add(bonus);
-//                        Stash.Add(target, bonus);
-//                    });
+                //                Hero.SelectTarget<Hero>(TargetType.Hero)
+                //                    .OnTarget(target =>
+                //                    {
+                //                        var bonus = new RollBonus(RollType.Elude, BonusType.Dice, 1, this);
+                //                        target.Add(bonus);
+                //                        Stash.Add(target, bonus);
+                //                    });
+                return true;
             }
 
             public override void Deactivate()
@@ -174,7 +179,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 //            }
         }
 
-        class Censure : Tactic
+        class Censure : TacticPower
         {
             public Censure()
                 : base(TacticType.Fight,2)
@@ -223,7 +228,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 //            }
         }
 
-        class Sanctuary : Tactic
+        class Sanctuary : TacticPower
         {
             public Sanctuary()
                 : base(TacticType.Elude, 4)

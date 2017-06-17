@@ -29,7 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Exhaust to draw one search result for your location without rolling dice.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
@@ -52,7 +52,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Exhaust and spend 1 Grace to cause -1 Darkness.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
@@ -67,13 +67,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Roll 2 dice and add them to this card. You may use all dice on this card instead of making any roll. When you do, clear this card.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
         }
 
-        class Premonition : Tactic
+        class Premonition : TacticPower
         {
             public Premonition() : base(TacticType.Elude)
             {

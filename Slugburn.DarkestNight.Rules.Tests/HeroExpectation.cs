@@ -12,10 +12,12 @@ namespace Slugburn.DarkestNight.Rules.Tests
         private int _expectedSecrecy;
         private readonly List<Location> _invalidLocations;
         private List<Location> _specifiedLocations;
+        private bool _expectedActionAvailable;
 
         public HeroExpectation(Hero hero)
         {
-            _hero = (Hero)hero;
+            _hero = hero;
+            _expectedActionAvailable = true;
             _expectedGrace = hero.DefaultGrace;
             _expectedSecrecy = hero.DefaultSecrecy;
             _invalidLocations = new List<Location>();
@@ -30,6 +32,8 @@ namespace Slugburn.DarkestNight.Rules.Tests
 
         public void Verify()
         {
+            Assert.That(_hero.IsActionAvailable, Is.EqualTo(_expectedActionAvailable),
+                _expectedActionAvailable ? "Should not have used action." : "Should have used action.");
             Assert.That(_hero.Grace, Is.EqualTo(_expectedGrace), "Unexpected Grace.");
             Assert.That(_hero.Secrecy, Is.EqualTo(_expectedSecrecy), "Unexpected Secrecy.");
             var validLocations = _hero.GetValidMovementLocations().ToList();
@@ -54,6 +58,18 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public HeroExpectation CanMoveTo(Location location)
         {
             _specifiedLocations.Add(location);
+            return this;
+        }
+
+        public HeroExpectation HasNotUsedAction()
+        {
+            _expectedActionAvailable = true;
+            return this;
+        }
+
+        public HeroExpectation HasUsedAction()
+        {
+            _expectedActionAvailable = false;
             return this;
         }
     }

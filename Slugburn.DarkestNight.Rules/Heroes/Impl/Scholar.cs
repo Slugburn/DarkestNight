@@ -11,7 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
         {
         }
 
-        class FindWeakness : Tactic
+        class FindWeakness : TacticPower
         {
             public FindWeakness() : base(TacticType.Fight)
             {
@@ -21,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class Foresight : Tactic
+        class Foresight : TacticPower
         {
             public Foresight() : base(TacticType.Elude)
             {
@@ -60,7 +60,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "When a hero has an event there, draw an extra card and discard 1.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
@@ -75,7 +75,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "When a blight appears there, draw an extra card and discard 1.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
@@ -100,7 +100,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "The might of blights there is reduced by 1.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
@@ -115,7 +115,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "Heroes gain +2 dice when eluding there.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }

@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Blights.Implementations;
 using Slugburn.DarkestNight.Rules.Heroes.Impl;
 using Slugburn.DarkestNight.Rules.Powers;
+using Slugburn.DarkestNight.Rules.Tactics;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Heroes
@@ -13,6 +15,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes
     {
         private readonly List<IPower> _powerDeck;
         private Stash _stash;
+        private readonly Dictionary<string, ITactic> _fightTactics;
+        private readonly Dictionary<string, ITactic> _evadeTactics;
+        private readonly List<IRollModifier> _rollModifiers;
+        private IRollClient _rollClient;
 
         public TriggerRegistry<HeroTrigger> Triggers { get; }
 
@@ -31,6 +37,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             _powerDeck = new List<IPower>(powers);
             _stash= new Stash();
             Triggers = new TriggerRegistry<HeroTrigger>(this);
+            IsActionAvailable = true;
+
+            _fightTactics = new Dictionary<string, ITactic>(StringComparer.InvariantCultureIgnoreCase) {{"None", new NoTactic()}};
+            _evadeTactics = new Dictionary<string, ITactic>(StringComparer.InvariantCultureIgnoreCase) {{"None", new NoTactic()}};
+            _rollModifiers = new List<IRollModifier>();
         }
 
         public IEnumerable<IPower> PowerDeck => _powerDeck;
@@ -90,7 +101,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void ExhaustPowers()
         {
-            throw new System.NotImplementedException();
+            foreach (var power in Powers)
+                power.Exhaust();
         }
 
         public void LoseGrace()
@@ -183,15 +195,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             Player = player;
         }
 
-        public void AttackBlight()
-        {
-            var space = GetSpace();
-            var blight = space.Blights.Single();
-            var selectedTactic = SelectTactic();
-            var result = selectedTactic.GetResult();
-            ResolveAttack(blight, result);
-        }
-
         internal void ResolveAttack(IBlight blight, int result)
         {
             LoseSecrecy("Attack");
@@ -207,15 +210,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             }
         }
 
-        internal Tactic SelectTactic()
+        public List<ITactic> GetAvailableFightTactics()
         {
-            var tactics = Powers.Where(x => x.Type == PowerType.Tactic && x.IsUsable()).Cast<Tactic>().ToList();
-            var fightTactics = tactics
-                .Where(x => (x.TacticType & TacticType.Fight) > 0)
-                .ToList();
-            var availableTactics = new[] {Tactic.None(this)}.Concat(fightTactics).ToList();
-            var selectedTactic = availableTactics.Count == 1 ? availableTactics.Single() : Player.ChooseTactic(availableTactics);
-            return selectedTactic;
+            return _fightTactics.Values.Where(x => x.IsAvailable(this)).ToList();
         }
 
         public Game Game { get; private set; }
@@ -234,7 +231,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             return (ITriggerHandler) GetPower(handlerName);
         }
 
-        private IPower GetPower(string name)
+        public IPower GetPower(string name)
         {
             return Powers.SingleOrDefault(x=>x.Name==name);
         }
@@ -248,6 +245,105 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             return Powers.Where(x=>x is T).Cast<T>();
         }
+
+        public void TakeAction(IAction action)
+        {
+            if (!IsActionAvailable)
+                throw new InvalidOperationException($"{Name} does not have an action available.");
+            var success = action.Act();
+            if (success)
+                IsActionAvailable = false;
+        }
+
+        public bool IsActionAvailable { get; private set; }
+        public ConflictState ConflictState { get; set; }
+
+        public void SelectTargetAndTactic(ICollection<Blight> targets, string tacticName)
+        {
+            ValidateState(HeroState.SelectingTarget);
+            var targetsAreValid =  ConflictState.AvailableTargets.Intersect(targets).Count() == targets.Count
+                && targets.Count >= ConflictState.MinTarget && targets.Count <= ConflictState.MaxTarget;
+            if (!targetsAreValid)
+                throw new Exception("Invalid targets.");
+            var tacticIsValid = ConflictState.AvailableFightTactics.Select(x=>x.Name).Contains(tacticName);
+            if (!tacticIsValid)
+                throw new Exception($"Invalid tactic: {tacticName}");
+            ConflictState.Targets = targets;
+            var tacticInfo = ConflictState.AvailableFightTactics.Single(x=>x.Name == tacticName);
+            ConflictState.SelectedTactic = tacticInfo;
+            var diceCount = tacticInfo.DiceCount;
+            var roll = Player.RollDice(diceCount).ToList();
+            ConflictState.Roll = roll;
+            State = HeroState.RollAvailable;
+        }
+
+        public void EndCombat()
+        {
+            ValidateState(HeroState.RollAvailable);
+            var tactic = _fightTactics[ConflictState.SelectedTactic.Name];
+            var roll = ConflictState.Roll;
+            tactic.AfterRoll(this, roll);
+            _rollClient.EndCombat(roll);
+        }
+
+        private void ValidateState(HeroState expected)
+        {
+            if (State != expected)
+                throw new UnexpectedStateException(State, expected);
+        }
+
+        public void AddFightTactic(ITactic tactic)
+        {
+            _fightTactics.Add(tactic.Name, tactic);
+        }
+
+        public void AddEvadeTactic(ITactic tactic)
+        {
+            _evadeTactics.Add(tactic.Name, tactic);
+        }
+
+        public void AddRollModifier(IRollModifier rollModifier)
+        {
+            _rollModifiers.Add(rollModifier);
+        }
+
+        public IEnumerable<IRollModifier> GetRollModifiers()
+        {
+            return _rollModifiers;
+        }
+
+        public void AssignDiceToBlights(ICollection<BlightDieAssignment> assignments)
+        {
+            ValidateState(HeroState.AssigningDice);
+            var validRolls = assignments.Select(x => x.DieValue).Intersect(ConflictState.Roll).Count() == assignments.Count;
+            if (!validRolls)
+                throw new Exception("Invalid die values specified.");
+            var validTargets = assignments.Select(x => x.Blight).Intersect(ConflictState.Targets).Count() == assignments.Count;
+            if (!validTargets)
+                throw new Exception("Invalid targets specified.");
+            foreach (var assignment in assignments)
+            {
+                ResolveAttack(GetSpace().GetBlight(assignment.Blight) , assignment.DieValue);
+            }
+        }
+
+        public void SetRollClient(IRollClient rollClient)
+        {
+            _rollClient = rollClient;
+        }
+
+        public void RemoveRollModifier(string name)
+        {
+            var toRemove = _rollModifiers.Single(x => x.Name == name);
+            _rollModifiers.Remove(toRemove);
+        }
     }
 
+    public class UnexpectedStateException : Exception
+    {
+        public UnexpectedStateException(HeroState actual, HeroState expected)
+            :base($"Unexpected game state. Expected {expected} but was {actual}.")
+        {
+        }
+    }
 }

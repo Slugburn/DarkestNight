@@ -20,13 +20,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Exhaust to move directly to any location, gaining 2 Secrecy (up to 5).";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
         }
 
-        class LightningStrike: Tactic
+        class LightningStrike: TacticPower
         {
             public LightningStrike() : base(TacticType.Fight)
             {
@@ -46,13 +46,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "That type of blight has no effect.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
         }
 
-        class Invisibility : Tactic
+        class Invisibility : TacticPower
         {
             public Invisibility() : base(TacticType.Elude)
             {
@@ -63,7 +63,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class Fiendfire : Tactic
+        class Fiendfire : TacticPower
         {
             public Fiendfire() : base(TacticType.Fight)
             {
@@ -90,7 +90,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "Roll 1 die when a blight is created. If you roll a 6, destroy it.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
@@ -105,7 +105,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "Roll twice for Necromancer movement and choose one result.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
@@ -119,7 +119,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Exhaust to search with 2 dice in any location (not necessarily the location you are at).";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
@@ -134,7 +134,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "At the start of your turn, look at the top card of any deck; put it on the top or bottom of that deck.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }

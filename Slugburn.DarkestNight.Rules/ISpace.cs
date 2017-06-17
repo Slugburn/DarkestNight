@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Slugburn.DarkestNight.Rules.Blights;
 
 namespace Slugburn.DarkestNight.Rules
@@ -9,7 +10,7 @@ namespace Slugburn.DarkestNight.Rules
         string Name { get; }
         int SearchTarget { get; set; }
         IEnumerable<Location> AdjacentLocations { get; }
-        IEnumerable<IBlight> Blights { get; }
+        ICollection<IBlight> Blights { get; }
         IDictionary<int, Location> MoveChart { get; }
 
         bool HasRelic { get; set; }
@@ -19,5 +20,6 @@ namespace Slugburn.DarkestNight.Rules
         void Add<T>(T item);
         void Remove<T>(T item);
         IEnumerable<T> GetBlights<T>() where T : IBlight;
+        IBlight GetBlight(Blight type);
     }
 }

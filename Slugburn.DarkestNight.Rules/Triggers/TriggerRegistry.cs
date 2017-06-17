@@ -21,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Triggers
             _actions[trigger].Add(new TriggeredAction(handler.Name, tag));
         }
 
-        public bool Handle(T trigger, string sourceName = null)
+        public bool Handle(T trigger, object state = null)
         {
             if (!_actions.ContainsKey(trigger)) return true;
             var actions = _actions[trigger];
@@ -29,7 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Triggers
             foreach (var action in actions)
             {
                 var handler = _registrar.GetTriggerHandler(action.HandlerName);
-                var context = new TriggerContext {SourceName = sourceName};
+                var context = new TriggerContext(state);
                 handler.HandleTrigger(context, action.Tag);
                 cancel = cancel || context.Cancel;
             }

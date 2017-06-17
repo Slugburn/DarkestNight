@@ -1,4 +1,5 @@
-﻿using Slugburn.DarkestNight.Rules.Blights;
+﻿using System;
+using Slugburn.DarkestNight.Rules.Blights;
 
 namespace Slugburn.DarkestNight.Rules.Tests
 {
@@ -11,9 +12,9 @@ namespace Slugburn.DarkestNight.Rules.Tests
             _player = player;
         }
 
-        public PlayerActionContext UsePower(string name)
+        public PlayerActionContext UsePower(string name, bool response = true)
         {
-            _player.SetUsePowerResponse(name, true);
+            _player.SetUsePowerResponse(name, response);
             return this;
         }
 
@@ -31,8 +32,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
 
         public PlayerActionContext ChoosesNumberOfDice(int count)
         {
-            _player.SetNumberOfDiceChoice(count);
-            return this;
+            throw new NotImplementedException();
         }
 
         public PlayerActionContext ChoosesBlight(params Blight[] blights)
@@ -44,6 +44,18 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public PlayerActionContext AssignRollToBlight(int roll, Blight blight)
         {
             _player.SetBlightRollAssignment(blight, roll);
+            return this;
+        }
+
+        public PlayerActionContext ChooseLocation(Location location)
+        {
+            _player.SetLocationChoice(location);
+            return this;
+        }
+
+        public PlayerActionContext RollAnotherDie(params bool[] choices)
+        {
+            _player.SetRollAnotherDieChoice(choices);
             return this;
         }
     }

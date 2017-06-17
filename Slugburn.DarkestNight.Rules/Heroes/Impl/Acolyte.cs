@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Powers;
+using Slugburn.DarkestNight.Rules.Tactics;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Heroes.Impl
@@ -29,19 +31,19 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             public override void Learn()
             {
                 base.Learn();
-                Hero.Game.Triggers.Register(this, GameTrigger.NecromancerDetectsHeroes);
+                Game.Triggers.Register(this, GameTrigger.NecromancerDetectsHeroes);
             }
 
             public void HandleTrigger(TriggerContext context, string tag)
             {
                 if (!IsUsable()) return;
-                if (!Hero.Player.AskUsePower(Name, Text)) return;
+                if (!Player.AskUsePower(Name, Text)) return;
                 Exhaust();
                 context.Cancel = true;
             }
         }
 
-        class CallToDeath : ActionPower
+        class CallToDeath : ActionPower, IRollClient
         {
             public CallToDeath()
             {
@@ -50,31 +52,31 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                     "Attack two blights in your location at once. Make a single fight roll with +1 die, then divide the dice between blights and resolve as two separate attacks (losing Secrecy for each).";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
-                base.Activate();
-                var hero = (Hero)Hero;
-                var player = hero.Player;
-                var blights = hero.GetBlights().Select(x=>x.Type).ToList();
-                var selectedBlights = blights.Count == 2
-                    ? blights
-                    : player.ChooseBlights(blights, 2);
-                var selectedTactic = hero.SelectTactic();
-                const int bonusDice = 1;
-                var dieCount = selectedTactic.GetDieCount() + bonusDice;
-                var rolls = selectedTactic.RollDice(dieCount).ToList();
-                foreach (var blightType in selectedBlights)
+                Hero.SetRollClient(this);
+                Hero.AddRollModifier(new StaticRollBonus(Name, TacticType.Fight, 1));
+                Hero.ConflictState = new ConflictState
                 {
-                    var blight = hero.GetBlights().First(x => x.Type == blightType);
-                    var assignedRoll =  player.AssignRollToBlight(blightType, rolls);
-                    rolls.Remove(assignedRoll);
-                    hero.ResolveAttack(blight, assignedRoll);
-                }
+                    TacticType = TacticType.Fight,
+                    AvailableFightTactics = Hero.GetAvailableFightTactics().GetInfo(Hero),
+                    AvailableTargets = Hero.GetSpace().Blights.Select(x=>x.Type).ToList(),
+                    MinTarget = 2,
+                    MaxTarget = 2
+                };
+                Hero.State = HeroState.SelectingTarget;
+                return true;
             }
 
             public override bool IsUsable()
             {
                 return base.IsUsable() && Hero.GetBlights().Count() > 1;
+            }
+
+            public void EndCombat(IEnumerable<int> roll)
+            {
+                Hero.RemoveRollModifier(Name);
+                Hero.State = HeroState.AssigningDice;
             }
         }
 
@@ -111,7 +113,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 {
                     case "FailedAttack":
                         if (!IsUsable()) return;
-                        if (!Hero.Player.AskUsePower(Name, Text)) return;
+                        if (!Player.AskUsePower(Name, Text)) return;
                         Exhaust();
                         context.Cancel = true;
                         break;
@@ -140,7 +142,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             public void HandleTrigger(TriggerContext context, string tag)
             {
                 if (!IsUsable()) return;
-                var sourceName = context.SourceName;
+                var sourceName = context.GetState<string>();
                 if (sourceName == "Attack" || sourceName == "Necromancer")
                     context.Cancel = true;
             }
@@ -183,12 +185,40 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "+1 die in fights when Darkness is 10 or more. Another +1 die in fights when Darkness is 20 or more.";
             }
 
+            public override void Learn()
+            {
+                base.Learn();
+                Hero.AddRollModifier(new FadeToBlackRollModifer(Name));
+            }
+
+            private class FadeToBlackRollModifer : IRollModifier
+            {
+                private readonly string _powerName;
+
+                public FadeToBlackRollModifer(string powerName)
+                {
+                    _powerName = powerName;
+                }
+
+                public int GetModifier(Hero hero)
+                {
+                    var power = hero.GetPower(_powerName);
+                    if (!power.IsUsable()) return 0;
+                    var game = hero.Game;
+                    if (game.Darkness < 10) return 0;
+                    if (game.Darkness < 20) return 1;
+                    return 2;
+                }
+
+                public string Name => _powerName;
+            }
+
             public void ModifyDice(RollContext context)
             {
                 if (!IsUsable()) return;
-                if (Hero.Game.Darkness >= 10)
+                if (Game.Darkness >= 10)
                     context.DieCount++;
-                if (Hero.Game.Darkness >= 20)
+                if (Game.Darkness >= 20)
                     context.DieCount++;
             }
         }
@@ -201,54 +231,157 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Move any number of blights from your location to one adjacent location, if this does not result in over 4 blights at one location.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
-                throw new System.NotImplementedException();
+                var space = Hero.GetSpace();
+                var potentialDestinations = space.AdjacentLocations;
+                var destination = Player.ChooseLocation(potentialDestinations);
+                if (destination == Location.None)
+                    return false;
+                var destinationSpace = Game.Board[destination];
+                var maxMoveCount = 4 - Game.Board[destination].Blights.Count();
+                var blights = Player.ChooseBlights(space.Blights.Select(x => x.Type).ToList(), 1, maxMoveCount);
+                if (!blights.Any())
+                    return false;
+                foreach (var blight in blights)
+                {
+                    var blightObj = space.GetBlight(blight);
+                    space.RemoveBlight(blightObj);
+                    destinationSpace.AddBlight(blightObj);
+                }
+                return true;
             }
         }
 
-        class FinalRest : Tactic
+        class FinalRest : TacticPower
         {
             public FinalRest() : base(TacticType.Fight)
             {
                 Name = "Final Rest";
                 StartingPower = true;
                 Text = "Fight with 2d or 3d. If any die comes up a 1, lose 1 Grace.";
-                base.GetDieCount = ChooseDieCount;
             }
 
-            private int ChooseDieCount()
+            public override void Learn()
             {
-                return Hero.Player.ChooseDieCount(2, 3);
+                base.Learn();
+                Hero.AddFightTactic(new FinalRestTactic(Name, 2));
+                Hero.AddFightTactic(new FinalRestTactic(Name, 3));
             }
 
-            internal override IEnumerable<int> RollDice(int count)
+            private class FinalRestTactic : PowerTactic
             {
-                var roll = base.RollDice(count).ToList();
-                if (roll.Any(x => x == 1))
-                    Hero.LoseGrace();
-                return roll;
+                public FinalRestTactic(string powerName, int diceCount)
+                {
+                    PowerName = powerName;
+                    DiceCount = diceCount;
+                }
+
+                public override string Name => $"{PowerName} ({DiceCount} dice)";
+
+                public override void AfterRoll(Hero hero, ICollection<int> roll)
+                {
+                    if (roll.Any(x => x == 1))
+                        hero.LoseGrace();
+                }
             }
         }
 
-        class ForbiddenArts : Bonus
+        class ForbiddenArts : Bonus, ITriggerHandler
         {
             public ForbiddenArts()
             {
                 Name = "Forbidden Arts";
                 Text = "After a fight roll, add any number of dice, one at a time. For each added die that comes up a 1, +1 Darkness.";
             }
+
+            public override void Learn()
+            {
+                base.Learn();
+                Hero.Triggers.Register(this, HeroTrigger.AfterRoll);
+            }
+
+            public void HandleTrigger(TriggerContext context, string tag)
+            {
+                if (!IsUsable()) return;
+                var state = context.GetState<AfterRollState>();
+                var rollAnotherDie = Player.AskToRollAnotherDie(state.Roll);
+                state.Repeat = rollAnotherDie;
+                if (!rollAnotherDie) return;
+                var dieValue = Player.RollOne();
+                if (dieValue == 1)
+                    Game.IncreaseDarkness();
+                state.Roll.Add(dieValue);
+            }
         }
 
-        class LeechLife: Tactic
+        class LeechLife: TacticPower
         {
             public LeechLife() : base(TacticType.Fight, 3)
             {
                 Name = "Leech Life";
                 Text = "Exhaust while not at the Monastery to fight with 3 dice. Gain 1 Grace (up to default) if you roll 2 successes. You may not enter the Monastery while this power is exhausted.";
             }
+
+            public override void Learn()
+            {
+                base.Learn();
+                Hero.Add(new PreventMovementEffect(location => location == Location.Monastery && Exhausted));
+            }
         }
 
         #endregion
     }
+
+    public class DiceDetail
+    {
+        public string Name { get; set; }
+        public int Modifier { get; set; }
+    }
+
+    public class TacticInfo
+    {
+        public string Name { get; set; }
+        public int DiceCount { get; set; }
+        public List<DiceDetail> DiceDetails { get; set; }
+    }
+
+    internal class Dice
+    {
+        public List<DiceDetail> Details { get; }
+
+        public int Total
+        {
+            get
+            {
+                var total = Details.Sum(x => x.Modifier);
+                return total > 0 ? total : 1;
+            }
+        }
+
+        public Dice(List<DiceDetail> details)
+        {
+            Details = details;
+        }
+    }
+
+    internal class StaticRollBonus : IRollModifier
+    {
+        private readonly int _dieCount;
+        public string Name { get; }
+        public TacticType TacticType { get; }
+
+        public StaticRollBonus(string name, TacticType tacticType, int dieCount)
+        {
+            _dieCount = dieCount;
+            Name = name;
+            TacticType = tacticType;
+        }
+
+        public int GetModifier(Hero hero)
+        {
+            return _dieCount;
+        }
+   }
+
 }

@@ -11,7 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
         {
         }
 
-        class Ambush : Tactic
+        class Ambush : TacticPower
         {
             public Ambush() : base(TacticType.Fight, 3)
             {
@@ -39,7 +39,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Spend 1 Secrecy to negate the effects of one blight in your location until the Necromancer ends a turn there.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
@@ -54,7 +54,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Spend 1 Secrecy to search with 2 dice.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
@@ -68,7 +68,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Spend 1 Secrecy in the Necromancer's location to cause -1 Darkness.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
@@ -92,7 +92,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class Skulk : Tactic
+        class Skulk : TacticPower
         {
             public Skulk() : base(TacticType.Elude, 2)
             {
@@ -110,7 +110,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class Vanish : Tactic
+        class Vanish : TacticPower
         {
             public Vanish() : base(TacticType.Elude, 2)
             {

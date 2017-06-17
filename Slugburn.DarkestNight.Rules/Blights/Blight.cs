@@ -2,6 +2,7 @@
 {
     public enum Blight
     {
+        None = 0,
         Confusion,
         Corruption,
         Curse,

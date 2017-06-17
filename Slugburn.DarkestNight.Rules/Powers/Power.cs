@@ -10,7 +10,8 @@ namespace Slugburn.DarkestNight.Rules.Powers
         public string ActiveText { get; protected set; }
         public bool StartingPower { get; protected set; }
         public Hero Hero { get; internal set; }
-        public bool Active { get; set; }
+        internal Game Game => Hero?.Game;
+        internal IPlayer Player => Hero?.Player;
 
         protected Power()
         {

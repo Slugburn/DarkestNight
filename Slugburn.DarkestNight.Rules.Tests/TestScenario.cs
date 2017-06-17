@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
+using Slugburn.DarkestNight.Rules.Actions;
+using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Powers;
 
@@ -24,6 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
             _game.AddHero(hero, _player);
             var ctx = new HeroDefContext(hero);
             def(ctx);
+            _game.ActingHero = hero;
             return this;
         }
 
@@ -92,7 +95,8 @@ namespace Slugburn.DarkestNight.Rules.Tests
         {
             actions?.Invoke(new PlayerActionContext(_player));
             var hero = _game.GetHero(heroName);
-            hero.AttackBlight();
+            var attackBlight = new Attack(hero);
+            hero.TakeAction(attackBlight);
             return this;
         }
 
@@ -122,8 +126,28 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public TestScenario WhenPlayerTakesAction(string actionName, Action<PlayerActionContext> actions = null)
         {
             actions?.Invoke(new PlayerActionContext(_player));
-            var action = (IAction) _game.GetPower(actionName);
-            action.Activate();
+            var hero = _game.ActingHero;
+            IAction action;
+            if (actionName == "Attack")
+            {
+                action = new Attack(hero);
+            }
+            else
+            {
+                var power = (Power)hero.GetPower(actionName);
+                action = (IAction) power;
+            }
+            hero.TakeAction(action);
+            return this;
+        }
+
+        public TestScenario WhenPlayerTakesFightAction(Action<FightContext> actions)
+        {
+            var context=  new FightContext(_player, _game.ActingHero);
+            actions(context);
+            WhenPlayerTakesAction(context.GetAction(), context.PlayerActions);
+            WhenPlayerSelectsTacticAndTarget(context.GetTactic(), context.GetTargets());
+            WhenPlayerAcceptsRoll();
             return this;
         }
 
@@ -145,6 +169,36 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public TestScenario GivenDarkness(int darkness)
         {
             _game.Darkness = darkness;
+            return this;
+        }
+
+        public TestScenario ThenDarkness(int expected)
+        {
+            Assert.That(_game.Darkness, Is.EqualTo(expected));
+            return this;
+        }
+
+        public TestScenario WhenPlayerSelectsTacticAndTarget(string tactic, params Blight[] blights)
+        {
+            _game.ActingHero.SelectTargetAndTactic(blights, tactic);
+            return this;
+        }
+
+        public TestScenario WhenPlayerAssignsRolledDiceToBlights( params BlightDieAssignment[]  assignments)
+        {
+            _game.ActingHero.AssignDiceToBlights(assignments);
+            return this;
+        }
+
+        public TestScenario GivenPlayerWillRoll(params int[] rolls)
+        {
+            _player.AddUpcomingRolls(rolls);
+            return this;
+        }
+
+        public TestScenario WhenPlayerAcceptsRoll()
+        {
+            _game.ActingHero.EndCombat();
             return this;
         }
     }

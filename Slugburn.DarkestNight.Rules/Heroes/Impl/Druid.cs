@@ -11,7 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
         {
         }
 
-        class AnimalCompanion : Tactic
+        class AnimalCompanion : TacticPower
         {
             public AnimalCompanion() : base(TacticType.Fight)
             {
@@ -21,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class Camouflage : Tactic
+        class Camouflage : TacticPower
         {
             public Camouflage() : base(TacticType.Elude)
             {
@@ -39,7 +39,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Deactivate all Forms. Travel. Optinally activate one of your Forms.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
@@ -54,7 +54,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "+1 die in searches. When you travel, you may move two spaces. You cannot gain Grace.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
@@ -70,7 +70,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "Ignore blights' effects unless the Necromancer is present. You cannot gain Grace.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
@@ -94,13 +94,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "Gain 2 Grace (up to default) at the start of your turn. Your actions can only be to hide or use a Druid power.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
         }
 
-        class Vines : Tactic
+        class Vines : TacticPower
         {
             public Vines() : base(TacticType.Fight | TacticType.Elude)
             {
@@ -128,7 +128,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "+1 die in fights. +1 die when eluding. You cannot gain Grace.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }

@@ -41,8 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\Attack.cs" />
+    <Compile Include="Actions\IAction.cs" />
     <Compile Include="ActionType.cs" />
     <Compile Include="Blights\BlightBase.cs" />
+    <Compile Include="Blights\BlightDieAssignment.cs" />
     <Compile Include="Blights\BlightFactory.cs" />
     <Compile Include="Blights\Blight.cs" />
     <Compile Include="Blights\Implementations\Confusion.cs" />
@@ -59,12 +62,15 @@
     <Compile Include="Blights\Implementations\UnholyAura.cs" />
     <Compile Include="Board.cs" />
     <Compile Include="BonusType.cs" />
+    <Compile Include="ConflictState.cs" />
     <Compile Include="Die.cs" />
     <Compile Include="Extensions\CardExtensions.cs" />
+    <Compile Include="Extensions\TacticExtension.cs" />
     <Compile Include="Heroes\HeroFactory.cs" />
     <Compile Include="Heroes\Impl\Acolyte.cs" />
     <Compile Include="Heroes\Impl\Druid.cs" />
     <Compile Include="Heroes\Impl\Knight.cs" />
+    <Compile Include="Heroes\Impl\PowerTactic.cs" />
     <Compile Include="Heroes\Impl\PreventMovementEffect.cs" />
     <Compile Include="Heroes\Impl\Priest.cs" />
     <Compile Include="Heroes\Impl\Prince.cs" />
@@ -73,16 +79,20 @@
     <Compile Include="Heroes\Impl\Seer.cs" />
     <Compile Include="Heroes\Impl\Wizard.cs" />
     <Compile Include="IDieBonus.cs" />
+    <Compile Include="IRollClient.cs" />
+    <Compile Include="IRollModifier.cs" />
     <Compile Include="IgnoreBlightEffect.cs" />
     <Compile Include="IPlayer.cs" />
+    <Compile Include="Tactics\ITactic.cs" />
     <Compile Include="Maps\Map.cs" />
     <Compile Include="Maps\MapFactory.cs" />
-    <Compile Include="Powers\IAction.cs" />
+    <Compile Include="Powers\AfterRollState.cs" />
     <Compile Include="Powers\IBonusAction.cs" />
     <Compile Include="Powers\IPowerEffect.cs" />
     <Compile Include="Powers\PowerNotUsableException.cs" />
     <Compile Include="RollContext.cs" />
     <Compile Include="Stash.cs" />
+    <Compile Include="Tactics\NoTactic.cs" />
     <Compile Include="Triggers\GameTrigger.cs" />
     <Compile Include="Triggers\HeroTrigger.cs" />
     <Compile Include="Triggers\ITriggerRegistrar.cs" />
@@ -103,7 +113,7 @@
     <Compile Include="Powers\IPower.cs" />
     <Compile Include="Powers\Power.cs" />
     <Compile Include="Powers\PowerType.cs" />
-    <Compile Include="Powers\Tactic.cs" />
+    <Compile Include="Powers\TacticPower.cs" />
     <Compile Include="Powers\TacticType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RollBonus.cs" />

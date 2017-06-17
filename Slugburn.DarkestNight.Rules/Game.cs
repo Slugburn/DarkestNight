@@ -27,6 +27,7 @@ namespace Slugburn.DarkestNight.Rules
         public Necromancer Necromancer { get; set; }
         public int Darkness { get; set; }
         public IEnumerable<Hero> AvailableHeroes { get; set; }
+        public Hero ActingHero { get; set; }
 
         public Game()
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
@@ -19,7 +20,7 @@ namespace Slugburn.DarkestNight.Rules.Spaces
         public int SearchTarget { get; set; }
         public IEnumerable<Location> AdjacentLocations { get; protected set; }
 
-        public IEnumerable<IBlight> Blights
+        public ICollection<IBlight> Blights
         {
             get { return _blights; }
         }
@@ -50,6 +51,11 @@ namespace Slugburn.DarkestNight.Rules.Spaces
         public IEnumerable<T> GetBlights<T>() where T: IBlight
         {
             return _blights.Where(x=>x is T).Cast<T>();
+        }
+
+        public IBlight GetBlight(Blight type)
+        {
+            return _blights.FirstOrDefault(x => x.Type == type);
         }
     }
 }

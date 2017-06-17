@@ -13,15 +13,17 @@ namespace Slugburn.DarkestNight.Rules.Tests
         private readonly List<Tuple<Blight, int>> _blightRollAssignments;
 
         private string _tacticChoice;
-        private int _dieCountChoice;
         private Blight[] _blightChoice;
         private List<int> _lastRoll;
+        private Location? _locationChoice;
+        private Queue<bool> _rollAnotherDie;
 
         public FakePlayer()
         {
             _usePowerResponse = new Dictionary<string, bool>();
             _upcomingRolls = new Queue<int>();
             _blightRollAssignments = new List<Tuple<Blight, int>>();
+            _rollAnotherDie = new Queue<bool>();
         }
 
         public bool AskUsePower(string name, string description)
@@ -58,24 +60,12 @@ namespace Slugburn.DarkestNight.Rules.Tests
             _tacticChoice = powerName;
         }
 
-        public void SetNumberOfDiceChoice(int count)
+        public TacticPower ChooseTactic(IEnumerable<TacticPower> choices)
         {
-            _dieCountChoice = count;
-        }
-
-        public Tactic ChooseTactic(IEnumerable<Tactic> choices)
-        {
+            if (_tacticChoice == null) return null;
             var choice = choices.SingleOrDefault(x=>x.Name==_tacticChoice);
             if (choice == null)
                 throw new Exception("No valid choice has been specified for IPlayer.ChooseTactic().");
-            return choice;
-        }
-
-        public int ChooseDieCount(params int[] choices)
-        {
-            var choice = choices.SingleOrDefault(x => x == _dieCountChoice);
-            if (choice == 0)
-                throw new Exception("No valid choice has been specified for IPlayer.ChooseDiceCount().");
             return choice;
         }
 
@@ -106,8 +96,37 @@ namespace Slugburn.DarkestNight.Rules.Tests
 
         public List<Blight> ChooseBlights(List<Blight> choices, int count)
         {
-            return choices.Intersect(_blightChoice).ToList();
+            if (CancelBlightSelectionSpecified())
+                return new List<Blight>();
+            var choice = ChooseBlights(choices);
+            if (choice.Count != count)
+                throw new Exception("No valid choices have been specified for IPlayer.ChooseBlights().");
+            return choice;
         }
+
+        public List<Blight> ChooseBlights(List<Blight> choices, int min, int max)
+        {
+            if (CancelBlightSelectionSpecified())
+                return new List<Blight>();
+            var choice = ChooseBlights(choices);
+            if (choice.Count < min || choice.Count > max)
+                throw new Exception("Invalid choices have been specified for IPlayer.ChooseBlights().");
+            return choice;
+        }
+
+        private List<Blight> ChooseBlights(List<Blight> choices)
+        {
+            if (_blightChoice == null || _blightChoice.Except(choices).ToList().Any())
+                throw new Exception("Invalid choices have been specified for IPlayer.ChooseBlights().");
+            var choice = choices.Intersect(_blightChoice).ToList();
+            return choice;
+        }
+
+        private bool CancelBlightSelectionSpecified()
+        {
+            return _blightChoice != null && _blightChoice.Length == 1 && _blightChoice[0] == Blight.None;
+        }
+
 
         public int AssignRollToBlight(Blight blight, List<int> rolls)
         {
@@ -122,5 +141,31 @@ namespace Slugburn.DarkestNight.Rules.Tests
         {
             return _lastRoll;
         }
+
+        public void SetLocationChoice(Location location)
+        {
+            _locationChoice = location;
+        }
+
+        public Location ChooseLocation(IEnumerable<Location> choices)
+        {
+            if (_locationChoice == Location.None) return Location.None;
+            var choice = choices.SingleOrDefault(x => x == _locationChoice);
+            if (choice == Location.None)
+                throw new Exception("No valid choice was specified for IPlayer.ChooseLocation().");
+            return choice;
+        }
+
+        public void SetRollAnotherDieChoice(bool[] choices)
+        {
+            foreach (var choice in choices)
+                _rollAnotherDie.Enqueue(choice);
+        }
+
+        public bool AskToRollAnotherDie(List<int> stateRoll)
+        {
+            return _rollAnotherDie.Dequeue();
+        }
+
     }
 }

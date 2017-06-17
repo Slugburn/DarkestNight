@@ -6,6 +6,9 @@
         Eluding,
         Fighting,
         AttackingBlight,
-        AttackingNecromancer
+        AttackingNecromancer,
+        SelectingTarget,
+        RollAvailable,
+        AssigningDice,
     }
 }

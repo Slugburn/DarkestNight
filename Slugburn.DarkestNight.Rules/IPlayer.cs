@@ -8,10 +8,12 @@ namespace Slugburn.DarkestNight.Rules
     {
         bool AskUsePower(string name, string description);
         int RollOne();
-        Tactic ChooseTactic(IEnumerable<Tactic> choices);
-        int ChooseDieCount(params int[] choices);
+        TacticPower ChooseTactic(IEnumerable<TacticPower> choices);
         IEnumerable<int> RollDice(int count);
         List<Blight> ChooseBlights(List<Blight> choices, int count);
         int AssignRollToBlight(Blight blight, List<int> rolls);
+        Location ChooseLocation(IEnumerable<Location> choices);
+        List<Blight> ChooseBlights(List<Blight> choices, int min, int max);
+        bool AskToRollAnotherDie(List<int> stateRoll);
     }
 }

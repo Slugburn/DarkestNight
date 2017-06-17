@@ -11,7 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
         {
         }
 
-        class Charge : Tactic
+        class Charge : TacticPower
         {
             public Charge() : base(TacticType.Fight)
             {
@@ -39,7 +39,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Move twice, but gain no Secrecy.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
@@ -69,7 +69,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "Gain 1 Grace (up to default) at start of turn.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
@@ -88,7 +88,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "+2 dice in fights when attacking blights.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
@@ -106,7 +106,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "+1 die in fights.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
@@ -124,7 +124,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "Add 1 to highest die when fighting the Necormancer.";
             }
 
-            public override void Activate()
+            protected override bool TakeAction()
             {
                 throw new System.NotImplementedException();
             }
@@ -133,7 +133,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             public string BreakText => "Hide or search; you lose 1 Grace.";
         }
 
-        class RecklessAbandon: Tactic
+        class RecklessAbandon: TacticPower
         {
             public RecklessAbandon() : base(TacticType.Fight)
             {
@@ -142,7 +142,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class Sprint : Tactic
+        class Sprint : TacticPower
         {
             public Sprint() : base(TacticType.Elude)
             {

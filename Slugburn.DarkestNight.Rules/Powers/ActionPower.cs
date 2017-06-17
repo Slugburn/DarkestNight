@@ -1,4 +1,5 @@
-﻿using Slugburn.DarkestNight.Rules.Heroes;
+﻿using Slugburn.DarkestNight.Rules.Actions;
+using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Powers
 {
@@ -14,17 +15,17 @@ namespace Slugburn.DarkestNight.Rules.Powers
             return base.IsUsable() && Hero.State == HeroState.ChoosingAction;
         }
 
-        public virtual void Activate()
+        public bool Act()
         {
             if (!IsUsable())
                 throw new PowerNotUsableException(this);
-            Active = true;
+            return TakeAction();
         }
 
         public virtual void Deactivate()
         {
-            Active = false;
         }
 
+        protected abstract bool TakeAction();
     }
 }
