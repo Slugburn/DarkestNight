@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Extensions;
@@ -354,56 +353,4 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         #endregion
     }
-
-    public class DiceDetail
-    {
-        public string Name { get; set; }
-        public int Modifier { get; set; }
-    }
-
-    public class TacticInfo
-    {
-        public string Name { get; set; }
-        public int DiceCount { get; set; }
-        public List<DiceDetail> DiceDetails { get; set; }
-    }
-
-    internal class Dice
-    {
-        public List<DiceDetail> Details { get; }
-
-        public int Total
-        {
-            get
-            {
-                var total = Details.Sum(x => x.Modifier);
-                return total > 0 ? total : 1;
-            }
-        }
-
-        public Dice(List<DiceDetail> details)
-        {
-            Details = details;
-        }
-    }
-
-    internal class StaticRollBonus : IRollModifier
-    {
-        private readonly int _dieCount;
-        public string Name { get; }
-        public TacticType TacticType { get; }
-
-        public StaticRollBonus(string name, TacticType tacticType, int dieCount)
-        {
-            _dieCount = dieCount;
-            Name = name;
-            TacticType = tacticType;
-        }
-
-        public int GetModifier(Hero hero)
-        {
-            return _dieCount;
-        }
-   }
-
 }

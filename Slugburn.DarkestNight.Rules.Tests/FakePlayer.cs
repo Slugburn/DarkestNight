@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
-using Slugburn.DarkestNight.Rules.Powers;
 
 namespace Slugburn.DarkestNight.Rules.Tests
 {
@@ -60,15 +59,6 @@ namespace Slugburn.DarkestNight.Rules.Tests
             _tacticChoice = powerName;
         }
 
-        public TacticPower ChooseTactic(IEnumerable<TacticPower> choices)
-        {
-            if (_tacticChoice == null) return null;
-            var choice = choices.SingleOrDefault(x=>x.Name==_tacticChoice);
-            if (choice == null)
-                throw new Exception("No valid choice has been specified for IPlayer.ChooseTactic().");
-            return choice;
-        }
-
         public IEnumerable<int> RollDice(int count)
         {
             if (count > _upcomingRolls.Count)
@@ -92,16 +82,6 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public void SetBlightRollAssignment(Blight blight, int roll)
         {
             _blightRollAssignments.Add(Tuple.Create(blight, roll));
-        }
-
-        public List<Blight> ChooseBlights(List<Blight> choices, int count)
-        {
-            if (CancelBlightSelectionSpecified())
-                return new List<Blight>();
-            var choice = ChooseBlights(choices);
-            if (choice.Count != count)
-                throw new Exception("No valid choices have been specified for IPlayer.ChooseBlights().");
-            return choice;
         }
 
         public List<Blight> ChooseBlights(List<Blight> choices, int min, int max)
@@ -128,15 +108,6 @@ namespace Slugburn.DarkestNight.Rules.Tests
         }
 
 
-        public int AssignRollToBlight(Blight blight, List<int> rolls)
-        {
-            var assignment = _blightRollAssignments.FirstOrDefault(x => x.Item1 == blight && rolls.Contains(x.Item2));
-            if (assignment == null)
-                throw new Exception($"No valid roll has been specified for {blight}");
-            _blightRollAssignments.Remove(assignment);
-            return assignment.Item2;
-        }
-
         public List<int> GetLastRoll()
         {
             return _lastRoll;
@@ -161,11 +132,5 @@ namespace Slugburn.DarkestNight.Rules.Tests
             foreach (var choice in choices)
                 _rollAnotherDie.Enqueue(choice);
         }
-
-        public bool AskToRollAnotherDie(List<int> stateRoll)
-        {
-            return _rollAnotherDie.Dequeue();
-        }
-
     }
 }

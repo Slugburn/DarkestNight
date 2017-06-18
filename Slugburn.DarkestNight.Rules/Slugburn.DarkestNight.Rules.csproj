@@ -63,6 +63,8 @@
     <Compile Include="Board.cs" />
     <Compile Include="BonusType.cs" />
     <Compile Include="ConflictState.cs" />
+    <Compile Include="Dice.cs" />
+    <Compile Include="DiceDetail.cs" />
     <Compile Include="Die.cs" />
     <Compile Include="Extensions\CardExtensions.cs" />
     <Compile Include="Extensions\TacticExtension.cs" />
@@ -84,6 +86,8 @@
     <Compile Include="IRollModifier.cs" />
     <Compile Include="IgnoreBlightEffect.cs" />
     <Compile Include="IPlayer.cs" />
+    <Compile Include="StaticRollBonus.cs" />
+    <Compile Include="TacticInfo.cs" />
     <Compile Include="Tactics\ITactic.cs" />
     <Compile Include="Maps\Map.cs" />
     <Compile Include="Maps\MapFactory.cs" />
