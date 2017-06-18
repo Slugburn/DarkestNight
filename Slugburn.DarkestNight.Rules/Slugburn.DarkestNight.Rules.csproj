@@ -69,7 +69,6 @@
     <Compile Include="DiceDetail.cs" />
     <Compile Include="Die.cs" />
     <Compile Include="Extensions\CardExtensions.cs" />
-    <Compile Include="Extensions\TacticExtension.cs" />
     <Compile Include="Heroes\HeroFactory.cs" />
     <Compile Include="Heroes\Impl\Acolyte.cs" />
     <Compile Include="Heroes\Impl\Druid.cs" />
@@ -83,13 +82,11 @@
     <Compile Include="Heroes\Impl\Seer.cs" />
     <Compile Include="Heroes\Impl\Wizard.cs" />
     <Compile Include="Heroes\UnexpectedStateException.cs" />
-    <Compile Include="IDieBonus.cs" />
     <Compile Include="IRollHandler.cs" />
     <Compile Include="IRollModifier.cs" />
     <Compile Include="IgnoreBlightEffect.cs" />
     <Compile Include="IPlayer.cs" />
     <Compile Include="StaticRollBonus.cs" />
-    <Compile Include="TacticInfo.cs" />
     <Compile Include="Tactics\BasicEludeTactic.cs" />
     <Compile Include="Tactics\ITactic.cs" />
     <Compile Include="Maps\Map.cs" />
@@ -98,9 +95,10 @@
     <Compile Include="Powers\IBonusAction.cs" />
     <Compile Include="Powers\IPowerEffect.cs" />
     <Compile Include="Powers\PowerNotUsableException.cs" />
-    <Compile Include="RollContext.cs" />
     <Compile Include="Stash.cs" />
     <Compile Include="Tactics\BasicFightTactic.cs" />
+    <Compile Include="Tactics\TacticExtension.cs" />
+    <Compile Include="Tactics\TacticInfo.cs" />
     <Compile Include="Triggers\GameTrigger.cs" />
     <Compile Include="Triggers\HeroTrigger.cs" />
     <Compile Include="Triggers\ITriggerRegistrar.cs" />

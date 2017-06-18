@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules
 {

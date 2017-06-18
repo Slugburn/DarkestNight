@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Tactics;
 
-namespace Slugburn.DarkestNight.Rules.Extensions
+namespace Slugburn.DarkestNight.Rules.Tactics
 {
     public static class TacticExtension
     {

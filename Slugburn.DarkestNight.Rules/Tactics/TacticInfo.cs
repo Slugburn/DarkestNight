@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using Slugburn.DarkestNight.Rules.Heroes.Impl;
 using Slugburn.DarkestNight.Rules.Powers;
 
-namespace Slugburn.DarkestNight.Rules
+namespace Slugburn.DarkestNight.Rules.Tactics
 {
     public class TacticInfo
     {
