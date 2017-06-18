@@ -9,6 +9,6 @@ namespace Slugburn.DarkestNight.Rules
         int RollOne();
         IEnumerable<int> RollDice(int count);
         Location ChooseLocation(IEnumerable<Location> choices);
-        List<Blight> ChooseBlights(List<Blight> choices, int min, int max);
+        List<Blight> ChooseBlights(ICollection<Blight> choices, int min, int max);
     }
 }

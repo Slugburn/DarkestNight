@@ -57,7 +57,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public ICollection<IPower> Powers { get; protected set; }
         public string Name { get; set; }
 
-        public ICollection<IBlight> GetBlights()
+        public ICollection<Blight> GetBlights()
         {
             return GetSpace().Blights;
         }
@@ -77,17 +77,17 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void EndTurn()
         {
             var space = GetSpace();
-            var spies = space.GetBlights<Spies>();
+            var spies = space.Blights.Where(x=>x==Blight.Spies);
             foreach (var spy in spies)
             {
                 if (!IsIgnoringBlight(spy))
-                    LoseSecrecy(spy.Name);
+                    LoseSecrecy("Spies");
             }
 
             IsTurnTaken = true;
         }
 
-        private bool IsIgnoringBlight(IBlight blight)
+        private bool IsIgnoringBlight(Blight blight)
         {
             var effects = _stash.GetAll<IgnoreBlightEffect>();
             return effects.Any(x => x.Match(blight));
@@ -191,14 +191,15 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             Player = player;
         }
 
-        internal void ResolveAttack(IBlight blight, int result)
+        internal void ResolveAttack(Blight blight, int result)
         {
             LoseSecrecy("Attack");
             var space = GetSpace();
-            if (result < blight.Might)
+            var blightInfo = new BlightFactory().Create(blight);
+            if (result < blightInfo.Might)
             {
                 if (Triggers.Handle(HeroTrigger.FailedAttack))
-                    blight.Defend(this);
+                    blightInfo.Defend(this);
             }
             else
             {
@@ -319,7 +320,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 throw new Exception("Invalid targets specified.");
             foreach (var assignment in assignments)
             {
-                ResolveAttack(GetSpace().GetBlight(assignment.Blight) , assignment.DieValue);
+                ResolveAttack(assignment.Blight, assignment.DieValue);
             }
         }
 

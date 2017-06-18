@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
             _player = player;
             _tactic = "Fight";
             if (hero.GetBlights().Count == 1)
-                _targets = hero.GetBlights().Select(x=>x.Type).ToList();
+                _targets = hero.GetBlights().ToList();
         }
 
         private string _tactic;

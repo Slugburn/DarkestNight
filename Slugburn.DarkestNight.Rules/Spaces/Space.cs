@@ -7,11 +7,11 @@ namespace Slugburn.DarkestNight.Rules.Spaces
 {
     public abstract class Space : ISpace
     {
-        private readonly List<IBlight> _blights;
+        private readonly List<Blight> _blights;
 
         protected Space()
         {
-            _blights = new List<IBlight>();
+            _blights = new List<Blight>();
         }
 
         public Location Location { get; protected set; }
@@ -19,20 +19,17 @@ namespace Slugburn.DarkestNight.Rules.Spaces
         public int SearchTarget { get; set; }
         public IEnumerable<Location> AdjacentLocations { get; protected set; }
 
-        public ICollection<IBlight> Blights
-        {
-            get { return _blights; }
-        }
+        public ICollection<Blight> Blights => _blights;
 
         public IDictionary<int, Location> MoveChart { get; protected set; }
         public bool HasRelic { get; set; }
         
-        public void AddBlight(IBlight blight)
+        public void AddBlight(Blight blight)
         {
             _blights.Add(blight);
         }
 
-        public void RemoveBlight(IBlight blight)
+        public void RemoveBlight(Blight blight)
         {
             _blights.Remove(blight);
         }
@@ -52,9 +49,9 @@ namespace Slugburn.DarkestNight.Rules.Spaces
             return _blights.Where(x=>x is T).Cast<T>();
         }
 
-        public IBlight GetBlight(Blight type)
+        public Blight GetBlight(Blight type)
         {
-            return _blights.FirstOrDefault(x => x.Type == type);
+            return _blights.FirstOrDefault(x => x == type);
         }
     }
 }

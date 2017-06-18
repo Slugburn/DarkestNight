@@ -74,7 +74,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                     {
                         ConflictType = ConflictType.Attack,
                         AvailableTactics = hero.GetAvailableFightTactics().GetInfo(hero),
-                        AvailableTargets = hero.GetSpace().Blights.Select(x => x.Type).ToList(),
+                        AvailableTargets = hero.GetBlights(),
                         MinTarget = 2,
                         MaxTarget = 2
                     };
@@ -258,14 +258,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                         return;
                     var destinationSpace = hero.Game.Board[destination];
                     var maxMoveCount = 4 - hero.Game.Board[destination].Blights.Count();
-                    var blights = hero.Player.ChooseBlights(space.Blights.Select(x => x.Type).ToList(), 1, maxMoveCount);
+                    var blights = hero.Player.ChooseBlights(space.Blights, 1, maxMoveCount);
                     if (!blights.Any())
                         return;
                     foreach (var blight in blights)
                     {
-                        var blightObj = space.GetBlight(blight);
-                        space.RemoveBlight(blightObj);
-                        destinationSpace.AddBlight(blightObj);
+                        space.RemoveBlight(blight);
+                        destinationSpace.AddBlight(blight);
                     }
                     hero.IsActionAvailable = false;
                 }

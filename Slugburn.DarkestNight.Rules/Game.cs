@@ -68,8 +68,7 @@ namespace Slugburn.DarkestNight.Rules
             var map = DrawMapCard();
             foreach (var location in locations)
             {
-                var blightType = map.GetBlight(location);
-                var blight = new BlightFactory().Create(blightType);
+                var blight = map.GetBlight(location);
                 var space = Board[location];
                 space.AddBlight(blight);
             }
@@ -106,7 +105,7 @@ namespace Slugburn.DarkestNight.Rules
             Darkness++;
 
             // increase darkness by number of descrations in play
-            Darkness += Board.Spaces.Sum(space => space.Blights.Count(blight => blight is Desecration));
+            Darkness += Board.Spaces.Sum(space => space.Blights.Count(blight => blight==Blight.Desecration));
 
             if (Darkness <= 30)
                 return;

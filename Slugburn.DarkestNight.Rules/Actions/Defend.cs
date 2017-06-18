@@ -17,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             {
                 MaxTarget = 1,
                 MinTarget = 1,
-                AvailableTargets = hero.GetBlights().Select(x => x.Type).ToList(),
+                AvailableTargets = hero.GetBlights(),
                 AvailableTactics = hero.GetAvailableTactics().GetInfo(hero)
             };
             hero.SetRollHandler(this);

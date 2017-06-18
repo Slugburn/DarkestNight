@@ -17,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
 
         public void Verify()
         {
-            Assert.That(_space.Blights.Select(x=>x.Type), Is.EquivalentTo(_expectedBlights), "Unexpected Blights");
+            Assert.That(_space.Blights, Is.EquivalentTo(_expectedBlights), "Unexpected Blights");
         }
 
         public SpaceExpectation NoBlights()

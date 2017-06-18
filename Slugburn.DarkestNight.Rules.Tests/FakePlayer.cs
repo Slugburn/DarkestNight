@@ -84,7 +84,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
             _blightRollAssignments.Add(Tuple.Create(blight, roll));
         }
 
-        public List<Blight> ChooseBlights(List<Blight> choices, int min, int max)
+        public List<Blight> ChooseBlights(ICollection<Blight> choices, int min, int max)
         {
             if (CancelBlightSelectionSpecified())
                 return new List<Blight>();
@@ -94,7 +94,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
             return choice;
         }
 
-        private List<Blight> ChooseBlights(List<Blight> choices)
+        private List<Blight> ChooseBlights(ICollection<Blight> choices)
         {
             if (_blightChoice == null || _blightChoice.Except(choices).ToList().Any())
                 throw new Exception("Invalid choices have been specified for IPlayer.ChooseBlights().");

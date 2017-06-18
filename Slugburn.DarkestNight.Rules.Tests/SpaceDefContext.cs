@@ -14,11 +14,8 @@ namespace Slugburn.DarkestNight.Rules.Tests
 
         public SpaceDefContext Blight(params Blight[] blights)
         {
-            var factory= new BlightFactory();
             foreach (var blight in blights)
-            {
-                _space.AddBlight(factory.Create(blight));
-            }
+                _space.AddBlight(blight);
             return this;
         }
     }

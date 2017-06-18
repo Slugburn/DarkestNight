@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Blights.Implementations;
 using Slugburn.DarkestNight.Rules.Heroes;
 
@@ -25,7 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Powers
         public override bool IsUsable(Hero hero)
         {
             // Confusion blight prevents use of tactic powers
-            return base.IsUsable(hero) && !hero.GetBlights().Any(x => x is Confusion);
+            return base.IsUsable(hero) && hero.GetBlights().All(x => x != Blight.Confusion);
         }
     }
 }

@@ -10,16 +10,15 @@ namespace Slugburn.DarkestNight.Rules
         string Name { get; }
         int SearchTarget { get; set; }
         IEnumerable<Location> AdjacentLocations { get; }
-        ICollection<IBlight> Blights { get; }
+        ICollection<Blight> Blights { get; }
         IDictionary<int, Location> MoveChart { get; }
 
         bool HasRelic { get; set; }
 
-        void AddBlight(IBlight blight);
-        void RemoveBlight(IBlight blight);
+        void AddBlight(Blight blight);
+        void RemoveBlight(Blight blight);
         void Add<T>(T item);
         void Remove<T>(T item);
-        IEnumerable<T> GetBlights<T>() where T : IBlight;
-        IBlight GetBlight(Blight type);
+        Blight GetBlight(Blight type);
     }
 }
