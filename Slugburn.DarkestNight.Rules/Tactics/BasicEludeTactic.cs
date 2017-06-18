@@ -1,14 +1,15 @@
 ﻿using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Powers;
 
 namespace Slugburn.DarkestNight.Rules.Tactics
 {
-    public class NoTactic : ITactic
+    public class BasicEludeTactic : ITactic
     {
-        public string Name => "None";
+        public string Name => "Elude";
+        public TacticType Type => TacticType.Elude;
 
         public void Use(Hero hero)
         {
-            // no action
         }
 
         public bool IsAvailable(Hero hero) => true;

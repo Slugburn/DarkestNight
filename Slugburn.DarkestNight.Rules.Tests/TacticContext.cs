@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public TacticContext(FakePlayer player, Hero hero)
         {
             _player = player;
-            _tactic = "None";
+            _tactic = "Fight";
             if (hero.GetBlights().Count == 1)
                 _targets = hero.GetBlights().Select(x=>x.Type).ToList();
         }
@@ -23,6 +23,12 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public string GetTactic() => _tactic;
 
         public ICollection<Blight> GetTargets() => _targets;
+
+        public TacticContext Tactic(string tactic)
+        {
+            _tactic = tactic;
+            return this;
+        }
 
         public TacticContext Rolls(params int[] roll)
         {

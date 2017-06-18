@@ -15,13 +15,13 @@ namespace Slugburn.DarkestNight.Rules.Actions
             hero.ValidateState(HeroState.ChoosingAction);
             hero.ConflictState = new ConflictState
             {
-                TacticType = TacticType.Fight,
-                AvailableFightTactics = hero.GetAvailableFightTactics().GetInfo(hero),
+                ConflictType = ConflictType.Attack,
+                AvailableTactics = hero.GetAvailableFightTactics().GetInfo(hero),
                 AvailableTargets = hero.GetSpace().Blights.Select(x => x.Type).ToList(),
                 MinTarget = 1,
                 MaxTarget = 1
             };
-            hero.SetRollClient(this);
+            hero.SetRollHandler(this);
             hero.State = HeroState.SelectingTarget;
         }
 

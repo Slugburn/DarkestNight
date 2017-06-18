@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
         {
             _player = player;
             _action = "Attack";
-            _tactic = "None";
+            _tactic = "Fight";
             var blights = hero.GetSpace().Blights;
             if (blights.Count == 1)
                 _targets = new[] {blights.First().Type};

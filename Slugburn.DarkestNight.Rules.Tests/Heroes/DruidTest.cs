@@ -13,12 +13,23 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             var roll = attackSucceeds ? new[] {1, 6} : new[] {3, 4};
             var expectedBlights = attackSucceeds ? new Blight[0] : new[] {Blight.Corruption};
             new TestScenario()
-                .GivenHero("Druid", x => x.Power("Animal Companion").Location(Location.Village).Secrecy(6))
+                .GivenHero("Druid", x => x.Power("Animal Companion").Location(Location.Village))
                 .GivenSpace(Location.Village, x => x.Blight(Blight.Corruption))
                 .WhenPlayerTakesAttackAction(x => x.Tactic("Animal Companion").Rolls(roll))
                 .ThenSpace(Location.Village, x => x.Blights(expectedBlights))
-                .ThenHero("Druid", x => x.HasUsedAction().Grace(5).Secrecy(5))
+                .ThenPlayer(x => x.RolledNumberOfDice(2))
+                .ThenHero("Druid", x => x.HasUsedAction().LostSecrecy())
                 .ThenPower("Animal Companion", x=>x.IsExhausted(!attackSucceeds));
+        }
+
+        [Test]
+        public void Camouflage()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Camouflage").Location(Location.Village).Secrecy(6))
+                .GivenSpace(Location.Village, x => x.Blight(Blight.Skeletons))
+                .WhenPlayerEludes(x => x.Tactic("Camouflage").Rolls(1, 6))
+                .ThenPlayer(x=>x.RolledNumberOfDice(2));
         }
     }
 }

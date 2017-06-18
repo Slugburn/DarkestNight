@@ -68,12 +68,12 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 public void Act(Hero hero)
                 {
                     hero.ValidateState(HeroState.ChoosingAction);
-                    hero.SetRollClient(this);
+                    hero.SetRollHandler(this);
                     hero.AddRollModifier(new StaticRollBonus(Name, TacticType.Fight, 1));
                     hero.ConflictState = new ConflictState
                     {
-                        TacticType = TacticType.Fight,
-                        AvailableFightTactics = hero.GetAvailableFightTactics().GetInfo(hero),
+                        ConflictType = ConflictType.Attack,
+                        AvailableTactics = hero.GetAvailableFightTactics().GetInfo(hero),
                         AvailableTargets = hero.GetSpace().Blights.Select(x => x.Type).ToList(),
                         MinTarget = 2,
                         MaxTarget = 2
@@ -285,8 +285,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             public override void Learn(Hero hero)
             {
                 base.Learn(hero);
-                hero.AddFightTactic(new FinalRestTactic(Name, 2));
-                hero.AddFightTactic(new FinalRestTactic(Name, 3));
+                hero.AddTactic(new FinalRestTactic(Name, 2));
+                hero.AddTactic(new FinalRestTactic(Name, 3));
             }
 
             private class FinalRestTactic : PowerTactic, IRollHandler
@@ -295,6 +295,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 {
                     PowerName = powerName;
                     DiceCount = diceCount;
+                    Type = TacticType.Fight;
                 }
 
                 public override string Name => $"{PowerName} ({DiceCount} dice)";
@@ -354,7 +355,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             {
                 base.Learn(hero);
                 hero.Add(new PreventMovementEffect(location => location == Location.Monastery && Exhausted));
-                hero.AddFightTactic(new LeechLifeTactic());
+                hero.AddTactic(new LeechLifeTactic());
             }
 
             public override bool IsUsable(Hero hero)
@@ -367,6 +368,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 public LeechLifeTactic()
                 {
                     PowerName = "Leech Life";
+                    Type = TacticType.Fight;
                     DiceCount = 3;
                 }
 

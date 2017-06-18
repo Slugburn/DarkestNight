@@ -24,7 +24,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             public override void Learn(Hero hero)
             {
                 base.Learn(hero);
-                hero.AddFightTactic(new AnimalCompanionTactic());
+                hero.AddTactic(new AnimalCompanionTactic());
             }
 
             private class AnimalCompanionTactic : PowerTactic
@@ -32,6 +32,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 public AnimalCompanionTactic()
                 {
                     PowerName = "Animal Companion";
+                    Type = TacticType.Fight;
                     DiceCount = 2;
                 }
             }
@@ -44,6 +45,22 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Name = "Camouflage";
                 StartingPower = true;
                 Text = "Elude with 2 dice.";
+            }
+
+            public override void Learn(Hero hero)
+            {
+                base.Learn(hero);
+                hero.AddTactic(new CamouflageTactic());
+            }
+
+            private class CamouflageTactic : PowerTactic
+            {
+                public CamouflageTactic()
+                {
+                    PowerName = "Camouflage";
+                    Type = TacticType.Elude;
+                    DiceCount = 2;
+                }
             }
         }
 

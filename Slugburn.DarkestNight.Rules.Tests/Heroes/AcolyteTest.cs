@@ -100,7 +100,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenHero("Acolyte", x => x.Power("Fade to Black").Location(Location.Monastery))
                 .GivenSpace(Location.Monastery, x => x.Blight(Blight.Skeletons))
                 .WhenPlayerTakesAttackAction(x=>x.Rolls(rolls))
-                .ThenPlayer(x => x.LastRoll(expectedDice));
+                .ThenPlayer(x => x.RolledNumberOfDice(expectedDice));
         }
 
         [Test]
@@ -113,7 +113,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenHero("Acolyte", x => x.Power("Fade to Black", "Final Rest").Location(Location.Monastery))
                 .GivenSpace(Location.Monastery, x => x.Blight(Blight.Skeletons))
                 .WhenPlayerTakesAttackAction(x=>x.Tactic("Final Rest (3 dice)").Rolls(rolls))
-                .ThenPlayer(x => x.LastRoll(expectedDice));
+                .ThenPlayer(x => x.RolledNumberOfDice(expectedDice));
         }
 
         [Test]

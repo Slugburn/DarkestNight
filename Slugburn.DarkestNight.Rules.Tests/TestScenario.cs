@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Powers;
 
@@ -196,6 +197,21 @@ namespace Slugburn.DarkestNight.Rules.Tests
         {
             var power = _game.GetPower(powerName);
             power.Exhaust();
+            return this;
+        }
+
+        public TestScenario WhenPlayerEludes(Action<TacticContext> actions)
+        {
+            WhenPlayerDefends();
+            WhenPlayerSelectsTactic(actions);
+            WhenPlayerAcceptsRoll();
+            return this;
+        }
+
+        private TestScenario WhenPlayerDefends()
+        {
+            var hero = _game.ActingHero;
+            new Defend().Act(hero);
             return this;
         }
     }

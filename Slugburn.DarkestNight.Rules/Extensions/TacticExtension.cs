@@ -11,7 +11,13 @@ namespace Slugburn.DarkestNight.Rules.Extensions
         {
             return (from tactic in tactics
                 let dice = GetDice(tactic, hero)
-                select new TacticInfo { Name = tactic.Name, DiceCount = dice.Total, DiceDetails = dice.Details }).ToList();
+                select new TacticInfo
+                {
+                    Name = tactic.Name,
+                    Type = tactic.Type,
+                    DiceCount = dice.Total,
+                    DiceDetails = dice.Details
+                }).ToList();
         }
 
         private static Dice GetDice(ITactic tactic, Hero hero)

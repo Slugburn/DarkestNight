@@ -72,5 +72,17 @@ namespace Slugburn.DarkestNight.Rules.Tests
             _expectedActionAvailable = false;
             return this;
         }
+
+        public HeroExpectation LostGrace(int loss = 1)
+        {
+            _expectedGrace = _hero.DefaultGrace - loss;
+            return this;
+        }
+
+        public HeroExpectation LostSecrecy(int loss = 1)
+        {
+            _expectedSecrecy = _hero.DefaultSecrecy - loss;
+            return this;
+        }
     }
 }

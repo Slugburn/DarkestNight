@@ -15,8 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
     {
         private readonly List<IPower> _powerDeck;
         private Stash _stash;
-        private readonly Dictionary<string, ITactic> _fightTactics;
-        private readonly Dictionary<string, ITactic> _evadeTactics;
+        private readonly Dictionary<string, ITactic> _tactics;
         private readonly List<IRollModifier> _rollModifiers;
         private readonly List<IAction> _actions;
         private List<IRollHandler> _rollHandlers;
@@ -36,8 +35,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             Triggers = new TriggerRegistry<HeroTrigger>(this);
             IsActionAvailable = true;
 
-            _fightTactics = new Dictionary<string, ITactic>(StringComparer.InvariantCultureIgnoreCase) {{"None", new NoTactic()}};
-            _evadeTactics = new Dictionary<string, ITactic>(StringComparer.InvariantCultureIgnoreCase) {{"None", new NoTactic()}};
+            var fightTactic = new BasicFightTactic();
+            var eludeTactic = new BasicEludeTactic();
+            _tactics = new Dictionary<string, ITactic>(StringComparer.InvariantCultureIgnoreCase)
+            {
+                {fightTactic.Name, fightTactic},
+                {eludeTactic.Name, eludeTactic}
+            };
             _rollModifiers = new List<IRollModifier>();
             _actions = new List<IAction>() {new Attack()};
         }
@@ -204,7 +208,12 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public List<ITactic> GetAvailableFightTactics()
         {
-            return _fightTactics.Values.Where(x => x.IsAvailable(this)).ToList();
+            return GetAvailableTactics().Where(x=>x.Type == TacticType.Fight ).ToList();
+        }
+
+        public List<ITactic> GetAvailableTactics()
+        {
+            return _tactics.Values.Where(x => x.IsAvailable(this)).ToList();
         }
 
         public Game Game { get; private set; }
@@ -255,15 +264,16 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 && targets.Count >= ConflictState.MinTarget && targets.Count <= ConflictState.MaxTarget;
             if (!targetsAreValid)
                 throw new Exception("Invalid targets.");
-            var tacticIsValid = ConflictState.AvailableFightTactics.Select(x=>x.Name).Contains(tacticName);
+
+            var tacticInfo = ConflictState.AvailableTactics.SingleOrDefault(x => x.Name == tacticName);
+            var tacticIsValid = tacticInfo != null;
             if (!tacticIsValid)
                 throw new Exception($"Invalid tactic: {tacticName}");
 
             ConflictState.Targets = targets;
-            var tacticInfo = ConflictState.AvailableFightTactics.Single(x=>x.Name == tacticName);
             ConflictState.SelectedTactic = tacticInfo;
             var diceCount = tacticInfo.DiceCount;
-            var tactic = _fightTactics[tacticName];
+            var tactic = _tactics[tacticName];
             tactic.Use(this);
             var roll = Player.RollDice(diceCount).ToList();
             ConflictState.Roll = roll;
@@ -283,14 +293,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 throw new UnexpectedStateException(State, expected);
         }
 
-        public void AddFightTactic(ITactic tactic)
+        public void AddTactic(ITactic tactic)
         {
-            _fightTactics.Add(tactic.Name, tactic);
-        }
-
-        public void AddEvadeTactic(ITactic tactic)
-        {
-            _evadeTactics.Add(tactic.Name, tactic);
+            _tactics.Add(tactic.Name, tactic);
         }
 
         public void AddRollModifier(IRollModifier rollModifier)
@@ -318,7 +323,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             }
         }
 
-        public void SetRollClient(IRollHandler rollHandler)
+        public void SetRollHandler(IRollHandler rollHandler)
         {
             _rollHandlers = new List<IRollHandler> {rollHandler};
         }

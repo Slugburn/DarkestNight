@@ -1,3 +1,4 @@
+using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Heroes.Impl
@@ -8,6 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
         public int DiceCount { get; set; }
 
         public virtual string Name => $"{PowerName}";
+        public TacticType Type { get; set; } 
         public virtual void Use(Hero hero) { }
 
         public bool IsAvailable(Hero hero) => hero.GetPower(PowerName).IsUsable(hero);

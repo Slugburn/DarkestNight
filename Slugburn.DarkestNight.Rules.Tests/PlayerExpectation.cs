@@ -17,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
             Assert.That(_player.GetLastRoll().Count, Is.EqualTo(_expectedDice));
         }
 
-        public PlayerExpectation LastRoll(int expectedDice)
+        public PlayerExpectation RolledNumberOfDice(int expectedDice)
         {
             _expectedDice = expectedDice;
             return this;

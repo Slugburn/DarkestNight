@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\Attack.cs" />
+    <Compile Include="Actions\Defend.cs" />
     <Compile Include="Actions\IAction.cs" />
     <Compile Include="ActionType.cs" />
     <Compile Include="Blights\BlightBase.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Board.cs" />
     <Compile Include="BonusType.cs" />
     <Compile Include="ConflictState.cs" />
+    <Compile Include="ConflictType.cs" />
     <Compile Include="Dice.cs" />
     <Compile Include="DiceDetail.cs" />
     <Compile Include="Die.cs" />
@@ -88,6 +90,7 @@
     <Compile Include="IPlayer.cs" />
     <Compile Include="StaticRollBonus.cs" />
     <Compile Include="TacticInfo.cs" />
+    <Compile Include="Tactics\BasicEludeTactic.cs" />
     <Compile Include="Tactics\ITactic.cs" />
     <Compile Include="Maps\Map.cs" />
     <Compile Include="Maps\MapFactory.cs" />
@@ -97,7 +100,7 @@
     <Compile Include="Powers\PowerNotUsableException.cs" />
     <Compile Include="RollContext.cs" />
     <Compile Include="Stash.cs" />
-    <Compile Include="Tactics\NoTactic.cs" />
+    <Compile Include="Tactics\BasicFightTactic.cs" />
     <Compile Include="Triggers\GameTrigger.cs" />
     <Compile Include="Triggers\HeroTrigger.cs" />
     <Compile Include="Triggers\ITriggerRegistrar.cs" />
