@@ -224,5 +224,34 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WhenPlayerAcceptsRoll()
                 .ThenHero("Acolyte", x => x.HasUsedAction().Secrecy(6));
         }
+
+        [Test]
+        public void LeechLife()
+        {
+            new TestScenario()
+                .GivenHero("Acolyte", x => x.Power("Leech Life").Location(Location.Village).Grace(1).Secrecy(7))
+                .GivenSpace(Location.Village, x => x.Blight(Blight.Corruption))
+                .WhenPlayerTakesAttackAction(x => x.Tactic("Leech Life").Rolls(1, 5, 6))
+                .ThenSpace(Location.Village, x => x.NoBlights())
+                .ThenHero("Acolyte", x => x.HasUsedAction().Grace(2).Secrecy(6)) // two successes gains a Grace
+                .ThenPower("Leech Life", x=>x.IsExhausted());
+        }
+
+        [Test]
+        public void LeechLife_NotUsableInMonastery()
+        {
+            new TestScenario()
+                .GivenHero("Acolyte", x => x.Power("Leech Life").Location(Location.Monastery))
+                .ThenPowerIsUsable("Leech Life", false);
+        }
+
+        [Test]
+        public void LeechLife_PreventsMovementToMonasteryWhileExhausted()
+        {
+            new TestScenario()
+                .GivenHero("Acolyte", x => x.Power("Leech Life").Location(Location.Village))
+                .GivenPowerIsExhausted("Leech Life")
+                .ThenHero("Acolyte", x => x.CannotMoveTo(Location.Monastery));
+        }
     }
 }

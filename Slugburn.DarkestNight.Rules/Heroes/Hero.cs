@@ -171,14 +171,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void GainGrace(int amount, int max)
         {
-            throw new NotImplementedException();
+            Grace = Math.Min(Grace + amount, max);
         }
 
-
-        public IEnumerable<int> GetLastRoll(RollType rollType)
-        {
-            throw new NotImplementedException();
-        }
 
         public void LearnPower(string name)
         {
@@ -336,18 +331,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             var toRemove = _rollModifiers.Single(x => x.Name == name);
             _rollModifiers.Remove(toRemove);
-        }
-
-        public void RollAnotherDie()
-        {
-            ValidateState(HeroState.RollAvailable);
-            var power = GetPower("Forbidden Arts");
-            if (power== null || !power.IsUsable())
-                throw new InvalidOperationException("Forbidden Arts is not available." );
-            var roll = Player.RollOne();
-            if (roll == 1)
-                Game.IncreaseDarkness();
-            ConflictState.Roll.Add(roll);
         }
 
         public void AddAction(IAction action)

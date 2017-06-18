@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
+using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Powers;
+using Slugburn.DarkestNight.Rules.Tactics;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Heroes.Impl
@@ -348,6 +350,36 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             {
                 base.Learn();
                 Hero.Add(new PreventMovementEffect(location => location == Location.Monastery && Exhausted));
+                Hero.AddFightTactic(new LeechLifeTactic());
+            }
+
+            public override bool IsUsable()
+            {
+                return base.IsUsable() && Hero.Location != Location.Monastery;
+            }
+
+            private class LeechLifeTactic : PowerTactic, IRollHandler
+            {
+                public LeechLifeTactic()
+                {
+                    PowerName = "Leech Life";
+                    DiceCount = 3;
+                }
+
+                public override void Use(Hero hero)
+                {
+                    base.Use(hero);
+                    hero.AddRollHandler(this);
+                    hero.GetPower(PowerName).Exhaust();
+                }
+
+                public void HandleRoll(Hero hero)
+                {
+                    var targetMight = hero.ConflictState.Targets.Select(x => new BlightFactory().Create(x)).Min(x => x.Might);
+                    if (hero.ConflictState.Roll.Count(roll=>roll>=targetMight)>1)
+                        hero.GainGrace(1, hero.DefaultGrace);
+                    hero.RemoveRollHandler(this);
+                }
             }
         }
 

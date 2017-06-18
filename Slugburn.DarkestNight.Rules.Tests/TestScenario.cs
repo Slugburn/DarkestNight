@@ -191,5 +191,12 @@ namespace Slugburn.DarkestNight.Rules.Tests
             _game.ActingHero.EndCombat();
             return this;
         }
+
+        public TestScenario GivenPowerIsExhausted(string powerName)
+        {
+            var power = _game.GetPower(powerName);
+            power.Exhaust();
+            return this;
+        }
     }
 }

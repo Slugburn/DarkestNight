@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Heroes.Impl
@@ -8,7 +7,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
         public string PowerName { get; set; }
         public int DiceCount { get; set; }
 
-        public virtual string Name => $"{ PowerName} ({DiceCount} dice)";
+        public virtual string Name => $"{PowerName}";
         public virtual void Use(Hero hero) { }
 
         public bool IsAvailable(Hero hero) => hero.GetPower(PowerName).IsUsable();
