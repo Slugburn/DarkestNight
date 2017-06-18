@@ -49,6 +49,7 @@
     <Compile Include="Heroes\AcolyteTest.cs" />
     <Compile Include="FakePlayer.cs" />
     <Compile Include="HeroDefContext.cs" />
+    <Compile Include="Heroes\DruidTest.cs" />
     <Compile Include="HeroExpectation.cs" />
     <Compile Include="HeroTest.cs" />
     <Compile Include="PlayerActionContext.cs" />

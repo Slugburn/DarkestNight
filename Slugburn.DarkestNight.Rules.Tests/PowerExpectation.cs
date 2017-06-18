@@ -13,9 +13,9 @@ namespace Slugburn.DarkestNight.Rules.Tests
             _power = power;
         }
 
-        public PowerExpectation IsExhausted()
+        public PowerExpectation IsExhausted(bool expected = true)
         {
-            _expectExhausted = true;
+            _expectExhausted = expected;
             return this;
         }
 

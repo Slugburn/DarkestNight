@@ -1,4 +1,5 @@
 ﻿using Slugburn.DarkestNight.Rules.Powers;
+using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 {
@@ -17,7 +18,22 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             {
                 Name = "Animal Companion";
                 StartingPower = true;
-                Text = "Figth with 2 dice. Exhaust if you fail.";
+                Text = "Fight with 2 dice. Exhaust if you fail.";
+            }
+
+            public override void Learn(Hero hero)
+            {
+                base.Learn(hero);
+                hero.AddFightTactic(new AnimalCompanionTactic());
+            }
+
+            private class AnimalCompanionTactic : PowerTactic
+            {
+                public AnimalCompanionTactic()
+                {
+                    PowerName = "Animal Companion";
+                    DiceCount = 2;
+                }
             }
         }
 
