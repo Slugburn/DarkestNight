@@ -10,7 +10,7 @@ using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Heroes
 {
-    public abstract class Hero : ITriggerRegistrar
+    public abstract class Hero
     {
         private readonly List<IPower> _powerDeck;
         private Stash _stash;
@@ -19,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         private readonly List<IRollModifier> _rollModifiers;
         private List<IRollHandler> _rollHandlers;
 
-        public TriggerRegistry<HeroTrigger> Triggers { get; }
+        public TriggerRegistry<HeroTrigger, Hero> Triggers { get; }
 
         protected Hero(string name, int defaultGrace, int defaultSecrecy, params IPower[] powers)
         {
@@ -31,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             Powers = new List<IPower>();
             _powerDeck = new List<IPower>(powers);
             _stash= new Stash();
-            Triggers = new TriggerRegistry<HeroTrigger>(this);
+            Triggers = new TriggerRegistry<HeroTrigger, Hero>(this);
             IsActionAvailable = true;
 
             var fightTactic = new BasicFightTactic();

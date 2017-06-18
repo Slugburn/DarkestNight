@@ -1,22 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
-using Slugburn.DarkestNight.Rules.Blights.Implementations;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Heroes.Impl;
 using Slugburn.DarkestNight.Rules.Maps;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules
 {
-    public class Game : ITriggerRegistrar
+    public class Game
     {
         private readonly List<IPlayer> _players = new List<IPlayer>();
         private readonly Dictionary<string, IIgnoreBlight> _ignoreBlights = new Dictionary<string, IIgnoreBlight>();
 
-        public TriggerRegistry<GameTrigger> Triggers { get; }
+        public TriggerRegistry<GameTrigger, Game> Triggers { get; }
 
         public Board Board { get; set; }
 
@@ -35,7 +33,7 @@ namespace Slugburn.DarkestNight.Rules
         public Game()
         {
             Heroes = new List<Hero>();
-            Triggers = new TriggerRegistry<GameTrigger>(this);
+            Triggers = new TriggerRegistry<GameTrigger, Game>(this);
             Board = new Board();
             Events = new List<IEvent>();
             Maps = new MapFactory().CreateMaps().Shuffle();

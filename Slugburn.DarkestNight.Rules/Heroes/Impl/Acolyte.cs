@@ -34,15 +34,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 hero.Game.Triggers.Register(handler, GameTrigger.NecromancerDetectsHeroes);
             }
 
-            public class BlindingBlackTriggerHandler : ITriggerHandler
+            public class BlindingBlackTriggerHandler : ITriggerHandler<Game>
             {
                 public string Name => "Blinding Black";
                 public string HeroName { get; set; }
 
-                public void HandleTrigger(ITriggerRegistrar registrar, TriggerContext context, string tag)
+                public void HandleTrigger(Game registrar, TriggerContext context)
                 {
-                    var game = (Game)registrar;
-                    var hero = game.GetHero(HeroName);
+                    var hero = registrar.GetHero(HeroName);
                     var power = hero.GetPower(Name);
                     if (!power.IsUsable(hero)) return;
                     if (!hero.Player.AskUsePower(Name, power.Text)) return;
@@ -119,12 +118,12 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 hero.Triggers.Register(new FailedAttackHandler(), HeroTrigger.FailedAttack);
             }
 
-            private class FailedAttackHandler : ITriggerHandler
+            private class FailedAttackHandler : ITriggerHandler<Hero>
             {
                 public string Name => "Dark Veil";
-                public void HandleTrigger(ITriggerRegistrar registrar, TriggerContext context, string tag)
+                public void HandleTrigger(Hero registrar, TriggerContext context)
                 {
-                    var hero = (Hero) registrar;
+                    var hero = registrar;
                     var power = hero.GetPower(Name);
                     if (!power.IsUsable(hero)) return;
                     if (!hero.Player.AskUsePower(Name, power.Text)) return;
@@ -143,12 +142,12 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                     hero.GetPower(Name).Exhaust(hero);
                 }
 
-                private class DarkVeilEnds : ITriggerHandler
+                private class DarkVeilEnds : ITriggerHandler<Hero>
                 {
                     public string Name => "Dark Veil";
-                    public void HandleTrigger(ITriggerRegistrar registrar, TriggerContext context, string tag)
+                    public void HandleTrigger(Hero registrar, TriggerContext context)
                     {
-                        var hero = (Hero)registrar;
+                        var hero = registrar;
                         hero.Game.RemoveIgnoreBlight(Name);
                         hero.Triggers.Unregister(HeroTrigger.StartTurn, Name);
                     }
@@ -156,11 +155,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class DeathMask : Bonus, ITriggerHandler
+        class DeathMask : Bonus
         {
+            private const string PowerName = "Death Mask";
+
             public DeathMask()
             {
-                Name = "Death Mask";
+                Name = PowerName;
                 Text =
                     "You may choose not to lose Secrecy for attacking a blight (including use of the Call to Death power) or for starting your turn at the Necromancer's location.";
             }
@@ -168,16 +169,22 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             public override void Learn(Hero hero)
             {
                 base.Learn(hero);
-                hero.Triggers.Register(this, HeroTrigger.LoseSecrecy);
+                hero.Triggers.Register(new DeathMaskTriggerHandler(), HeroTrigger.LoseSecrecy);
             }
 
-            public void HandleTrigger(ITriggerRegistrar registrar, TriggerContext context, string tag)
+            private class DeathMaskTriggerHandler : ITriggerHandler<Hero>
             {
-                var hero = (Hero) registrar;
-                if (!IsUsable(hero)) return;
-                var sourceName = context.GetState<string>();
-                if (sourceName == "Attack" || sourceName == "Necromancer")
-                    context.Cancel = true;
+                public string Name => PowerName;
+                public void HandleTrigger(Hero registrar, TriggerContext context)
+                {
+                    var hero = registrar;
+                    var power = hero.GetPower(PowerName);
+                    if (!power.IsUsable(hero)) return;
+                    var sourceName = context.GetState<string>();
+                    if (sourceName == "Attack" || sourceName == "Necromancer")
+                        context.Cancel = true;
+                }
+
             }
         }
 

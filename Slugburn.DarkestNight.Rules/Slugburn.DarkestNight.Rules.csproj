@@ -103,7 +103,6 @@
     <Compile Include="Tactics\TacticInfo.cs" />
     <Compile Include="Triggers\GameTrigger.cs" />
     <Compile Include="Triggers\HeroTrigger.cs" />
-    <Compile Include="Triggers\ITriggerRegistrar.cs" />
     <Compile Include="Triggers\TriggerContext.cs" />
     <Compile Include="Triggers\ITriggerHandler.cs" />
     <Compile Include="Game.cs" />
