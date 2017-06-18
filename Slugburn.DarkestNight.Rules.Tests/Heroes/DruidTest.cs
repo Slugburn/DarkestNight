@@ -18,7 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WhenPlayerTakesAttackAction(x => x.Tactic("Animal Companion").Rolls(roll))
                 .ThenSpace(Location.Village, x => x.Blights(expectedBlights))
                 .ThenPlayer(x => x.RolledNumberOfDice(2))
-                .ThenHero("Druid", x => x.HasUsedAction().LostSecrecy())
+                .ThenHero(x => x.HasUsedAction().LostSecrecy())
                 .ThenPower("Animal Companion", x=>x.IsExhausted(!attackSucceeds));
         }
 
@@ -26,10 +26,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Camouflage()
         {
             new TestScenario()
-                .GivenHero("Druid", x => x.Power("Camouflage").Location(Location.Village).Secrecy(6))
+                .GivenHero("Druid", x => x.Power("Camouflage").Location(Location.Village))
                 .GivenSpace(Location.Village, x => x.Blight(Blight.Skeletons))
                 .WhenPlayerEludes(x => x.Tactic("Camouflage").Rolls(1, 6))
-                .ThenPlayer(x=>x.RolledNumberOfDice(2));
+                .ThenPlayer(x=>x.RolledNumberOfDice(2))
+                .ThenHero(x=>x.LostGrace(0));
         }
     }
 }

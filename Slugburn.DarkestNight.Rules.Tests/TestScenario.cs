@@ -78,6 +78,17 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public TestScenario ThenHero(string heroName, Action<HeroExpectation> expect)
         {
             var hero = _game.GetHero(heroName);
+            return ThenHero(hero, expect);
+        }
+
+        public TestScenario ThenHero(Action<HeroExpectation> expect)
+        {
+            var hero = _game.ActingHero;
+            return ThenHero(hero, expect);
+        }
+
+        private TestScenario ThenHero(Hero hero, Action<HeroExpectation> expect)
+        {
             var expectation = new HeroExpectation(hero);
             expect(expectation);
             expectation.Verify();

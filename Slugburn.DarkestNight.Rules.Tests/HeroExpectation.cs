@@ -11,7 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
         private int _expectedGrace;
         private int _expectedSecrecy;
         private readonly List<Location> _invalidLocations;
-        private List<Location> _specifiedLocations;
+        private readonly List<Location> _specifiedLocations;
         private bool _expectedActionAvailable;
 
         public HeroExpectation(Hero hero)
