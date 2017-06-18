@@ -28,11 +28,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 StartingPower = true;
                 Text = "Exhaust to draw one search result for your location without rolling dice.";
             }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
-            }
         }
 
         class Foreknowledge : Bonus
@@ -51,11 +46,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Name = "Hope";
                 Text = "Exhaust and spend 1 Grace to cause -1 Darkness.";
             }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
-            }
         }
 
         class Prediction : ActionPower
@@ -65,11 +55,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Name = "Prediction";
                 StartingPower = true;
                 Text = "Roll 2 dice and add them to this card. You may use all dice on this card instead of making any roll. When you do, clear this card.";
-            }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
             }
         }
 

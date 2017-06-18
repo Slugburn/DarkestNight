@@ -57,6 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpaceDefContext.cs" />
     <Compile Include="SpaceExpectation.cs" />
+    <Compile Include="TacticContext.cs" />
     <Compile Include="TestScenario.cs" />
   </ItemGroup>
   <ItemGroup>

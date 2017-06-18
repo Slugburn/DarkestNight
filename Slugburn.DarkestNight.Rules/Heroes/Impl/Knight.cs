@@ -38,11 +38,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 StartingPower = true;
                 Text = "Move twice, but gain no Secrecy.";
             }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
-            }
         }
 
         class HolyMantle : Bonus
@@ -69,11 +64,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "Gain 1 Grace (up to default) at start of turn.";
             }
 
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
-            }
-
             public string FulfillText => "No blights at location; You gain 1 Grace.";
             public string BreakText => "Leave location; you lose all Grace.";
         }
@@ -86,11 +76,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 StartingPower = true;
                 Text = "If no Oaths are active, activate until you fulfill or break.";
                 ActiveText = "+2 dice in fights when attacking blights.";
-            }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
             }
 
             public string FulfillText => "Destroy a blight; you gain 1 Grace.";
@@ -106,11 +91,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "+1 die in fights.";
             }
 
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
-            }
-
             public string FulfillText => "Win a fight; You may activate any Oath immediately.";
             public string BreakText => "Attempt to elude; you lose 1 Grace.";
         }
@@ -122,11 +102,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Name = "Oath of Vengeance";
                 Text = "If no Oaths are active, activate until you fulfill or break.";
                 ActiveText = "Add 1 to highest die when fighting the Necormancer.";
-            }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
             }
 
             public string FulfillText => "Win fight versus the Necromancer; you get a free action.";

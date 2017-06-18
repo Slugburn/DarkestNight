@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
 
@@ -25,7 +24,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             new TestScenario()
                 .GivenSpace(Location.Swamp, x => x.Blight(Blight.Skeletons, Blight.Shades, Blight.Lich))
                 .GivenHero("Acolyte", x => x.Power("Call to Death").Location(Location.Swamp).Secrecy(6))
-                .WhenPlayerTakesFightAction(x=>x.Action("Call to Death").Target(Blight.Skeletons, Blight.Lich).Roll(5,6))
+                .WhenPlayerTakesAttackAction(x=>x.Action("Call to Death").Target(Blight.Skeletons, Blight.Lich).Rolls(5,6))
                 .WhenPlayerAssignsRolledDiceToBlights(BlightDieAssignment.Create(Blight.Lich, 6), BlightDieAssignment.Create(Blight.Skeletons, 5))
                 .ThenSpace(Location.Swamp, x => x.Blights(Blight.Shades))
                 .ThenHero("Acolyte", x => x.Secrecy(4).HasUsedAction());
@@ -37,10 +36,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             new TestScenario()
                 .GivenSpace(Location.Swamp, x => x.Blight(Blight.Skeletons, Blight.Shades))
                 .GivenHero("Acolyte", x => x.Power("Call to Death", "Final Rest").Location(Location.Swamp).Secrecy(6))
-                .WhenPlayerTakesAction("Call to Death")
-                .GivenPlayerWillRoll(5, 2, 3, 1)
-                .WhenPlayerSelectsTacticAndTarget("Final Rest (3 dice)", Blight.Skeletons, Blight.Shades)
-                .WhenPlayerAcceptsRoll()
+                .WhenPlayerTakesAttackAction(x=>x.Action("Call to Death").Tactic("Final Rest (3 dice)").Target(Blight.Skeletons, Blight.Shades).Rolls(5, 2, 3, 1))
                 .WhenPlayerAssignsRolledDiceToBlights(BlightDieAssignment.Create(Blight.Shades, 5), BlightDieAssignment.Create(Blight.Skeletons, 3))
                 .ThenSpace(Location.Swamp, x => x.Blights(Blight.Skeletons))
                 .ThenHero("Acolyte", x => x.HasUsedAction()
@@ -66,8 +62,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             new TestScenario()
                 .GivenSpace(Location.Swamp, x => x.Blight(Blight.Spies))
                 .GivenHero("Acolyte", x => x.Power("Dark Veil").Location(Location.Swamp).Secrecy(7))
-                .WhenPlayerTakesAction("Attack", player=>player.UsePower("Dark Veil").Rolls(1))
-                .WhenPlayerSelectsTacticAndTarget("None", Blight.Spies)
+                .WhenPlayerTakesAttackAction(player=>player.UsePower("Dark Veil").Rolls(1))
                 .ThenHero("Acolyte", x => x.HasUsedAction().Secrecy(6)) // loses Secrecy for making attack, but not for Spies defense
                 .ThenPower("Dark Veil", x => x.IsExhausted());
         }
@@ -78,8 +73,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             new TestScenario()
                 .GivenSpace(Location.Swamp, x => x.Blight(Blight.Spies))
                 .GivenHero("Acolyte", x => x.Power("Death Mask").Location(Location.Swamp).Secrecy(7))
-                .WhenPlayerTakesAction("Attack", player=>player.Rolls(1))
-                .WhenPlayerSelectsTacticAndTarget("None", Blight.Spies)
+                .WhenPlayerTakesAttackAction(player=>player.Rolls(1))
                 .ThenHero("Acolyte", x => x.HasUsedAction().Secrecy(6)); // loses Secrecy for Spies defense, but not for making attack
         }
 
@@ -105,9 +99,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenDarkness(darkness)
                 .GivenHero("Acolyte", x => x.Power("Fade to Black").Location(Location.Monastery))
                 .GivenSpace(Location.Monastery, x => x.Blight(Blight.Skeletons))
-                .WhenPlayerTakesAction("Attack")
-                .GivenPlayerWillRoll(rolls)
-                .WhenPlayerSelectsTacticAndTarget("None", Blight.Skeletons)
+                .WhenPlayerTakesAttackAction(x=>x.Rolls(rolls))
                 .ThenPlayer(x => x.LastRoll(expectedDice));
         }
 
@@ -120,9 +112,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenDarkness(20)
                 .GivenHero("Acolyte", x => x.Power("Fade to Black", "Final Rest").Location(Location.Monastery))
                 .GivenSpace(Location.Monastery, x => x.Blight(Blight.Skeletons))
-                .WhenPlayerTakesAction("Attack")
-                .GivenPlayerWillRoll(rolls)
-                .WhenPlayerSelectsTacticAndTarget("Final Rest (3 dice)", Blight.Skeletons)
+                .WhenPlayerTakesAttackAction(x=>x.Tactic("Final Rest (3 dice)").Rolls(rolls))
                 .ThenPlayer(x => x.LastRoll(expectedDice));
         }
 
@@ -214,9 +204,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             new TestScenario()
                 .GivenHero("Acolyte", x => x.Power("Final Rest").Location(Location.Village).Grace(3).Secrecy(7))
                 .GivenSpace(Location.Village, x => x.Blight(Blight.Corruption))
-                .WhenPlayerTakesAction("Attack")
-                .GivenPlayerWillRoll(rolls)
-                .WhenPlayerSelectsTacticAndTarget(tacticName, Blight.Corruption)
+                .WhenPlayerTakesAttackAction(x=>x.Tactic(tacticName).Rolls(rolls))
                 .ThenSpace(Location.Village, x => x.NoBlights())
                 .ThenHero("Acolyte", x => x.HasUsedAction().Grace(2).Secrecy(6));
         }
@@ -228,11 +216,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenDarkness(0)
                 .GivenHero("Acolyte", x => x.Power("Forbidden Arts").Location(Location.Village))
                 .GivenSpace(Location.Village, x => x.Blight(Blight.Confusion))
-                .WhenHeroAttacksBlight("Acolyte", player => player
-                    .RollAnotherDie(true, true, false)
-                    .Rolls(1, 1, 4))
-                .ThenHero("Acolyte", x => x.HasUsedAction().Secrecy(6))
-                .ThenDarkness(1);
+                .WhenPlayerTakesAction("Attack")
+                .WhenPlayerSelectsTactic(x=>x.Rolls(1))
+                .WhenPlayerTakesAction("Forbidden Arts", x=>x.Rolls(1))
+                .ThenDarkness(1)
+                .WhenPlayerTakesAction("Forbidden Arts", x => x.Rolls(4))
+                .WhenPlayerAcceptsRoll()
+                .ThenHero("Acolyte", x => x.HasUsedAction().Secrecy(6));
         }
     }
 }

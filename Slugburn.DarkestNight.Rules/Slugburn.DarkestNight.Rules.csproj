@@ -78,8 +78,9 @@
     <Compile Include="Heroes\Impl\Scholar.cs" />
     <Compile Include="Heroes\Impl\Seer.cs" />
     <Compile Include="Heroes\Impl\Wizard.cs" />
+    <Compile Include="Heroes\UnexpectedStateException.cs" />
     <Compile Include="IDieBonus.cs" />
-    <Compile Include="IRollClient.cs" />
+    <Compile Include="IRollHandler.cs" />
     <Compile Include="IRollModifier.cs" />
     <Compile Include="IgnoreBlightEffect.cs" />
     <Compile Include="IPlayer.cs" />

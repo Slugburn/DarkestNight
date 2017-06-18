@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -8,37 +6,33 @@ using Slugburn.DarkestNight.Rules.Powers;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
-    public class Attack : IAction, IRollClient
+    public class Attack : IAction, IRollHandler
     {
-        private readonly Hero _hero;
+        public string Name => "Attack";
 
-        public Attack(Hero hero)
+        public void Act(Hero hero)
         {
-            _hero = hero;
-        }
-
-        public bool Act()
-        {
-            _hero.ConflictState = new ConflictState
+            hero.ValidateState(HeroState.ChoosingAction);
+            hero.ConflictState = new ConflictState
             {
                 TacticType = TacticType.Fight,
-                AvailableFightTactics = _hero.GetAvailableFightTactics().GetInfo(_hero),
-                AvailableTargets = _hero.GetSpace().Blights.Select(x => x.Type).ToList(),
+                AvailableFightTactics = hero.GetAvailableFightTactics().GetInfo(hero),
+                AvailableTargets = hero.GetSpace().Blights.Select(x => x.Type).ToList(),
                 MinTarget = 1,
                 MaxTarget = 1
             };
-            _hero.SetRollClient(this);
-            _hero.State = HeroState.SelectingTarget;
-            return true;
+            hero.SetRollClient(this);
+            hero.State = HeroState.SelectingTarget;
         }
 
-        public void EndCombat(IEnumerable<int> roll)
+        public void HandleRoll(Hero hero)
         {
-            var result = roll.Max();
-            var target = _hero.ConflictState.Targets.Single();
+            var result = hero.ConflictState.Roll.Max();
+            var target = hero.ConflictState.Targets.Single();
             var assignment = BlightDieAssignment.Create(target, result);
-            _hero.State = HeroState.AssigningDice;
-            _hero.AssignDiceToBlights(new[] {assignment});
+            hero.State = HeroState.AssigningDice;
+            hero.AssignDiceToBlights(new[] {assignment});
+            hero.IsActionAvailable = false;
         }
     }
 }

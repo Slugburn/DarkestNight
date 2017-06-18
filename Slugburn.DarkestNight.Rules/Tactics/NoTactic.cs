@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Slugburn.DarkestNight.Rules.Heroes;
+﻿using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Tactics
 {
@@ -7,13 +6,13 @@ namespace Slugburn.DarkestNight.Rules.Tactics
     {
         public string Name => "None";
 
+        public void Use(Hero hero)
+        {
+            // no action
+        }
+
         public bool IsAvailable(Hero hero) => true;
 
         public int GetDiceCount() => 1;
-
-        public void AfterRoll(Hero hero, ICollection<int> roll)
-        {
-            // do nothing
-        }
     }
 }

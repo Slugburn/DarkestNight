@@ -38,11 +38,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Name = "Diversion";
                 Text = "Spend 1 Secrecy to negate the effects of one blight in your location until the Necromancer ends a turn there.";
             }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
-            }
         }
 
         class Eavesdrop : ActionPower
@@ -53,11 +48,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 StartingPower = true;
                 Text = "Spend 1 Secrecy to search with 2 dice.";
             }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
-            }
         }
 
         class Sabotage : ActionPower
@@ -66,11 +56,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             {
                 Name = "Sabotage";
                 Text = "Spend 1 Secrecy in the Necromancer's location to cause -1 Darkness.";
-            }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
             }
         }
 

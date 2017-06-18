@@ -60,10 +60,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "When a hero has an event there, draw an extra card and discard 1.";
             }
 
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
-            }
         }
 
         class AncientDefense: ActionPower
@@ -73,11 +69,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Name = "Ancient Defense";
                 Text = "Activate in your location.";
                 ActiveText = "When a blight appears there, draw an extra card and discard 1.";
-            }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
             }
 
         }
@@ -99,11 +90,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Activate in your location.";
                 ActiveText = "The might of blights there is reduced by 1.";
             }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
-            }
         }
 
         class ForgottenSancutary : ActionPower
@@ -113,11 +99,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Name = "Forgotten Sanctuary";
                 Text = "Activate in your location.";
                 ActiveText = "Heroes gain +2 dice when eluding there.";
-            }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
             }
         }
 

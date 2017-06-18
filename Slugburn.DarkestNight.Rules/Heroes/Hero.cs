@@ -18,7 +18,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         private readonly Dictionary<string, ITactic> _fightTactics;
         private readonly Dictionary<string, ITactic> _evadeTactics;
         private readonly List<IRollModifier> _rollModifiers;
-        private IRollClient _rollClient;
+        private readonly List<IAction> _actions;
+        private List<IRollHandler> _rollHandlers;
 
         public TriggerRegistry<HeroTrigger> Triggers { get; }
 
@@ -42,6 +43,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             _fightTactics = new Dictionary<string, ITactic>(StringComparer.InvariantCultureIgnoreCase) {{"None", new NoTactic()}};
             _evadeTactics = new Dictionary<string, ITactic>(StringComparer.InvariantCultureIgnoreCase) {{"None", new NoTactic()}};
             _rollModifiers = new List<IRollModifier>();
+            _actions = new List<IAction>() {new Attack()};
         }
 
         public IEnumerable<IPower> PowerDeck => _powerDeck;
@@ -55,7 +57,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public ICollection<IPower> Powers { get; protected set; }
         public string Name { get; set; }
 
-        public IEnumerable<IBlight> GetBlights()
+        public ICollection<IBlight> GetBlights()
         {
             return GetSpace().Blights;
         }
@@ -75,7 +77,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void EndTurn()
         {
             var space = GetSpace();
-            var blights = space.Blights.ToList();
             var spies = space.GetBlights<Spies>();
             foreach (var spy in spies)
             {
@@ -250,15 +251,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             if (!IsActionAvailable)
                 throw new InvalidOperationException($"{Name} does not have an action available.");
-            var success = action.Act();
-            if (success)
-                IsActionAvailable = false;
+            action.Act(this);
         }
 
-        public bool IsActionAvailable { get; private set; }
+        public bool IsActionAvailable { get; set; }
         public ConflictState ConflictState { get; set; }
 
-        public void SelectTargetAndTactic(ICollection<Blight> targets, string tacticName)
+        public void SelectTactic(string tacticName, ICollection<Blight> targets)
         {
             ValidateState(HeroState.SelectingTarget);
             var targetsAreValid =  ConflictState.AvailableTargets.Intersect(targets).Count() == targets.Count
@@ -268,10 +267,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var tacticIsValid = ConflictState.AvailableFightTactics.Select(x=>x.Name).Contains(tacticName);
             if (!tacticIsValid)
                 throw new Exception($"Invalid tactic: {tacticName}");
+
             ConflictState.Targets = targets;
             var tacticInfo = ConflictState.AvailableFightTactics.Single(x=>x.Name == tacticName);
             ConflictState.SelectedTactic = tacticInfo;
             var diceCount = tacticInfo.DiceCount;
+            var tactic = _fightTactics[tacticName];
+            tactic.Use(this);
             var roll = Player.RollDice(diceCount).ToList();
             ConflictState.Roll = roll;
             State = HeroState.RollAvailable;
@@ -280,13 +282,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void EndCombat()
         {
             ValidateState(HeroState.RollAvailable);
-            var tactic = _fightTactics[ConflictState.SelectedTactic.Name];
-            var roll = ConflictState.Roll;
-            tactic.AfterRoll(this, roll);
-            _rollClient.EndCombat(roll);
+            foreach (var handler in _rollHandlers.ToList())
+                handler.HandleRoll(this);
         }
 
-        private void ValidateState(HeroState expected)
+        public void ValidateState(HeroState expected)
         {
             if (State != expected)
                 throw new UnexpectedStateException(State, expected);
@@ -327,9 +327,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             }
         }
 
-        public void SetRollClient(IRollClient rollClient)
+        public void SetRollClient(IRollHandler rollHandler)
         {
-            _rollClient = rollClient;
+            _rollHandlers = new List<IRollHandler> {rollHandler};
         }
 
         public void RemoveRollModifier(string name)
@@ -337,13 +337,40 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var toRemove = _rollModifiers.Single(x => x.Name == name);
             _rollModifiers.Remove(toRemove);
         }
-    }
 
-    public class UnexpectedStateException : Exception
-    {
-        public UnexpectedStateException(HeroState actual, HeroState expected)
-            :base($"Unexpected game state. Expected {expected} but was {actual}.")
+        public void RollAnotherDie()
         {
+            ValidateState(HeroState.RollAvailable);
+            var power = GetPower("Forbidden Arts");
+            if (power== null || !power.IsUsable())
+                throw new InvalidOperationException("Forbidden Arts is not available." );
+            var roll = Player.RollOne();
+            if (roll == 1)
+                Game.IncreaseDarkness();
+            ConflictState.Roll.Add(roll);
+        }
+
+        public void AddAction(IAction action)
+        {
+            _actions.Add(action);
+        }
+
+        public IAction GetAction(string name)
+        {
+            var action = _actions.SingleOrDefault(x => x.Name == name);
+            if (action==null)
+                throw new Exception($"Unknown action {name} requested.");
+            return action;
+        }
+
+        public void RemoveRollHandler(IRollHandler rollHandler)
+        {
+            _rollHandlers.Remove(rollHandler);
+        }
+
+        public void AddRollHandler(IRollHandler handler)
+        {
+            _rollHandlers.Add(handler);
         }
     }
 }

@@ -19,11 +19,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 StartingPower = true;
                 Text = "Exhaust to move directly to any location, gaining 2 Secrecy (up to 5).";
             }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
-            }
         }
 
         class LightningStrike: TacticPower
@@ -44,11 +39,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 StartingPower = true;
                 Text = "Deactivate all Runes. Activate and choose a type of blight.";
                 ActiveText = "That type of blight has no effect.";
-            }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
             }
         }
 
@@ -89,11 +79,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Deactivate all Runes. Activate.";
                 ActiveText = "Roll 1 die when a blight is created. If you roll a 6, destroy it.";
             }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
-            }
         }
 
         class RuneOfMisdirection : ActionPower
@@ -104,11 +89,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Deactivate all Runes. Activate.";
                 ActiveText = "Roll twice for Necromancer movement and choose one result.";
             }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
-            }
         }
 
         class Divination : ActionPower
@@ -117,11 +97,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             {
                 Name = "Divination";
                 Text = "Exhaust to search with 2 dice in any location (not necessarily the location you are at).";
-            }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
             }
         }
 
@@ -132,11 +107,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Name = "Rune of Clairvoyance";
                 Text = "Deactivate all Runes. Activate.";
                 ActiveText = "At the start of your turn, look at the top card of any deck; put it on the top or bottom of that deck.";
-            }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
             }
         }
     }

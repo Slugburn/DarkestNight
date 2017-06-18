@@ -22,8 +22,6 @@ namespace Slugburn.DarkestNight.Rules.Tests
                 _targets = new[] {blights.First().Type};
         }
 
-        public Action<PlayerActionContext> PlayerActions { get; private set; }
-
         public string GetAction() => _action;
         public string GetTactic() => _tactic;
         public Blight[] GetTargets() => _targets;
@@ -46,9 +44,15 @@ namespace Slugburn.DarkestNight.Rules.Tests
             return this;
         }
 
-        public FightContext Roll(params int[] roll)
+        public FightContext Rolls(params int[] roll)
         {
             _player.AddUpcomingRolls(roll);
+            return this;
+        }
+
+        public FightContext UsePower(string powerName)
+        {
+            _player.SetUsePowerResponse(powerName, true);
             return this;
         }
     }

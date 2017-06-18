@@ -22,18 +22,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 StartingPower = true;
                 Text = "One hero at your location gains 1 Grace (up to default). If they now have more Grace than you, you gain 1 Grace.";
             }
-
-            protected override bool TakeAction()
-            {
-                //                Hero.SelectTarget<Hero>(TargetType.Hero)
-                //                    .OnTarget(target =>
-                //                    {
-                //                        target.GainGrace(1, target.DefaultGrace);
-                //                        if (target.Grace > Hero.Grace)
-                //                            Hero.GainGrace(1);
-                //                    });
-                return true;
-            }
         }
 
         class BlessingOfFaith : ActionPower
@@ -44,18 +32,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 StartingPower = true;
                 Text = "Activate on a hero in your location.";
                 ActiveText = "Gain an extra Grace (up to default) when praying.";
-            }
-
-            protected override bool TakeAction()
-            {
-                //                Hero.SelectTarget<Hero>(TargetType.Hero)
-                //                    .OnTarget(target =>
-                //                    {
-                //                        var effect = new TriggeredEffect(this, Trigger.Praying, ActiveText, c => c.Hero.GainGrace(1, c.Hero.DefaultGrace));
-                //                        target.Add(effect);
-                //                        Stash.Add(target, effect);
-                //                    });
-                return true;
             }
 
             public override void Deactivate()
@@ -76,15 +52,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "Gain 1 Grace (up to default) when hiding.";
             }
 
-            protected override bool TakeAction()
-            {
-                //                var space = Hero.GetSpace();
-                //                var effect = new TriggeredEffect(this, HeroTrigger.Hiding, ActiveText, c => c.Hero.GainGrace(1, c.Hero.DefaultGrace));
-                //                space.Add(effect);
-                //                Stash.Add(space, effect);
-                return true;
-            }
-
             public override void Deactivate()
             {
 //                base.Deactivate();
@@ -103,18 +70,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "+1d in fights.";
             }
 
-            protected override bool TakeAction()
-            {
-                //                Hero.SelectTarget<Hero>(TargetType.Hero)
-                //                    .OnTarget(target =>
-                //                    {
-                //                        var bonus = new RollBonus(RollType.Fight, BonusType.Dice, 1, this);
-                //                        target.Add(bonus);
-                //                        Stash.Add(target, bonus);
-                //                    });
-                return true;
-            }
-
             public override void Deactivate()
             {
                 base.Deactivate();
@@ -131,18 +86,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Name = "Blessing of Wisdom";
                 Text = "Activate on a hero in your location.";
                 ActiveText = "+1d when eluding.";
-            }
-
-            protected override bool TakeAction()
-            {
-                //                Hero.SelectTarget<Hero>(TargetType.Hero)
-                //                    .OnTarget(target =>
-                //                    {
-                //                        var bonus = new RollBonus(RollType.Elude, BonusType.Dice, 1, this);
-                //                        target.Add(bonus);
-                //                        Stash.Add(target, bonus);
-                //                    });
-                return true;
             }
 
             public override void Deactivate()
@@ -247,11 +190,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 //            {
 //                Hero.SetDice(RollType.Elude, 4);
 //            }
-
-            public override void OnSuccess()
-            {
-//                Hero.LoseSecrecy();
-            }
         }
         #endregion
     }

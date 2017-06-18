@@ -39,10 +39,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Deactivate all Forms. Travel. Optinally activate one of your Forms.";
             }
 
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
-            }
         }
 
         class RavenForm : ActionPower
@@ -52,11 +48,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Name = "Raven Form";
                 Text = "Deactivate all Forms. Optionally activate.";
                 ActiveText = "+1 die in searches. When you travel, you may move two spaces. You cannot gain Grace.";
-            }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
             }
         }
 
@@ -68,11 +59,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 StartingPower = true;
                 Text = "Deactivate all Forms. Optionally activate.";
                 ActiveText = "Ignore blights' effects unless the Necromancer is present. You cannot gain Grace.";
-            }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
             }
         }
 
@@ -92,11 +78,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Name = "Tree Form";
                 Text = "Deactivate all Forms. Optionally activate.";
                 ActiveText = "Gain 2 Grace (up to default) at the start of your turn. Your actions can only be to hide or use a Druid power.";
-            }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
             }
         }
 
@@ -126,11 +107,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Name = "Wolf Form";
                 Text = "Deactivate all Forms. Optionally activate.";
                 ActiveText = "+1 die in fights. +1 die when eluding. You cannot gain Grace.";
-            }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
             }
         }
     }

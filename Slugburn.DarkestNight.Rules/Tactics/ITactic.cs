@@ -6,11 +6,10 @@ namespace Slugburn.DarkestNight.Rules.Tactics
     public interface ITactic
     {
         string Name { get; }
+        void Use(Hero hero);
 
         bool IsAvailable(Hero hero);
 
         int GetDiceCount();
-
-        void AfterRoll(Hero hero, ICollection<int> roll);
     }
 }

@@ -9,12 +9,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
         public int DiceCount { get; set; }
 
         public virtual string Name => $"{ PowerName} ({DiceCount} dice)";
+        public virtual void Use(Hero hero) { }
+
         public bool IsAvailable(Hero hero) => hero.GetPower(PowerName).IsUsable();
         public int GetDiceCount() => DiceCount;
 
-        public virtual void AfterRoll(Hero hero, ICollection<int> roll)
-        {
-            // do nothing
-        }
     }
 }

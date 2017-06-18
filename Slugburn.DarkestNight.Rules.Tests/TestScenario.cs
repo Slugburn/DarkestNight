@@ -91,15 +91,6 @@ namespace Slugburn.DarkestNight.Rules.Tests
             return this;
         }
 
-        public TestScenario WhenHeroAttacksBlight(string heroName, Action<PlayerActionContext> actions = null)
-        {
-            actions?.Invoke(new PlayerActionContext(_player));
-            var hero = _game.GetHero(heroName);
-            var attackBlight = new Attack(hero);
-            hero.TakeAction(attackBlight);
-            return this;
-        }
-
         public TestScenario ThenPowerIsUsable(string powerName, bool expected=true)
         {
             var power = _game.GetPower(powerName);
@@ -127,26 +118,17 @@ namespace Slugburn.DarkestNight.Rules.Tests
         {
             actions?.Invoke(new PlayerActionContext(_player));
             var hero = _game.ActingHero;
-            IAction action;
-            if (actionName == "Attack")
-            {
-                action = new Attack(hero);
-            }
-            else
-            {
-                var power = (Power)hero.GetPower(actionName);
-                action = (IAction) power;
-            }
+            var action = hero.GetAction(actionName);
             hero.TakeAction(action);
             return this;
         }
 
-        public TestScenario WhenPlayerTakesFightAction(Action<FightContext> actions)
+        public TestScenario WhenPlayerTakesAttackAction(Action<FightContext> actions)
         {
             var context=  new FightContext(_player, _game.ActingHero);
             actions(context);
-            WhenPlayerTakesAction(context.GetAction(), context.PlayerActions);
-            WhenPlayerSelectsTacticAndTarget(context.GetTactic(), context.GetTargets());
+            WhenPlayerTakesAction(context.GetAction());
+            WhenPlayerSelectsTactic(context.GetTactic(), context.GetTargets());
             WhenPlayerAcceptsRoll();
             return this;
         }
@@ -178,9 +160,17 @@ namespace Slugburn.DarkestNight.Rules.Tests
             return this;
         }
 
-        public TestScenario WhenPlayerSelectsTacticAndTarget(string tactic, params Blight[] blights)
+        public TestScenario WhenPlayerSelectsTactic(string tactic, params Blight[] blights)
         {
-            _game.ActingHero.SelectTargetAndTactic(blights, tactic);
+            _game.ActingHero.SelectTactic(tactic, blights);
+            return this;
+        }
+
+        public TestScenario WhenPlayerSelectsTactic(Action<TacticContext> define = null)
+        {
+            var context = new TacticContext(_player, _game.ActingHero);
+            define?.Invoke(context);
+            _game.ActingHero.SelectTactic(context.GetTactic(), context.GetTargets());
             return this;
         }
 

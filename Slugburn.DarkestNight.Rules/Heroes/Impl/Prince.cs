@@ -28,11 +28,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 return base.IsUsable() && Hero.Secrecy > 0;
             }
 
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
-            }
-
 //            public override void Activate()
 //            {
 //                var space = Hero.GetSpace();
@@ -83,22 +78,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 StartingPower = true;
                 Text = "Activate on a hero in your location.";
                 ActiveText = "Deactivate before any die roll for +3d.";
-            }
-
-            protected override bool TakeAction()
-            {
-                //                Hero.SelectTarget<Hero>(TargetType.Hero)
-                //                    .OnTarget(target =>
-                //                    {
-                //                        var bonus = new RollBonus(RollType.Any, BonusType.Dice, 3, this)
-                //                        {
-                //                            Auto = false,
-                //                            OnUse = () => Deactivate()
-                //                        };
-                //                        target.Add(bonus);
-                //                        Stash.Add(target, bonus);
-                //                    });
-                return true;
             }
 
             public override void Deactivate()
@@ -167,11 +146,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 return base.IsUsable() && Hero.Secrecy > 0;
             }
 
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
-            }
-
 //            public override void Activate()
 //            {
 //                Hero.LoseSecrecy();
@@ -198,17 +172,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "Heroes gain 1 Secrecy (up to 5) when ending a turn there, and +1d when eluding there.";
             }
 
-            protected override bool TakeAction()
-            {
-                //                var space = Hero.GetSpace();
-                //                var effect = new TriggeredEffect(this, HeroTrigger.EndOfTurn, "Gain 1 Secrecy (up to 5)", c => c.Hero.GainSecrecy(1, 5));
-                //                var bonus = new RollBonus(RollType.Elude, BonusType.Dice, 1, this);
-                //                space.Add(effect);
-                //                space.Add(bonus);
-                //                Stash.Add(space, effect, bonus);
-                return true;
-            }
-
             public override void Deactivate()
             {
 //                var space = Stash.Get<ISpace>();
@@ -230,11 +193,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             public override bool IsUsable()
             {
                 return base.IsUsable() && Hero.Secrecy > 0;
-            }
-
-            protected override bool TakeAction()
-            {
-                throw new System.NotImplementedException();
             }
 
 //            public override void Activate()
@@ -261,16 +219,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Move to an adjacent location and gain 2 Secrecy (up to 5).";
             }
 
-            protected override bool TakeAction()
-            {
-                //                Hero.SelectTarget<Location>(TargetType.AdjacentLocation)
-                //                    .OnTarget(location =>
-                //                    {
-                //                        Hero.MoveTo(location);
-                //                        Hero.GainSecrecy(2, 5);
-                //                    });
-                return true;
-            }
         }
         class Strategy : TacticPower
         {
