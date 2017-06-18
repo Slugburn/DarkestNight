@@ -2,6 +2,5 @@
 {
     public interface ITriggerRegistrar
     {
-        ITriggerHandler GetTriggerHandler(string handlerName);
     }
 }

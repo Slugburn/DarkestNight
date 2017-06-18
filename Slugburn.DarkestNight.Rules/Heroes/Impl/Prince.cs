@@ -80,13 +80,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "Deactivate before any die roll for +3d.";
             }
 
-            public override void Deactivate()
-            {
-                base.Deactivate();
-                var target = Stash.Get<Hero>();
-                var bonus = Stash.Get<RollBonus>();
-                target.Remove(bonus);
-            }
         }
         class Loyalty : Bonus
         {
@@ -172,14 +165,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "Heroes gain 1 Secrecy (up to 5) when ending a turn there, and +1d when eluding there.";
             }
 
-            public override void Deactivate()
-            {
-//                var space = Stash.Get<ISpace>();
-//                var effect = Stash.Get<TriggeredEffect>();
-//                var bonus = Stash.Get<ISpace>();
-//                space.Remove(effect);
-//                space.Remove(bonus);
-            }
         }
         class Scouts : ActionPower
         {

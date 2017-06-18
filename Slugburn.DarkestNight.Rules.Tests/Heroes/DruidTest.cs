@@ -32,5 +32,45 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .ThenPlayer(x=>x.RolledNumberOfDice(2))
                 .ThenHero(x=>x.LostGrace(0));
         }
+
+        [Test]
+        public void SpriteFormActivated()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Sprite Form", "Raven Form"))
+                .GivenPower("Raven Form", x => x.IsActive())
+                .WhenPlayerTakesAction("Sprite Form")
+                .ThenPower("Sprite Form", x => x.IsActive())
+                .ThenPower("Raven Form", x => x.IsActive(false));
+        }
+
+        [Test]
+        public void SpriteForm_IgnoreBlightsWhileActive()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Sprite Form"))
+                .GivenPower("Sprite Form", x=>x.IsActive())
+                .ThenHero(x=>x.IsIgnoringBlights());
+        }
+
+        [Test]
+        public void SpriteForm_DoesNotIgnoreBlightsWhenNecromancerIsPresent()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Sprite Form").Location(Location.Ruins))
+                .GivenNecromancerLocation(Location.Ruins)
+                .GivenPower("Sprite Form", x => x.IsActive())
+                .ThenHero(x => x.IsNotIgnoringBlights());
+        }
+
+        [Test]
+        public void SpriteForm_Deactivate()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Sprite Form"))
+                .GivenPower("Sprite Form", x => x.IsActive())
+                .WhenPlayerTakesAction("Deactivate Form")
+                .ThenHero(x => x.IsNotIgnoringBlights());
+        }
     }
 }

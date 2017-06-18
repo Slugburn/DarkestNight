@@ -13,9 +13,5 @@ namespace Slugburn.DarkestNight.Rules.Powers
         {
             return base.IsUsable(hero) && hero.State == HeroState.ChoosingAction;
         }
-
-        public virtual void Deactivate()
-        {
-        }
     }
 }

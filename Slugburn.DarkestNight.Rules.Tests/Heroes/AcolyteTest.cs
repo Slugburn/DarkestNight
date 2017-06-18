@@ -48,12 +48,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void DarkVeil_IgnoreBlightEffects()
         {
             new TestScenario()
-                .GivenSpace(Location.Swamp, x => x.Blight(Blight.Spies))
-                .GivenHero("Acolyte", x => x.Power("Dark Veil").Location(Location.Swamp))
-                .WhenHeroUsesBonusAction("Acolyte", "Dark Veil")
-                .WhenHeroEndsTurn("Acolyte")
-                .ThenHero(x => x.LostSecrecy(0))
-                .ThenPower("Dark Veil", x => x.IsExhausted());
+                .GivenHero("Acolyte", x => x.Power("Dark Veil"))
+                .WhenPlayerTakesAction("Dark Veil")
+                .ThenHero(x=>x.IsIgnoringBlights())
+                .ThenPower("Dark Veil", x => x.IsExhausted())
+                .WhenHeroStartsTurn("Acolyte")
+                .ThenHero(x=>x.IsNotIgnoringBlights());
         }
 
         [Test]
@@ -250,7 +250,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Acolyte", x => x.Power("Leech Life").Location(Location.Village))
-                .GivenPowerIsExhausted("Leech Life")
+                .GivenPower("Leech Life", x=>x.IsExhausted())
                 .ThenHero(x => x.CannotMoveTo(Location.Monastery));
         }
     }

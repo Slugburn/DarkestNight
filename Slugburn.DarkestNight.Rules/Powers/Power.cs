@@ -24,7 +24,7 @@ namespace Slugburn.DarkestNight.Rules.Powers
             return !Exhausted;
         }
 
-        public void Exhaust()
+        public virtual void Exhaust(Hero hero)
         {
             Exhausted = true;
         }

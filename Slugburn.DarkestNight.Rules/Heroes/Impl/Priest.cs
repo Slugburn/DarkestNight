@@ -33,14 +33,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Activate on a hero in your location.";
                 ActiveText = "Gain an extra Grace (up to default) when praying.";
             }
-
-            public override void Deactivate()
-            {
-//                base.Deactivate();
-//                var target = Stash.Get<Hero>();
-//                var effect = Stash.Get<TriggeredEffect>();
-//                target.Remove(effect);
-            }
         }
 
         class BlessingOfPiety : ActionPower
@@ -50,14 +42,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Name = "Blessing of Piety";
                 Text = "Activate on a hero in your location.";
                 ActiveText = "Gain 1 Grace (up to default) when hiding.";
-            }
-
-            public override void Deactivate()
-            {
-//                base.Deactivate();
-//                var space = Stash.Get<ISpace>();
-//                var effect = Stash.Get<TriggeredEffect>();
-//                space.Remove(effect);
             }
         }
 
@@ -70,13 +54,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "+1d in fights.";
             }
 
-            public override void Deactivate()
-            {
-                base.Deactivate();
-                var target = Stash.Get<Hero>();
-                var bonus = Stash.Get<RollBonus>();
-                target.Remove(bonus);
-            }
         }
 
         class BlessingOfWisdom : ActionPower
@@ -86,14 +63,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Name = "Blessing of Wisdom";
                 Text = "Activate on a hero in your location.";
                 ActiveText = "+1d when eluding.";
-            }
-
-            public override void Deactivate()
-            {
-                base.Deactivate();
-                var target = Stash.Get<Hero>();
-                var bonus = Stash.Get<RollBonus>();
-                target.Remove(bonus);
             }
         }
 

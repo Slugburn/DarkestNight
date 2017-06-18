@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Powers
         bool IsUsable(Hero hero);
 
         void Learn(Hero hero);
-        void Exhaust();
+        void Exhaust(Hero hero);
         void Refresh();
     }
 }

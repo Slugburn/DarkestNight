@@ -1,8 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
-using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Tactics;
 using Slugburn.DarkestNight.Rules.Triggers;
@@ -20,7 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         #region Powers
 
-        public class BlindingBlack : Bonus, ITriggerHandler
+        public class BlindingBlack : Bonus
         {
             public BlindingBlack()
             {
@@ -32,17 +30,25 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             public override void Learn(Hero hero)
             {
                 base.Learn(hero);
-                hero.Game.Triggers.Register(this, GameTrigger.NecromancerDetectsHeroes, hero.Name);
+                var handler = new BlindingBlackTriggerHandler {HeroName = hero.Name};
+                hero.Game.Triggers.Register(handler, GameTrigger.NecromancerDetectsHeroes);
             }
 
-            public void HandleTrigger(ITriggerRegistrar registrar, TriggerContext context, string tag)
+            public class BlindingBlackTriggerHandler : ITriggerHandler
             {
-                var game = (Game) registrar;
-                var hero = game.GetHero(tag);
-                if (!IsUsable(hero)) return;
-                if (!hero.Player.AskUsePower(Name, Text)) return;
-                Exhaust();
-                context.Cancel = true;
+                public string Name => "Blinding Black";
+                public string HeroName { get; set; }
+
+                public void HandleTrigger(ITriggerRegistrar registrar, TriggerContext context, string tag)
+                {
+                    var game = (Game)registrar;
+                    var hero = game.GetHero(HeroName);
+                    var power = hero.GetPower(Name);
+                    if (!power.IsUsable(hero)) return;
+                    if (!hero.Player.AskUsePower(Name, power.Text)) return;
+                    power.Exhaust(hero);
+                    context.Cancel = true;
+                }
             }
         }
 
@@ -96,7 +102,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class DarkVeil : Bonus, IBonusAction, ITriggerHandler
+        class DarkVeil : Bonus
         {
             public DarkVeil()
             {
@@ -109,34 +115,43 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             public override void Learn(Hero hero)
             {
                 base.Learn(hero);
-                hero.Triggers.Register(this, HeroTrigger.FailedAttack);
+                hero.AddAction(new DarkVeilAction());
+                hero.Triggers.Register(new FailedAttackHandler(), HeroTrigger.FailedAttack);
             }
 
-            public void Use(Hero hero)
+            private class FailedAttackHandler : ITriggerHandler
             {
-                if (!IsUsable(hero))
-                    throw new PowerNotUsableException(this);
-
-                hero.Add(new IgnoreBlightEffect(blight => true, Name));
-                hero.Triggers.Register(this, HeroTrigger.StartTurn);
-
-                Exhaust();
-            }
-
-            public void HandleTrigger(ITriggerRegistrar registrar, TriggerContext context, string tag)
-            {
-                var hero = (Hero) registrar;
-                switch (tag)
+                public string Name => "Dark Veil";
+                public void HandleTrigger(ITriggerRegistrar registrar, TriggerContext context, string tag)
                 {
-                    case "FailedAttack":
-                        if (!IsUsable(hero)) return;
-                        if (!hero.Player.AskUsePower(Name, Text)) return;
-                        Exhaust();
-                        context.Cancel = true;
-                        break;
-                    case "StartTurn":
-                        hero.RemoveBySource<IgnoreBlightEffect>(Name);
-                        break;
+                    var hero = (Hero) registrar;
+                    var power = hero.GetPower(Name);
+                    if (!power.IsUsable(hero)) return;
+                    if (!hero.Player.AskUsePower(Name, power.Text)) return;
+                    power.Exhaust(hero);
+                    context.Cancel = true;
+                }
+            }
+
+            private class DarkVeilAction : IAction
+            {
+                public string Name => "Dark Veil";
+                public void Act(Hero hero)
+                {
+                    hero.Game.AddIgnoreBlight(IgnoreBlight.Create(Name, hero));
+                    hero.Triggers.Register(new DarkVeilEnds(), HeroTrigger.StartTurn);
+                    hero.GetPower(Name).Exhaust(hero);
+                }
+
+                private class DarkVeilEnds : ITriggerHandler
+                {
+                    public string Name => "Dark Veil";
+                    public void HandleTrigger(ITriggerRegistrar registrar, TriggerContext context, string tag)
+                    {
+                        var hero = (Hero)registrar;
+                        hero.Game.RemoveIgnoreBlight(Name);
+                        hero.Triggers.Unregister(HeroTrigger.StartTurn, Name);
+                    }
                 }
             }
         }
@@ -223,7 +238,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 if (!IsUsable(hero))
                     throw new PowerNotUsableException(this);
                 hero.GainGrace(1, hero.DefaultGrace);
-                Exhaust();
+                Exhaust(hero);
             }
 
             public override bool IsUsable(Hero hero)
@@ -375,7 +390,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 {
                     base.Use(hero);
                     hero.AddRollHandler(this);
-                    hero.GetPower(PowerName).Exhaust();
+                    hero.GetPower(PowerName).Exhaust(hero);
                 }
 
                 public void HandleRoll(Hero hero)
@@ -389,5 +404,20 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
         }
 
         #endregion
+    }
+
+    internal class IgnoreBlight : IIgnoreBlight
+    {
+        public static IIgnoreBlight Create(string name, Hero hero)
+        {
+            return new IgnoreBlight {Name = name, HeroName = hero.Name};
+        }
+
+        public string HeroName { get; set; }
+        public string Name { get; set; }
+        public bool IsIgnoring(Hero hero, Blight blight)
+        {
+            return hero.Name == HeroName;
+        }
     }
 }

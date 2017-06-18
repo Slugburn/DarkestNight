@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Tests
@@ -13,6 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
         private readonly List<Location> _invalidLocations;
         private readonly List<Location> _specifiedLocations;
         private bool _expectedActionAvailable;
+        private IEnumerable<Blight> _expectedIgnoredBlights;
 
         public HeroExpectation(Hero hero)
         {
@@ -41,6 +43,11 @@ namespace Slugburn.DarkestNight.Rules.Tests
             var specifiedMovement = validLocations.Intersect(_specifiedLocations);
             Assert.That(disallowedMovement, Is.EquivalentTo(Enumerable.Empty<Location>()), "Movement that should be blocked is allowed.");
             Assert.That(specifiedMovement, Is.EquivalentTo(_specifiedLocations), "Moement that should be allowed is blocked.");
+            if (_expectedIgnoredBlights != null)
+            {
+                var ignoredBlights = AllBlights().Where(x => _hero.IsBlightIgnored(x)).ToList();
+                Assert.That(ignoredBlights, Is.EquivalentTo(_expectedIgnoredBlights), "Unexpected ignored blights.");
+            }
         }
 
         public HeroExpectation Secrecy(int expected)
@@ -83,6 +90,42 @@ namespace Slugburn.DarkestNight.Rules.Tests
         {
             _expectedSecrecy = _hero.DefaultSecrecy - loss;
             return this;
+        }
+
+        public HeroExpectation IsIgnoringBlights(params Blight[] blights)
+        {
+            if (!blights.Any())
+                blights = AllBlights();
+            _expectedIgnoredBlights = blights;
+            return this;
+        }
+
+        public HeroExpectation IsNotIgnoringBlights(params Blight[] blights)
+        {
+            _expectedIgnoredBlights = blights.Any() ? AllBlights().Except(blights) : new Blight[0];
+            return this;
+        }
+
+        private static Blight[] AllBlights()
+        {
+            return new[]
+            {
+                Blight.Confusion,
+                Blight.Corruption,
+                Blight.Curse,
+                Blight.DarkFog,
+                Blight.Desecration,
+                Blight.EvilPresence,
+                Blight.Lich,
+                Blight.Spies,
+                Blight.Shades,
+                Blight.Shroud,
+                Blight.Skeletons,
+                Blight.Taint,
+                Blight.UnholyAura,
+                Blight.Vampire,
+                Blight.Zombies
+            };
         }
     }
 }

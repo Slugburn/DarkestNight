@@ -49,6 +49,7 @@
     <Compile Include="Blights\BlightDieAssignment.cs" />
     <Compile Include="Blights\BlightFactory.cs" />
     <Compile Include="Blights\Blight.cs" />
+    <Compile Include="Blights\IIgnoreBlight.cs" />
     <Compile Include="Blights\Implementations\Confusion.cs" />
     <Compile Include="Blights\Implementations\Corruption.cs" />
     <Compile Include="Blights\Implementations\Curse.cs" />
@@ -84,8 +85,9 @@
     <Compile Include="Heroes\UnexpectedStateException.cs" />
     <Compile Include="IRollHandler.cs" />
     <Compile Include="IRollModifier.cs" />
-    <Compile Include="IgnoreBlightEffect.cs" />
     <Compile Include="IPlayer.cs" />
+    <Compile Include="Powers\ActivateablePower.cs" />
+    <Compile Include="Powers\IActivateable.cs" />
     <Compile Include="StaticRollBonus.cs" />
     <Compile Include="Tactics\BasicEludeTactic.cs" />
     <Compile Include="Tactics\ITactic.cs" />

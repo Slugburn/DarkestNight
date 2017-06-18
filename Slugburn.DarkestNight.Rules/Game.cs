@@ -4,6 +4,7 @@ using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Blights.Implementations;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Heroes.Impl;
 using Slugburn.DarkestNight.Rules.Maps;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Triggers;
@@ -12,7 +13,9 @@ namespace Slugburn.DarkestNight.Rules
 {
     public class Game : ITriggerRegistrar
     {
-        private List<IPlayer> _players = new List<IPlayer>();
+        private readonly List<IPlayer> _players = new List<IPlayer>();
+        private readonly Dictionary<string, IIgnoreBlight> _ignoreBlights = new Dictionary<string, IIgnoreBlight>();
+
         public TriggerRegistry<GameTrigger> Triggers { get; }
 
         public Board Board { get; set; }
@@ -125,9 +128,19 @@ namespace Slugburn.DarkestNight.Rules
             return Heroes.SingleOrDefault(x => x.Name == name);
         }
 
-        public ITriggerHandler GetTriggerHandler(string handlerName)
+        public bool IsBlightIgnored(Hero hero, Blight blight)
         {
-            return (ITriggerHandler) GetPower(handlerName);
+            return _ignoreBlights.Values.Any(x=>x.IsIgnoring(hero, blight));
+        }
+
+        public void AddIgnoreBlight(IIgnoreBlight ignoreBlight)
+        {
+            _ignoreBlights.Add(ignoreBlight.Name, ignoreBlight);
+        }
+
+        public void RemoveIgnoreBlight(string name)
+        {
+            _ignoreBlights.Remove(name);
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
-using Slugburn.DarkestNight.Rules.Blights.Implementations;
 using Slugburn.DarkestNight.Rules.Heroes.Impl;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Tactics;
@@ -16,8 +15,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         private readonly List<IPower> _powerDeck;
         private Stash _stash;
         private readonly Dictionary<string, ITactic> _tactics;
+        private readonly Dictionary<string, IAction> _actions;
         private readonly List<IRollModifier> _rollModifiers;
-        private readonly List<IAction> _actions;
         private List<IRollHandler> _rollHandlers;
 
         public TriggerRegistry<HeroTrigger> Triggers { get; }
@@ -43,7 +42,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 {eludeTactic.Name, eludeTactic}
             };
             _rollModifiers = new List<IRollModifier>();
-            _actions = new List<IAction>() {new Attack()};
+
+            var attack = new Attack();
+            _actions = new Dictionary<string, IAction> { {attack.Name, attack}};
+            Location = Location.Monastery;
         }
 
         public IEnumerable<IPower> PowerDeck => _powerDeck;
@@ -76,34 +78,28 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void EndTurn()
         {
-            var space = GetSpace();
-            var spies = space.Blights.Where(x=>x==Blight.Spies);
-            foreach (var spy in spies)
+            if (IsAffectedByBlight(Blight.Spies))
             {
-                if (!IsIgnoringBlight(spy))
+                var space = GetSpace();
+                var spies = space.Blights.Where(x => x == Blight.Spies);
+                foreach (var spy in spies)
                     LoseSecrecy("Spies");
             }
 
             IsTurnTaken = true;
         }
 
-        private bool IsIgnoringBlight(Blight blight)
-        {
-            var effects = _stash.GetAll<IgnoreBlightEffect>();
-            return effects.Any(x => x.Match(blight));
-        }
-
         public bool IsTurnTaken { get; set; }
 
         public void LoseTurn()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void ExhaustPowers()
         {
             foreach (var power in Powers)
-                power.Exhaust();
+                power.Exhaust(this);
         }
 
         public void LoseGrace()
@@ -127,7 +123,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void DrawEvent()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void LoseSecrecy(string sourceName)
@@ -140,7 +136,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void ChooseAction()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void Add<T>(T item)
@@ -226,11 +222,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var blocks = _stash.GetAll<PreventMovementEffect>();
             var valid = locations.Where(loc => !blocks.Any(block => block.Matches(loc)));
             return valid;
-        }
-
-        public ITriggerHandler GetTriggerHandler(string handlerName)
-        {
-            return (ITriggerHandler) GetPower(handlerName);
         }
 
         public IPower GetPower(string name)
@@ -337,14 +328,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void AddAction(IAction action)
         {
-            _actions.Add(action);
+            _actions.Add(action.Name, action);
         }
 
         public IAction GetAction(string name)
         {
-            var action = _actions.SingleOrDefault(x => x.Name == name);
-            if (action==null)
+            if (!_actions.ContainsKey(name))
                 throw new Exception($"Unknown action {name} requested.");
+            var action = _actions[name];
             return action;
         }
 
@@ -356,6 +347,17 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void AddRollHandler(IRollHandler handler)
         {
             _rollHandlers.Add(handler);
+        }
+
+        public bool IsAffectedByBlight(Blight blight)
+        {
+            var blightExists = GetBlights().Any(x => x == blight);
+            return blightExists && !IsBlightIgnored(blight);
+        }
+
+        public bool IsBlightIgnored(Blight blight)
+        {
+            return Game.IsBlightIgnored(this, blight);
         }
     }
 }

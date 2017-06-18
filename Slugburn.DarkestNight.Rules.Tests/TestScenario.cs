@@ -21,11 +21,11 @@ namespace Slugburn.DarkestNight.Rules.Tests
             _game.AddPlayer(_player);
         }
 
-        public TestScenario GivenHero(string name, Action<HeroDefContext> def) 
+        public TestScenario GivenHero(string name, Action<HeroContext> def) 
         {
             var hero = new HeroFactory().Create(name);
             _game.AddHero(hero, _player);
-            var ctx = new HeroDefContext(hero);
+            var ctx = new HeroContext(hero);
             def(ctx);
             _game.ActingHero = hero;
             return this;
@@ -204,10 +204,12 @@ namespace Slugburn.DarkestNight.Rules.Tests
             return this;
         }
 
-        public TestScenario GivenPowerIsExhausted(string powerName)
+        public TestScenario GivenPower(string powerName, Action<PowerContext> actions)
         {
-            var power = _game.GetPower(powerName);
-            power.Exhaust();
+            var hero = _game.ActingHero;
+            var power = hero.GetPower(powerName);
+            var context = new PowerContext(hero, power);
+            actions(context);
             return this;
         }
 
