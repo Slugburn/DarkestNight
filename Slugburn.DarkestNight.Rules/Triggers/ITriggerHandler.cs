@@ -2,6 +2,6 @@
 {
     public interface ITriggerHandler : ISource
     {
-        void HandleTrigger(TriggerContext context, string tag);
+        void HandleTrigger(ITriggerRegistrar registrar, TriggerContext context, string tag);
     }
 }

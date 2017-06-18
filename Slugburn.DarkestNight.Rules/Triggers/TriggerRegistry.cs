@@ -30,7 +30,7 @@ namespace Slugburn.DarkestNight.Rules.Triggers
             {
                 var handler = _registrar.GetTriggerHandler(action.HandlerName);
                 var context = new TriggerContext(state);
-                handler.HandleTrigger(context, action.Tag);
+                handler.HandleTrigger(_registrar, context, action.Tag);
                 cancel = cancel || context.Cancel;
             }
             return !cancel;

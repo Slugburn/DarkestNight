@@ -181,9 +181,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Elude with 4d. Lose 1 Secrecy if you succeed.";
             }
 
-            public override bool IsUsable()
+            public override bool IsUsable(Hero hero)
             {
-                return base.IsUsable() && Hero.State == HeroState.Eluding;
+                return base.IsUsable(hero) && hero.State == HeroState.Eluding;
             }
 
 //            public override void Activate()

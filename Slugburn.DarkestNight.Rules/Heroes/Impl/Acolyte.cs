@@ -29,16 +29,18 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Exhaust after a Necromancer movement roll to prevent him from detecting any heroes, regardless of Secrecy.";
             }
 
-            public override void Learn()
+            public override void Learn(Hero hero)
             {
-                base.Learn();
-                Game.Triggers.Register(this, GameTrigger.NecromancerDetectsHeroes);
+                base.Learn(hero);
+                hero.Game.Triggers.Register(this, GameTrigger.NecromancerDetectsHeroes, hero.Name);
             }
 
-            public void HandleTrigger(TriggerContext context, string tag)
+            public void HandleTrigger(ITriggerRegistrar registrar, TriggerContext context, string tag)
             {
-                if (!IsUsable()) return;
-                if (!Player.AskUsePower(Name, Text)) return;
+                var game = (Game) registrar;
+                var hero = game.GetHero(tag);
+                if (!IsUsable(hero)) return;
+                if (!hero.Player.AskUsePower(Name, Text)) return;
                 Exhaust();
                 context.Cancel = true;
             }
@@ -53,10 +55,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                     "Attack two blights in your location at once. Make a single fight roll with +1 die, then divide the dice between blights and resolve as two separate attacks (losing Secrecy for each).";
             }
 
-            public override void Learn()
+            public override void Learn(Hero hero)
             {
-                base.Learn();
-                Hero.AddAction(new CallToDeathAction());
+                base.Learn(hero);
+                hero.AddAction(new CallToDeathAction());
             }
 
             private class CallToDeathAction : IAction, IRollHandler
@@ -88,9 +90,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 }
             }
 
-            public override bool IsUsable()
+            public override bool IsUsable(Hero hero)
             {
-                return base.IsUsable() && Hero.GetBlights().Count() > 1;
+                return base.IsUsable(hero) && hero.GetBlights().Count() > 1;
             }
         }
 
@@ -104,35 +106,36 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                     "Exhaust at any time to ignore blights' effects until your next turn. *OR* Exhaust after you fail an attack on a blight to ignore its Defense.";
             }
 
-            public override void Learn()
+            public override void Learn(Hero hero)
             {
-                base.Learn();
-                Hero.Triggers.Register(this, HeroTrigger.FailedAttack);
+                base.Learn(hero);
+                hero.Triggers.Register(this, HeroTrigger.FailedAttack);
             }
 
-            public void Use()
+            public void Use(Hero hero)
             {
-                if (!IsUsable())
+                if (!IsUsable(hero))
                     throw new PowerNotUsableException(this);
 
-                Hero.Add(new IgnoreBlightEffect(blight => true, Name));
-                Hero.Triggers.Register(this, HeroTrigger.StartTurn);
+                hero.Add(new IgnoreBlightEffect(blight => true, Name));
+                hero.Triggers.Register(this, HeroTrigger.StartTurn);
 
                 Exhaust();
             }
 
-            public void HandleTrigger(TriggerContext context, string tag)
+            public void HandleTrigger(ITriggerRegistrar registrar, TriggerContext context, string tag)
             {
+                var hero = (Hero) registrar;
                 switch (tag)
                 {
                     case "FailedAttack":
-                        if (!IsUsable()) return;
-                        if (!Player.AskUsePower(Name, Text)) return;
+                        if (!IsUsable(hero)) return;
+                        if (!hero.Player.AskUsePower(Name, Text)) return;
                         Exhaust();
                         context.Cancel = true;
                         break;
                     case "StartTurn":
-                        Hero.RemoveBySource<IgnoreBlightEffect>(Name);
+                        hero.RemoveBySource<IgnoreBlightEffect>(Name);
                         break;
                 }
             }
@@ -147,15 +150,16 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                     "You may choose not to lose Secrecy for attacking a blight (including use of the Call to Death power) or for starting your turn at the Necromancer's location.";
             }
 
-            public override void Learn()
+            public override void Learn(Hero hero)
             {
-                base.Learn();
-                Hero.Triggers.Register(this, HeroTrigger.LoseSecrecy);
+                base.Learn(hero);
+                hero.Triggers.Register(this, HeroTrigger.LoseSecrecy);
             }
 
-            public void HandleTrigger(TriggerContext context, string tag)
+            public void HandleTrigger(ITriggerRegistrar registrar, TriggerContext context, string tag)
             {
-                if (!IsUsable()) return;
+                var hero = (Hero) registrar;
+                if (!IsUsable(hero)) return;
                 var sourceName = context.GetState<string>();
                 if (sourceName == "Attack" || sourceName == "Necromancer")
                     context.Cancel = true;
@@ -170,10 +174,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "+1 die in fights when Darkness is 10 or more. Another +1 die in fights when Darkness is 20 or more.";
             }
 
-            public override void Learn()
+            public override void Learn(Hero hero)
             {
-                base.Learn();
-                Hero.AddRollModifier(new FadeToBlackRollModifer(Name));
+                base.Learn(hero);
+                hero.AddRollModifier(new FadeToBlackRollModifer(Name));
             }
 
             private class FadeToBlackRollModifer : IRollModifier
@@ -188,7 +192,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 public int GetModifier(Hero hero)
                 {
                     var power = hero.GetPower(_powerName);
-                    if (!power.IsUsable()) return 0;
+                    if (!power.IsUsable(hero)) return 0;
                     var game = hero.Game;
                     if (game.Darkness < 10) return 0;
                     if (game.Darkness < 20) return 1;
@@ -208,23 +212,23 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Exhaust at any time while not at the Monastery to gain 1 Grace (up to default). You may not enter the Monastery while this power is exhausted.";
             }
 
-            public override void Learn()
+            public override void Learn(Hero hero)
             {
-                base.Learn();
-                Hero.Add(new PreventMovementEffect(location=>Exhausted && location==Location.Monastery));
+                base.Learn(hero);
+                hero.Add(new PreventMovementEffect(location=>Exhausted && location==Location.Monastery));
             }
 
-            public void Use()
+            public void Use(Hero hero)
             {
-                if (!IsUsable())
+                if (!IsUsable(hero))
                     throw new PowerNotUsableException(this);
-                Hero.Grace = Math.Min(Hero.Grace+1, Hero.DefaultGrace);
+                hero.GainGrace(1, hero.DefaultGrace);
                 Exhaust();
             }
 
-            public override bool IsUsable()
+            public override bool IsUsable(Hero hero)
             {
-                return base.IsUsable() && Hero.Grace < Hero.DefaultGrace && Hero.Location != Location.Monastery;
+                return base.IsUsable(hero) && hero.Grace < hero.DefaultGrace && hero.Location != Location.Monastery;
             }
         }
 
@@ -236,10 +240,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Move any number of blights from your location to one adjacent location, if this does not result in over 4 blights at one location.";
             }
 
-            public override void Learn()
+            public override void Learn(Hero hero)
             {
-                base.Learn();
-                Hero.AddAction(new FalseOrdersAction());
+                base.Learn(hero);
+                hero.AddAction(new FalseOrdersAction());
             }
 
             private class FalseOrdersAction : IAction
@@ -278,11 +282,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Fight with 2d or 3d. If any die comes up a 1, lose 1 Grace.";
             }
 
-            public override void Learn()
+            public override void Learn(Hero hero)
             {
-                base.Learn();
-                Hero.AddFightTactic(new FinalRestTactic(Name, 2));
-                Hero.AddFightTactic(new FinalRestTactic(Name, 3));
+                base.Learn(hero);
+                hero.AddFightTactic(new FinalRestTactic(Name, 2));
+                hero.AddFightTactic(new FinalRestTactic(Name, 3));
             }
 
             private class FinalRestTactic : PowerTactic, IRollHandler
@@ -318,10 +322,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "After a fight roll, add any number of dice, one at a time. For each added die that comes up a 1, +1 Darkness.";
             }
 
-            public override void Learn()
+            public override void Learn(Hero hero)
             {
-                base.Learn();
-                Hero.AddAction(new ForbiddenArtsAction());
+                base.Learn(hero);
+                hero.AddAction(new ForbiddenArtsAction());
             }
 
             private class ForbiddenArtsAction : IAction
@@ -346,16 +350,16 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Exhaust while not at the Monastery to fight with 3 dice. Gain 1 Grace (up to default) if you roll 2 successes. You may not enter the Monastery while this power is exhausted.";
             }
 
-            public override void Learn()
+            public override void Learn(Hero hero)
             {
-                base.Learn();
-                Hero.Add(new PreventMovementEffect(location => location == Location.Monastery && Exhausted));
-                Hero.AddFightTactic(new LeechLifeTactic());
+                base.Learn(hero);
+                hero.Add(new PreventMovementEffect(location => location == Location.Monastery && Exhausted));
+                hero.AddFightTactic(new LeechLifeTactic());
             }
 
-            public override bool IsUsable()
+            public override bool IsUsable(Hero hero)
             {
-                return base.IsUsable() && Hero.Location != Location.Monastery;
+                return base.IsUsable(hero) && hero.Location != Location.Monastery;
             }
 
             private class LeechLifeTactic : PowerTactic, IRollHandler

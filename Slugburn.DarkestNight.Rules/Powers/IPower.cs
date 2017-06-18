@@ -1,4 +1,6 @@
-﻿namespace Slugburn.DarkestNight.Rules.Powers
+﻿using Slugburn.DarkestNight.Rules.Heroes;
+
+namespace Slugburn.DarkestNight.Rules.Powers
 {
     public interface IPower : ISource
     {
@@ -7,9 +9,9 @@
         bool StartingPower { get; }
 
         bool Exhausted { get; }
-        bool IsUsable();
+        bool IsUsable(Hero hero);
 
-        void Learn();
+        void Learn(Hero hero);
         void Exhaust();
         void Refresh();
     }

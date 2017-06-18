@@ -30,10 +30,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             Grace = defaultGrace;
             DefaultSecrecy = defaultSecrecy;
             Secrecy = defaultSecrecy;
-            foreach (var power in powers.Cast<Power>())
-            {
-                power.Hero = this;
-            }
             Powers = new List<IPower>();
             _powerDeck = new List<IPower>(powers);
             _stash= new Stash();
@@ -180,7 +176,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var power = _powerDeck.SingleOrDefault(x => x.Name == name);
             if (power == null)
                 throw new Exception($"The power {name} is not available.");
-            power.Learn();
+            power.Learn(this);
             _powerDeck.Remove(power);
             Powers.Add(power);
         }

@@ -9,9 +9,9 @@ namespace Slugburn.DarkestNight.Rules.Powers
             Type = PowerType.Action;
         }
 
-        public override bool IsUsable()
+        public override bool IsUsable(Hero hero)
         {
-            return base.IsUsable() && Hero.State == HeroState.ChoosingAction;
+            return base.IsUsable(hero) && hero.State == HeroState.ChoosingAction;
         }
 
         public virtual void Deactivate()

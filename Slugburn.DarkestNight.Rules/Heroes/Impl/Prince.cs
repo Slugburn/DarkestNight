@@ -23,9 +23,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "Heroes may pray there.";
             }
 
-            public override bool IsUsable()
+            public override bool IsUsable(Hero hero)
             {
-                return base.IsUsable() && Hero.Secrecy > 0;
+                return base.IsUsable(hero) && hero.Secrecy > 0;
             }
 
 //            public override void Activate()
@@ -120,9 +120,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Fight with 3d when attacking a blight or the Necromancer";
             }
 
-            public override bool IsUsable()
+            public override bool IsUsable(Hero hero)
             {
-                return base.IsUsable() && (Hero.State == HeroState.AttackingBlight || Hero.State == HeroState.AttackingNecromancer);
+                return base.IsUsable(hero) && (hero.State == HeroState.AttackingBlight || hero.State == HeroState.AttackingNecromancer);
             }
 
 //            public override void Activate()
@@ -141,9 +141,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "Heroes gain +1d in fights when attacking blights there.";
             }
 
-            public override bool IsUsable()
+            public override bool IsUsable(Hero hero)
             {
-                return base.IsUsable() && Hero.Secrecy > 0;
+                return base.IsUsable(hero) && hero.Secrecy > 0;
             }
 
 //            public override void Activate()
@@ -190,9 +190,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "Heroes gain +1d in searches there.";
             }
 
-            public override bool IsUsable()
+            public override bool IsUsable(Hero hero)
             {
-                return base.IsUsable() && Hero.Secrecy > 0;
+                return base.IsUsable(hero) && hero.Secrecy > 0;
             }
 
 //            public override void Activate()
@@ -230,9 +230,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Fight with 2d.";
             }
 
-            public override bool IsUsable()
+            public override bool IsUsable(Hero hero)
             {
-                return base.IsUsable() && (Hero.State == HeroState.Fighting || Hero.State == HeroState.AttackingBlight || Hero.State == HeroState.AttackingNecromancer);
+                return base.IsUsable(hero) && (hero.State == HeroState.Fighting || hero.State == HeroState.AttackingBlight || hero.State == HeroState.AttackingNecromancer);
             }
 
 //            public override void Activate()

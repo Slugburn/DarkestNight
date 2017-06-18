@@ -10,7 +10,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
         public virtual string Name => $"{PowerName}";
         public virtual void Use(Hero hero) { }
 
-        public bool IsAvailable(Hero hero) => hero.GetPower(PowerName).IsUsable();
+        public bool IsAvailable(Hero hero) => hero.GetPower(PowerName).IsUsable(hero);
         public int GetDiceCount() => DiceCount;
 
     }

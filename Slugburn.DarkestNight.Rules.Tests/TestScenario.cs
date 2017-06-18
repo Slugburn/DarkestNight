@@ -87,14 +87,14 @@ namespace Slugburn.DarkestNight.Rules.Tests
         {
             var hero = _game.GetHero(heroName);
             var bonusAction = (IBonusAction) hero.Powers.Single(p => p.Name == powerName);
-            bonusAction.Use();
+            bonusAction.Use(hero);
             return this;
         }
 
         public TestScenario ThenPowerIsUsable(string powerName, bool expected=true)
         {
             var power = _game.GetPower(powerName);
-            Assert.That(power.IsUsable, Is.EqualTo(expected));
+            Assert.That(() => power.IsUsable(_game.ActingHero), Is.EqualTo(expected));
             return this;
         }
 

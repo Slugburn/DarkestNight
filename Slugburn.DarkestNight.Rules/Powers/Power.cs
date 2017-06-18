@@ -9,9 +9,6 @@ namespace Slugburn.DarkestNight.Rules.Powers
         public string Text { get; protected set; }
         public string ActiveText { get; protected set; }
         public bool StartingPower { get; protected set; }
-        public Hero Hero { get; internal set; }
-        internal Game Game => Hero?.Game;
-        internal IPlayer Player => Hero?.Player;
 
         protected Power()
         {
@@ -22,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Powers
 
         public bool Exhausted { get; set; }
 
-        public virtual bool IsUsable()
+        public virtual bool IsUsable(Hero hero)
         {
             return !Exhausted;
         }
@@ -37,7 +34,7 @@ namespace Slugburn.DarkestNight.Rules.Powers
             Exhausted = false;
         }
 
-        public virtual void Learn()
+        public virtual void Learn(Hero hero)
         {
         }
     }
