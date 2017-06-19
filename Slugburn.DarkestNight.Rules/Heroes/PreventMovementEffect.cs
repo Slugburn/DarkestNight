@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace Slugburn.DarkestNight.Rules.Heroes.Impl
+namespace Slugburn.DarkestNight.Rules.Heroes
 {
     internal class PreventMovementEffect
     {

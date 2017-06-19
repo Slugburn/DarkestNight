@@ -1,7 +1,7 @@
+using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Powers;
-using Slugburn.DarkestNight.Rules.Tactics;
 
-namespace Slugburn.DarkestNight.Rules.Heroes.Impl
+namespace Slugburn.DarkestNight.Rules.Tactics
 {
     internal class PowerTactic : ITactic
     {

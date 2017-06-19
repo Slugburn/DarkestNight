@@ -112,14 +112,13 @@
     <Compile Include="Heroes\Impl\Acolyte.cs" />
     <Compile Include="Heroes\Impl\Druid.cs" />
     <Compile Include="Heroes\Impl\Knight.cs" />
-    <Compile Include="Heroes\Impl\PowerTactic.cs" />
-    <Compile Include="Heroes\Impl\PreventMovementEffect.cs" />
     <Compile Include="Heroes\Impl\Priest.cs" />
     <Compile Include="Heroes\Impl\Prince.cs" />
     <Compile Include="Heroes\Impl\Rogue.cs" />
     <Compile Include="Heroes\Impl\Scholar.cs" />
     <Compile Include="Heroes\Impl\Seer.cs" />
     <Compile Include="Heroes\Impl\Wizard.cs" />
+    <Compile Include="Heroes\PreventMovementEffect.cs" />
     <Compile Include="Heroes\UnexpectedStateException.cs" />
     <Compile Include="ILocationSelectedHandler.cs" />
     <Compile Include="IPlayer.cs" />
@@ -143,6 +142,7 @@
     <Compile Include="Powers\PowerNotUsableException.cs" />
     <Compile Include="Stash.cs" />
     <Compile Include="Tactics\BasicFightTactic.cs" />
+    <Compile Include="Tactics\PowerTactic.cs" />
     <Compile Include="Tactics\TacticExtension.cs" />
     <Compile Include="Tactics\TacticInfo.cs" />
     <Compile Include="TargetInfo.cs" />
