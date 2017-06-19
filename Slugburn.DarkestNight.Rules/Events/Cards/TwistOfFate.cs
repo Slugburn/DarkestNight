@@ -35,7 +35,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 public string Name => EventName;
                 public void HandleTrigger(Hero registrar, TriggerContext context)
                 {
-                    registrar.RemoveRollModifier(EventName);
+                    registrar.RemoveRollModifiers(EventName);
                     registrar.Triggers.Unregister(HeroTrigger.EndOfTurn, EventName);
                 }
 

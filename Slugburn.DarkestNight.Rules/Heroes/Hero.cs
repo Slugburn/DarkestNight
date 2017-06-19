@@ -380,10 +380,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             _rollHandlers = new List<IRollHandler> {rollHandler};
         }
 
-        public void RemoveRollModifier(string name)
+        public void RemoveRollModifiers(string name)
         {
-            var toRemove = _rollModifiers.Single(x => x.Name == name);
-            _rollModifiers.Remove(toRemove);
+            _rollModifiers.RemoveAll(x => x.Name == name);
         }
 
         public void AddAction(IAction action)

@@ -94,7 +94,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
                 public void HandleRoll(Hero hero)
                 {
-                    hero.RemoveRollModifier(Name);
+                    hero.RemoveRollModifiers(Name);
                     hero.State = HeroState.AssigningDice;
                     hero.RemoveRollHandler(this);
                 }

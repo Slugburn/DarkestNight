@@ -231,5 +231,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WhenHeroDrawsEvent()
                 .ThenEventHasOption("Visions", false);
         }
+
+        [Test]
+        public void WolfForm_Activate()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Wolf Form"))
+                .WhenPlayerTakesAction("Wolf Form")
+                .ThenPower("Wolf Form", x => x.IsActive())
+                .ThenHero(x=>x.HasUsedAction().CanGainGrace(false).FightDice(2).EludeDice(2));
+        }
     }
 }

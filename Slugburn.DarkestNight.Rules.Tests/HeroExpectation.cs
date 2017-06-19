@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Tests
 {
@@ -19,6 +21,8 @@ namespace Slugburn.DarkestNight.Rules.Tests
         private bool _expectedCanGainGrace;
         private int _expectedTravelSpeed;
         private int _expectedSearchDice;
+        private int _expectedFightDice;
+        private int _expectedEludeDice;
 
         public HeroExpectation(Hero hero)
         {
@@ -31,6 +35,8 @@ namespace Slugburn.DarkestNight.Rules.Tests
             _specifiedLocations = new List<Location>();
             _expectedLocation = hero.Location;
             _expectedTravelSpeed = 1;
+            _expectedFightDice = 1;
+            _expectedEludeDice = 1;
             _expectedSearchDice = 1;
         }
 
@@ -53,6 +59,11 @@ namespace Slugburn.DarkestNight.Rules.Tests
                 Assert.That(ignoredBlights, Is.EquivalentTo(_expectedIgnoredBlights), "Unexpected ignored blights.");
             }
             Assert.That(_hero.TravelSpeed, Is.EqualTo(_expectedTravelSpeed), "Unexpected TravelSpeed.");
+
+            var fightDice = _hero.GetDice(RollType.Fight, null, 1).Total;
+            Assert.That(fightDice, Is.EqualTo(_expectedFightDice), "Unexpected number of Fight dice.");
+            var eludeDice = _hero.GetDice(RollType.Elude, null, 1).Total;
+            Assert.That(eludeDice, Is.EqualTo(_expectedEludeDice), "Unexpected number of Elude dice.");
             var searchDice = _hero.GetSearchDice().Total;
             Assert.That(searchDice, Is.EqualTo(_expectedSearchDice), "Unexpected number of Search dice.");
         }
@@ -169,6 +180,18 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public HeroExpectation DefaultGrace(int expected)
         {
             Assert.That(_hero.DefaultGrace, Is.EqualTo(expected));
+            return this;
+        }
+
+        public HeroExpectation FightDice(int expected)
+        {
+            _expectedFightDice = expected;
+            return this;
+        }
+
+        public HeroExpectation EludeDice(int expected)
+        {
+            _expectedEludeDice = expected;
             return this;
         }
     }
