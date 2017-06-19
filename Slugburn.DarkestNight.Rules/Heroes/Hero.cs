@@ -12,15 +12,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 {
     public abstract class Hero
     {
-        private readonly List<IPower> _powerDeck;
-        private Stash _stash;
-        private readonly Dictionary<string, ITactic> _tactics;
         private readonly Dictionary<string, IAction> _actions;
+        private readonly List<IPower> _powerDeck;
         private readonly List<IRollModifier> _rollModifiers;
-        private List<IRollHandler> _rollHandlers;
+        private readonly Dictionary<string, ITactic> _tactics;
         private ILocationSelectedHandler _locationSelectedHandler;
-
-        public TriggerRegistry<HeroTrigger, Hero> Triggers { get; }
+        private List<IRollHandler> _rollHandlers;
+        private readonly Stash _stash;
 
         protected Hero(string name, int defaultGrace, int defaultSecrecy, params IPower[] powers)
         {
@@ -31,9 +29,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             Secrecy = defaultSecrecy;
             Powers = new List<IPower>();
             _powerDeck = new List<IPower>(powers);
-            _stash= new Stash();
+            _stash = new Stash();
             Triggers = new TriggerRegistry<HeroTrigger, Hero>(this);
             IsActionAvailable = true;
+            CanGainGrace = true;
 
             var fightTactic = new BasicFightTactic();
             var eludeTactic = new BasicEludeTactic();
@@ -44,10 +43,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             };
             _rollModifiers = new List<IRollModifier>();
 
-            var attack = new Attack();
-            _actions = new Dictionary<string, IAction> { {attack.Name, attack}};
+            _actions = new IAction[] {new Attack(), new Search()}.ToDictionary(x => x.Name);
             Location = Location.Monastery;
+            TravelSpeed = 1;
         }
+
+        public TriggerRegistry<HeroTrigger, Hero> Triggers { get; }
+        public List<int> Roll { get; set; }
 
         public IEnumerable<IPower> PowerDeck => _powerDeck;
 
@@ -59,6 +61,21 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public HeroState State { get; set; }
         public ICollection<IPower> Powers { get; protected set; }
         public string Name { get; set; }
+
+        public bool IsTurnTaken { get; set; }
+
+        public Game Game { get; private set; }
+        public IPlayer Player { get; private set; }
+
+        public bool IsActionAvailable { get; set; }
+        public ConflictState ConflictState { get; set; }
+
+        public IList<string> AvailableActions { get; set; }
+
+        public bool CanGainGrace { get; set; }
+        public List<Blight> DefendList { get; set; }
+
+        public int TravelSpeed { get; set; }
 
         public ICollection<Blight> GetBlights()
         {
@@ -90,8 +107,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             IsTurnTaken = true;
         }
 
-        public bool IsTurnTaken { get; set; }
-
         public void LoseTurn()
         {
             throw new NotImplementedException();
@@ -114,7 +129,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (Grace > 0)
                 LoseGrace();
             else
-                this.Death();
+                Death();
         }
 
         private void Death()
@@ -206,16 +221,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public List<ITactic> GetAvailableFightTactics()
         {
-            return GetAvailableTactics().Where(x=>x.Type == TacticType.Fight ).ToList();
+            return GetAvailableTactics().Where(x => x.Type == TacticType.Fight).ToList();
         }
 
         public List<ITactic> GetAvailableTactics()
         {
             return _tactics.Values.Where(x => x.IsAvailable(this)).ToList();
         }
-
-        public Game Game { get; private set; }
-        public IPlayer Player { get; private set; }
 
         public IEnumerable<Location> GetValidMovementLocations()
         {
@@ -227,17 +239,12 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public IPower GetPower(string name)
         {
-            return Powers.SingleOrDefault(x=>x.Name==name);
-        }
-
-        public void RemoveBySource<T>(string name)
-        {
-            _stash.RemoveBySource<T>(name);
+            return Powers.SingleOrDefault(x => x.Name == name);
         }
 
         public IEnumerable<T> GetPowers<T>()
         {
-            return Powers.Where(x=>x is T).Cast<T>();
+            return Powers.Where(x => x is T).Cast<T>();
         }
 
         public void TakeAction(IAction action)
@@ -247,14 +254,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             action.Act(this);
         }
 
-        public bool IsActionAvailable { get; set; }
-        public ConflictState ConflictState { get; set; }
-
         public void SelectTactic(string tacticName, ICollection<Blight> targets)
         {
             ValidateState(HeroState.SelectingTarget);
-            var targetsAreValid =  ConflictState.AvailableTargets.Intersect(targets).Count() == targets.Count
-                && targets.Count >= ConflictState.MinTarget && targets.Count <= ConflictState.MaxTarget;
+            var targetsAreValid = ConflictState.AvailableTargets.Intersect(targets).Count() == targets.Count
+                                  && targets.Count >= ConflictState.MinTarget && targets.Count <= ConflictState.MaxTarget;
             if (!targetsAreValid)
                 throw new Exception("Invalid targets.");
 
@@ -269,7 +273,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var tactic = _tactics[tacticName];
             tactic.Use(this);
             var roll = Player.RollDice(diceCount).ToList();
-            ConflictState.Roll = roll;
+            Roll = roll;
             State = HeroState.RollAvailable;
         }
 
@@ -304,7 +308,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void AssignDiceToBlights(ICollection<BlightDieAssignment> assignments)
         {
             ValidateState(HeroState.AssigningDice);
-            var validRolls = assignments.Select(x => x.DieValue).Intersect(ConflictState.Roll).Count() == assignments.Count;
+            var validRolls = assignments.Select(x => x.DieValue).Intersect(Roll).Count() == assignments.Count;
             if (!validRolls)
                 throw new Exception("Invalid die values specified.");
             var validTargets = assignments.Select(x => x.Blight).Intersect(ConflictState.Targets).Count() == assignments.Count;
@@ -372,8 +376,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             _locationSelectedHandler.Handle(this, location);
         }
 
-        public IList<string> AvailableActions { get; set; }
-
         public bool HasAction(string actionName)
         {
             return _actions.ContainsKey(actionName);
@@ -382,6 +384,24 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void RemoveAction(string name)
         {
             _actions.Remove(name);
+        }
+
+        public Dice GetDice(RollType rollType, string baseName, int baseDiceCount)
+        {
+            var baseDetail = new DiceDetail {Name = baseName, Modifier = baseDiceCount};
+            var otherDetails = from rollMod in GetRollModifiers()
+                let mod = rollMod.GetModifier(this, rollType)
+                where mod != 0
+                select new DiceDetail {Name = rollMod.Name, Modifier = mod};
+            var details = new[] {baseDetail}.Concat(otherDetails).ToList();
+            var dice = new Dice(details);
+            return dice;
+        }
+
+        public Dice GetSearchDice()
+        {
+            var dice = GetDice(RollType.Search, "Search", 1);
+            return dice;
         }
     }
 }

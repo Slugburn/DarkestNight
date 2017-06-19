@@ -12,9 +12,11 @@ namespace Slugburn.DarkestNight.Rules.Powers
             IsActive = true;
         }
 
-        public virtual void Deactivate(Hero hero)
+        public virtual bool Deactivate(Hero hero)
         {
+            if (!IsActive) return false;
             IsActive = false;
+            return true;
         }
 
         public override void Exhaust(Hero hero)

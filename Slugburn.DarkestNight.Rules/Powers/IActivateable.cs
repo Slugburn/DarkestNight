@@ -5,6 +5,7 @@ namespace Slugburn.DarkestNight.Rules.Powers
     public interface IActivateable
     {
         void Activate(Hero hero);
-        void Deactivate(Hero hero);
+        bool Deactivate(Hero hero);
+        bool IsActive { get; }
     }
 }

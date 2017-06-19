@@ -14,6 +14,5 @@ namespace Slugburn.DarkestNight.Rules
         public List<TacticInfo> AvailableTactics { get; set; }
         public List<TacticInfo> AvailableEvadeTactics { get; set; }
         public ICollection<Blight> AvailableTargets { get; set; }
-        public List<int> Roll { get; set; }
     }
 }

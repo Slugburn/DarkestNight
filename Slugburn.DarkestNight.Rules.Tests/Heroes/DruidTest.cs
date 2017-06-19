@@ -62,13 +62,35 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         }
 
         [Test]
+        public void RavenForm_Activated()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Sprite Form", "Raven Form"))
+                .GivenPower("Sprite Form", x => x.IsActive())
+                .WhenPlayerTakesAction("Raven Form")
+                .ThenHero(x => x.TravelSpeed(2).SearchDice(2).CanGainGrace(false).HasUsedAction())
+                .ThenPower("Raven Form", x => x.IsActive())
+                .ThenPower("Sprite Form", x => x.IsActive(false));
+        }
+
+        [Test]
+        public void RavenForm_Deactivate()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Raven Form"))
+                .GivenPower("Raven Form", x => x.IsActive())
+                .WhenPlayerTakesAction("Deactivate Form")
+                .ThenHero(x=>x.TravelSpeed(1).SearchDice(1).HasUsedAction());
+        }
+
+        [Test]
         public void SpriteFormActivated()
         {
             new TestScenario()
                 .GivenHero("Druid", x => x.Power("Sprite Form", "Raven Form"))
                 .GivenPower("Raven Form", x => x.IsActive())
                 .WhenPlayerTakesAction("Sprite Form")
-                .ThenHero(x=>x.HasUsedAction())
+                .ThenHero(x=>x.CanGainGrace(false).HasUsedAction())
                 .ThenPower("Sprite Form", x => x.IsActive())
                 .ThenPower("Raven Form", x => x.IsActive(false));
         }
@@ -79,7 +101,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             new TestScenario()
                 .GivenHero("Druid", x => x.Power("Sprite Form"))
                 .GivenPower("Sprite Form", x=>x.IsActive())
-                .ThenHero(x=>x.IsIgnoringBlights());
+                .ThenHero(x=>x.CanGainGrace(false).IsIgnoringBlights());
         }
 
         [Test]
@@ -89,7 +111,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenHero("Druid", x => x.Power("Sprite Form").Location(Location.Ruins))
                 .GivenNecromancerLocation(Location.Ruins)
                 .GivenPower("Sprite Form", x => x.IsActive())
-                .ThenHero(x => x.IsNotIgnoringBlights());
+                .ThenHero(x => x.CanGainGrace(false).IsNotIgnoringBlights());
         }
 
         [Test]

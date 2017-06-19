@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
         {
         }
 
-        private interface IForm : IPower, IActivateable
+        private interface IDruidForm : IPower, IActivateable
         {
             
         }
@@ -87,11 +87,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 hero.AddAction(new CelerityAction());
             }
 
-            private class CelerityAction : IAction
+            private class CelerityAction : PowerAction
             {
-                public string Name => PowerName;
+                public CelerityAction() : base(PowerName)
+                {
+                }
 
-                public void Act(Hero hero)
+                public override void Act(Hero hero)
                 {
                     hero.ValidateState(HeroState.ChoosingAction);
                     DeactivateAllForms(hero);
@@ -108,7 +110,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
                         // Allow player to pick a new form
                         hero.State = HeroState.ChoosingAction;
-                        var formActions = hero.GetPowers<IForm>().Where(x => x.IsUsable(hero)).Select(x => x.Name);
+                        var formActions = hero.GetPowers<IDruidForm>().Where(x => x.IsUsable(hero)).Select(x => x.Name);
                         var continueAction = new CelerityContinueAction();
                         var availableActions = formActions.Concat(new[] {continueAction.Name}).ToList();
                         hero.AddAction(continueAction);
@@ -125,11 +127,16 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                         hero.RemoveAction(Name);
                         hero.IsActionAvailable = false;
                     }
+
+                    public bool IsAvailable(Hero hero)
+                    {
+                        return true;
+                    }
                 }
             }
         }
 
-        class RavenForm : ActivateablePower , IForm
+        class RavenForm : DruidFormPower
         {
             public RavenForm()
             {
@@ -138,15 +145,46 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "+1 die in searches. When you travel, you may move two spaces. You cannot gain Grace.";
             }
 
+            public override void Activate(Hero hero)
+            {
+                base.Activate(hero);
+                hero.TravelSpeed = 2;
+                hero.AddRollModifier(StaticRollBonus.Create(Name, RollType.Search, 1));
+            }
+
+            public override bool Deactivate(Hero hero)
+            {
+                if (!base.Deactivate(hero)) return false;
+                hero.TravelSpeed = 1;
+                hero.RemoveRollModifier(Name);
+                return true;
+            }
+        }
+
+        private class DruidFormPower : ActivateablePower, IDruidForm
+        {
             public override void Learn(Hero hero)
             {
                 base.Learn(hero);
                 AddFormActions(hero, Name);
             }
 
+            public override void Activate(Hero hero)
+            {
+                base.Activate(hero);
+                hero.IsActionAvailable = false;
+                hero.CanGainGrace = false;
+            }
+
+            public override bool Deactivate(Hero hero)
+            {
+                if (!base.Deactivate(hero)) return false;
+                hero.CanGainGrace = true;
+                return true;
+            }
         }
 
-        class SpriteForm : ActivateablePower, IForm
+        class SpriteForm : DruidFormPower
         {
             private const string PowerName = "Sprite Form";
 
@@ -158,17 +196,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 ActiveText = "Ignore blights' effects unless the Necromancer is present. You cannot gain Grace.";
             }
 
-            public override void Learn(Hero hero)
-            {
-                base.Learn(hero);
-                AddFormActions(hero, Name);
-            }
-
             public override void Activate(Hero hero)
             {
                 base.Activate(hero);
                 hero.Game.AddIgnoreBlight(new SpriteFormIgnoreBlight {HeroName = hero.Name});
-                hero.IsActionAvailable = false;
             }
 
             private class SpriteFormIgnoreBlight : IIgnoreBlight
@@ -182,22 +213,21 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 }
             }
 
-            public override void Deactivate(Hero hero)
+            public override bool Deactivate(Hero hero)
             {
-                base.Deactivate(hero);
+                if (!base.Deactivate(hero)) return false;
                 hero.Game.RemoveIgnoreBlight(Name);
+                return true;
             }
         }
 
-        private class ActivateForm : IAction
+        private class ActivateForm : PowerAction
         {
-            public string Name { get; set; }
-
-            public void Act(Hero hero)
+            public override void Act(Hero hero)
             {
                 hero.ValidateState(HeroState.ChoosingAction);
                 DeactivateAllForms(hero);
-                var power = (IForm) hero.GetPower(Name);
+                var power = (IDruidForm) hero.GetPower(Name);
                 power.Activate(hero);
             }
         }
@@ -211,6 +241,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 DeactivateAllForms(hero);
                 hero.IsActionAvailable = false;
             }
+
+            public bool IsAvailable(Hero hero)
+            {
+                return hero.IsActionAvailable && hero.GetPowers<IDruidForm>().Any(x => x.IsActive);
+            }
         }
 
 
@@ -223,7 +258,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class TreeForm : ActivateablePower, IForm
+        class TreeForm : ActivateablePower, IDruidForm
         {
             public TreeForm()
             {
@@ -252,7 +287,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class WolfForm : ActivateablePower, IForm
+        class WolfForm : ActivateablePower, IDruidForm
         {
             public WolfForm()
             {
@@ -271,7 +306,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         private static void DeactivateAllForms(Hero hero)
         {
-            hero.Powers.Where(x => x is IForm).Cast<IForm>().ToList().ForEach(x => x.Deactivate(hero));
+            hero.Powers.Where(x => x is IDruidForm).Cast<IDruidForm>().ToList().ForEach(x => x.Deactivate(hero));
         }
     }
 }

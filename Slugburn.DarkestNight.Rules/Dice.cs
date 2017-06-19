@@ -4,7 +4,7 @@ using Slugburn.DarkestNight.Rules.Heroes.Impl;
 
 namespace Slugburn.DarkestNight.Rules
 {
-    internal class Dice
+    public class Dice
     {
         public List<DiceDetail> Details { get; }
 

@@ -24,9 +24,14 @@ namespace Slugburn.DarkestNight.Rules.Actions
             hero.State = HeroState.SelectingTarget;
         }
 
+        public bool IsAvailable(Hero hero)
+        {
+            return hero.IsActionAvailable && hero.GetBlights().Any();
+        }
+
         public void HandleRoll(Hero hero)
         {
-            var result = hero.ConflictState.Roll.Max();
+            var result = hero.Roll.Max();
             var target = hero.ConflictState.Targets.Single();
             var assignment = BlightDieAssignment.Create(target, result);
             hero.State = HeroState.AssigningDice;

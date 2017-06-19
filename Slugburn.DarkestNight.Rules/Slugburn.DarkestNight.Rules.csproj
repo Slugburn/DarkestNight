@@ -44,9 +44,12 @@
     <Compile Include="Actions\Attack.cs" />
     <Compile Include="Actions\Defend.cs" />
     <Compile Include="Actions\IAction.cs" />
+    <Compile Include="Actions\PowerAction.cs" />
+    <Compile Include="Actions\Search.cs" />
     <Compile Include="ActionType.cs" />
     <Compile Include="Blights\BlightBase.cs" />
     <Compile Include="Blights\BlightDieAssignment.cs" />
+    <Compile Include="Blights\BlightExtension.cs" />
     <Compile Include="Blights\BlightFactory.cs" />
     <Compile Include="Blights\Blight.cs" />
     <Compile Include="Blights\IIgnoreBlight.cs" />

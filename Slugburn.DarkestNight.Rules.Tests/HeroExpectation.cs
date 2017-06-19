@@ -16,28 +16,29 @@ namespace Slugburn.DarkestNight.Rules.Tests
         private bool _expectedActionAvailable;
         private IEnumerable<Blight> _expectedIgnoredBlights;
         private Location _expectedLocation;
+        private bool _expectedCanGainGrace;
+        private int _expectedTravelSpeed;
+        private int _expectedSearchDice;
 
         public HeroExpectation(Hero hero)
         {
             _hero = hero;
             _expectedActionAvailable = true;
+            _expectedCanGainGrace = true;
             _expectedGrace = hero.DefaultGrace;
             _expectedSecrecy = hero.DefaultSecrecy;
             _invalidLocations = new List<Location>();
             _specifiedLocations = new List<Location>();
             _expectedLocation = hero.Location;
-        }
-
-        public HeroExpectation Grace(int expected)
-        {
-            _expectedGrace = expected;
-            return this;
+            _expectedTravelSpeed = 1;
+            _expectedSearchDice = 1;
         }
 
         public void Verify()
         {
             Assert.That(_hero.IsActionAvailable, Is.EqualTo(_expectedActionAvailable),
                 _expectedActionAvailable ? "Should not have used action." : "Should have used action.");
+            Assert.That(_hero.CanGainGrace, Is.EqualTo(_expectedCanGainGrace));
             Assert.That(_hero.Grace, Is.EqualTo(_expectedGrace), "Unexpected Grace.");
             Assert.That(_hero.Secrecy, Is.EqualTo(_expectedSecrecy), "Unexpected Secrecy.");
             Assert.That(_hero.Location, Is.EqualTo(_expectedLocation));
@@ -51,6 +52,16 @@ namespace Slugburn.DarkestNight.Rules.Tests
                 var ignoredBlights = AllBlights().Where(x => _hero.IsBlightIgnored(x)).ToList();
                 Assert.That(ignoredBlights, Is.EquivalentTo(_expectedIgnoredBlights), "Unexpected ignored blights.");
             }
+            Assert.That(_hero.TravelSpeed, Is.EqualTo(_expectedTravelSpeed), "Unexpected TravelSpeed.");
+            var searchDice = _hero.GetSearchDice().Total;
+            Assert.That(searchDice, Is.EqualTo(_expectedSearchDice), "Unexpected number of Search dice.");
+        }
+
+
+        public HeroExpectation Grace(int expected)
+        {
+            _expectedGrace = expected;
+            return this;
         }
 
         public HeroExpectation Secrecy(int expected)
@@ -65,9 +76,9 @@ namespace Slugburn.DarkestNight.Rules.Tests
             return this;
         }
 
-        public HeroExpectation CanMoveTo(Location location)
+        public HeroExpectation CanMoveTo(params Location[] location)
         {
-            _specifiedLocations.Add(location);
+            _specifiedLocations.AddRange(location);
             return this;
         }
 
@@ -134,6 +145,24 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public HeroExpectation Location(Location location)
         {
             _expectedLocation = location;
+            return this;
+        }
+
+        public HeroExpectation CanGainGrace(bool expected = true)
+        {
+            _expectedCanGainGrace = expected;
+            return this;
+        }
+
+        public HeroExpectation TravelSpeed(int expected)
+        {
+            _expectedTravelSpeed = expected;
+            return this;
+        }
+
+        public HeroExpectation SearchDice(int expected)
+        {
+            _expectedSearchDice = expected;
             return this;
         }
     }

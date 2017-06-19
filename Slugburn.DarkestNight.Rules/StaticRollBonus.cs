@@ -5,20 +5,18 @@ namespace Slugburn.DarkestNight.Rules
 {
     internal class StaticRollBonus : IRollModifier
     {
-        private readonly int _dieCount;
-        public string Name { get; }
-        public TacticType TacticType { get; }
-
-        public StaticRollBonus(string name, TacticType tacticType, int dieCount)
+        public static StaticRollBonus Create(string name, RollType rollType, int dieCount)
         {
-            _dieCount = dieCount;
-            Name = name;
-            TacticType = tacticType;
+            return new StaticRollBonus {Name = name, RollType = rollType, DieCount = dieCount};
         }
 
-        public int GetModifier(Hero hero)
+        public int DieCount { get; set; }
+        public string Name { get; set;  }
+        public RollType RollType { get; set; }
+
+        public int GetModifier(Hero hero, RollType rollType)
         {
-            return _dieCount;
+            return rollType == RollType ?  DieCount : 0;
         }
     }
 }

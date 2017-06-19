@@ -53,9 +53,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         class CallToDeath : ActionPower
         {
+            private const string PowerName = "Call to Death";
+
             public CallToDeath()
             {
-                Name = "Call to Death";
+                Name = PowerName;
                 Text =
                     "Attack two blights in your location at once. Make a single fight roll with +1 die, then divide the dice between blights and resolve as two separate attacks (losing Secrecy for each).";
             }
@@ -66,15 +68,17 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 hero.AddAction(new CallToDeathAction());
             }
 
-            private class CallToDeathAction : IAction, IRollHandler
+            private class CallToDeathAction : PowerAction, IRollHandler
             {
-                public string Name  => "Call to Death";
+                public CallToDeathAction() : base(PowerName)
+                {
+                }
 
-                public void Act(Hero hero)
+                public override void Act(Hero hero)
                 {
                     hero.ValidateState(HeroState.ChoosingAction);
                     hero.SetRollHandler(this);
-                    hero.AddRollModifier(new StaticRollBonus(Name, TacticType.Fight, 1));
+                    hero.AddRollModifier(StaticRollBonus.Create(Name, RollType.Fight, 1));
                     hero.ConflictState = new ConflictState
                     {
                         ConflictType = ConflictType.Attack,
@@ -95,6 +99,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 }
             }
 
+
             public override bool IsUsable(Hero hero)
             {
                 return base.IsUsable(hero) && hero.GetBlights().Count() > 1;
@@ -103,9 +108,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         class DarkVeil : Bonus
         {
+            private const string PowerName = "Dark Veil";
+
             public DarkVeil()
             {
-                Name = "Dark Veil";
+                Name = PowerName;
                 StartingPower = true;
                 Text =
                     "Exhaust at any time to ignore blights' effects until your next turn. *OR* Exhaust after you fail an attack on a blight to ignore its Defense.";
@@ -120,7 +127,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
             private class FailedAttackHandler : ITriggerHandler<Hero>
             {
-                public string Name => "Dark Veil";
+                public string Name => PowerName;
                 public void HandleTrigger(Hero registrar, TriggerContext context)
                 {
                     var hero = registrar;
@@ -132,10 +139,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 }
             }
 
-            private class DarkVeilAction : IAction
+            private class DarkVeilAction : PowerAction
             {
-                public string Name => "Dark Veil";
-                public void Act(Hero hero)
+                public DarkVeilAction() : base(PowerName)
+                {
+                }
+
+                public override void Act(Hero hero)
                 {
                     hero.Game.AddIgnoreBlight(IgnoreBlight.Create(Name, hero));
                     hero.Triggers.Register(new DarkVeilEnds(), HeroTrigger.StartTurn);
@@ -144,7 +154,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
                 private class DarkVeilEnds : ITriggerHandler<Hero>
                 {
-                    public string Name => "Dark Veil";
+                    public string Name => PowerName;
                     public void HandleTrigger(Hero registrar, TriggerContext context)
                     {
                         var hero = registrar;
@@ -211,7 +221,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                     _powerName = powerName;
                 }
 
-                public int GetModifier(Hero hero)
+                public int GetModifier(Hero hero, RollType rollType)
                 {
                     var power = hero.GetPower(_powerName);
                     if (!power.IsUsable(hero)) return 0;
@@ -256,9 +266,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         class FalseOrders : ActionPower
         {
+            private const string PowerName = "False Orders";
+
             public FalseOrders()
             {
-                Name = "False Orders";
+                Name = PowerName;
                 Text = "Move any number of blights from your location to one adjacent location, if this does not result in over 4 blights at one location.";
             }
 
@@ -268,10 +280,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 hero.AddAction(new FalseOrdersAction());
             }
 
-            private class FalseOrdersAction : IAction
+            private class FalseOrdersAction : PowerAction
             {
-                public string Name => "False Orders";
-                public void Act(Hero hero)
+                public FalseOrdersAction() : base(PowerName)
+                {
+                }
+
+                public override void Act(Hero hero)
                 {
                     var space = hero.GetSpace();
                     var potentialDestinations = space.AdjacentLocations;
@@ -329,7 +344,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
                 public void HandleRoll(Hero hero)
                 {
-                    if (hero.ConflictState.Roll.Any(x => x == 1))
+                    if (hero.Roll.Any(x => x == 1))
                         hero.LoseGrace();
                     hero.RemoveRollHandler(this);
                 }
@@ -338,9 +353,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         class ForbiddenArts : Bonus
         {
+            private const string PowerName = "Forbidden Arts";
+
             public ForbiddenArts()
             {
-                Name = "Forbidden Arts";
+                Name = PowerName;
                 Text = "After a fight roll, add any number of dice, one at a time. For each added die that comes up a 1, +1 Darkness.";
             }
 
@@ -350,16 +367,18 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 hero.AddAction(new ForbiddenArtsAction());
             }
 
-            private class ForbiddenArtsAction : IAction
+            private class ForbiddenArtsAction : PowerAction
             {
-                public string Name => "Forbidden Arts";
+                public ForbiddenArtsAction() : base(PowerName)
+                {
+                }
 
-                public void Act(Hero hero)
+                public override void Act(Hero hero)
                 {
                     var roll = hero.Player.RollOne();
                     if (roll == 1)
                         hero.Game.IncreaseDarkness();
-                    hero.ConflictState.Roll.Add(roll);
+                    hero.Roll.Add(roll);
                 }
             }
         }
@@ -403,7 +422,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 public void HandleRoll(Hero hero)
                 {
                     var targetMight = hero.ConflictState.Targets.Select(x => new BlightFactory().Create(x)).Min(x => x.Might);
-                    if (hero.ConflictState.Roll.Count(roll=>roll>=targetMight)>1)
+                    if (hero.Roll.Count(roll => roll >= targetMight) > 1)
                         hero.GainGrace(1, hero.DefaultGrace);
                     hero.RemoveRollHandler(this);
                 }

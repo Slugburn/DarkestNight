@@ -9,7 +9,7 @@ namespace Slugburn.DarkestNight.Rules
 {
     public interface IRollModifier
     {
-        int GetModifier(Hero hero);
+        int GetModifier(Hero hero, RollType rollType);
         string Name { get; }
     }
 }

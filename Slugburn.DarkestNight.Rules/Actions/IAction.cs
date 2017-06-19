@@ -4,7 +4,8 @@ namespace Slugburn.DarkestNight.Rules.Actions
 {
     public interface IAction 
     {
-        void Act(Hero hero);
         string Name { get; }
+        void Act(Hero hero);
+        bool IsAvailable(Hero hero);
     }
 }

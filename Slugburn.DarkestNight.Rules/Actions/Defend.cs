@@ -24,13 +24,18 @@ namespace Slugburn.DarkestNight.Rules.Actions
             hero.State = HeroState.SelectingTarget;
         }
 
+        public bool IsAvailable(Hero hero)
+        {
+            return hero.DefendList != null && hero.DefendList.Any();
+        }
+
         public void HandleRoll(Hero hero)
         {
             var blight = hero.ConflictState.Targets.Single();
             var behavior = (Undead) new BlightFactory().Create(blight);
             var tactic = hero.ConflictState.SelectedTactic;
             var targetNumber = tactic.Type == TacticType.Fight ? behavior.FightTarget : behavior.EludeTarget;
-            var result = hero.ConflictState.Roll.Max();
+            var result = hero.Roll.Max();
             if (result < targetNumber)
                 hero.TakeWound();
         }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Powers;
 
 namespace Slugburn.DarkestNight.Rules.Tactics
 {
@@ -21,13 +22,8 @@ namespace Slugburn.DarkestNight.Rules.Tactics
 
         private static Dice GetDice(ITactic tactic, Hero hero)
         {
-            var baseDetail = new DiceDetail {Name = tactic.Name, Modifier = tactic.GetDiceCount()};
-            var otherDetails = from rollMod in hero.GetRollModifiers()
-                let mod = rollMod.GetModifier(hero)
-                where mod != 0
-                select new DiceDetail {Name = rollMod.Name, Modifier = mod};
-            var details = new[] {baseDetail}.Concat(otherDetails).ToList();
-            var dice = new Dice(details);
+            var rollType = tactic.Type == TacticType.Fight ? RollType.Fight : RollType.Elude;
+            var dice = hero.GetDice(rollType, tactic.Name, tactic.GetDiceCount());
             return dice;
         }
     }
