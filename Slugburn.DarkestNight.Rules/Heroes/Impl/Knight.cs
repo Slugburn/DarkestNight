@@ -1,4 +1,5 @@
 ﻿using Slugburn.DarkestNight.Rules.Powers;
+using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 {
@@ -13,11 +14,19 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         class Charge : TacticPower
         {
+            private const string PowerName = "Charge";
+
             public Charge() : base(TacticType.Fight)
             {
-                Name = "Charge";
+                Name = PowerName;
                 StartingPower = true;
                 Text = "Fight with 2 dice.";
+            }
+
+            public override void Learn(Hero hero)
+            {
+                base.Learn(hero);
+                hero.AddTactic(new PowerTactic {PowerName = PowerName, Type = TacticType.Fight, DiceCount = 2});
             }
         }
 

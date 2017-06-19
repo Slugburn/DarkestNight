@@ -185,7 +185,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
             return this;
         }
 
-        private IEnumerable<int> GetTargetIds(IEnumerable<string> targets)
+        private IEnumerable<int> GetTargetIds(ICollection<string> targets)
         {
             var source = _game.ActingHero.ConflictState.AvailableTargets.ToList();
             Assert.That(source.Select(x=>x.Name).Intersect(targets), Is.EquivalentTo(targets));
