@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
         {
         }
 
-        private interface IForm : IActivateable
+        private interface IForm : IPower, IActivateable
         {
             
         }
@@ -73,12 +73,60 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         class Celerity : ActionPower
         {
+            private const string PowerName = "Celerity";
+
             public Celerity()
             {
-                Name = "Celerity";
+                Name = PowerName;
                 Text = "Deactivate all Forms. Travel. Optionally activate one of your Forms.";
             }
 
+            public override void Learn(Hero hero)
+            {
+                base.Learn(hero);
+                hero.AddAction(new CelerityAction());
+            }
+
+            private class CelerityAction : IAction
+            {
+                public string Name => PowerName;
+
+                public void Act(Hero hero)
+                {
+                    hero.ValidateState(HeroState.ChoosingAction);
+                    DeactivateAllForms(hero);
+                    hero.State = HeroState.SelectingLocation;
+                    hero.SetLocationSelectedHandler(new CelerityLocationSelectedHandler());
+                }
+
+                private class CelerityLocationSelectedHandler : ILocationSelectedHandler
+                {
+                    public void Handle(Hero hero, Location location)
+                    {
+                        // Move to selected location
+                        hero.MoveTo(location);
+
+                        // Allow player to pick a new form
+                        hero.State = HeroState.ChoosingAction;
+                        var formActions = hero.GetPowers<IForm>().Where(x => x.IsUsable(hero)).Select(x => x.Name);
+                        var continueAction = new CelerityContinueAction();
+                        var availableActions = formActions.Concat(new[] {continueAction.Name}).ToList();
+                        hero.AddAction(continueAction);
+                        hero.AvailableActions = availableActions;
+                    }
+
+                }
+                private class CelerityContinueAction : IAction
+                {
+                    public string Name => "Continue";
+
+                    public void Act(Hero hero)
+                    {
+                        hero.RemoveAction(Name);
+                        hero.IsActionAvailable = false;
+                    }
+                }
+            }
         }
 
         class RavenForm : ActivateablePower , IForm
@@ -89,6 +137,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Deactivate all Forms. Optionally activate.";
                 ActiveText = "+1 die in searches. When you travel, you may move two spaces. You cannot gain Grace.";
             }
+
+            public override void Learn(Hero hero)
+            {
+                base.Learn(hero);
+                AddFormActions(hero, Name);
+            }
+
         }
 
         class SpriteForm : ActivateablePower, IForm
@@ -106,14 +161,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             public override void Learn(Hero hero)
             {
                 base.Learn(hero);
-                hero.AddAction(new DeactivateForm());
-                hero.AddAction(new ActivateForm {Name = Name});
+                AddFormActions(hero, Name);
             }
 
             public override void Activate(Hero hero)
             {
                 base.Activate(hero);
                 hero.Game.AddIgnoreBlight(new SpriteFormIgnoreBlight {HeroName = hero.Name});
+                hero.IsActionAvailable = false;
             }
 
             private class SpriteFormIgnoreBlight : IIgnoreBlight
@@ -140,6 +195,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
             public void Act(Hero hero)
             {
+                hero.ValidateState(HeroState.ChoosingAction);
                 DeactivateAllForms(hero);
                 var power = (IForm) hero.GetPower(Name);
                 power.Activate(hero);
@@ -148,10 +204,12 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         private class DeactivateForm : IAction
         {
-            public string Name => "Deactivate Form";
+            public const string ActionName = "Deactivate Form";
+            public string Name => ActionName;
             public void Act(Hero hero)
             {
                 DeactivateAllForms(hero);
+                hero.IsActionAvailable = false;
             }
         }
 
@@ -202,6 +260,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Deactivate all Forms. Optionally activate.";
                 ActiveText = "+1 die in fights. +1 die when eluding. You cannot gain Grace.";
             }
+        }
+
+        private static void AddFormActions(Hero hero, string powerName)
+        {
+            if (!hero.HasAction(DeactivateForm.ActionName))
+                hero.AddAction(new DeactivateForm());
+            hero.AddAction(new ActivateForm { Name = powerName });
         }
 
         private static void DeactivateAllForms(Hero hero)

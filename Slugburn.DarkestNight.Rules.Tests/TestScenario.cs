@@ -227,5 +227,20 @@ namespace Slugburn.DarkestNight.Rules.Tests
             new Defend().Act(hero);
             return this;
         }
+
+        public TestScenario WhenPlayerSelectsLocation(Location location)
+        {
+            var hero = _game.ActingHero;
+            hero.SelectLocation(location);
+            return this;
+        }
+
+        public TestScenario ThenAvailableActions(params string[] actionNames)
+        {
+            var hero = _game.ActingHero;
+            Assert.That(hero.AvailableActions, Is.Not.Null, "Hero.AvailableActions has not been specified.");
+            Assert.That(hero.AvailableActions, Is.EquivalentTo(actionNames));
+            return this;
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
         private readonly List<Location> _specifiedLocations;
         private bool _expectedActionAvailable;
         private IEnumerable<Blight> _expectedIgnoredBlights;
+        private Location _expectedLocation;
 
         public HeroExpectation(Hero hero)
         {
@@ -24,6 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
             _expectedSecrecy = hero.DefaultSecrecy;
             _invalidLocations = new List<Location>();
             _specifiedLocations = new List<Location>();
+            _expectedLocation = hero.Location;
         }
 
         public HeroExpectation Grace(int expected)
@@ -38,6 +40,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
                 _expectedActionAvailable ? "Should not have used action." : "Should have used action.");
             Assert.That(_hero.Grace, Is.EqualTo(_expectedGrace), "Unexpected Grace.");
             Assert.That(_hero.Secrecy, Is.EqualTo(_expectedSecrecy), "Unexpected Secrecy.");
+            Assert.That(_hero.Location, Is.EqualTo(_expectedLocation));
             var validLocations = _hero.GetValidMovementLocations().ToList();
             var disallowedMovement = validLocations.Intersect(_invalidLocations);
             var specifiedMovement = validLocations.Intersect(_specifiedLocations);
@@ -126,6 +129,12 @@ namespace Slugburn.DarkestNight.Rules.Tests
                 Blight.Vampire,
                 Blight.Zombies
             };
+        }
+
+        public HeroExpectation Location(Location location)
+        {
+            _expectedLocation = location;
+            return this;
         }
     }
 }

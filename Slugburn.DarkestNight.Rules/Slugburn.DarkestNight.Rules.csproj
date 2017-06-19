@@ -83,6 +83,7 @@
     <Compile Include="Heroes\Impl\Seer.cs" />
     <Compile Include="Heroes\Impl\Wizard.cs" />
     <Compile Include="Heroes\UnexpectedStateException.cs" />
+    <Compile Include="ILocationSelectedHandler.cs" />
     <Compile Include="IRollHandler.cs" />
     <Compile Include="IRollModifier.cs" />
     <Compile Include="IPlayer.cs" />

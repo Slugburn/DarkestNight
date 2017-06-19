@@ -18,6 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         private readonly Dictionary<string, IAction> _actions;
         private readonly List<IRollModifier> _rollModifiers;
         private List<IRollHandler> _rollHandlers;
+        private ILocationSelectedHandler _locationSelectedHandler;
 
         public TriggerRegistry<HeroTrigger, Hero> Triggers { get; }
 
@@ -152,7 +153,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void MoveTo(Location location)
         {
-            throw new NotImplementedException();
+            Location = location;
         }
 
         public void GainSecrecy(int amount, int max)
@@ -358,6 +359,29 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public bool IsBlightIgnored(Blight blight)
         {
             return Game.IsBlightIgnored(this, blight);
+        }
+
+        public void SetLocationSelectedHandler(ILocationSelectedHandler handler)
+        {
+            _locationSelectedHandler = handler;
+        }
+
+        public void SelectLocation(Location location)
+        {
+            ValidateState(HeroState.SelectingLocation);
+            _locationSelectedHandler.Handle(this, location);
+        }
+
+        public IList<string> AvailableActions { get; set; }
+
+        public bool HasAction(string actionName)
+        {
+            return _actions.ContainsKey(actionName);
+        }
+
+        public void RemoveAction(string name)
+        {
+            _actions.Remove(name);
         }
     }
 }

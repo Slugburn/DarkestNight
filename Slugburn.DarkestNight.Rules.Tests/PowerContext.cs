@@ -17,6 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public PowerContext IsActive()
         {
             ((IActivateable)_power).Activate(_hero);
+            _hero.IsActionAvailable = true;
             return this;
         }
 

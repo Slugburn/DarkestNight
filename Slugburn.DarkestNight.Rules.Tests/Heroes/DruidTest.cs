@@ -34,12 +34,41 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         }
 
         [Test]
+        public void Celerity()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Celerity", "Raven Form", "Wolf Form").Location(Location.Monastery))
+                .GivenPower("Wolf Form", x => x.IsActive())
+                .WhenPlayerTakesAction("Celerity")
+                .ThenPower("Wolf Form", x => x.IsActive(false))
+                .WhenPlayerSelectsLocation(Location.Village)
+                .ThenHero(x => x.Location(Location.Village))
+                .ThenAvailableActions("Raven Form", "Wolf Form", "Continue")
+                .WhenPlayerTakesAction("Raven Form")
+                .ThenPower("Raven Form", x => x.IsActive());
+        }
+
+        [Test]
+        public void Celerity_NoNewFormSelected()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Celerity").Location(Location.Monastery))
+                .WhenPlayerTakesAction("Celerity")
+                .WhenPlayerSelectsLocation(Location.Village)
+                .ThenHero(x => x.Location(Location.Village))
+                .ThenAvailableActions("Continue")
+                .WhenPlayerTakesAction("Continue")
+                .ThenHero(x=>x.HasUsedAction());
+        }
+
+        [Test]
         public void SpriteFormActivated()
         {
             new TestScenario()
                 .GivenHero("Druid", x => x.Power("Sprite Form", "Raven Form"))
                 .GivenPower("Raven Form", x => x.IsActive())
                 .WhenPlayerTakesAction("Sprite Form")
+                .ThenHero(x=>x.HasUsedAction())
                 .ThenPower("Sprite Form", x => x.IsActive())
                 .ThenPower("Raven Form", x => x.IsActive(false));
         }
@@ -70,7 +99,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenHero("Druid", x => x.Power("Sprite Form"))
                 .GivenPower("Sprite Form", x => x.IsActive())
                 .WhenPlayerTakesAction("Deactivate Form")
-                .ThenHero(x => x.IsNotIgnoringBlights());
+                .ThenHero(x => x.IsNotIgnoringBlights().HasUsedAction());
         }
     }
 }

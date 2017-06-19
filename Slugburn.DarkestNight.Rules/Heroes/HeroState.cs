@@ -10,5 +10,6 @@
         SelectingTarget,
         RollAvailable,
         AssigningDice,
+        SelectingLocation
     }
 }
