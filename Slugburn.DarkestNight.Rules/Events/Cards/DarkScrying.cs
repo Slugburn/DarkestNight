@@ -3,7 +3,7 @@ using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class DarkScrying : IEvent
+    public class DarkScrying : IEventCard
     {
         public string Name => "Dark Scrying";
 

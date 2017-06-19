@@ -2,7 +2,7 @@
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class Ritual : IEvent
+    public class Ritual : IEventCard
     {
         public string Name => "Ritual";
 

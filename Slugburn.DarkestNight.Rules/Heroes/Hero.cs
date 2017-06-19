@@ -48,6 +48,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
             Location = Location.Monastery;
             TravelSpeed = 1;
+            Enemies = new List<string>();
         }
 
         public void AddActionFilter(string name, HeroState state, ICollection<string> allowed)
@@ -175,8 +176,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void DrawEvent()
         {
-            throw new NotImplementedException();
+            var eventName = Game.Events.Draw();
+            var card = EventFactory.CreateCard(eventName);
+            CurrentEvent = card.GetHeroEvent(this);
+            Triggers.Handle(HeroTrigger.EventDrawn);
         }
+
+        public HeroEvent CurrentEvent { get; set; }
 
         public void LoseSecrecy(string sourceName)
         {
@@ -453,12 +459,12 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             return dice;
         }
 
-        public void ResolveEvent(IEvent e, string option)
+        public void ResolveEvent(IEventCard e, string option)
         {
             throw new NotImplementedException();
         }
 
-        public void PresentEvent(IEvent e)
+        public void PresentEvent(IEventCard e)
         {
             throw new NotImplementedException();
         }
@@ -490,6 +496,20 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public IPower DrawPower()
         {
             return _powerDeck.Draw();
+        }
+
+        public void SelectEventOption(string option)
+        {
+            CurrentEvent.SelectedOption = option;
+            if (!Triggers.Handle(HeroTrigger.EventOptionSelected))
+                return;
+            var card = EventFactory.CreateCard(CurrentEvent.Name);
+            card.Resolve(this, option);
+        }
+
+        public void CancelCurrentEvent()
+        {
+            CurrentEvent = null;
         }
     }
 }

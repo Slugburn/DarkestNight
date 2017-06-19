@@ -2,7 +2,7 @@ using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class VengefulSpirit : IEvent
+    public class VengefulSpirit : IEventCard
     {
         public string Name => "Vengeful Spirit";
 

@@ -2,7 +2,7 @@ using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class Patrols : IEvent
+    public class Patrols : IEventCard
     {
         public string Name => "Patrols";
 

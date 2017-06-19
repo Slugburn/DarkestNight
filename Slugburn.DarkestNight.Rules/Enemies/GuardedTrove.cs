@@ -37,7 +37,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             yield return new ConflictResult("Fail elude", "Spend 1 Secrecy or draw another event");
         }
 
-        public class GuardedTroveEludeFailureEvent : IEvent
+        public class GuardedTroveEludeFailureEvent : IEventCard
         {
             public string Name => "Guarded Trove (Fail elude)";
 

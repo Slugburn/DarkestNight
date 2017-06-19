@@ -2,7 +2,7 @@
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class Demon : IEvent
+    public class Demon : IEventCard
     {
         public string Name => "Demon";
         public EventDetail Detail => EventDetail.Create(x => x.Text("Compare to Secrecy", "6+: Flying", "4-5: Fearful", "0-3: Deadly").Option("cont", "Continue"));

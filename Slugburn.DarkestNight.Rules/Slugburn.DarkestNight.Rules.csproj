@@ -102,9 +102,11 @@
     <Compile Include="Events\Cards\VengefulSpirit.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\EventDetail.cs" />
+    <Compile Include="Events\EventExtension.cs" />
     <Compile Include="Events\EventFactory.cs" />
-    <Compile Include="Events\EventOption.cs" />
-    <Compile Include="Events\IEvent.cs" />
+    <Compile Include="Events\EventConfig.cs" />
+    <Compile Include="Events\HeroEvent.cs" />
+    <Compile Include="Events\IEventCard.cs" />
     <Compile Include="Extensions\CardExtensions.cs" />
     <Compile Include="Heroes\HeroFactory.cs" />
     <Compile Include="Heroes\Impl\Acolyte.cs" />

@@ -4,7 +4,7 @@ using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class BlackBanner : IEvent
+    public class BlackBanner : IEventCard
     {
         public string Name => "Black Banner";
 

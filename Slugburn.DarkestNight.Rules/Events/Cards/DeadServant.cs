@@ -2,7 +2,7 @@
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class DeadServant : IEvent
+    public class DeadServant : IEventCard
     {
         public string Name => "Dead Servant";
         public EventDetail Detail => EventDetail.Create(x => x.Text("Compare to Secrecy", "5+: Scout", "3-4: Archer", "0-2: Dread").Option("cont", "Continue"));

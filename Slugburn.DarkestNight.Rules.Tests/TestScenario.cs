@@ -272,5 +272,33 @@ namespace Slugburn.DarkestNight.Rules.Tests
             Assert.That(hero.AvailableActions, Is.EquivalentTo(actionNames));
             return this;
         }
+
+        public TestScenario WhenHeroDrawsEvent()
+        {
+            var hero = _game.ActingHero;
+            hero.DrawEvent();
+            return this;
+        }
+
+        public TestScenario ThenEventHasOption(string option, bool expected = true)
+        {
+            var hero = _game.ActingHero;
+            var constraint = expected ? Has.Member(option) : Has.No.Member(option);
+            Assert.That(hero.CurrentEvent.Options.Select(x=>x.Code), constraint, $"Event option {option} not found.");
+            return this;
+        }
+
+        public TestScenario WhenPlayerSelectsEventOption(string option)
+        {
+            var hero = _game.ActingHero;
+            hero.SelectEventOption(option);
+            return this;
+        }
+
+        public TestScenario GivenNextEventIs(string eventName)
+        {
+            _game.Events.Insert(0, eventName);
+            return this;
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class DarkChampion : IEvent
+    public class DarkChampion : IEventCard
     {
         public string Name => "Dark Champion";
         public EventDetail Detail => EventDetail.Create(x => x.Text("Compare to Darkness", "0-9: Ghoul", "10-19: Revenant", "20+: Slayer").Option("cont", "Continue"));

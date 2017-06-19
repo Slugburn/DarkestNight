@@ -7,7 +7,7 @@ using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class CloseCall : IEvent
+    public class CloseCall : IEventCard
     {
         public string Name => "Close Call";
         public EventDetail Detail => EventDetail.Create(x=>x.Text("Roll 1 die and take the highest", "5-6: No effect", "3-4: Lose 1 Secrecy", "1-2: Lose 1 Grace").Option("cont", "Continue"));

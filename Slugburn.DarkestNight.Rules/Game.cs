@@ -23,7 +23,7 @@ namespace Slugburn.DarkestNight.Rules
 
         public ICollection<Hero> Heroes { get; set; }
 
-        public ICollection<string> Events { get; set; }
+        public List<string> Events { get; set; }
 
         public IList<IMap> Maps { get; set; }
         private List<IMap> MapsDiscard { get; set; }

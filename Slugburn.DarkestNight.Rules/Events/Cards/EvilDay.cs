@@ -4,7 +4,7 @@ using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class EvilDay : IEvent
+    public class EvilDay : IEventCard
     {
         public string Name => "Event";
 

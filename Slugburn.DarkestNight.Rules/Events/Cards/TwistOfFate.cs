@@ -6,7 +6,7 @@ using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class TwistOfFate : IEvent
+    public class TwistOfFate : IEventCard
     {
         private const string EventName = "Twist of Fate";
         public string Name => EventName;

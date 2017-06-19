@@ -8,6 +8,8 @@ namespace Slugburn.DarkestNight.Rules.Triggers
         AfterRoll,
         StartTurn,
         FailedAttack,
-        LoseSecrecy
+        LoseSecrecy,
+        EventDrawn,
+        EventOptionSelected
     }
 }

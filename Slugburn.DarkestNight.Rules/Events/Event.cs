@@ -3,7 +3,7 @@ using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Events
 {
-    public class Event : IEvent
+    public class Event : IEventCard
     {
         private readonly Action<Hero, string> _resolve;
 

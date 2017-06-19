@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Security.Cryptography.X509Certificates;
+using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Heroes
@@ -206,6 +207,29 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WhenHeroEludes(x => x.Tactic("Vines [Elude]").Rolls(1, 2, 3, 4))
                 .ThenPlayer(x => x.RolledNumberOfDice(4))
                 .ThenPower("Vines", x=>x.IsExhausted());
+        }
+
+        [Test]
+        public void Visions_IgnoreEvent()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Visions"))
+                .GivenNextEventIs("Anathema")
+                .WhenHeroDrawsEvent()
+                .ThenEventHasOption("Visions")
+                .WhenPlayerSelectsEventOption("Visions")
+                .ThenHero(x=>x.LostGrace(0)) // Anathema causes hero to lose 1 Grace unless ignored
+                .ThenPower("Visions", x => x.IsExhausted());
+        }
+
+        [Test]
+        public void Visions_CannotIgnoreRenewal()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Visions"))
+                .GivenNextEventIs("Renewal")
+                .WhenHeroDrawsEvent()
+                .ThenEventHasOption("Visions", false);
         }
     }
 }

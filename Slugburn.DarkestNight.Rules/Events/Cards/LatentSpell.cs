@@ -5,7 +5,7 @@ using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class LatentSpell : IEvent
+    public class LatentSpell : IEventCard
     {
         public string Name => "Latent Spell";
 

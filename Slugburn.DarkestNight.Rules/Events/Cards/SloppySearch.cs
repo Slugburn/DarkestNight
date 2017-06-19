@@ -5,7 +5,7 @@ using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class SloppySearch : IEvent
+    public class SloppySearch : IEventCard
     {
         public string Name => "Sloppy Search";
 

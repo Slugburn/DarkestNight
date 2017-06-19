@@ -15,14 +15,12 @@ namespace Slugburn.DarkestNight.Rules.Tests
             _die = die;
             _tactic = "Fight";
             var blights = hero.GetBlights();
-            if (blights.Count == 1)
-            {
-                var blight = blights.First();
-                var target = blight.IsEnemyGenerator()
-                    ? ((EnemyGenerator) blight.GetDetail()).EnemyName
-                    : blight.ToString();
-                _targets = new[] {target}.ToList();
-            }
+            if (blights.Count != 1) return;
+            var blight = blights.First();
+            var target = blight.IsEnemyGenerator()
+                ? ((EnemyGenerator) blight.GetDetail()).EnemyName
+                : blight.ToString();
+            _targets = new[] {target}.ToList();
         }
 
         private string _tactic;

@@ -2,7 +2,7 @@
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class Raid : IEvent
+    public class Raid : IEventCard
     {
         public string Name => "Raid";
 

@@ -3,7 +3,7 @@ using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class UnfriendlyEyes : IEvent
+    public class UnfriendlyEyes : IEventCard
     {
         public string Name => "Unfriendly Eyes";
 

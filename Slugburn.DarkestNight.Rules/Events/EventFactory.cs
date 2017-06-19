@@ -18,13 +18,13 @@ namespace Slugburn.DarkestNight.Rules.Events
             };
         } 
 
-        public static IEvent Create(string name)
+        public static IEventCard CreateCard(string name)
         {
             switch (name)
             {
                 case "Altar":
                     return new Altar();
-                case "Anethama":
+                case "Anathema":
                     return new Event("Anathema", "Lose 1 Grace.", hero => hero.LoseGrace());
                 case "Betrayal":
                     return new Event("Betrayal", "Lose 1 Secrecy.", hero => hero.LoseSecrecy("Event"));
@@ -81,7 +81,7 @@ namespace Slugburn.DarkestNight.Rules.Events
                 case "Vile Messenger":
                     return new Event(name, x => x.Text("Fight: 4, Elude: -", "Failure: +1 Darkness"), (h, o) => h.FaceEnemy(name));
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(name));
+                    throw new ArgumentOutOfRangeException(nameof(name),name, "Unknown event name");
             }
         }
 
