@@ -38,7 +38,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
         {
             Assert.That(_hero.IsActionAvailable, Is.EqualTo(_expectedActionAvailable),
                 _expectedActionAvailable ? "Should not have used action." : "Should have used action.");
-            Assert.That(_hero.CanGainGrace, Is.EqualTo(_expectedCanGainGrace));
+            Assert.That(_hero.CanGainGrace, Is.EqualTo(_expectedCanGainGrace), "Unexpected CanGrainGrace");
             Assert.That(_hero.Grace, Is.EqualTo(_expectedGrace), "Unexpected Grace.");
             Assert.That(_hero.Secrecy, Is.EqualTo(_expectedSecrecy), "Unexpected Secrecy.");
             Assert.That(_hero.Location, Is.EqualTo(_expectedLocation));
@@ -163,6 +163,12 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public HeroExpectation SearchDice(int expected)
         {
             _expectedSearchDice = expected;
+            return this;
+        }
+
+        public HeroExpectation DefaultGrace(int expected)
+        {
+            Assert.That(_hero.DefaultGrace, Is.EqualTo(expected));
             return this;
         }
     }

@@ -147,6 +147,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public TestScenario WhenHeroStartsTurn(string heroName)
         {
             var hero = _game.GetHero(heroName);
+            hero.IsActionAvailable = true;
             hero.StartTurn();
             return this;
         }
@@ -212,15 +213,23 @@ namespace Slugburn.DarkestNight.Rules.Tests
             return this;
         }
 
-        public TestScenario WhenPlayerEludes(Action<TacticContext> actions)
+        public TestScenario WhenHeroFights(Action<TacticContext> actions)
         {
-            WhenPlayerDefends();
+            WhenHeroDefends();
             WhenPlayerSelectsTactic(actions);
             WhenPlayerAcceptsRoll();
             return this;
         }
 
-        private TestScenario WhenPlayerDefends()
+        public TestScenario WhenHeroEludes(Action<TacticContext> actions)
+        {
+            WhenHeroDefends();
+            WhenPlayerSelectsTactic(actions);
+            WhenPlayerAcceptsRoll();
+            return this;
+        }
+
+        private TestScenario WhenHeroDefends()
         {
             var hero = _game.ActingHero;
             new Defend().Act(hero);

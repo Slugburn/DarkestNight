@@ -19,6 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         private ILocationSelectedHandler _locationSelectedHandler;
         private List<IRollHandler> _rollHandlers;
         private readonly Stash _stash;
+        private List<ActionFilter> _actionFilters;
 
         protected Hero(string name, int defaultGrace, int defaultSecrecy, params IPower[] powers)
         {
@@ -34,18 +35,33 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             IsActionAvailable = true;
             CanGainGrace = true;
 
-            var fightTactic = new BasicFightTactic();
-            var eludeTactic = new BasicEludeTactic();
-            _tactics = new Dictionary<string, ITactic>(StringComparer.InvariantCultureIgnoreCase)
-            {
-                {fightTactic.Name, fightTactic},
-                {eludeTactic.Name, eludeTactic}
-            };
+            _actions = new IAction[] {new Travel(), new Hide(), new Attack(), new Search(), new Pray()}
+                .ToDictionary(x => x.Name, StringComparer.InvariantCultureIgnoreCase);
+            _tactics = new ITactic[] {new BasicFightTactic(), new BasicEludeTactic()}
+                .ToDictionary(x => x.Name, StringComparer.InvariantCultureIgnoreCase);
             _rollModifiers = new List<IRollModifier>();
+            _actionFilters = new List<ActionFilter>();
 
-            _actions = new IAction[] {new Attack(), new Search()}.ToDictionary(x => x.Name);
             Location = Location.Monastery;
             TravelSpeed = 1;
+        }
+
+        public void AddActionFilter(string name, HeroState state, ICollection<string> allowed)
+        {
+            var filter = new ActionFilter {Name=name, State=state, Allowed = allowed};
+            _actionFilters.Add(filter);
+        }
+
+        public void RemoveActionFilter(string name)
+        {
+            _actionFilters.RemoveAll(x => x.Name == name);
+        }
+
+        private class ActionFilter
+        {
+            public string Name {get;set;}
+            public HeroState State { get; set; }
+            public ICollection<string> Allowed { get; set; }
         }
 
         public TriggerRegistry<HeroTrigger, Hero> Triggers { get; }
@@ -92,6 +108,15 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             Triggers.Handle(HeroTrigger.StartTurn);
             if (Location == Game.Necromancer.Location)
                 LoseSecrecy("Necromancer");
+            State = HeroState.ChoosingAction;
+            AvailableActions = GetAvailableActions();
+        }
+
+        private IList<string> GetAvailableActions()
+        {
+            var actions = _actions.Values.Where(x => x.IsAvailable(this)).Select(x => x.Name);
+            var filtered = _actionFilters.Where(x => x.State == State).Aggregate(actions, (x, filter) => x.Intersect(filter.Allowed));
+            return filtered.ToList();
         }
 
         public void EndTurn()

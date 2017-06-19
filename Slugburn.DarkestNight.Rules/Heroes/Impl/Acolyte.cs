@@ -31,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             {
                 base.Learn(hero);
                 var handler = new BlindingBlackTriggerHandler {HeroName = hero.Name};
-                hero.Game.Triggers.Register(handler, GameTrigger.NecromancerDetectsHeroes);
+                hero.Game.Triggers.Register(GameTrigger.NecromancerDetectsHeroes, handler);
             }
 
             public class BlindingBlackTriggerHandler : ITriggerHandler<Game>
@@ -122,7 +122,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             {
                 base.Learn(hero);
                 hero.AddAction(new DarkVeilAction());
-                hero.Triggers.Register(new FailedAttackHandler(), HeroTrigger.FailedAttack);
+                hero.Triggers.Register(HeroTrigger.FailedAttack, new FailedAttackHandler());
             }
 
             private class FailedAttackHandler : ITriggerHandler<Hero>
@@ -148,7 +148,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 public override void Act(Hero hero)
                 {
                     hero.Game.AddIgnoreBlight(IgnoreBlight.Create(Name, hero));
-                    hero.Triggers.Register(new DarkVeilEnds(), HeroTrigger.StartTurn);
+                    hero.Triggers.Register(HeroTrigger.StartTurn, new DarkVeilEnds());
                     hero.GetPower(Name).Exhaust(hero);
                 }
 
@@ -179,7 +179,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             public override void Learn(Hero hero)
             {
                 base.Learn(hero);
-                hero.Triggers.Register(new DeathMaskTriggerHandler(), HeroTrigger.LoseSecrecy);
+                hero.Triggers.Register(HeroTrigger.LoseSecrecy, new DeathMaskTriggerHandler());
             }
 
             private class DeathMaskTriggerHandler : ITriggerHandler<Hero>

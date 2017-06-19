@@ -2,6 +2,8 @@
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Powers;
+using Slugburn.DarkestNight.Rules.Tactics;
+using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 {
@@ -248,7 +250,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-
         class Tranquility : Bonus
         {
             public Tranquility()
@@ -256,15 +257,48 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Name = "Tranquility";
                 Text = "+3 to default Grace.";
             }
+
+            public override void Learn(Hero hero)
+            {
+                base.Learn(hero);
+                hero.DefaultGrace += 3;
+            }
         }
 
-        class TreeForm : ActivateablePower, IDruidForm
+        class TreeForm : DruidFormPower
         {
+            private const string PowerName = "Tree Form";
+
             public TreeForm()
             {
-                Name = "Tree Form";
+                Name = PowerName;
                 Text = "Deactivate all Forms. Optionally activate.";
                 ActiveText = "Gain 2 Grace (up to default) at the start of your turn. Your actions can only be to hide or use a Druid power.";
+            }
+
+            public override void Activate(Hero hero)
+            {
+                base.Activate(hero);
+                hero.CanGainGrace = true;
+                hero.Triggers.Register(HeroTrigger.StartTurn, new TreeFormStartTurnHandler());
+                hero.AddActionFilter(PowerName, HeroState.ChoosingAction, new [] { "Hide", "Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form" });
+            }
+
+            public override bool Deactivate(Hero hero)
+            {
+                if (!base.Deactivate(hero)) return false;
+                hero.Triggers.Unregister(HeroTrigger.StartTurn, PowerName);
+                hero.RemoveActionFilter(PowerName);
+                return true;
+            }
+
+            private class TreeFormStartTurnHandler : ITriggerHandler<Hero>
+            {
+                public string Name => PowerName;
+                public void HandleTrigger(Hero registrar, TriggerContext context)
+                {
+                    registrar.GainGrace(2, registrar.DefaultGrace);
+                }
             }
         }
 
@@ -274,6 +308,34 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             {
                 Name = "Vines";
                 Text = "Exhaust to fight or elude with 4 dice.";
+            }
+
+            public override void Learn(Hero hero)
+            {
+                base.Learn(hero);
+                hero.AddTactic(new VinesTactic {PowerName = Name, Type = TacticType.Elude, DiceCount = 4});
+                hero.AddTactic(new VinesTactic {PowerName = Name, Type = TacticType.Fight, DiceCount = 4});
+            }
+
+            private class VinesTactic : PowerTactic
+            {
+                public override string Name => $"{PowerName} [{Type}]";
+
+                public override void Use(Hero hero)
+                {
+                    base.Use(hero);
+                    hero.AddRollHandler(new ExhaustPowerRollHandler {PowerName = PowerName});
+                }
+
+                private class ExhaustPowerRollHandler : IRollHandler
+                {
+                    public void HandleRoll(Hero hero)
+                    {
+                        hero.GetPower(PowerName).Exhaust(hero);
+                    }
+
+                    public string PowerName { get; set; }
+                }
             }
         }
 
@@ -287,7 +349,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class WolfForm : ActivateablePower, IDruidForm
+        class WolfForm : DruidFormPower
         {
             public WolfForm()
             {
@@ -309,4 +371,5 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             hero.Powers.Where(x => x is IDruidForm).Cast<IDruidForm>().ToList().ForEach(x => x.Deactivate(hero));
         }
     }
+
 }

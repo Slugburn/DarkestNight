@@ -43,9 +43,12 @@
   <ItemGroup>
     <Compile Include="Actions\Attack.cs" />
     <Compile Include="Actions\Defend.cs" />
+    <Compile Include="Actions\Hide.cs" />
     <Compile Include="Actions\IAction.cs" />
     <Compile Include="Actions\PowerAction.cs" />
+    <Compile Include="Actions\Pray.cs" />
     <Compile Include="Actions\Search.cs" />
+    <Compile Include="Actions\Travel.cs" />
     <Compile Include="ActionType.cs" />
     <Compile Include="Blights\BlightBase.cs" />
     <Compile Include="Blights\BlightDieAssignment.cs" />

@@ -14,9 +14,8 @@ namespace Slugburn.DarkestNight.Rules.Triggers
             _handlers = new Dictionary<TTrigger, List<ITriggerHandler<TRegistrar>>>();
         }
 
-        public void Register(ITriggerHandler<TRegistrar> handler, TTrigger trigger, string tag = null)
+        public void Register(TTrigger trigger, ITriggerHandler<TRegistrar> handler)
         {
-            tag = tag ?? trigger.ToString();
             if (!_handlers.ContainsKey(trigger))
                 _handlers[trigger] = new List<ITriggerHandler<TRegistrar>>();
             _handlers[trigger].Add(handler);

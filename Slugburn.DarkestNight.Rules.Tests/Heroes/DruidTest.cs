@@ -28,7 +28,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             new TestScenario()
                 .GivenHero("Druid", x => x.Power("Camouflage").Location(Location.Village))
                 .GivenSpace(Location.Village, x => x.Blight(Blight.Skeletons))
-                .WhenPlayerEludes(x => x.Tactic("Camouflage").Rolls(1, 6))
+                .WhenHeroEludes(x => x.Tactic("Camouflage").Rolls(1, 6))
                 .ThenPlayer(x=>x.RolledNumberOfDice(2))
                 .ThenHero(x=>x.LostGrace(0));
         }
@@ -62,7 +62,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         }
 
         [Test]
-        public void RavenForm_Activated()
+        public void RavenForm_Activate()
         {
             new TestScenario()
                 .GivenHero("Druid", x => x.Power("Sprite Form", "Raven Form"))
@@ -122,6 +122,90 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenPower("Sprite Form", x => x.IsActive())
                 .WhenPlayerTakesAction("Deactivate Form")
                 .ThenHero(x => x.IsNotIgnoringBlights().HasUsedAction());
+        }
+
+        [Test]
+        public void Tranquility()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Tranquility"))
+                .ThenHero(x => x.DefaultGrace(8).Grace(5));
+        }
+
+        [Test]
+        public void TreeForm_Activate()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Tree Form", "Wolf Form"))
+                .GivenPower("Wolf Form", x => x.IsActive())
+                .WhenPlayerTakesAction("Tree Form")
+                .ThenHero(x => x.HasUsedAction())
+                .ThenPower("Tree Form", x => x.IsActive())
+                .ThenPower("Wolf Form", x => x.IsActive(false));
+        }
+
+        [Test]
+        public void TreeForm_GainTwoGraceAtStartOfTurn()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Tree Form").Grace(0))
+                .GivenPower("Tree Form", x => x.IsActive())
+                .WhenHeroStartsTurn("Druid")
+                .ThenHero(x=>x.Grace(2));
+        }
+
+        [Test]
+        public void TreeForm_MaxAtDefaultGrace()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Tree Form").Grace(4))
+                .GivenPower("Tree Form", x => x.IsActive())
+                .WhenHeroStartsTurn("Druid")
+                .ThenHero(x => x.DefaultGrace(5).Grace(5));
+        }
+
+        [Test]
+        public void TreeForm_RestrictedActions()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form"))
+                .GivenPower("Tree Form", x => x.IsActive())
+                .WhenHeroStartsTurn("Druid")
+                .ThenAvailableActions("Hide", "Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form");
+        }
+
+        [Test]
+        public void TreeForm_Deactivate()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Tree Form").Grace(0).Location(Location.Monastery))
+                .GivenPower("Tree Form", x => x.IsActive())
+                .WhenPlayerTakesAction("Deactivate Form")
+                .WhenHeroStartsTurn("Druid")
+                .ThenHero(x => x.Grace(0))
+                .ThenAvailableActions("Travel", "Hide", "Pray", "Tree Form");
+        }
+
+        [Test]
+        public void Vines_Fight()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Vines").Location(Location.Mountains))
+                .GivenSpace(Location.Mountains, x => x.Blight(Blight.Zombies))
+                .WhenHeroFights(x => x.Tactic("Vines [Fight]").Rolls(2, 3, 4, 5))
+                .ThenPlayer(x => x.RolledNumberOfDice(4))
+                .ThenPower("Vines", x => x.IsExhausted());
+        }
+
+        [Test]
+        public void Vines_Elude()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.Power("Vines").Location(Location.Mountains))
+                .GivenSpace(Location.Mountains, x=>x.Blight(Blight.Zombies))
+                .WhenHeroEludes(x => x.Tactic("Vines [Elude]").Rolls(1, 2, 3, 4))
+                .ThenPlayer(x => x.RolledNumberOfDice(4))
+                .ThenPower("Vines", x=>x.IsExhausted());
         }
     }
 }
