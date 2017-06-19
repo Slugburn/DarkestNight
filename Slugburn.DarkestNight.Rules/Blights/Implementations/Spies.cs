@@ -2,7 +2,7 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights.Implementations
 {
-    class Spies : BlightBase, ISource
+    class Spies : BlightDetail, ISource
     {
         public Spies() : base(Blight.Spies)
         {

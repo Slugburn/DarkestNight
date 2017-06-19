@@ -2,7 +2,7 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights.Implementations
 {
-    public class Taint : BlightBase
+    public class Taint : BlightDetail
     {
         public Taint() : base(Blight.Taint)
         {

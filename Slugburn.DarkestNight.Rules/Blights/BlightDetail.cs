@@ -2,11 +2,11 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights
 {
-    public abstract class BlightBase : IBlight
+    public abstract class BlightDetail : IBlightDetail
     {
         public Blight Type { get; }
 
-        protected BlightBase(Blight type)
+        protected BlightDetail(Blight type)
         {
             Type = type;
         }

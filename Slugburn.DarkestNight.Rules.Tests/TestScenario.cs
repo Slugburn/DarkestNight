@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Actions;
@@ -174,15 +175,28 @@ namespace Slugburn.DarkestNight.Rules.Tests
 
         public TestScenario WhenPlayerSelectsTactic(string tactic, params Blight[] blights)
         {
-            _game.ActingHero.SelectTactic(tactic, blights);
+            var targetIds = GetTargetIds(blights).ToList();
+            _game.ActingHero.SelectTactic(tactic, targetIds);
             return this;
+        }
+
+        private IEnumerable<int> GetTargetIds(IEnumerable<Blight> blights)
+        {
+            var source = _game.ActingHero.ConflictState.AvailableTargets.ToList();
+            foreach (var match in blights.Select(blight => source.First(x => x.Name == blight.ToString())))
+            {
+                source.Remove(match);
+                yield return match.Id;
+            }
         }
 
         public TestScenario WhenPlayerSelectsTactic(Action<TacticContext> define = null)
         {
             var context = new TacticContext(_player, _game.ActingHero);
             define?.Invoke(context);
-            _game.ActingHero.SelectTactic(context.GetTactic(), context.GetTargets());
+            var blights = context.GetTargets();
+            var targetIds = GetTargetIds(blights).ToList();
+            _game.ActingHero.SelectTactic(context.GetTactic(), targetIds);
             return this;
         }
 

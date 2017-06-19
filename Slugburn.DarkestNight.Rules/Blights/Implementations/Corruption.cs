@@ -2,7 +2,7 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights.Implementations
 {
-    public class Corruption : BlightBase
+    public class Corruption : BlightDetail
     {
         public Corruption() :base(Blight.Corruption)
         {

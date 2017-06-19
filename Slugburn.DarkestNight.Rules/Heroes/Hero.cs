@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Enemies;
+using Slugburn.DarkestNight.Rules.Events;
+using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes.Impl;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Tactics;
@@ -89,7 +92,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public IList<string> AvailableActions { get; set; }
 
         public bool CanGainGrace { get; set; }
-        public List<Blight> DefendList { get; set; }
+        public List<IEnemy> Enemies { get; set; }
 
         public int TravelSpeed { get; set; }
 
@@ -149,6 +152,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (Grace < 0) Grace = 0;
         }
 
+        public void SpendGrace(int amount)
+        {
+            if (Grace-amount < 0)
+                throw new Exception("Insufficient Grace.");
+            Grace -= amount;
+        }
+        
         public void TakeWound()
         {
             if (Grace > 0)
@@ -169,11 +179,22 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void LoseSecrecy(string sourceName)
         {
-            if (!Triggers.Handle(HeroTrigger.LoseSecrecy, sourceName)) return;
-            Secrecy--;
-            if (Secrecy < 0)
-                Secrecy = 0;
+            LoseSecrecy(1, sourceName);
         }
+
+        public void LoseSecrecy(int amount, string sourceName)
+        {
+            if (!Triggers.Handle(HeroTrigger.LoseSecrecy, sourceName)) return;
+            Secrecy = Math.Max(Secrecy - amount, 0);
+        }
+
+        public void SpendSecrecy(int amount)
+        {
+            if (Secrecy - amount < 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            Secrecy -= amount;
+        }
+
 
         public void ChooseAction()
         {
@@ -232,7 +253,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             LoseSecrecy("Attack");
             var space = GetSpace();
-            var blightInfo = new BlightFactory().Create(blight);
+            var blightInfo = BlightExtension.GetDetail(blight);
             if (result < blightInfo.Might)
             {
                 if (Triggers.Handle(HeroTrigger.FailedAttack))
@@ -279,11 +300,12 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             action.Act(this);
         }
 
-        public void SelectTactic(string tacticName, ICollection<Blight> targets)
+        public void SelectTactic(string tacticName, ICollection<int> targetIds)
         {
             ValidateState(HeroState.SelectingTarget);
-            var targetsAreValid = ConflictState.AvailableTargets.Intersect(targets).Count() == targets.Count
-                                  && targets.Count >= ConflictState.MinTarget && targets.Count <= ConflictState.MaxTarget;
+            var targetCount = targetIds.Count;
+            var targetsAreValid = ConflictState.AvailableTargets.Select(x=>x.Id).Intersect(targetIds).Count() == targetCount
+                                  && targetCount >= ConflictState.MinTarget && targetCount <= ConflictState.MaxTarget;
             if (!targetsAreValid)
                 throw new Exception("Invalid targets.");
 
@@ -292,7 +314,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (!tacticIsValid)
                 throw new Exception($"Invalid tactic: {tacticName}");
 
-            ConflictState.Targets = targets;
+            var selectedTargets = from id in targetIds join target in ConflictState.AvailableTargets on id equals target.Id select target;
+            ConflictState.SelectedTargets = selectedTargets.ToList();
             ConflictState.SelectedTactic = tacticInfo;
             var diceCount = tacticInfo.DiceCount;
             var tactic = _tactics[tacticName];
@@ -336,7 +359,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var validRolls = assignments.Select(x => x.DieValue).Intersect(Roll).Count() == assignments.Count;
             if (!validRolls)
                 throw new Exception("Invalid die values specified.");
-            var validTargets = assignments.Select(x => x.Blight).Intersect(ConflictState.Targets).Count() == assignments.Count;
+            var validTargets = assignments.Select(x => x.Blight.ToString()).Intersect(ConflictState.SelectedTargets.Select(x=>x.Name)).Count() == assignments.Count;
             if (!validTargets)
                 throw new Exception("Invalid targets specified.");
             foreach (var assignment in assignments)
@@ -427,6 +450,46 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             var dice = GetDice(RollType.Search, "Search", 1);
             return dice;
+        }
+
+        public void ResolveEvent(IEvent e, string option)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PresentEvent(IEvent e)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EndEvent()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RollEventDice(IRollHandler rollHandler)
+        {
+            var dice = GetDice(RollType.Event, "Event", 1);
+            Roll = Player.RollDice(dice.Total);
+            SetRollHandler(rollHandler);
+            State = HeroState.RollAvailable;
+        }
+
+        public void FaceEnemy(string enemyName)
+        {
+            var enemy = EnemyFactory.Create(enemyName);
+            Enemies = new List<IEnemy> {enemy};
+            throw new NotImplementedException();
+        }
+
+        public void DrawSearchResult()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IPower DrawPower()
+        {
+            return _powerDeck.Draw();
         }
     }
 }

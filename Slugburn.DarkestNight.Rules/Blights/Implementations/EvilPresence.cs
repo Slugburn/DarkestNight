@@ -2,7 +2,7 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights.Implementations
 {
-    public class EvilPresence : BlightBase
+    public class EvilPresence : BlightDetail
     {
         public EvilPresence() : base(Blight.EvilPresence)
         {

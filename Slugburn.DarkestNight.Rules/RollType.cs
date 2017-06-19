@@ -6,6 +6,7 @@
         Any,
         Elude,
         Search,
-        Fight
+        Fight,
+        Event
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Slugburn.DarkestNight.Rules.Triggers;
 
-namespace Slugburn.DarkestNight.Rules
+namespace Slugburn.DarkestNight.Rules.Enemies
 {
     public class Necromancer
     {

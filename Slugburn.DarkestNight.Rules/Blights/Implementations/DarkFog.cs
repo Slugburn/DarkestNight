@@ -2,7 +2,7 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights.Implementations
 {
-    public class DarkFog : BlightBase
+    public class DarkFog : BlightDetail
     {
         public DarkFog() :base(Blight.DarkFog)
         {

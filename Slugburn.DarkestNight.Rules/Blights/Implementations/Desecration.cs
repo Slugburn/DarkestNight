@@ -2,7 +2,7 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights.Implementations
 {
-    class Desecration : BlightBase
+    class Desecration : BlightDetail
     {
         public Desecration() :base(Blight.Desecration)
         {

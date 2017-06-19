@@ -2,7 +2,7 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights.Implementations
 {
-    public class Shroud : BlightBase
+    public class Shroud : BlightDetail
     {
         public Shroud() : base(Blight.Shroud)
         {

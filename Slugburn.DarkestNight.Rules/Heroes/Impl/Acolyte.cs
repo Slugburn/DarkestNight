@@ -83,7 +83,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                     {
                         ConflictType = ConflictType.Attack,
                         AvailableTactics = hero.GetAvailableFightTactics().GetInfo(hero),
-                        AvailableTargets = hero.GetBlights(),
+                        AvailableTargets = hero.GetBlights().GetTargetInfo(),
                         MinTarget = 2,
                         MaxTarget = 2
                     };
@@ -421,8 +421,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
                 public void HandleRoll(Hero hero)
                 {
-                    var targetMight = hero.ConflictState.Targets.Select(x => new BlightFactory().Create(x)).Min(x => x.Might);
-                    if (hero.Roll.Count(roll => roll >= targetMight) > 1)
+                    var target = hero.ConflictState.SelectedTargets.Select(x => x.FightTarget).Min();
+                    if (hero.Roll.Count(roll => roll >= target) > 1)
                         hero.GainGrace(1, hero.DefaultGrace);
                     hero.RemoveRollHandler(this);
                 }

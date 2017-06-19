@@ -1,25 +1,29 @@
-﻿using Slugburn.DarkestNight.Rules.Heroes;
+﻿using Slugburn.DarkestNight.Rules.Enemies;
+using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Blights.Implementations
 {
-    public class Undead : BlightBase
+    public class Undead : BlightDetail
     {
-        public int FightTarget { get; }
-        public int EludeTarget { get; }
+        private readonly string _enemyName;
 
-        public Undead(Blight type,  string name, int might, int fightTarget, int eludeTarget) : base(type)
+        public Undead(Blight type,  string name, int might, string enemyName) : base(type)
         {
+            _enemyName = enemyName;
             Name = name;
-            EffectText = $"At the end of each turn in the affected location, a hero must combat a {name.ToLower()}.";
+            EffectText = $"At the end of each turn in the affected location, a hero must combat a {enemyName.ToLower()}.";
             Might = might;
             DefenseText = "Wound.";
-            FightTarget = fightTarget;
-            EludeTarget = eludeTarget;
         }
 
         public override void Defend(Hero hero)
         {
             hero.TakeWound();
+        }
+
+        public IEnemy CreateEnemy()
+        {
+            return EnemyFactory.Create(_enemyName);
         }
     }
 }

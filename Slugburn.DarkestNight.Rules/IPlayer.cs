@@ -7,7 +7,7 @@ namespace Slugburn.DarkestNight.Rules
     {
         bool AskUsePower(string name, string description);
         int RollOne();
-        IEnumerable<int> RollDice(int count);
+        List<int> RollDice(int count);
         Location ChooseLocation(IEnumerable<Location> choices);
         List<Blight> ChooseBlights(ICollection<Blight> choices, int min, int max);
     }

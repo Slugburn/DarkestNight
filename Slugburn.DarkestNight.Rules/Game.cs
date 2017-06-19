@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Enemies;
+using Slugburn.DarkestNight.Rules.Events;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Maps;
@@ -20,7 +23,7 @@ namespace Slugburn.DarkestNight.Rules
 
         public ICollection<Hero> Heroes { get; set; }
 
-        public ICollection<IEvent> Events { get; set; }
+        public ICollection<string> Events { get; set; }
 
         public IList<IMap> Maps { get; set; }
         private List<IMap> MapsDiscard { get; set; }
@@ -35,7 +38,7 @@ namespace Slugburn.DarkestNight.Rules
             Heroes = new List<Hero>();
             Triggers = new TriggerRegistry<GameTrigger, Game>(this);
             Board = new Board();
-            Events = new List<IEvent>();
+            Events = EventFactory.GetEventDeck().Shuffle();
             Maps = new MapFactory().CreateMaps().Shuffle();
             MapsDiscard = new List<IMap>();
             Necromancer = new Necromancer(this);
@@ -64,7 +67,7 @@ namespace Slugburn.DarkestNight.Rules
                 CreateBlight(new[] {location});
         }
 
-        public void CreateBlight(IEnumerable<Location> locations)
+        public void CreateBlight(params Location[] locations)
         {
             var map = DrawMapCard();
             foreach (var location in locations)
@@ -81,7 +84,7 @@ namespace Slugburn.DarkestNight.Rules
             var locations = Board.Spaces
                 .Select(space => space.Location)
                 .Where(loc => loc != Location.Monastery);
-            CreateBlight(locations);
+            CreateBlight(locations.ToArray());
         }
 
         public void AddPlayer(IPlayer player)
@@ -139,6 +142,11 @@ namespace Slugburn.DarkestNight.Rules
         public void RemoveIgnoreBlight(string name)
         {
             _ignoreBlights.Remove(name);
+        }
+
+        public void DecreaseDarkness()
+        {
+            Darkness = Math.Max(0, Darkness - 1);
         }
     }
 }

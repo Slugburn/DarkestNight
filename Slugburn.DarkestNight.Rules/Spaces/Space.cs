@@ -44,7 +44,7 @@ namespace Slugburn.DarkestNight.Rules.Spaces
             throw new NotImplementedException();
         }
 
-        public IEnumerable<T> GetBlights<T>() where T: IBlight
+        public IEnumerable<T> GetBlights<T>() where T: IBlightDetail
         {
             return _blights.Where(x=>x is T).Cast<T>();
         }

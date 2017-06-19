@@ -1,5 +1,4 @@
 using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Powers;
 
 namespace Slugburn.DarkestNight.Rules
 {
@@ -16,7 +15,7 @@ namespace Slugburn.DarkestNight.Rules
 
         public int GetModifier(Hero hero, RollType rollType)
         {
-            return rollType == RollType ?  DieCount : 0;
+            return rollType == RollType || RollType == RollType.Any ?  DieCount : 0;
         }
     }
 }

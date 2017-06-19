@@ -9,10 +9,10 @@ namespace Slugburn.DarkestNight.Rules
         public ConflictType ConflictType { get; set; }
         public int MinTarget { get; set; }
         public int MaxTarget { get; set; }
-        public ICollection<Blight> Targets { get; set; }
+        public ICollection<TargetInfo> SelectedTargets { get; set; }
         public TacticInfo SelectedTactic { get; set; }
         public List<TacticInfo> AvailableTactics { get; set; }
         public List<TacticInfo> AvailableEvadeTactics { get; set; }
-        public ICollection<Blight> AvailableTargets { get; set; }
+        public ICollection<TargetInfo> AvailableTargets { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights.Implementations
 {
-    class UnholyAura : BlightBase
+    class UnholyAura : BlightDetail
     {
         public UnholyAura() : base(Blight.UnholyAura)
         {

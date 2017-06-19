@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Tactics;
@@ -16,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             {
                 ConflictType = ConflictType.Attack,
                 AvailableTactics = hero.GetAvailableFightTactics().GetInfo(hero),
-                AvailableTargets = hero.GetSpace().Blights,
+                AvailableTargets = hero.GetSpace().Blights.GetTargetInfo(),
                 MinTarget = 1,
                 MaxTarget = 1
             };
@@ -32,8 +33,9 @@ namespace Slugburn.DarkestNight.Rules.Actions
         public void HandleRoll(Hero hero)
         {
             var result = hero.Roll.Max();
-            var target = hero.ConflictState.Targets.Single();
-            var assignment = BlightDieAssignment.Create(target, result);
+            var target = hero.ConflictState.SelectedTargets.Single();
+            var blight = (Blight) Enum.Parse(typeof (Blight), target.Name);
+            var assignment = BlightDieAssignment.Create(blight, result);
             hero.State = HeroState.AssigningDice;
             hero.AssignDiceToBlights(new[] {assignment});
             hero.IsActionAvailable = false;

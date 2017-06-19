@@ -59,7 +59,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
             _tacticChoice = powerName;
         }
 
-        public IEnumerable<int> RollDice(int count)
+        public List<int> RollDice(int count)
         {
             if (count > _upcomingRolls.Count)
                 throw new Exception($"Rolling {count} dice but only {_upcomingRolls.Count} specified rolls are remaining.");

@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Blights.Implementations;
+using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Tactics;
@@ -17,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             {
                 MaxTarget = 1,
                 MinTarget = 1,
-                AvailableTargets = hero.GetBlights(),
+                AvailableTargets = hero.Enemies.GetTargetInfo(),
                 AvailableTactics = hero.GetAvailableTactics().GetInfo(hero)
             };
             hero.SetRollHandler(this);
@@ -26,15 +28,14 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public bool IsAvailable(Hero hero)
         {
-            return hero.DefendList != null && hero.DefendList.Any();
+            return hero.Enemies != null && hero.Enemies.Any();
         }
 
         public void HandleRoll(Hero hero)
         {
-            var blight = hero.ConflictState.Targets.Single();
-            var behavior = (Undead) new BlightFactory().Create(blight);
+            var target = hero.ConflictState.SelectedTargets.Single();
             var tactic = hero.ConflictState.SelectedTactic;
-            var targetNumber = tactic.Type == TacticType.Fight ? behavior.FightTarget : behavior.EludeTarget;
+            var targetNumber = tactic.Type == TacticType.Fight ? target.FightTarget : target.EludeTarget;
             var result = hero.Roll.Max();
             if (result < targetNumber)
                 hero.TakeWound();
