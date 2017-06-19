@@ -19,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             };
         }
 
-        public static List<TargetInfo> GetTargetInfo(this List<IEnemy> enemies)
+        public static List<TargetInfo> GetTargetInfo(this IEnumerable<IEnemy> enemies)
         {
             return enemies.Select((enemy,id)=>enemy.GetTargetInfo(id)).ToList();
         }

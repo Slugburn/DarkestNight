@@ -8,6 +8,7 @@ using Slugburn.DarkestNight.Rules.Events;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes.Impl;
 using Slugburn.DarkestNight.Rules.Powers;
+using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tactics;
 using Slugburn.DarkestNight.Rules.Triggers;
 
@@ -92,7 +93,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public IList<string> AvailableActions { get; set; }
 
         public bool CanGainGrace { get; set; }
-        public List<IEnemy> Enemies { get; set; }
+        public List<string> Enemies { get; set; }
 
         public int TravelSpeed { get; set; }
 
@@ -253,7 +254,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             LoseSecrecy("Attack");
             var space = GetSpace();
-            var blightInfo = BlightExtension.GetDetail(blight);
+            var blightInfo = blight.GetDetail();
             if (result < blightInfo.Might)
             {
                 if (Triggers.Handle(HeroTrigger.FailedAttack))
@@ -320,7 +321,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var diceCount = tacticInfo.DiceCount;
             var tactic = _tactics[tacticName];
             tactic.Use(this);
-            var roll = Player.RollDice(diceCount).ToList();
+            var roll = Die.Roll(diceCount).ToList();
             Roll = roll;
             State = HeroState.RollAvailable;
         }
@@ -470,15 +471,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void RollEventDice(IRollHandler rollHandler)
         {
             var dice = GetDice(RollType.Event, "Event", 1);
-            Roll = Player.RollDice(dice.Total);
+            Roll = Die.Roll(dice.Total);
             SetRollHandler(rollHandler);
             State = HeroState.RollAvailable;
         }
 
         public void FaceEnemy(string enemyName)
         {
-            var enemy = EnemyFactory.Create(enemyName);
-            Enemies = new List<IEnemy> {enemy};
+            Enemies.Add(enemyName);
             throw new NotImplementedException();
         }
 

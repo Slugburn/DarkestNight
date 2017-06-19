@@ -98,11 +98,6 @@ namespace Slugburn.DarkestNight.Rules
             hero.JoinGame(this, player);
         }
 
-        public int RollDie()
-        {
-            return _players.First().RollOne();
-        }
-
         public void IncreaseDarkness()
         {
             // increase darkness by one automatically

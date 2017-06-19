@@ -8,19 +8,16 @@ namespace Slugburn.DarkestNight.Rules.Tests
     public class FakePlayer : IPlayer
     {
         private readonly Dictionary<string, bool> _usePowerResponse;
-        private readonly Queue<int> _upcomingRolls;
         private readonly List<Tuple<Blight, int>> _blightRollAssignments;
 
         private string _tacticChoice;
         private Blight[] _blightChoice;
-        private List<int> _lastRoll;
         private Location? _locationChoice;
         private Queue<bool> _rollAnotherDie;
 
         public FakePlayer()
         {
             _usePowerResponse = new Dictionary<string, bool>();
-            _upcomingRolls = new Queue<int>();
             _blightRollAssignments = new List<Tuple<Blight, int>>();
             _rollAnotherDie = new Queue<bool>();
         }
@@ -38,41 +35,11 @@ namespace Slugburn.DarkestNight.Rules.Tests
         }
 
 
-        public int RollOne()
-        {
-            return _upcomingRolls.Dequeue();
-        }
-
-        public void AddUpcomingRoll(int value)
-        {
-            _upcomingRolls.Enqueue(value);
-        }
-
-        public void AddUpcomingRolls(int[] dieRolls)
-        {
-            foreach (var roll in dieRolls)
-                _upcomingRolls.Enqueue(roll);
-        }
-
         public void SetTacticChoice(string powerName)
         {
             _tacticChoice = powerName;
         }
 
-        public List<int> RollDice(int count)
-        {
-            if (count > _upcomingRolls.Count)
-                throw new Exception($"Rolling {count} dice but only {_upcomingRolls.Count} specified rolls are remaining.");
-            var roll = GenerateRolls(count).ToList();
-            _lastRoll = roll;
-            return roll;
-        }
-
-        private IEnumerable<int> GenerateRolls(int count)
-        {
-            for (var i = 0; i < count; i++)
-                yield return _upcomingRolls.Dequeue();
-        }
 
         public void SetBlightChoice(Blight[] blights)
         {
@@ -107,11 +74,6 @@ namespace Slugburn.DarkestNight.Rules.Tests
             return _blightChoice != null && _blightChoice.Length == 1 && _blightChoice[0] == Blight.None;
         }
 
-
-        public List<int> GetLastRoll()
-        {
-            return _lastRoll;
-        }
 
         public void SetLocationChoice(Location location)
         {

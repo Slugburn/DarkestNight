@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FakeDie.cs" />
     <Compile Include="FightContext.cs" />
     <Compile Include="Heroes\AcolyteTest.cs" />
     <Compile Include="FakePlayer.cs" />

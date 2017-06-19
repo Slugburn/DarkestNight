@@ -5,6 +5,7 @@ using Slugburn.DarkestNight.Rules.Blights.Implementations;
 using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Powers;
+using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Actions
@@ -15,11 +16,12 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public void Act(Hero hero)
         {
+            var enemies = hero.Enemies.Select(EnemyFactory.Create);
             hero.ConflictState = new ConflictState
             {
                 MaxTarget = 1,
                 MinTarget = 1,
-                AvailableTargets = hero.Enemies.GetTargetInfo(),
+                AvailableTargets = enemies.GetTargetInfo(),
                 AvailableTactics = hero.GetAvailableTactics().GetInfo(hero)
             };
             hero.SetRollHandler(this);

@@ -2,6 +2,7 @@
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Powers;
+using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tactics;
 using Slugburn.DarkestNight.Rules.Triggers;
 
@@ -375,7 +376,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
                 public override void Act(Hero hero)
                 {
-                    var roll = hero.Player.RollOne();
+                    var roll = Die.Roll();
                     if (roll == 1)
                         hero.Game.IncreaseDarkness();
                     hero.Roll.Add(roll);

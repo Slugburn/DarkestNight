@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
@@ -13,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
         public void Resolve(Hero hero, string option)
         {
             var dice = hero.GetDice(RollType.Event, "Event", 1);
-            hero.Roll = hero.Player.RollDice(dice.Total);
+            hero.Roll = Die.Roll(dice.Total);
             hero.SetRollHandler(new CloseCallRollHandler());
             hero.State = HeroState.RollAvailable;
         }

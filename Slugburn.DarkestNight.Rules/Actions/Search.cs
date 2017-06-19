@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
@@ -11,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
         {
             hero.SetRollHandler(new SearchRollHandler());
             var dice = hero.GetSearchDice();
-            hero.Roll = hero.Player.RollDice(dice.Total).ToList();
+            hero.Roll = Die.Roll(dice.Total).ToList();
             hero.State = HeroState.RollAvailable;
         }
 

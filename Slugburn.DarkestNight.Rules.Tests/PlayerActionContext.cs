@@ -1,15 +1,16 @@
-﻿using System;
-using Slugburn.DarkestNight.Rules.Blights;
+﻿using Slugburn.DarkestNight.Rules.Blights;
 
 namespace Slugburn.DarkestNight.Rules.Tests
 {
     public class PlayerActionContext
     {
         private readonly FakePlayer _player;
+        private readonly FakeDie _die;
 
-        public PlayerActionContext(FakePlayer player)
+        public PlayerActionContext(FakePlayer player, FakeDie die)
         {
             _player = player;
+            _die = die;
         }
 
         public PlayerActionContext UsePower(string name, bool response = true)
@@ -20,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
 
         public PlayerActionContext Rolls(params int[] rolls)
         {
-            _player.AddUpcomingRolls(rolls);
+            _die.AddUpcomingRolls(rolls);
             return this;
         }
 
@@ -28,11 +29,6 @@ namespace Slugburn.DarkestNight.Rules.Tests
         {
             _player.SetTacticChoice(powerName);
             return this;
-        }
-
-        public PlayerActionContext ChoosesNumberOfDice(int count)
-        {
-            throw new NotImplementedException();
         }
 
         public PlayerActionContext ChoosesBlight(params Blight[] blights)

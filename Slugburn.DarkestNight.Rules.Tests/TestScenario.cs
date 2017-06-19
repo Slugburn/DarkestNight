@@ -4,8 +4,10 @@ using System.Linq;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Blights.Implementations;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Powers;
+using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Tests
 {
@@ -13,11 +15,14 @@ namespace Slugburn.DarkestNight.Rules.Tests
     {
         private readonly Game _game;
         private readonly FakePlayer _player;
+        private readonly FakeDie _die;
 
         public TestScenario()
         {
             _game = new Game();
             _player = new FakePlayer();
+            _die = new FakeDie();
+            Die.SetImplementation(_die);
             _game.AddPlayer(_player);
         }
 
@@ -39,8 +44,8 @@ namespace Slugburn.DarkestNight.Rules.Tests
 
         public TestScenario WhenNecromancerRollsForMovement(int value, Action<PlayerActionContext> actions = null)
         {
-            actions?.Invoke(new PlayerActionContext(_player));
-            _player.AddUpcomingRoll(value);
+            actions?.Invoke(new PlayerActionContext(_player, _die));
+            _die.AddUpcomingRoll(value);
             _game.Necromancer.TakeTurn();
             return this;
         }
@@ -128,7 +133,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
 
         public TestScenario WhenPlayerTakesAction(string actionName, Action<PlayerActionContext> actions = null)
         {
-            actions?.Invoke(new PlayerActionContext(_player));
+            actions?.Invoke(new PlayerActionContext(_player, _die));
             var hero = _game.ActingHero;
             var action = hero.GetAction(actionName);
             hero.TakeAction(action);
@@ -137,7 +142,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
 
         public TestScenario WhenPlayerTakesAttackAction(Action<FightContext> actions)
         {
-            var context=  new FightContext(_player, _game.ActingHero);
+            var context=  new FightContext(_die, _player, _game.ActingHero);
             actions(context);
             WhenPlayerTakesAction(context.GetAction());
             WhenPlayerSelectsTactic(context.GetTactic(), context.GetTargets());
@@ -155,7 +160,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
 
         public TestScenario ThenPlayer(Action<PlayerExpectation> expect)
         {
-            var expectation = new PlayerExpectation(_player);
+            var expectation = new PlayerExpectation(_player, _game);
             expect(expectation);
             expectation.Verify();
             return this;
@@ -173,17 +178,18 @@ namespace Slugburn.DarkestNight.Rules.Tests
             return this;
         }
 
-        public TestScenario WhenPlayerSelectsTactic(string tactic, params Blight[] blights)
+        public TestScenario WhenPlayerSelectsTactic(string tactic, params string[] blights)
         {
             var targetIds = GetTargetIds(blights).ToList();
             _game.ActingHero.SelectTactic(tactic, targetIds);
             return this;
         }
 
-        private IEnumerable<int> GetTargetIds(IEnumerable<Blight> blights)
+        private IEnumerable<int> GetTargetIds(IEnumerable<string> targets)
         {
             var source = _game.ActingHero.ConflictState.AvailableTargets.ToList();
-            foreach (var match in blights.Select(blight => source.First(x => x.Name == blight.ToString())))
+            Assert.That(source.Select(x=>x.Name).Intersect(targets), Is.EquivalentTo(targets));
+            foreach (var match in targets.Select(target => source.First(x => x.Name == target)))
             {
                 source.Remove(match);
                 yield return match.Id;
@@ -192,7 +198,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
 
         public TestScenario WhenPlayerSelectsTactic(Action<TacticContext> define = null)
         {
-            var context = new TacticContext(_player, _game.ActingHero);
+            var context = new TacticContext(_game.ActingHero, _die);
             define?.Invoke(context);
             var blights = context.GetTargets();
             var targetIds = GetTargetIds(blights).ToList();
@@ -208,7 +214,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
 
         public TestScenario GivenPlayerWillRoll(params int[] rolls)
         {
-            _player.AddUpcomingRolls(rolls);
+            _die.AddUpcomingRolls(rolls);
             return this;
         }
 
@@ -246,6 +252,8 @@ namespace Slugburn.DarkestNight.Rules.Tests
         private TestScenario WhenHeroDefends()
         {
             var hero = _game.ActingHero;
+            var enemies = hero.GetBlights().GenerateEnemies();
+            hero.Enemies = enemies; 
             new Defend().Act(hero);
             return this;
         }

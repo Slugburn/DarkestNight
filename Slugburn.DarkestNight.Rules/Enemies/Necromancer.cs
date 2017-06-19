@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Enemies
@@ -19,7 +20,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             _game.IncreaseDarkness();
 
             // roll to detect and move
-            var movementRoll = _game.RollDie();
+            var movementRoll = Die.Roll();
             var detected = _game.Heroes.Where(h => h.Location != Location.Monastery).Where(h => h.Secrecy < movementRoll).ToList();
 
             var necromancerSpace = _game.Board[Location];

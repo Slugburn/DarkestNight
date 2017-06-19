@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using Slugburn.DarkestNight.Rules.Heroes.Impl;
 
-namespace Slugburn.DarkestNight.Rules
+namespace Slugburn.DarkestNight.Rules.Rolls
 {
     public class Dice
     {

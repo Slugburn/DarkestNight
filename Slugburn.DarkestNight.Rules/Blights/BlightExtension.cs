@@ -9,12 +9,12 @@ namespace Slugburn.DarkestNight.Rules.Blights
     {
         private static readonly Blight[] UndeadList = {Blight.Lich, Blight.Shades, Blight.Skeletons, Blight.Vampire, Blight.Zombies};
 
-        public static bool IsUndead(this Blight blight)
+        public static bool IsEnemyGenerator(this Blight blight)
         {
             return UndeadList.Contains(blight);
         }
 
-        public static IBlightDetail GetDetail(Blight blight)
+        public static IBlightDetail GetDetail(this Blight blight)
         {
             switch (blight)
             {
@@ -31,13 +31,13 @@ namespace Slugburn.DarkestNight.Rules.Blights
                 case Blight.EvilPresence:
                     return new EvilPresence();
                 case Blight.Lich:
-                    return new Undead(Blight.Lich, "Lich", 5, "Lich");
+                    return new EnemyGenerator(Blight.Lich, "Lich", 5, "Lich");
                 case Blight.Shades:
-                    return new Undead(Blight.Shades, "Shades", 5, "Shade");
+                    return new EnemyGenerator(Blight.Shades, "Shades", 5, "Shade");
                 case Blight.Shroud:
                     return new Shroud();
                 case Blight.Skeletons:
-                    return new Undead(Blight.Skeletons, "Skeletons", 5, "Skeleton");
+                    return new EnemyGenerator(Blight.Skeletons, "Skeletons", 5, "Skeleton");
                 case Blight.Spies:
                     return new Spies();
                 case Blight.Taint:
@@ -45,9 +45,9 @@ namespace Slugburn.DarkestNight.Rules.Blights
                 case Blight.UnholyAura:
                     return new UnholyAura();
                 case Blight.Vampire:
-                    return new Undead(Blight.Vampire, "Vampire", 6, "Vampire");
+                    return new EnemyGenerator(Blight.Vampire, "Vampire", 6, "Vampire");
                 case Blight.Zombies:
-                    return new Undead(Blight.Zombies, "Zombies", 5, "Zombie");
+                    return new EnemyGenerator(Blight.Zombies, "Zombies", 5, "Zombie");
                 default:
                     throw new ArgumentOutOfRangeException(nameof(blight), blight, "Unknown blight type");
             }
@@ -60,7 +60,7 @@ namespace Slugburn.DarkestNight.Rules.Blights
 
         private static TargetInfo GetTargetInfo(this Blight blight, int id)
         {
-            var detail = GetDetail(blight);
+            var detail = blight.GetDetail();
             var targetInfo = new TargetInfo
             {
                 Id = id,
@@ -74,6 +74,11 @@ namespace Slugburn.DarkestNight.Rules.Blights
                 }
             };
             return targetInfo;
+        }
+
+        public static List<string> GenerateEnemies(this IEnumerable<Blight> blights)
+        {
+            return blights.Where(x=>x.IsEnemyGenerator()).Select(BlightExtension.GetDetail).Cast<EnemyGenerator>().Select(x=>x.EnemyName).ToList();
         }
     }
 }

@@ -1,28 +1,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Blights.Implementations;
 using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Tests
 {
     public class TacticContext
     {
-        private readonly FakePlayer _player;
+        private readonly FakeDie _die;
 
-        public TacticContext(FakePlayer player, Hero hero)
+        public TacticContext(Hero hero, FakeDie die)
         {
-            _player = player;
+            _die = die;
             _tactic = "Fight";
-            if (hero.GetBlights().Count == 1)
-                _targets = hero.GetBlights().ToList();
+            var blights = hero.GetBlights();
+            if (blights.Count == 1)
+            {
+                var blight = blights.First();
+                var target = blight.IsEnemyGenerator()
+                    ? ((EnemyGenerator) blight.GetDetail()).EnemyName
+                    : blight.ToString();
+                _targets = new[] {target}.ToList();
+            }
         }
 
         private string _tactic;
-        private List<Blight> _targets;
+        private List<string> _targets;
 
         public string GetTactic() => _tactic;
 
-        public ICollection<Blight> GetTargets() => _targets;
+        public ICollection<string> GetTargets() => _targets;
 
         public TacticContext Tactic(string tactic)
         {
@@ -32,7 +40,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
 
         public TacticContext Rolls(params int[] roll)
         {
-            _player.AddUpcomingRolls(roll);
+            _die.AddUpcomingRolls(roll);
             return this;
         }
     }
