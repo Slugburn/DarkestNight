@@ -111,7 +111,6 @@
     <Compile Include="Extensions\CardExtensions.cs" />
     <Compile Include="Heroes\HeroFactory.cs" />
     <Compile Include="Heroes\IHeroFactory.cs" />
-    <Compile Include="Heroes\Impl\Priest.cs" />
     <Compile Include="Heroes\Impl\Prince.cs" />
     <Compile Include="Heroes\Impl\Rogue.cs" />
     <Compile Include="Heroes\Impl\Scholar.cs" />
@@ -160,6 +159,16 @@
     <Compile Include="Powers\Knight\RecklessAbandon.cs" />
     <Compile Include="Powers\Knight\Sprint.cs" />
     <Compile Include="Powers\PowerFactory.cs" />
+    <Compile Include="Powers\Priest\Benediction.cs" />
+    <Compile Include="Powers\Priest\BlessingOfFaith.cs" />
+    <Compile Include="Powers\Priest\BlessingOfPiety.cs" />
+    <Compile Include="Powers\Priest\BlessingOfStrength.cs" />
+    <Compile Include="Powers\Priest\BlessingOfWisdom.cs" />
+    <Compile Include="Powers\Priest\Calm.cs" />
+    <Compile Include="Powers\Priest\Censure.cs" />
+    <Compile Include="Powers\Priest\Intercession.cs" />
+    <Compile Include="Powers\Priest\Miracle.cs" />
+    <Compile Include="Powers\Priest\Sanctuary.cs" />
     <Compile Include="Rolls\Dice.cs" />
     <Compile Include="Rolls\DiceDetail.cs" />
     <Compile Include="Rolls\Die.cs" />

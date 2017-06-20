@@ -52,6 +52,7 @@
     <Compile Include="HeroContext.cs" />
     <Compile Include="Heroes\DruidTest.cs" />
     <Compile Include="Heroes\KnightTest.cs" />
+    <Compile Include="Heroes\PriestTest.cs" />
     <Compile Include="HeroExpectation.cs" />
     <Compile Include="HeroTest.cs" />
     <Compile Include="PlayerActionContext.cs" />

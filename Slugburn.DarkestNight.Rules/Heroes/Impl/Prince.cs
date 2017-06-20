@@ -1,5 +1,4 @@
 ﻿using Slugburn.DarkestNight.Rules.Powers;
-using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 {
