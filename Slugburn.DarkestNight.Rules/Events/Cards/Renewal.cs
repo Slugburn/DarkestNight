@@ -7,6 +7,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
     public class Renewal : IEventCard
     {
         public string Name => "Renewal";
+        public int Fate { get; }
         public EventDetail Detail => EventDetail.Create(x=>x.Text("Reshuffle the Event Deck and draw another card.").Option("cont", "Continue"));
 
         public void Resolve(Hero hero, string option)

@@ -6,6 +6,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
     public class UnfriendlyEyes : IEventCard
     {
         public string Name => "Unfriendly Eyes";
+        public int Fate { get; }
 
         public EventDetail Detail => EventDetail.Create(x => x
             .Text("Count the blights in your location", "0: Lose 1 Secrecy", "1-2: Spend 1 Secrecy or Lose 1 Grace", "3-4: Spend 1 Grace or +1 Darkness"));
@@ -19,15 +20,15 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 return;
             }
             var e = count < 3
-                ? new Event(Name, x => x
+                ? new EventCard(Name, x => x
                     .Text("Spend 1 Secrecy or Lose 1 Grace")
                     .Option("secrecy", "Spend Secrecy", h => h.Secrecy > 0)
                     .Option("grace", "Lose Grace"), SecrecyOrGrace)
-                : new Event(Name, x => x
+                : new EventCard(Name, x => x
                     .Text("Spend 1 Grace or +1 Darkness")
                     .Option("grace", "Spend Grace", h => h.Grace > 0)
                     .Option("darkness", "+1 Darkness"), GraceOrDarkness);
-            hero.PresentEvent(e);
+            hero.PresentCurrentEvent();
         }
 
         private void SecrecyOrGrace(Hero hero, string option)

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
 
@@ -6,42 +7,63 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
     public class Altar : IEventCard
     {
+        private const string PureAltarText = "You may spend 1 Secrecy to gain 1 Grace";
+        private const string DefiledAltarText = "Spend 1 Grace or +1 Darkness";
         public string Name => "Altar";
-        public EventDetail Detail => EventDetail.Create(x=>x.Text("Roll 1 die and take the highest.","4-6: Pure Altar","1-3: Defiled Altar").Option("roll", "Roll Die"));
+        public int Fate => 3;
+
+        public EventDetail Detail => EventDetail
+            .Create(x => x.Text("Roll 1 die and take the highest.", "4-6: Pure Altar", PureAltarText, "1-3: Defiled Altar", DefiledAltarText)
+                .Option("roll", "Roll"));
         public void Resolve(Hero hero, string option)
         {
-            hero.RollEventDice(new AltarRollHandler());
+            switch (option)
+            {
+                case "roll":
+                    hero.RollEventDice(new AltarRollHandler());
+                    break;
+                case "secrecy":
+                    hero.SpendSecrecy(1);
+                    hero.GainGrace(1, hero.DefaultGrace);
+                    break;
+                case "grace":
+                    hero.SpendGrace(1);
+                    break;
+                case "darkness":
+                    hero.Game.IncreaseDarkness();
+                    break;
+                case "cont":
+                    break;
+            }
+            if (option!="roll")
+                hero.EndEvent();
         }
 
         public class AltarRollHandler : IRollHandler
         {
             public void HandleRoll(Hero hero)
             {
+                var e = hero.CurrentEvent;
                 var result = hero.Roll.Max();
-                var subEvent = result > 3 ? (IEventCard)new PureAltar() : new DefiledAltar();
-                hero.PresentEvent(subEvent);
+                e.Options.Clear();
+                if (result > 3)
+                {
+                    e.Title = "Pure Altar";
+                    e.Text = new List<string> {PureAltarText};
+                    if (hero.Secrecy > 0)
+                        e.Options.Add(new EventOption {Code = "secrecy", Text = "Spend Secrecy"});
+                    e.Options.Add(EventOption.Continue());
+                }
+                else
+                {
+                    e.Title = "Defiled Altar";
+                    e.Text = new List<string> {DefiledAltarText};
+                    if (hero.Grace > 0)
+                        e.Options.Add(new EventOption {Code = "grace", Text = "Spend Grace"});
+                    e.Options.Add(new EventOption {Code = "darkness", Text = "+1 Darkness"});
+                }
+                hero.PresentCurrentEvent();
             }
         }
-
-        public class PureAltar : IEventCard
-        {
-            public string Name { get; }
-            public EventDetail Detail { get; }
-            public void Resolve(Hero hero, string option)
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
-        public class DefiledAltar : IEventCard
-        {
-            public string Name { get; }
-            public EventDetail Detail { get; }
-            public void Resolve(Hero hero, string option)
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
     }
 }

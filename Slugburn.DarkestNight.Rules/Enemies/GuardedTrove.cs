@@ -27,7 +27,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             if (tacticType == TacticType.Fight)
                 hero.TakeWound();
             else
-                hero.PresentEvent(new GuardedTroveEludeFailureEvent());
+                hero.PresentCurrentEvent();
         }
 
         public override IEnumerable<ConflictResult> GetResults()
@@ -40,6 +40,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
         public class GuardedTroveEludeFailureEvent : IEventCard
         {
             public string Name => "Guarded Trove (Fail elude)";
+            public int Fate { get; }
 
             public EventDetail Detail => EventDetail.Create(x => x
                 .Text("Spend 1 Secrecy or draw another event")

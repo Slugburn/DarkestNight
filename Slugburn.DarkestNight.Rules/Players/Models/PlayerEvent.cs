@@ -1,0 +1,28 @@
+﻿using System.Linq;
+using Slugburn.DarkestNight.Rules.Events;
+
+namespace Slugburn.DarkestNight.Rules.Players.Models
+{
+    public class PlayerEvent
+    {
+        public string Title { get; set; }
+        public int Fate { get; set; }
+        public Option[] Options { get; set; }
+
+        public class Option
+        {
+            public string Code { get; set; }
+            public string Text { get; set; }
+        }
+
+        public static PlayerEvent From(HeroEvent obj)
+        {
+            return new PlayerEvent
+            {
+                Title = obj.Title,
+                Fate = obj.Fate,
+                Options = obj.Options.Select(o => new Option {Code = o.Code, Text = o.Text}).ToArray()
+            };
+        }
+    }
+}

@@ -15,6 +15,8 @@ namespace Slugburn.DarkestNight.Rules.Events
             return new HeroEvent
             {
                 Name = card.Name,
+                Title = card.Name,
+                Fate = card.Fate,
                 Text = card.Detail.GetText(),
                 Options = card.Detail.GetOptions(hero),
                 IsIgnorable = card.CanIgnore()

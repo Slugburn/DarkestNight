@@ -26,15 +26,15 @@ namespace Slugburn.DarkestNight.Rules.Events
                 case "Altar":
                     return new Altar();
                 case "Anathema":
-                    return new Event("Anathema", "Lose 1 Grace.", hero => hero.LoseGrace());
+                    return new EventCard("Anathema", "Lose 1 Grace.", hero => hero.LoseGrace());
                 case "Betrayal":
-                    return new Event("Betrayal", "Lose 1 Secrecy.", hero => hero.LoseSecrecy("Event"));
+                    return new EventCard("Betrayal", "Lose 1 Secrecy.", hero => hero.LoseSecrecy("Event"));
                 case "Black Banner":
                     return new BlackBanner();
                 case "CloseCall":
                     return new CloseCall();
                 case "Cultist":
-                    return new Event("Cultist", "Fight: 5, Elude: 3", hero => hero.FaceEnemy(name));
+                    return new EventCard("Cultist", "Fight: 5, Elude: 3", hero => hero.FaceEnemy(name));
                 case "Dark Champion":
                     return new DarkChampion();
                 case "Dark Scrying":
@@ -46,17 +46,17 @@ namespace Slugburn.DarkestNight.Rules.Events
                 case "Evil Day":
                     return new EvilDay();
                 case "Guarded Trove":
-                    return new Event(name, "Fight: 6, Elude: 6", hero=>hero.FaceEnemy(name));
+                    return new EventCard(name, "Fight: 6, Elude: 6", hero=>hero.FaceEnemy(name));
                 case "Horde":
                     return new Horde();
                 case "Latent Spell":
                     return new LatentSpell();
                 case "Lich":
-                    return new Event(name, "Fight: 5, Elude: 5", hero => hero.FaceEnemy(name));
+                    return new EventCard(name, "Fight: 5, Elude: 5", hero => hero.FaceEnemy(name));
                 case "Looters":
-                    return new Event(name, "Elude: 4", hero=>hero.FaceEnemy(name));
+                    return new EventCard(name, "Elude: 4", hero=>hero.FaceEnemy(name));
                 case "Midnight":
-                    return new Event(name, "+1 Darkness.", hero=>hero.Game.IncreaseDarkness());
+                    return new EventCard(name, "+1 Darkness.", hero=>hero.Game.IncreaseDarkness());
                 case "Raid":
                     return new Raid();
                 case "Renewal":
@@ -68,7 +68,7 @@ namespace Slugburn.DarkestNight.Rules.Events
                 case "Sloppy Search":
                     return new SloppySearch();
                 case "Tracker":
-                    return new Event(name, x => x
+                    return new EventCard(name, x => x
                         .Text("Fight: 4, Elude: 5", "Win fight: Lose 1 Secrecy", "Win elude: No effect", "Failure: Lose 2 Secrecy)"),
                         (h, o) => h.FaceEnemy(name));
                 case "Twist of Fate":
@@ -76,11 +76,11 @@ namespace Slugburn.DarkestNight.Rules.Events
                 case "Unfriendly Eyes":
                     return new UnfriendlyEyes();
                 case "Upheaval":
-                    return new Event(name, "Remove all blights from your current location and create an equal number of new blights", Upheaval);
+                    return new EventCard(name, "Remove all blights from your current location and create an equal number of new blights", Upheaval);
                 case "Vengeful Spirit":
                     return new VengefulSpirit();
                 case "Vile Messenger":
-                    return new Event(name, x => x.Text("Fight: 4, Elude: -", "Failure: +1 Darkness"), (h, o) => h.FaceEnemy(name));
+                    return new EventCard(name, x => x.Text("Fight: 4, Elude: -", "Failure: +1 Darkness"), (h, o) => h.FaceEnemy(name));
                 default:
                     throw new ArgumentOutOfRangeException(nameof(name),name, "Unknown event name");
             }

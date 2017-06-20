@@ -6,21 +6,14 @@ namespace Slugburn.DarkestNight.Rules.Rolls
 {
     public static class Die
     {
-        private static IDie _implementation = new RandomDie();
-
         public static int Roll()
         {
-            return _implementation.Roll();
+            return Implementation.Roll();
         }
 
         public static List<int> Roll(int number)
         {
-            return Enumerable.Range(1, number).Select(x=>_implementation.Roll()).ToList();
-        }
-
-        public static void SetImplementation(IDie die)
-        {
-            _implementation = die;
+            return Enumerable.Range(1, number).Select(x=>Implementation.Roll()).ToList();
         }
 
         private class RandomDie : IDie
@@ -32,5 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Rolls
                 return Random.Next(1, 6);
             }
         }
+
+        public static IDie Implementation { get; set; } = new RandomDie();
     }
 }

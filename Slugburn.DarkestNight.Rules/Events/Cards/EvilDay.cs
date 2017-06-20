@@ -7,6 +7,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
     public class EvilDay : IEventCard
     {
         public string Name => "Event";
+        public int Fate { get; }
 
         public EventDetail Detail => EventDetail.Create(x => x
             .Text("Exhaust a power or draw 2 more events.")

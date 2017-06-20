@@ -1,28 +1,30 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Players;
 
 namespace Slugburn.DarkestNight.Rules.Tests
 {
     public class PlayerExpectation
     {
         private readonly FakePlayer _player;
-        private readonly Game _game;
-        private int _expectedDice;
 
-        public PlayerExpectation(FakePlayer player, Game game)
+        public PlayerExpectation(FakePlayer player)
         {
             _player = player;
-            _game = game;
         }
 
         public void Verify()
         {
-            Assert.That(_game.ActingHero.Roll.Count, Is.EqualTo(_expectedDice));
         }
 
-        public PlayerExpectation RolledNumberOfDice(int expectedDice)
+        public PlayerExpectation SeesEvent(string title, int fate, params string[] options)
         {
-            _expectedDice = expectedDice;
+            Assert.That(_player.State, Is.EqualTo(PlayerState.Event));
+            var e = _player.Event;
+            Assert.That(e.Title, Is.EqualTo(title));
+            Assert.That(e.Fate, Is.EqualTo(fate));
+            Assert.That(e.Options.Select(x=>x.Text), Is.EquivalentTo(options));
             return this;
         }
     }

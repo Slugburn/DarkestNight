@@ -5,6 +5,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
     public class Raid : IEventCard
     {
         public string Name => "Raid";
+        public int Fate { get; }
 
         public EventDetail Detail => EventDetail.Create(x => x
             .Text("Count the blights in your location",

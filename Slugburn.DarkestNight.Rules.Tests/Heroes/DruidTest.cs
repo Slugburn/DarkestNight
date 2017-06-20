@@ -18,8 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenSpace(Location.Village, x => x.Blight(Blight.Corruption))
                 .WhenPlayerTakesAttackAction(x => x.Tactic("Animal Companion").Rolls(roll))
                 .ThenSpace(Location.Village, x => x.Blights(expectedBlights))
-                .ThenPlayer(x => x.RolledNumberOfDice(2))
-                .ThenHero(x => x.HasUsedAction().LostSecrecy())
+                .ThenHero(x => x.RolledNumberOfDice(2).HasUsedAction().LostSecrecy())
                 .ThenPower("Animal Companion", x=>x.IsExhausted(!attackSucceeds));
         }
 
@@ -30,8 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenHero("Druid", x => x.Power("Camouflage").Location(Location.Village))
                 .GivenSpace(Location.Village, x => x.Blight(Blight.Skeletons))
                 .WhenHeroEludes(x => x.Tactic("Camouflage").Rolls(1, 6))
-                .ThenPlayer(x=>x.RolledNumberOfDice(2))
-                .ThenHero(x=>x.LostGrace(0));
+                .ThenHero(x=>x.RolledNumberOfDice(2).LostGrace(0));
         }
 
         [Test]
@@ -194,7 +192,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenHero("Druid", x => x.Power("Vines").Location(Location.Mountains))
                 .GivenSpace(Location.Mountains, x => x.Blight(Blight.Zombies))
                 .WhenHeroFights(x => x.Tactic("Vines [Fight]").Rolls(2, 3, 4, 5))
-                .ThenPlayer(x => x.RolledNumberOfDice(4))
+                .ThenHero(x=>x.RolledNumberOfDice(4))
                 .ThenPower("Vines", x => x.IsExhausted());
         }
 
@@ -205,7 +203,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenHero("Druid", x => x.Power("Vines").Location(Location.Mountains))
                 .GivenSpace(Location.Mountains, x=>x.Blight(Blight.Zombies))
                 .WhenHeroEludes(x => x.Tactic("Vines [Elude]").Rolls(1, 2, 3, 4))
-                .ThenPlayer(x => x.RolledNumberOfDice(4))
+                .ThenHero(x => x.RolledNumberOfDice(4))
                 .ThenPower("Vines", x=>x.IsExhausted());
         }
 
@@ -214,8 +212,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Druid", x => x.Power("Visions"))
-                .GivenNextEventIs("Anathema")
-                .WhenHeroDrawsEvent()
+                .WhenHeroDrawsEvent("Anathema")
                 .ThenEventHasOption("Visions")
                 .WhenPlayerSelectsEventOption("Visions")
                 .ThenHero(x=>x.LostGrace(0)) // Anathema causes hero to lose 1 Grace unless ignored
@@ -227,8 +224,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Druid", x => x.Power("Visions"))
-                .GivenNextEventIs("Renewal")
-                .WhenHeroDrawsEvent()
+                .WhenHeroDrawsEvent("Renewal")
                 .ThenEventHasOption("Visions", false);
         }
 

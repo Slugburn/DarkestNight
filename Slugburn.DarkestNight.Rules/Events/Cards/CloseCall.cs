@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
 
@@ -10,6 +8,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
     public class CloseCall : IEventCard
     {
         public string Name => "Close Call";
+        public int Fate { get; }
         public EventDetail Detail => EventDetail.Create(x=>x.Text("Roll 1 die and take the highest", "5-6: No effect", "3-4: Lose 1 Secrecy", "1-2: Lose 1 Grace").Option("cont", "Continue"));
         public void Resolve(Hero hero, string option)
         {

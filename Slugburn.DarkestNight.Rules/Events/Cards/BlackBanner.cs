@@ -1,5 +1,4 @@
 ﻿using System;
-using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
@@ -7,6 +6,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
     public class BlackBanner : IEventCard
     {
         public string Name => "Black Banner";
+        public int Fate { get; }
 
         public EventDetail Detail => EventDetail.Create(x => x
             .Text("Count the blights in your location")

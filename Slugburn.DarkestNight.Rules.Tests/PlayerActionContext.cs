@@ -1,27 +1,21 @@
-﻿using Slugburn.DarkestNight.Rules.Blights;
+﻿using System;
+using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Tests
 {
-    public class PlayerActionContext
+    public class PlayerActionContext : IFakeRollContext
     {
         private readonly FakePlayer _player;
-        private readonly FakeDie _die;
 
-        public PlayerActionContext(FakePlayer player, FakeDie die)
+        public PlayerActionContext(FakePlayer player)
         {
             _player = player;
-            _die = die;
         }
 
         public PlayerActionContext UsePower(string name, bool response = true)
         {
             _player.SetUsePowerResponse(name, response);
-            return this;
-        }
-
-        public PlayerActionContext Rolls(params int[] rolls)
-        {
-            _die.AddUpcomingRolls(rolls);
             return this;
         }
 
@@ -54,5 +48,31 @@ namespace Slugburn.DarkestNight.Rules.Tests
             _player.SetRollAnotherDieChoice(choices);
             return this;
         }
+
+        public PlayerActionContext SelectsEventOption(string option, Action<IFakeRollContext> action = null)
+        {
+            action?.Invoke(this);
+            _player.SelectEventOption(option);
+            return this;
+        }
+
+        public void AcceptsRoll()
+        {
+            _player.AcceptRoll();
+        }
+    }
+
+    public interface IFakeRollContext
+    {
+    }
+
+    public static class FakeRollExtension
+    {
+        public static T Rolls<T>(this T context, params int[] upcomingRolls) where T : IFakeRollContext
+        {
+            var die = (FakeDie) Die.Implementation;
+            die.AddUpcomingRolls(upcomingRolls);
+            return context;
+        } 
     }
 }

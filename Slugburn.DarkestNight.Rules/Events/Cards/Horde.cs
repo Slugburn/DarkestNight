@@ -5,6 +5,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
     public class Horde : IEventCard
     {
         public string Name => "Horde";
+        public int Fate { get; }
         public EventDetail Detail => EventDetail.Create(x => x.Text("Compare to Secrecy", "4+: Small", "2-3: Large", "0-1: Giant").Option("cont", "Continue"));
 
         public void Resolve(Hero hero, string option)

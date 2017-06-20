@@ -5,6 +5,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
     public class ShamblingHorror : IEventCard
     {
         public string Name => "Shambling Horror";
+        public int Fate { get; }
 
         public EventDetail Detail => EventDetail.Create(x => x.Text("Compare to Secrecy",
             "6+: Zombie (Fight: 5, Elude: 3)",

@@ -5,6 +5,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
     public class Ritual : IEventCard
     {
         public string Name => "Ritual";
+        public int Fate { get; }
 
         public EventDetail Detail => EventDetail.Create(x => x.Text(
             "You may spend 1 Grace and lose 1 Secrecy to cancel this event.",

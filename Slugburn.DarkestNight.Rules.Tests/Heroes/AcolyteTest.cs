@@ -101,20 +101,19 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenHero("Acolyte", x => x.Power("Fade to Black").Location(Location.Monastery))
                 .GivenSpace(Location.Monastery, x => x.Blight(Blight.Skeletons))
                 .WhenPlayerTakesAttackAction(x=>x.Rolls(rolls))
-                .ThenPlayer(x => x.RolledNumberOfDice(expectedDice));
+                .ThenHero(x => x.FightDice(expectedDice).RolledNumberOfDice(expectedDice).HasUsedAction().LostSecrecy());
         }
 
         [Test]
         public void FadeToBlack_CombinedWith_FinalRest()
         {
-            var expectedDice = 5;
-            var rolls = Enumerable.Repeat(6, expectedDice).ToArray();
+            var rolls = Enumerable.Repeat(6, 5).ToArray();
             new TestScenario()
                 .GivenDarkness(20)
                 .GivenHero("Acolyte", x => x.Power("Fade to Black", "Final Rest").Location(Location.Monastery))
                 .GivenSpace(Location.Monastery, x => x.Blight(Blight.Skeletons))
                 .WhenPlayerTakesAttackAction(x=>x.Tactic("Final Rest (3 dice)").Rolls(rolls))
-                .ThenPlayer(x => x.RolledNumberOfDice(expectedDice));
+                .ThenHero(x => x.FightDice(3).RolledNumberOfDice(5).HasUsedAction().LostSecrecy());
         }
 
         [Test]

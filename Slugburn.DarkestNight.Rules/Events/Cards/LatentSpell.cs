@@ -8,6 +8,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
     public class LatentSpell : IEventCard
     {
         public string Name => "Latent Spell";
+        public int Fate { get; }
 
         public EventDetail Detail => EventDetail.Create(x => x
             .Text("Lose 1 Secrecy. Then, spend 1 Grace or discard this event without further effect.",

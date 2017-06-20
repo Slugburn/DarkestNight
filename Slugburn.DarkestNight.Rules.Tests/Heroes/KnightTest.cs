@@ -13,7 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenHero("Knight", x => x.Power("Charge").Location(Location.Village))
                 .GivenSpace(Location.Village, x=>x.Blight(Blight.Skeletons))
                 .WhenPlayerTakesAttackAction(x => x.Tactic("Charge").Rolls(1,6))
-                .ThenPlayer(x => x.RolledNumberOfDice(2));
+                .ThenHero(x => x.RolledNumberOfDice(2).HasUsedAction().LostSecrecy());
         }
 
         [Test]

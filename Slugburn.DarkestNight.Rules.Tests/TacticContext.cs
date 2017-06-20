@@ -6,13 +6,10 @@ using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Tests
 {
-    public class TacticContext
+    public class TacticContext : IFakeRollContext
     {
-        private readonly FakeDie _die;
-
-        public TacticContext(Hero hero, FakeDie die, string defaultTactic)
+        public TacticContext(Hero hero, string defaultTactic)
         {
-            _die = die;
             _tactic = defaultTactic;
             var blights = hero.GetBlights();
             if (blights.Count != 1) return;
@@ -33,12 +30,6 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public TacticContext Tactic(string tactic)
         {
             _tactic = tactic;
-            return this;
-        }
-
-        public TacticContext Rolls(params int[] roll)
-        {
-            _die.AddUpcomingRolls(roll);
             return this;
         }
     }

@@ -5,6 +5,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
     public class VengefulSpirit : IEventCard
     {
         public string Name => "Vengeful Spirit";
+        public int Fate { get; }
 
         public EventDetail Detail => EventDetail.Create(x => x.Text("Compare to Secrecy",
             "5+: Shade (Fight: 3, Elude: 5)",

@@ -26,6 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
         private int[] _expectedRoll;
         private int _expectedDiceCount;
         private int _expectedFreeActions;
+        private bool _expectedOutstandingEvents;
 
         public HeroExpectation(Hero hero)
         {
@@ -78,6 +79,8 @@ namespace Slugburn.DarkestNight.Rules.Tests
                 Assert.That(_hero.Roll, Is.EquivalentTo(_expectedRoll));
             }
             Assert.That(_hero.FreeActions, Is.EqualTo(_expectedFreeActions));
+            var outstandingEvents = _hero.CurrentEvent != null;
+            Assert.That(outstandingEvents, Is.EqualTo(_expectedOutstandingEvents), ()=> _expectedOutstandingEvents ? "Hero should have unresolved events.": "Hero has unresolved event");
         }
 
 

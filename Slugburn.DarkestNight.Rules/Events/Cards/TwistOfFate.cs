@@ -10,6 +10,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
     {
         private const string EventName = "Twist of Fate";
         public string Name => EventName;
+        public int Fate { get; }
 
         public EventDetail Detail => EventDetail.Create(x => x
             .Text("Roll 1 die and take the highest", "5-6: +1 die on all rolls for the rest of this turn", "1-4: -1 die (to a minimum of 1 die) on all rolls for the rest of this turn"));

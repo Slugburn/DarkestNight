@@ -5,6 +5,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
     public class Patrols : IEventCard
     {
         public string Name => "Patrols";
+        public int Fate { get; }
 
         public EventDetail Detail => EventDetail.Create(x => x.Text("Compare to Darkness",
             "0-14: Archer (Fight: 4, Elude: 4)",

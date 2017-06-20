@@ -58,11 +58,11 @@ namespace Slugburn.DarkestNight.Rules.Events
         {
             return _text;
         }
-    }
 
-    public class EventOption
-    {
-        public string Code { get; set; }
-        public string Text { get; set; }
+        private class EventConfig
+        {
+            public string Text { get; set; }
+            public Func<Hero, bool> Condition { get; set; }
+        }
     }
 }

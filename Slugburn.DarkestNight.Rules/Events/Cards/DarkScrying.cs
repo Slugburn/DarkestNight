@@ -6,6 +6,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
     public class DarkScrying : IEventCard
     {
         public string Name => "Dark Scrying";
+        public int Fate { get; }
 
         public EventDetail Detail => EventDetail.Create(x =>
             x.Text("Spend 1 Grace or lose 2 Secrecy.")

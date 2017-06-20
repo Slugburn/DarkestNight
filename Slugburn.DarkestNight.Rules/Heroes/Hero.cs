@@ -6,6 +6,8 @@ using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Events;
 using Slugburn.DarkestNight.Rules.Extensions;
+using Slugburn.DarkestNight.Rules.Players;
+using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tactics;
@@ -172,6 +174,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var card = EventFactory.CreateCard(eventName);
             CurrentEvent = card.GetHeroEvent(this);
             Triggers.Send(HeroTrigger.EventDrawn);
+            Player.DisplayEvent(Players.Models.PlayerEvent.From(CurrentEvent));
         }
 
         public void LoseSecrecy(string sourceName)
@@ -335,7 +338,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             State = HeroState.RollAvailable;
         }
 
-        public void EndCombat()
+        public void AcceptRoll()
         {
             ValidateState(HeroState.RollAvailable);
             foreach (var handler in _rollHandlers.ToList())
@@ -466,14 +469,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             throw new NotImplementedException();
         }
 
-        public void PresentEvent(IEventCard e)
+        public void PresentCurrentEvent()
         {
-            throw new NotImplementedException();
+            Player.DisplayEvent(PlayerEvent.From(CurrentEvent));
         }
 
         public void EndEvent()
         {
-            throw new NotImplementedException();
+            CurrentEvent = null;
         }
 
         public void RollEventDice(IRollHandler rollHandler)
@@ -500,13 +503,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             return _powerDeck.Draw();
         }
 
-        public void SelectEventOption(string option)
+        public void SelectEventOption(string optionCode)
         {
-            CurrentEvent.SelectedOption = option;
+            CurrentEvent.SelectedOption = optionCode;
             if (!Triggers.Send(HeroTrigger.EventOptionSelected))
                 return;
             var card = EventFactory.CreateCard(CurrentEvent.Name);
-            card.Resolve(this, option);
+            card.Resolve(this, optionCode);
         }
 
         public void CancelCurrentEvent()

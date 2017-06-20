@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Players;
+using Slugburn.DarkestNight.Rules.Players.Models;
 
 namespace Slugburn.DarkestNight.Rules.Tests
 {
     public class FakePlayer : IPlayer
     {
+        private readonly Game _game;
         private readonly Dictionary<string, bool> _usePowerResponse;
         private readonly List<Tuple<Blight, int>> _blightRollAssignments;
 
@@ -15,8 +19,9 @@ namespace Slugburn.DarkestNight.Rules.Tests
         private Location? _locationChoice;
         private Queue<bool> _rollAnotherDie;
 
-        public FakePlayer()
+        public FakePlayer(Game game)
         {
+            _game = game;
             _usePowerResponse = new Dictionary<string, bool>();
             _blightRollAssignments = new List<Tuple<Blight, int>>();
             _rollAnotherDie = new Queue<bool>();
@@ -93,6 +98,29 @@ namespace Slugburn.DarkestNight.Rules.Tests
         {
             foreach (var choice in choices)
                 _rollAnotherDie.Enqueue(choice);
+        }
+
+        public PlayerState State { get; set; }
+        public void DisplayEvent(PlayerEvent playerEvent)
+        {
+            Event = playerEvent;
+        }
+
+        public PlayerEvent Event { get; set; }
+
+        public void SelectEventOption(string option)
+        {
+            var matching = Event.Options.SingleOrDefault(x => x.Text == option);
+            if (matching==null)
+                throw new ArgumentOutOfRangeException(nameof(option), option, "No matching option found");
+
+            var code = matching.Code;
+            _game.ActingHero.SelectEventOption(code);
+        }
+
+        public void AcceptRoll()
+        {
+            _game.ActingHero.AcceptRoll();
         }
     }
 }
