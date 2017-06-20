@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Heroes;
 
-namespace Slugburn.DarkestNight.Rules.Tests
+namespace Slugburn.DarkestNight.Rules.Tests.Heroes
 {
     [TestFixture]
-    public class HeroTest
+    public class HeroFactoryTest
     {
         [TestCase("Acolyte")]
         [TestCase("Druid")]
@@ -24,6 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public void HasFullComplementOfPowers(string name)
         {
             var hero = HeroFactory.Create(name);
+            Assert.That(hero.Name, Is.EqualTo(name));
             var powers = hero.PowerDeck.ToList();
             Assert.That(powers.Count, Is.EqualTo(10));
             Assert.That(powers.Count(x => x.StartingPower), Is.EqualTo(4), string.Join(",", powers.Where(x => x.StartingPower).Select(x => x.Name)));

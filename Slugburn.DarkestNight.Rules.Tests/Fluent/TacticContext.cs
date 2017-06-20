@@ -4,7 +4,7 @@ using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Blights.Implementations;
 using Slugburn.DarkestNight.Rules.Heroes;
 
-namespace Slugburn.DarkestNight.Rules.Tests
+namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 {
     public class TacticContext : IFakeRollContext
     {

@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Tests.Fluent;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Heroes
 {
@@ -28,8 +29,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             new TestScenario()
                 .GivenHero("Druid", x => x.Power("Camouflage").Location(Location.Village))
                 .GivenSpace(Location.Village, x => x.Blight(Blight.Skeletons))
-                .WhenHeroEludes(x => x.Tactic("Camouflage").Rolls(1, 6))
-                .ThenHero(x=>x.RolledNumberOfDice(2).LostGrace(0));
+                .WhenHero(h => h.Eludes(x => x.Tactic("Camouflage").Rolls(1, 6)))
+                .ThenHero(x => x.RolledNumberOfDice(2).LostGrace(0));
         }
 
         [Test]
@@ -40,9 +41,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenPower("Wolf Form", x => x.IsActive())
                 .WhenPlayerTakesAction("Celerity")
                 .ThenPower("Wolf Form", x => x.IsActive(false))
-                .WhenPlayerSelectsLocation(Location.Village)
-                .ThenHero(x => x.Location(Location.Village))
-                .ThenAvailableActions("Raven Form", "Wolf Form", "Continue")
+                .WhenPlayer(x=>x.SelectsLocation(Location.Village))
+                .ThenHero(x => x.Location(Location.Village).HasAvailableActions("Raven Form", "Wolf Form", "Continue"))
                 .WhenPlayerTakesAction("Raven Form")
                 .ThenPower("Raven Form", x => x.IsActive());
         }
@@ -53,11 +53,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             new TestScenario()
                 .GivenHero("Druid", x => x.Power("Celerity").Location(Location.Monastery))
                 .WhenPlayerTakesAction("Celerity")
-                .WhenPlayerSelectsLocation(Location.Village)
-                .ThenHero(x => x.Location(Location.Village))
-                .ThenAvailableActions("Continue")
+                .WhenPlayer(x => x.SelectsLocation(Location.Village))
+                .ThenHero(x => x.Location(Location.Village).HasAvailableActions("Continue"))
                 .WhenPlayerTakesAction("Continue")
-                .ThenHero(x=>x.HasUsedAction());
+                .ThenHero(x => x.HasUsedAction());
         }
 
         [Test]
@@ -149,7 +148,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             new TestScenario()
                 .GivenHero("Druid", x => x.Power("Tree Form").Grace(0))
                 .GivenPower("Tree Form", x => x.IsActive())
-                .WhenHeroStartsTurn("Druid")
+                .WhenHero(x=>x.StartsTurn())
                 .ThenHero(x=>x.Grace(2));
         }
 
@@ -159,7 +158,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             new TestScenario()
                 .GivenHero("Druid", x => x.Power("Tree Form").Grace(4))
                 .GivenPower("Tree Form", x => x.IsActive())
-                .WhenHeroStartsTurn("Druid")
+                .WhenHero(x => x.StartsTurn())
                 .ThenHero(x => x.DefaultGrace(5).Grace(5));
         }
 
@@ -169,8 +168,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             new TestScenario()
                 .GivenHero("Druid", x => x.Power("Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form"))
                 .GivenPower("Tree Form", x => x.IsActive())
-                .WhenHeroStartsTurn("Druid")
-                .ThenAvailableActions("Hide", "Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form");
+                .WhenHero(x=>x.StartsTurn())
+                .ThenHero(x=>x.HasAvailableActions("Hide", "Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form"));
         }
 
         [Test]
@@ -180,9 +179,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenHero("Druid", x => x.Power("Tree Form").Grace(0).Location(Location.Monastery))
                 .GivenPower("Tree Form", x => x.IsActive())
                 .WhenPlayerTakesAction("Deactivate Form")
-                .WhenHeroStartsTurn("Druid")
-                .ThenHero(x => x.Grace(0))
-                .ThenAvailableActions("Travel", "Hide", "Pray", "Tree Form");
+                .WhenHero(x=>x.StartsTurn())
+                .ThenHero(x => x.Grace(0).HasAvailableActions("Travel", "Hide", "Pray", "Tree Form"));
         }
 
         [Test]
@@ -191,7 +189,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             new TestScenario()
                 .GivenHero("Druid", x => x.Power("Vines").Location(Location.Mountains))
                 .GivenSpace(Location.Mountains, x => x.Blight(Blight.Zombies))
-                .WhenHeroFights(x => x.Tactic("Vines [Fight]").Rolls(2, 3, 4, 5))
+                .WhenHero(h => h.Fights(x=>x.Tactic("Vines [Fight]").Rolls(2, 3, 4, 5)))
                 .ThenHero(x=>x.RolledNumberOfDice(4))
                 .ThenPower("Vines", x => x.IsExhausted());
         }
@@ -201,10 +199,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Druid", x => x.Power("Vines").Location(Location.Mountains))
-                .GivenSpace(Location.Mountains, x=>x.Blight(Blight.Zombies))
-                .WhenHeroEludes(x => x.Tactic("Vines [Elude]").Rolls(1, 2, 3, 4))
+                .GivenSpace(Location.Mountains, x => x.Blight(Blight.Zombies))
+                .WhenHero(h => h.Eludes(x => x.Tactic("Vines [Elude]").Rolls(1, 2, 3, 4)))
                 .ThenHero(x => x.RolledNumberOfDice(4))
-                .ThenPower("Vines", x=>x.IsExhausted());
+                .ThenPower("Vines", x => x.IsExhausted());
         }
 
         [Test]
@@ -212,10 +210,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Druid", x => x.Power("Visions"))
-                .WhenHeroDrawsEvent("Anathema")
-                .ThenEventHasOption("Visions")
-                .WhenPlayerSelectsEventOption("Visions")
-                .ThenHero(x=>x.LostGrace(0)) // Anathema causes hero to lose 1 Grace unless ignored
+                .WhenHero(x=>x.DrawsEvent("Anathema"))
+                .ThenPlayer(x => x.SeesEvent("Anathema", 0, "Continue", "Ignore [Visions]"))
+                .WhenPlayer(x => x.SelectsEventOption("Ignore [Visions]"))
+                .ThenHero(x => x.LostGrace(0)) // Anathema causes hero to lose 1 Grace unless ignored
                 .ThenPower("Visions", x => x.IsExhausted());
         }
 
@@ -224,8 +222,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Druid", x => x.Power("Visions"))
-                .WhenHeroDrawsEvent("Renewal")
-                .ThenEventHasOption("Visions", false);
+                .WhenHero(x => x.DrawsEvent("Renewal"))
+                .ThenPlayer(x => x.SeesEvent("Renewal", 0, "Continue"));
         }
 
         [Test]

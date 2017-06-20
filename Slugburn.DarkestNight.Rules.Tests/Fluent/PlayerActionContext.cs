@@ -1,8 +1,9 @@
 ﻿using System;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Rolls;
+using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
-namespace Slugburn.DarkestNight.Rules.Tests
+namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 {
     public class PlayerActionContext : IFakeRollContext
     {
@@ -12,6 +13,13 @@ namespace Slugburn.DarkestNight.Rules.Tests
         {
             _player = player;
         }
+
+        public PlayerActionContext TakesAction(string actionName)
+        {
+            _player.TakeAction(_player.ActiveHero, actionName);
+            return this;
+        }
+
 
         public PlayerActionContext UsePower(string name, bool response = true)
         {
@@ -59,6 +67,12 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public void AcceptsRoll()
         {
             _player.AcceptRoll();
+        }
+
+        public PlayerActionContext SelectsLocation(Location location)
+        {
+            _player.SelectLocation(location);
+            return this;
         }
     }
 

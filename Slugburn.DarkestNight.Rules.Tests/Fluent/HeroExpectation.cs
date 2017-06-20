@@ -5,7 +5,7 @@ using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
 
-namespace Slugburn.DarkestNight.Rules.Tests
+namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 {
     public class HeroExpectation
     {
@@ -80,7 +80,8 @@ namespace Slugburn.DarkestNight.Rules.Tests
             }
             Assert.That(_hero.FreeActions, Is.EqualTo(_expectedFreeActions));
             var outstandingEvents = _hero.CurrentEvent != null;
-            Assert.That(outstandingEvents, Is.EqualTo(_expectedOutstandingEvents), ()=> _expectedOutstandingEvents ? "Hero should have unresolved events.": "Hero has unresolved event");
+            Assert.That(outstandingEvents, Is.EqualTo(_expectedOutstandingEvents),
+                () => _expectedOutstandingEvents ? "Hero should have unresolved events." : "Hero has unresolved event");
         }
 
 
@@ -233,5 +234,21 @@ namespace Slugburn.DarkestNight.Rules.Tests
             _expectedFreeActions = 1;
             return this;
         }
+
+        public HeroExpectation CanUsePower(string powerName, bool expected = true)
+        {
+            var power = _hero.GetPower(powerName);
+            Assert.That(power.IsUsable(_hero), Is.EqualTo(expected), $"{powerName} is usable.");
+            return this;
+        }
+
+        public HeroExpectation HasAvailableActions(params string[] actionNames)
+        {
+            var hero = _hero;
+            Assert.That(hero.AvailableActions, Is.Not.Null, "Hero.AvailableActions has not been specified.");
+            Assert.That(hero.AvailableActions, Is.EquivalentTo(actionNames));
+            return this;
+        }
+
     }
 }

@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Rolls;
+using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
-namespace Slugburn.DarkestNight.Rules.Tests
+namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 {
     public class TestScenario
     {
@@ -32,6 +32,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
             var ctx = new HeroContext(hero);
             def?.Invoke(ctx);
             _game.ActingHero = hero;
+            _player.ActiveHero = hero.Name;
             return this;
         }
 
@@ -72,13 +73,6 @@ namespace Slugburn.DarkestNight.Rules.Tests
             return this;
         }
 
-        public TestScenario WhenHeroEndsTurn(string heroName)
-        {
-            var hero = _game.GetHero(heroName);
-            hero.EndTurn();
-            return this;
-        }
-
         public TestScenario ThenHero(string heroName, Action<HeroExpectation> expect)
         {
             var hero = _game.GetHero(heroName);
@@ -107,20 +101,6 @@ namespace Slugburn.DarkestNight.Rules.Tests
             return this;
         }
 
-        public TestScenario ThenPowerIsUsable(string powerName, bool expected=true)
-        {
-            var power = _game.GetPower(powerName);
-            Assert.That(() => power.IsUsable(_game.ActingHero), Is.EqualTo(expected));
-            return this;
-        }
-
-        public TestScenario WhenPowerIsRefreshed(string powerName)
-        {
-            var power = _game.GetPower(powerName);
-            power.Refresh();
-            return this;
-        }
-
         public TestScenario ThenSpace(Location location, Action<SpaceExpectation> define)
         {
             var space = _game.Board[location];
@@ -146,14 +126,6 @@ namespace Slugburn.DarkestNight.Rules.Tests
             WhenPlayerTakesAction(context.GetAction());
             WhenPlayerSelectsTactic(context.GetTactic(), context.GetTargets());
             WhenPlayerAcceptsRoll();
-            return this;
-        }
-
-        public TestScenario WhenHeroStartsTurn(string heroName)
-        {
-            var hero = _game.GetHero(heroName);
-            hero.IsActionAvailable = true;
-            hero.StartTurn();
             return this;
         }
 
@@ -213,12 +185,6 @@ namespace Slugburn.DarkestNight.Rules.Tests
             return this;
         }
 
-        public TestScenario GivenPlayerWillRoll(params int[] rolls)
-        {
-            _die.AddUpcomingRolls(rolls);
-            return this;
-        }
-
         public TestScenario WhenPlayerAcceptsRoll()
         {
             _game.ActingHero.AcceptRoll();
@@ -234,81 +200,9 @@ namespace Slugburn.DarkestNight.Rules.Tests
             return this;
         }
 
-        public TestScenario WhenHeroFights(Action<TacticContext> actions)
-        {
-            WhenHeroDefends();
-            WhenPlayerSelectsTactic(actions, "Fight");
-            Assert.That(_game.ActingHero.ConflictState.SelectedTactic.Type, Is.EqualTo(TacticType.Fight));
-            WhenPlayerAcceptsRoll();
-            return this;
-        }
-
-        public TestScenario WhenHeroEludes(Action<TacticContext> actions)
-        {
-            WhenHeroDefends();
-            WhenPlayerSelectsTactic(actions, "Elude");
-            Assert.That(_game.ActingHero.ConflictState.SelectedTactic.Type, Is.EqualTo(TacticType.Elude));
-            WhenPlayerAcceptsRoll();
-            return this;
-        }
-
-        private TestScenario WhenHeroDefends()
-        {
-            var hero = _game.ActingHero;
-            var enemies = hero.GetBlights().GenerateEnemies();
-            hero.Enemies = enemies; 
-            new Defend().Act(hero);
-            return this;
-        }
-
-        public TestScenario WhenPlayerSelectsLocation(Location location)
-        {
-            var hero = _game.ActingHero;
-            hero.SelectLocation(location);
-            return this;
-        }
-
-        public TestScenario ThenAvailableActions(params string[] actionNames)
-        {
-            var hero = _game.ActingHero;
-            Assert.That(hero.AvailableActions, Is.Not.Null, "Hero.AvailableActions has not been specified.");
-            Assert.That(hero.AvailableActions, Is.EquivalentTo(actionNames));
-            return this;
-        }
-
-        public TestScenario WhenHeroDrawsEvent(string eventName = null)
-        {
-            if (eventName != null)
-                _game.Events.Insert(0, eventName);
-            var hero = _game.ActingHero;
-            hero.DrawEvent();
-            return this;
-        }
-
-        public TestScenario ThenEventHasOption(string option, bool expected = true)
-        {
-            var hero = _game.ActingHero;
-            var constraint = expected ? Has.Member(option) : Has.No.Member(option);
-            Assert.That(hero.CurrentEvent.Options.Select(x=>x.Code), constraint, $"Event option {option} not found.");
-            return this;
-        }
-
-        public TestScenario WhenPlayerSelectsEventOption(string option)
-        {
-            var hero = _game.ActingHero;
-            hero.SelectEventOption(option);
-            return this;
-        }
-
         public TestScenario WhenBlightIsDestroyed(Location location, Blight blight)
         {
             _game.DestroyBlight(location, blight);
-            return this;
-        }
-
-        public TestScenario WhenHeroMovesTo(Location location)
-        {
-            _game.ActingHero.MoveTo(location);
             return this;
         }
 
@@ -323,24 +217,6 @@ namespace Slugburn.DarkestNight.Rules.Tests
         {
             var context = new PlayerActionContext(_player);
             action(context);
-            return this;
-        }
-    }
-
-    public class HeroActionContext
-    {
-        private readonly Hero _hero;
-
-        public HeroActionContext(Hero hero)
-        {
-            _hero = hero;
-        }
-
-        public HeroActionContext DrawsEvent(string eventName=null)
-        {
-            if (eventName != null)
-                _hero.Game.Events.Insert(0, eventName);
-            _hero.DrawEvent();
             return this;
         }
     }

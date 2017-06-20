@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
 
-namespace Slugburn.DarkestNight.Rules.Tests
+namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 {
     public class FakePlayer : IPlayer
     {
@@ -107,6 +106,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
         }
 
         public PlayerEvent Event { get; set; }
+        public string ActiveHero { get; set; }
 
         public void SelectEventOption(string option)
         {
@@ -121,6 +121,19 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public void AcceptRoll()
         {
             _game.ActingHero.AcceptRoll();
+        }
+
+        public void TakeAction(string heroName, string actionName)
+        {
+            var hero = _game.GetHero(heroName);
+            var action = hero.GetAction(actionName);
+            action.Act(hero);
+        }
+
+        public void SelectLocation(Location location)
+        {
+            var hero = _game.GetHero(ActiveHero);
+            hero.SelectLocation(location);
         }
     }
 }

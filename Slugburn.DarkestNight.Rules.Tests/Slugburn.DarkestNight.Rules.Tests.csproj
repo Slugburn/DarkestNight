@@ -46,25 +46,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\AltarTest.cs" />
-    <Compile Include="FakeDie.cs" />
-    <Compile Include="FightContext.cs" />
+    <Compile Include="Fakes\FakeDie.cs" />
+    <Compile Include="Fakes\FakePlayer.cs" />
+    <Compile Include="Fluent\FightContext.cs" />
+    <Compile Include="Fluent\HeroActionContext.cs" />
+    <Compile Include="Fluent\HeroContext.cs" />
+    <Compile Include="Fluent\HeroExpectation.cs" />
+    <Compile Include="Fluent\PlayerActionContext.cs" />
+    <Compile Include="Fluent\PlayerExpectation.cs" />
+    <Compile Include="Fluent\PowerContext.cs" />
+    <Compile Include="Fluent\PowerExpectation.cs" />
+    <Compile Include="Fluent\SpaceDefContext.cs" />
+    <Compile Include="Fluent\SpaceExpectation.cs" />
+    <Compile Include="Fluent\TacticContext.cs" />
+    <Compile Include="Fluent\TestScenario.cs" />
     <Compile Include="Heroes\AcolyteTest.cs" />
-    <Compile Include="FakePlayer.cs" />
-    <Compile Include="HeroContext.cs" />
     <Compile Include="Heroes\DruidTest.cs" />
+    <Compile Include="Heroes\HeroFactoryTest.cs" />
     <Compile Include="Heroes\KnightTest.cs" />
     <Compile Include="Heroes\PriestTest.cs" />
-    <Compile Include="HeroExpectation.cs" />
-    <Compile Include="HeroTest.cs" />
-    <Compile Include="PlayerActionContext.cs" />
-    <Compile Include="PlayerExpectation.cs" />
-    <Compile Include="PowerContext.cs" />
-    <Compile Include="PowerExpectation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpaceDefContext.cs" />
-    <Compile Include="SpaceExpectation.cs" />
-    <Compile Include="TacticContext.cs" />
-    <Compile Include="TestScenario.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

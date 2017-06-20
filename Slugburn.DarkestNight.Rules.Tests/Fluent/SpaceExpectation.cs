@@ -1,9 +1,8 @@
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
 
-namespace Slugburn.DarkestNight.Rules.Tests
+namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 {
     public class SpaceExpectation
     {

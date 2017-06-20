@@ -1,7 +1,6 @@
 ﻿using Slugburn.DarkestNight.Rules.Blights;
-using Slugburn.DarkestNight.Rules.Spaces;
 
-namespace Slugburn.DarkestNight.Rules.Tests
+namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 {
     public class SpaceDefContext
     {

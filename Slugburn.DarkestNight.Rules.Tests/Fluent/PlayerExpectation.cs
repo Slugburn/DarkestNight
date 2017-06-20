@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Players;
+using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
-namespace Slugburn.DarkestNight.Rules.Tests
+namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 {
     public class PlayerExpectation
     {

@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Powers;
 
-namespace Slugburn.DarkestNight.Rules.Tests
+namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 {
     public class PowerExpectation
     {

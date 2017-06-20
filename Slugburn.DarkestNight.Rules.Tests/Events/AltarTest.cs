@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Slugburn.DarkestNight.Rules.Tests.Fluent;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Events
 {

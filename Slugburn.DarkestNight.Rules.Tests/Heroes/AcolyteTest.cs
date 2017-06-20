@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Tests.Fluent;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Heroes
 {
@@ -50,10 +51,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Acolyte", x => x.Power("Dark Veil"))
-                .WhenPlayerTakesAction("Dark Veil")
+                .WhenPlayer(x=>x.TakesAction("Dark Veil"))
                 .ThenHero(x=>x.IsIgnoringBlights())
                 .ThenPower("Dark Veil", x => x.IsExhausted())
-                .WhenHeroStartsTurn("Acolyte")
+                .WhenHero(x=>x.StartsTurn())
                 .ThenHero(x=>x.IsNotIgnoringBlights());
         }
 
@@ -84,7 +85,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             new TestScenario()
                 .GivenHero("Acolyte", x => x.Power("Death Mask").Location(Location.Swamp))
                 .GivenNecromancerLocation(Location.Swamp)
-                .WhenHeroStartsTurn("Acolyte")
+                .WhenHero(x=>x.StartsTurn())
                 .ThenHero(x => x.LostSecrecy(0));
         }
 
@@ -131,7 +132,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Acolyte", x => x.Power("False Life").Location(Location.Monastery).Grace(0))
-                .ThenPowerIsUsable("False Life", false);
+                .ThenHero(x=>x.Grace(0).CanUsePower("False Life", false));
         }
 
         [TestCase(0, true)]
@@ -143,7 +144,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Acolyte", x => x.Power("False Life").Location(Location.Swamp).Grace(grace))
-                .ThenPowerIsUsable("False Life", usable);
+                .ThenHero(x=>x.Grace(grace).CanUsePower("False Life", usable));
         }
 
         [Test]
@@ -154,7 +155,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .ThenHero(x => x.Grace(2).CanMoveTo(Location.Monastery))
                 .WhenHeroUsesBonusAction("Acolyte", "False Life")
                 .ThenHero(x => x.CannotMoveTo(Location.Monastery))
-                .WhenPowerIsRefreshed("False Life")
+                .WhenHero(x => x.RefreshesPower("False Life"))
                 .ThenHero(x => x.CanMoveTo(Location.Monastery));
         }
 
@@ -242,7 +243,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Acolyte", x => x.Power("Leech Life").Location(Location.Monastery))
-                .ThenPowerIsUsable("Leech Life", false);
+                .ThenHero(x=>x.CanUsePower("Leech Life", false));
         }
 
         [Test]

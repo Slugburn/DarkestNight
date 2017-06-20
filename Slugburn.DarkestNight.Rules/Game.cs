@@ -123,7 +123,12 @@ namespace Slugburn.DarkestNight.Rules
 
         public Hero GetHero(string name)
         {
-            return Heroes.SingleOrDefault(x => x.Name == name);
+            if (name==null)
+                throw new ArgumentNullException(nameof(name));
+            var hero = Heroes.SingleOrDefault(x => x.Name == name);
+            if (hero == null)
+                throw new ArgumentOutOfRangeException(nameof(name), name, "Unknown hero.");
+            return hero;
         }
 
         public bool IsBlightIgnored(Hero hero, Blight blight)
