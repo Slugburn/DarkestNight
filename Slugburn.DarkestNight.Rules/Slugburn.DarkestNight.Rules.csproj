@@ -121,6 +121,12 @@
     <Compile Include="IgnoreBlight.cs" />
     <Compile Include="ILocationSelectedHandler.cs" />
     <Compile Include="IPlayer.cs" />
+    <Compile Include="Items\Artifacts\BloodRing.cs" />
+    <Compile Include="Items\Artifacts\CrystalBall.cs" />
+    <Compile Include="Items\Artifacts\GhostMail.cs" />
+    <Compile Include="Items\Artifacts\MagicMask.cs" />
+    <Compile Include="Items\Artifacts\StarryVeil.cs" />
+    <Compile Include="Items\Artifacts\VanishingCowl.cs" />
     <Compile Include="Powers\Acolyte\BlindingBlack.cs" />
     <Compile Include="Powers\Acolyte\CallToDeath.cs" />
     <Compile Include="Powers\Acolyte\DarkVeil.cs" />

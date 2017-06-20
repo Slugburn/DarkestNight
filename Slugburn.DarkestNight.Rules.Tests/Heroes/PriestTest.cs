@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Heroes
 {
@@ -13,6 +8,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         // Benediction
         // One hero at your location gains 1 Grace (up to default). 
         // If they now have more Grace than you, you gain 1 Grace.
+
 
         // Blessing of Faith
         // Activate on a hero in your location.
