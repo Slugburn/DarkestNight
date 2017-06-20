@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Events;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Powers;
@@ -77,6 +78,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public HeroEvent CurrentEvent { get; set; }
 
         public int AvailableMovement { get; set; }
+        public int FreeActions { get; set; }
 
         public void AddActionFilter(string name, HeroState state, ICollection<string> allowed)
         {
@@ -215,7 +217,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void GainSecrecy(int amount, int max)
         {
-            throw new NotImplementedException();
+            Secrecy = Math.Min(Secrecy+amount, max);
         }
 
         public void SetDice(RollType rollType, int count)
@@ -245,21 +247,30 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             Player = player;
         }
 
-        internal void ResolveAttack(Blight blight, int result)
+        internal void ResolveAttack(int targetId, int result)
         {
-            LoseSecrecy("Attack");
-            var blightInfo = blight.GetDetail();
-            if (result < blightInfo.Might)
+            var targetInfo = ConflictState.SelectedTargets.Single(x => x.Id == targetId);
+            var isWin = result >= targetInfo.FightTarget;
+            if (isWin)
+                Triggers.Send(HeroTrigger.FightWon);
+            var isNecromancer = targetInfo.Name == "Necromancer";
+            if (isNecromancer)
             {
-                Triggers.Send(HeroTrigger.AttackFailed);
-                if (Triggers.Send(HeroTrigger.BeforeBlightDefends))
-                    blightInfo.Defend(this);
+                Game.Necromancer.ResolveAttack(result, this);
+                return;
+            }
+            LoseSecrecy("Attack");
+            var blight = (Blight) Enum.Parse(typeof (Blight), targetInfo.Name);
+            var blightInfo = blight.GetDetail();
+            if (isWin)
+            {
+                Game.DestroyBlight(Location, blight);
+                Triggers.Send(HeroTrigger.DestroyedBlight);
             }
             else
             {
-                Triggers.Send(HeroTrigger.FightWon);
-                Game.DestroyBlight(Location, blight);
-                Triggers.Send(HeroTrigger.DestroyedBlight);
+                if (Triggers.Send(HeroTrigger.BeforeBlightDefends))
+                    blightInfo.Defend(this);
             }
         }
 
@@ -320,6 +331,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             tactic.Use(this);
             var roll = Die.Roll(diceCount).ToList();
             Roll = roll;
+            Triggers.Send(HeroTrigger.AfterRoll);
             State = HeroState.RollAvailable;
         }
 
@@ -351,18 +363,18 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             return _rollModifiers;
         }
 
-        public void AssignDiceToBlights(ICollection<BlightDieAssignment> assignments)
+        public void AssignDiceToBlights(ICollection<TargetDieAssignment> assignments)
         {
             ValidateState(HeroState.AssigningDice);
             var validRolls = assignments.Select(x => x.DieValue).Intersect(Roll).Count() == assignments.Count;
             if (!validRolls)
                 throw new Exception("Invalid die values specified.");
-            var validTargets = assignments.Select(x => x.Blight.ToString()).Intersect(ConflictState.SelectedTargets.Select(x => x.Name)).Count() == assignments.Count;
+            var validTargets = assignments.Select(x => x.TargetId).Intersect(ConflictState.SelectedTargets.Select(x => x.Id)).Count() == assignments.Count;
             if (!validTargets)
                 throw new Exception("Invalid targets specified.");
             foreach (var assignment in assignments)
             {
-                ResolveAttack(assignment.Blight, assignment.DieValue);
+                ResolveAttack(assignment.TargetId, assignment.DieValue);
             }
         }
 
@@ -515,5 +527,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             public ICollection<string> Allowed { get; set; }
         }
 
+        public bool HasHolyRelic() => false;
+
+        public bool IsTargetNecromancer()
+        {
+            var conflictState = ConflictState;
+            if (conflictState?.SelectedTargets == null || conflictState.SelectedTargets.Count != 1) return false;
+            return conflictState.SelectedTargets.First().Name == "Necromancer";
+        }
     }
 }

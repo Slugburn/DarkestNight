@@ -177,9 +177,9 @@ namespace Slugburn.DarkestNight.Rules.Tests
             return this;
         }
 
-        public TestScenario WhenPlayerSelectsTactic(string tactic, params string[] blights)
+        public TestScenario WhenPlayerSelectsTactic(string tactic, params string[] targets)
         {
-            var targetIds = GetTargetIds(blights).ToList();
+            var targetIds = GetTargetIds(targets).ToList();
             _game.ActingHero.SelectTactic(tactic, targetIds);
             return this;
         }
@@ -187,7 +187,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
         private IEnumerable<int> GetTargetIds(ICollection<string> targets)
         {
             var source = _game.ActingHero.ConflictState.AvailableTargets.ToList();
-            Assert.That(source.Select(x=>x.Name).Intersect(targets), Is.EquivalentTo(targets));
+            Assert.That(source.Select(x=>x.Name).Intersect(targets), Is.EquivalentTo(targets), "Requested target is not valid.");
             foreach (var match in targets.Select(target => source.First(x => x.Name == target)))
             {
                 source.Remove(match);
@@ -205,9 +205,11 @@ namespace Slugburn.DarkestNight.Rules.Tests
             return this;
         }
 
-        public TestScenario WhenPlayerAssignsRolledDiceToBlights( params BlightDieAssignment[]  assignments)
+        public TestScenario WhenPlayerAssignsRolledDiceToBlights( params Tuple<Blight,int>[]  assignments)
         {
-            _game.ActingHero.AssignDiceToBlights(assignments);
+            var targets = _game.ActingHero.ConflictState.SelectedTargets;
+            var a = assignments.Select(x => new TargetDieAssignment {TargetId = targets.Single(t => t.Name == x.Item1.ToString()).Id, DieValue = x.Item2}).ToList();
+            _game.ActingHero.AssignDiceToBlights(a);
             return this;
         }
 

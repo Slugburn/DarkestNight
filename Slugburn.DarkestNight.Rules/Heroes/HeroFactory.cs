@@ -35,7 +35,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 Secrecy = _secrecy
             };
             hero.PowerDeck.AddRange(_powers.Select(PowerFactory.Create).ToList());
-            var defaultActions = new IAction[] {new Travel(), new Hide(), new Attack(), new Search(), new Pray()};
+            var defaultActions = new IAction[] {new Travel(), new Hide(), new Attack(), new Search(), new Pray(), new FightNecromancer() };
             foreach (var action in defaultActions)
                 hero.AddAction(action);
             var defaultTactics = new ITactic[] {new BasicFightTactic(), new BasicEludeTactic()};

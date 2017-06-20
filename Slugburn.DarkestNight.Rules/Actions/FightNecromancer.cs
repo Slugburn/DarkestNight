@@ -1,25 +1,29 @@
 ﻿using System;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
-    public class Attack : IAction, IRollHandler
+    public class FightNecromancer : IAction, IRollHandler
     {
-        public string Name => "Attack";
+        public const string ActionName = "Fight Necromancer";
+        public string Name => ActionName;
 
         public void Act(Hero hero)
         {
             hero.ValidateState(HeroState.ChoosingAction);
+            var necromancerTargetInfo = new [] {hero.Game.Necromancer}.GetTargetInfo();
             var conflictState = new ConflictState
             {
                 ConflictType = ConflictType.Attack,
+                SelectedTargets = necromancerTargetInfo,
                 MinTarget = 1,
                 MaxTarget = 1,
-                AvailableTargets = hero.GetSpace().Blights.GetTargetInfo()
+                AvailableTargets = necromancerTargetInfo
             };
             hero.ConflictState = conflictState;
             hero.SetRollHandler(this);
@@ -37,7 +41,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
         {
             var result = hero.Roll.Max();
             var target = hero.ConflictState.SelectedTargets.Single();
-            var assignment = TargetDieAssignment.Create(target.Id, result);
+            var assignment = TargetDieAssignment.Create(target.Id , result);
             hero.State = HeroState.AssigningDice;
             hero.AssignDiceToBlights(new[] {assignment});
             hero.IsActionAvailable = false;

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
 
@@ -25,7 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenSpace(Location.Swamp, x => x.Blight(Blight.Skeletons, Blight.Shades, Blight.Lich))
                 .GivenHero("Acolyte", x => x.Power("Call to Death").Location(Location.Swamp))
                 .WhenPlayerTakesAttackAction(x=>x.Action("Call to Death").Target(Blight.Skeletons, Blight.Lich).Rolls(5,6))
-                .WhenPlayerAssignsRolledDiceToBlights(BlightDieAssignment.Create(Blight.Lich, 6), BlightDieAssignment.Create(Blight.Skeletons, 5))
+                .WhenPlayerAssignsRolledDiceToBlights(Tuple.Create(Blight.Lich, 6), Tuple.Create(Blight.Skeletons, 5))
                 .ThenSpace(Location.Swamp, x => x.Blights(Blight.Shades))
                 .ThenHero(x => x.LostSecrecy(2).HasUsedAction());
         }
@@ -37,7 +38,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenSpace(Location.Swamp, x => x.Blight(Blight.Skeletons, Blight.Shades))
                 .GivenHero("Acolyte", x => x.Power("Call to Death", "Final Rest").Location(Location.Swamp))
                 .WhenPlayerTakesAttackAction(x => x.Action("Call to Death").Tactic("Final Rest (3 dice)").Target(Blight.Skeletons, Blight.Shades).Rolls(5, 2, 3, 1))
-                .WhenPlayerAssignsRolledDiceToBlights(BlightDieAssignment.Create(Blight.Shades, 5), BlightDieAssignment.Create(Blight.Skeletons, 3))
+                .WhenPlayerAssignsRolledDiceToBlights(Tuple.Create(Blight.Shades, 5), Tuple.Create(Blight.Skeletons, 3))
                 .ThenSpace(Location.Swamp, x => x.Blights(Blight.Skeletons))
                 .ThenHero(x => x.HasUsedAction()
                     .LostGrace(2)       // loses Grace from failing to kill Skeletons and rolling a 1 with Final Rest

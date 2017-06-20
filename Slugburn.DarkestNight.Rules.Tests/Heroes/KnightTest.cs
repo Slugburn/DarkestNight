@@ -218,6 +218,42 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         }
 
         // Oath of Vengeance
+        [Test]
+        public void OathOfVengeance_Activate()
+        {
+            const string powerName = "Oath of Vengeance";
+            new TestScenario()
+                .GivenHero("Knight", x => x.Power(powerName))
+                .WhenPlayerTakesAction(powerName)
+                .ThenPower(powerName, x => x.IsActive());
+        }
+
+        [Test]
+        public void OathOfVengeance_Active()
+        {
+            // Add 1 to highest die when fighting the Necromancer.
+            // Win fight versus the Necromancer; you get a free action.
+            new TestScenario()
+                .GivenHero("Knight", x => x.Power("Oath of Vengeance", "Charge", "Consecrated Blade").Location(Location.Ruins))
+                .GivenNecromancerLocation(Location.Ruins)
+                .GivenPower("Oath of Vengeance", x=>x.IsActive())
+                .WhenPlayerTakesAttackAction(x=>x.Action("Fight Necromancer").Tactic("Charge").Rolls(2, 3, 6))
+                .ThenHero(x=>x.Rolled(2, 3, 7).FightDice(2).HasUsedAction().HasFreeAction())
+                .ThenPower("Oath of Vengeance", x=>x.IsActive(false));
+        }
+
+        [TestCase("Hide")]
+        [TestCase("Search")]
+        public void OathOfVengeance_Broken(string action)
+        {
+            // Hide or search; you lose 1 Grace
+            new TestScenario()
+                .GivenHero("Knight", x => x.Power("Oath of Vengeance"))
+                .GivenPower("Oath of Vengeance", x => x.IsActive())
+                .WhenPlayerTakesAction(action)
+                .ThenHero(x=>x.HasUsedAction().LostGrace());
+        }
+
 
         // Reckless Abandon
 

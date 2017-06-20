@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 
@@ -31,6 +32,8 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public FightContext Action(string action)
         {
             _action = action;
+            if (action == FightNecromancer.ActionName)
+                _targets = new[] {"Necromancer"};
             return this;
         }
 

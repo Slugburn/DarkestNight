@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Enemies
 {
-    public class Necromancer
+    public class Necromancer : IEnemy
     {
         private readonly Game _game;
 
@@ -47,6 +49,37 @@ namespace Slugburn.DarkestNight.Rules.Enemies
                 blightsCreated++;
 
             _game.CreateBlights(Location, blightsCreated);
+        }
+
+        public string Name => "Necromancer";
+        public int Fight => 7;
+        public int Elude => 6;
+        public void Win(Hero hero)
+        {
+            if (hero.GetBlights().Any())
+                throw new System.NotImplementedException();
+            else if (hero.HasHolyRelic())
+                throw new System.NotImplementedException();
+        }
+
+        public void Failure(Hero hero)
+        {
+            hero.TakeWound();
+        }
+
+        public IEnumerable<ConflictResult> GetResults()
+        {
+            yield return new ConflictResult("Win fight", "Sacrifice blight or (with holy relic) Necromancer slain");
+            yield return new ConflictResult("Win elude", "No effect");
+            yield return new ConflictResult("Failure", "Take wound");
+        }
+
+        public void ResolveAttack(int result, Hero hero)
+        {
+            if (result >= Fight)
+                Win(hero);
+            else
+                Failure(hero);
         }
     }
 }

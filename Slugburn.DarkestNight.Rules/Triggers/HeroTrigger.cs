@@ -12,9 +12,9 @@ namespace Slugburn.DarkestNight.Rules.Triggers
         EventDrawn,
         EventOptionSelected,
         LocationChanged,
-        AttackFailed,
         DestroyedBlight,
         FightWon,
-        Eluding
+        Eluding,
+        Searching
     }
 }

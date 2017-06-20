@@ -23,8 +23,9 @@ namespace Slugburn.DarkestNight.Rules.Tests
         private int _expectedFightDice;
         private int _expectedEludeDice;
         private int _expectedAvailableMovement;
-        private int[] _expectedRolls;
+        private int[] _expectedRoll;
         private int _expectedDiceCount;
+        private int _expectedFreeActions;
 
         public HeroExpectation(Hero hero)
         {
@@ -71,8 +72,12 @@ namespace Slugburn.DarkestNight.Rules.Tests
             Assert.That(searchDice, Is.EqualTo(_expectedSearchDice), "Unexpected number of Search dice.");
             if (_expectedDiceCount > 0)
                 Assert.That(_hero.Roll.Count, Is.EqualTo(_expectedDiceCount));
-            if (_expectedRolls != null)
-                Assert.That(_hero.Roll, Is.EquivalentTo(_expectedRolls));
+            if (_expectedRoll != null)
+            {
+                Assert.That(_hero.Roll, Is.Not.Null, "No roll was made");
+                Assert.That(_hero.Roll, Is.EquivalentTo(_expectedRoll));
+            }
+            Assert.That(_hero.FreeActions, Is.EqualTo(_expectedFreeActions));
         }
 
 
@@ -210,13 +215,19 @@ namespace Slugburn.DarkestNight.Rules.Tests
 
         public HeroExpectation Rolled(params int[] expected)
         {
-            _expectedRolls = expected;
+            _expectedRoll = expected;
             return this;
         }
 
         public HeroExpectation RolledNumberOfDice(int expectedDice)
         {
             _expectedDiceCount = expectedDice;
+            return this;
+        }
+
+        public HeroExpectation HasFreeAction()
+        {
+            _expectedFreeActions = 1;
             return this;
         }
     }

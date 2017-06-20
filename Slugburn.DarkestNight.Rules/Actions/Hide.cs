@@ -1,5 +1,5 @@
-﻿using System;
-using Slugburn.DarkestNight.Rules.Heroes;
+﻿using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
@@ -9,7 +9,11 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public void Act(Hero hero)
         {
-            throw new NotImplementedException();
+            hero.Triggers.Send(HeroTrigger.Hiding);
+            hero.RefreshPowers();
+            if (hero.Secrecy < 5)
+                hero.GainSecrecy(1, 5);
+            hero.IsActionAvailable = false;
         }
 
         public bool IsAvailable(Hero hero)
