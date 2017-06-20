@@ -238,6 +238,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
         {
             WhenHeroDefends();
             WhenPlayerSelectsTactic(actions, "Fight");
+            Assert.That(_game.ActingHero.ConflictState.SelectedTactic.Type, Is.EqualTo(TacticType.Fight));
             WhenPlayerAcceptsRoll();
             return this;
         }
@@ -246,6 +247,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
         {
             WhenHeroDefends();
             WhenPlayerSelectsTactic(actions, "Elude");
+            Assert.That(_game.ActingHero.ConflictState.SelectedTactic.Type, Is.EqualTo(TacticType.Elude));
             WhenPlayerAcceptsRoll();
             return this;
         }

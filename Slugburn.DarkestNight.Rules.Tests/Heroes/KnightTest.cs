@@ -254,9 +254,28 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .ThenHero(x=>x.HasUsedAction().LostGrace());
         }
 
-
         // Reckless Abandon
+        // Tactic: Fight with 4 dice. Lose 1 Grace if you roll fewer than 2 successes.
+        [Test]
+        public void RecklessAbandon()
+        {
+            new TestScenario()
+                .GivenHero("Knight", x => x.Power("Reckless Abandon").Location(Location.Village))
+                .GivenSpace(Location.Village, x => x.Blight(Blight.Vampire))
+                .WhenHeroFights(x => x.Tactic("Reckless Abandon").Rolls(1, 2, 3, 4))
+                .ThenHero(x => x.RolledNumberOfDice(4).LostGrace());
+        }
 
         // Sprint
+        // Tactic: Elude with 2 dice
+        [Test]
+        public void Sprint()
+        {
+            new TestScenario()
+                .GivenHero("Knight", x => x.Power("Sprint").Location(Location.Village))
+                .GivenSpace(Location.Village, x => x.Blight(Blight.Skeletons))
+                .WhenHeroEludes(x => x.Tactic("Sprint"))
+                .ThenHero(x=>x.RolledNumberOfDice(2));
+        }
     }
 }
