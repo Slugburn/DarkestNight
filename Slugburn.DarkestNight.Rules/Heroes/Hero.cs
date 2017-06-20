@@ -101,7 +101,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void StartTurn()
         {
-            Triggers.Handle(HeroTrigger.StartTurn);
+            Triggers.Send(HeroTrigger.StartTurn);
             if (Location == Game.Necromancer.Location)
                 LoseSecrecy("Necromancer");
             State = HeroState.ChoosingAction;
@@ -169,7 +169,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var eventName = Game.Events.Draw();
             var card = EventFactory.CreateCard(eventName);
             CurrentEvent = card.GetHeroEvent(this);
-            Triggers.Handle(HeroTrigger.EventDrawn);
+            Triggers.Send(HeroTrigger.EventDrawn);
         }
 
         public void LoseSecrecy(string sourceName)
@@ -179,7 +179,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void LoseSecrecy(int amount, string sourceName)
         {
-            if (!Triggers.Handle(HeroTrigger.LoseSecrecy, sourceName)) return;
+            if (!Triggers.Send(HeroTrigger.LoseSecrecy, sourceName)) return;
             Secrecy = Math.Max(Secrecy - amount, 0);
         }
 
@@ -210,7 +210,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void MoveTo(Location location)
         {
             Location = location;
-            Triggers.Handle(HeroTrigger.LocationChanged);
+            Triggers.Send(HeroTrigger.LocationChanged);
         }
 
         public void GainSecrecy(int amount, int max)
@@ -251,15 +251,15 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var blightInfo = blight.GetDetail();
             if (result < blightInfo.Might)
             {
-                Triggers.Handle(HeroTrigger.AttackFailed);
-                if (Triggers.Handle(HeroTrigger.BeforeBlightDefends))
+                Triggers.Send(HeroTrigger.AttackFailed);
+                if (Triggers.Send(HeroTrigger.BeforeBlightDefends))
                     blightInfo.Defend(this);
             }
             else
             {
-                Triggers.Handle(HeroTrigger.FightWon);
+                Triggers.Send(HeroTrigger.FightWon);
                 Game.DestroyBlight(Location, blight);
-                Triggers.Handle(HeroTrigger.DestroyedBlight);
+                Triggers.Send(HeroTrigger.DestroyedBlight);
             }
         }
 
@@ -491,7 +491,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void SelectEventOption(string option)
         {
             CurrentEvent.SelectedOption = option;
-            if (!Triggers.Handle(HeroTrigger.EventOptionSelected))
+            if (!Triggers.Send(HeroTrigger.EventOptionSelected))
                 return;
             var card = EventFactory.CreateCard(CurrentEvent.Name);
             card.Resolve(this, option);

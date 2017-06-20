@@ -3,48 +3,66 @@ using System.Linq;
 
 namespace Slugburn.DarkestNight.Rules.Triggers
 {
-    public class TriggerRegistry<TTrigger, TRegistrar>
+    public class TriggerRegistry<TTrigger, TRegistrar> where TTrigger : struct
     {
-        private readonly Dictionary<TTrigger, List<ITriggerHandler<TRegistrar>>> _handlers;
         private readonly TRegistrar _registrar;
+        private readonly Dictionary<TTrigger, List<Item>> _byTrigger;
+        private readonly Dictionary<string, List<Item>> _bySource;
 
         public TriggerRegistry(TRegistrar registrar)
         {
             _registrar = registrar;
-            _handlers = new Dictionary<TTrigger, List<ITriggerHandler<TRegistrar>>>();
+            _byTrigger = new Dictionary<TTrigger, List<Item>>();
+            _bySource = new Dictionary<string, List<Item>>();
         }
 
-        public void Register(TTrigger trigger, ITriggerHandler<TRegistrar> handler)
+        public void Add(TTrigger trigger, string source, ITriggerHandler<TRegistrar> handler)
         {
-            if (!_handlers.ContainsKey(trigger))
-                _handlers[trigger] = new List<ITriggerHandler<TRegistrar>>();
-            _handlers[trigger].Add(handler);
+            if (!_byTrigger.ContainsKey(trigger))
+                _byTrigger[trigger] = new List<Item>();
+            if (!_bySource.ContainsKey(source))
+                _bySource[source] = new List<Item>();
+            var item = new Item {Trigger = trigger, Source = source, Handler = handler};
+            _byTrigger[trigger].Add(item);
+            _bySource[source].Add(item);
         }
 
-        public bool Handle(TTrigger trigger, object state = null)
+        public bool Send(TTrigger trigger, object state = null)
         {
-            if (!_handlers.ContainsKey(trigger)) return true;
-            var handlers = _handlers[trigger];
+            if (!_byTrigger.ContainsKey(trigger)) return true;
+            var items = _byTrigger[trigger];
             var cancel = false;
-            foreach (var handler in handlers.ToList())
+            foreach (var item in items.ToList())
             {
                 var context = new TriggerContext(state);
-                handler.HandleTrigger(_registrar, context);
+                item.Handler.HandleTrigger(_registrar, item.Source, context);
                 cancel = cancel || context.Cancel;
             }
             return !cancel;
         }
 
-        public void Unregister(TTrigger trigger, string name)
+        public void Remove(TTrigger trigger, string source)
         {
-            var handlers = _handlers[trigger];
-            handlers.RemoveAll(x => x.Name == name);
+            var byTrigger = _byTrigger[trigger];
+            byTrigger.RemoveAll(x => x.Source== source);
+            var bySource = _bySource[source];
+            bySource.RemoveAll(x => x.Trigger.ToString() == trigger.ToString());
         }
 
-        public void UnregisterAll(string name)
+        public void RemoveBySource(string source)
         {
-            foreach (var key in _handlers.Keys)
-                Unregister(key, name);
+            if (!_bySource.ContainsKey(source)) return;
+            var bySource = _bySource[source];
+            _bySource.Remove(source);
+            foreach (var item in bySource)
+                _byTrigger[item.Trigger].Remove(item);
+        }
+
+        private class Item
+        {
+            public TTrigger Trigger { get; set; }
+            public string Source { get; set; }
+            public ITriggerHandler<TRegistrar> Handler { get; set; }
         }
     }
 }

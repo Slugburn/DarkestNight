@@ -33,7 +33,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             else
             {
                 // move toward closest detected hero
-                var handled = _game.Triggers.Handle(GameTrigger.NecromancerDetectsHeroes);
+                var handled = _game.Triggers.Send(GameTrigger.NecromancerDetectsHeroes);
                 // TODO: update to find closest
                 Location = handled
                     ? detected.First().Location 

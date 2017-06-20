@@ -27,16 +27,15 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 var result = roll.Max();
                 var dieCount = result >= 5 ? 1 : -1;
                 hero.AddRollModifier(new StaticRollBonus {Name = EventName, RollType = RollType.Any, DieCount = dieCount});
-                hero.Triggers.Register(HeroTrigger.EndOfTurn, new TwistOfFateEndOfTurnHandler() );
+                hero.Triggers.Add(HeroTrigger.EndOfTurn, EventName, new TwistOfFateEndOfTurnHandler() );
             }
-
+            
             public class TwistOfFateEndOfTurnHandler : ITriggerHandler<Hero>
             {
-                public string Name => EventName;
-                public void HandleTrigger(Hero registrar, TriggerContext context)
+                public void HandleTrigger(Hero registrar, string source, TriggerContext context)
                 {
                     registrar.RemoveRollModifiers(EventName);
-                    registrar.Triggers.Unregister(HeroTrigger.EndOfTurn, EventName);
+                    registrar.Triggers.Remove(HeroTrigger.EndOfTurn, EventName);
                 }
 
             }

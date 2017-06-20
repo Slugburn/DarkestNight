@@ -18,22 +18,21 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
         {
             base.Activate(hero);
             hero.CanGainGrace = true;
-            hero.Triggers.Register(HeroTrigger.StartTurn, new TreeFormStartTurnHandler());
+            hero.Triggers.Add(HeroTrigger.StartTurn, Name, new TreeFormStartTurnHandler());
             hero.AddActionFilter(PowerName, HeroState.ChoosingAction, new[] { "Hide", "Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form" });
         }
 
         public override bool Deactivate(Hero hero)
         {
             if (!base.Deactivate(hero)) return false;
-            hero.Triggers.Unregister(HeroTrigger.StartTurn, PowerName);
+            hero.Triggers.Remove(HeroTrigger.StartTurn, PowerName);
             hero.RemoveActionFilter(PowerName);
             return true;
         }
 
         private class TreeFormStartTurnHandler : ITriggerHandler<Hero>
         {
-            public string Name => PowerName;
-            public void HandleTrigger(Hero registrar, TriggerContext context)
+            public void HandleTrigger(Hero registrar, string source, TriggerContext context)
             {
                 registrar.GainGrace(2, registrar.DefaultGrace);
             }

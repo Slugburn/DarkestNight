@@ -149,7 +149,7 @@ namespace Slugburn.DarkestNight.Rules
         {
             var space = (Space) Board[location];
             space.RemoveBlight(blight);
-            Triggers.Handle(GameTrigger.BlightDestroyed, location);
+            Triggers.Send(GameTrigger.BlightDestroyed, location);
         }
     }
 }

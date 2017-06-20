@@ -21,8 +21,8 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         {
             base.Activate(hero);
             hero.AddRollModifier(new OathOfPurgingModifier());
-            hero.Triggers.Register(HeroTrigger.DestroyedBlight, new OathOfPurgingFulfilled {Name = Name});
-            hero.Triggers.Register(HeroTrigger.LocationChanged, new OathOfPurgingBroken {Name = Name});
+            hero.Triggers.Add(HeroTrigger.DestroyedBlight, Name, new OathOfPurgingFulfilled());
+            hero.Triggers.Add(HeroTrigger.LocationChanged, Name, new OathOfPurgingBroken());
         }
 
         public override bool Deactivate(Hero hero)
@@ -57,22 +57,22 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             }
 
         }
-        private class OathOfPurgingFulfilled : HeroTriggerHandler
+        private class OathOfPurgingFulfilled : ITriggerHandler<Hero>
         {
 
-            public override void HandleTrigger(Hero hero, TriggerContext context)
+            public void HandleTrigger(Hero hero, string source, TriggerContext context)
             {
-                var oath = (IOath)hero.GetPower(Name);
+                var oath = (IOath)hero.GetPower(source);
                 oath.Fulfill(hero);
             }
         }
 
-        private class OathOfPurgingBroken : HeroTriggerHandler
+        private class OathOfPurgingBroken : ITriggerHandler<Hero>
         {
-            public override void HandleTrigger(Hero hero, TriggerContext context)
+            public void HandleTrigger(Hero hero, string source, TriggerContext context)
             {
                 if (hero.Location != Location.Monastery) return;
-                var oath = (IOath) hero.GetPower(Name);
+                var oath = (IOath) hero.GetPower(source);
                 oath.Break(hero);
             }
         }

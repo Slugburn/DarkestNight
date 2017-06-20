@@ -29,8 +29,8 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         public override bool Deactivate(Hero hero)
         {
             if (!base.Deactivate(hero)) return false;
-            hero.Triggers.UnregisterAll(Name);
-            hero.Game.Triggers.UnregisterAll(Name);
+            hero.Triggers.RemoveBySource(Name);
+            hero.Game.Triggers.RemoveBySource(Name);
             return true;
         }
 

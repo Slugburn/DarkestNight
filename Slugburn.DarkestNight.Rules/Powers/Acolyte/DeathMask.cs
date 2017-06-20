@@ -17,13 +17,12 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            hero.Triggers.Register(HeroTrigger.LoseSecrecy, new DeathMaskTriggerHandler());
+            hero.Triggers.Add(HeroTrigger.LoseSecrecy, Name, new DeathMaskTriggerHandler());
         }
 
         private class DeathMaskTriggerHandler : ITriggerHandler<Hero>
         {
-            public string Name => PowerName;
-            public void HandleTrigger(Hero registrar, TriggerContext context)
+            public void HandleTrigger(Hero registrar, string source, TriggerContext context)
             {
                 var hero = registrar;
                 var power = hero.GetPower(PowerName);

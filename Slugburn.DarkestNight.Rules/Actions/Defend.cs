@@ -40,7 +40,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             var tactic = hero.ConflictState.SelectedTactic;
             var tacticType = tactic.Type;
             if (tacticType == TacticType.Elude)
-                hero.Triggers.Handle(HeroTrigger.Eluding);
+                hero.Triggers.Send(HeroTrigger.Eluding);
             var targetNumber = tacticType == TacticType.Fight ? target.FightTarget : target.EludeTarget;
             var result = hero.Roll.Max();
             var enemy = EnemyFactory.Create(target.Name);
@@ -50,7 +50,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             {
                 enemy.Win(hero);
                 if (tacticType == TacticType.Fight)
-                    hero.Triggers.Handle(HeroTrigger.FightWon);
+                    hero.Triggers.Send(HeroTrigger.FightWon);
             }
         }
     }

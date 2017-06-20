@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             hero.State = HeroState.Praying;
             var dice = hero.GetDice(RollType.Pray, "Pray", 2);
             hero.Roll = Die.Roll(dice.Total);
-            hero.Triggers.Handle(HeroTrigger.AfterRoll);
+            hero.Triggers.Send(HeroTrigger.AfterRoll);
             var successes = hero.Roll.Count(x => x>=3);
             hero.GainGrace(successes, hero.DefaultGrace);
             hero.RefreshPowers();

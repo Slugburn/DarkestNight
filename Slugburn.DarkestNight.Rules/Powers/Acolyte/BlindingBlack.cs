@@ -16,20 +16,19 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         {
             base.Learn(hero);
             var handler = new BlindingBlackTriggerHandler {HeroName = hero.Name};
-            hero.Game.Triggers.Register(GameTrigger.NecromancerDetectsHeroes, handler);
+            hero.Game.Triggers.Add(GameTrigger.NecromancerDetectsHeroes, Name, handler);
         }
 
         public class BlindingBlackTriggerHandler : ITriggerHandler<Game>
         {
-            public string Name => "Blinding Black";
             public string HeroName { get; set; }
 
-            public void HandleTrigger(Game registrar, TriggerContext context)
+            public void HandleTrigger(Game registrar, string source, TriggerContext context)
             {
                 var hero = registrar.GetHero(HeroName);
-                var power = hero.GetPower(Name);
+                var power = hero.GetPower(source);
                 if (!power.IsUsable(hero)) return;
-                if (!hero.Player.AskUsePower(Name, power.Text)) return;
+                if (!hero.Player.AskUsePower(source, power.Text)) return;
                 power.Exhaust(hero);
                 context.Cancel = true;
             }

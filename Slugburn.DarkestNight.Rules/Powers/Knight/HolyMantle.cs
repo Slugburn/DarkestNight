@@ -18,13 +18,12 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         {
             base.Learn(hero);
             hero.DefaultGrace += 1;
-            hero.Triggers.Register(HeroTrigger.AfterRoll, new HolyMantleAfterRoll());
+            hero.Triggers.Add(HeroTrigger.AfterRoll, Name, new HolyMantleAfterRoll());
         }
 
         private class HolyMantleAfterRoll : ITriggerHandler<Hero>
         {
-            public string Name => PowerName;
-            public void HandleTrigger(Hero registrar, TriggerContext context)
+            public void HandleTrigger(Hero registrar, string source, TriggerContext context)
             {
                 var hero = registrar;
                 if (hero.State != HeroState.Praying) return;

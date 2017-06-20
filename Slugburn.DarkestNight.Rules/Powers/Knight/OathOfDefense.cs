@@ -26,18 +26,18 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             }
             else
             {
-                hero.Triggers.Register(HeroTrigger.StartTurn, new OathOfDefenseActive() { Name = Name });
-                hero.Game.Triggers.Register(GameTrigger.BlightDestroyed, new OathOfDefenseFulfilled { Name = Name, HeroName = hero.Name });
-                hero.Triggers.Register(HeroTrigger.LocationChanged, new OathOfDefenseBroken() { Name = Name });
+                hero.Triggers.Add(HeroTrigger.StartTurn, Name, new OathOfDefenseActive());
+                hero.Game.Triggers.Add(GameTrigger.BlightDestroyed, Name, new OathOfDefenseFulfilled { HeroName = hero.Name });
+                hero.Triggers.Add(HeroTrigger.LocationChanged, Name, new OathOfDefenseBroken());
             }
             hero.IsActionAvailable = false;
         }
 
-        private class OathOfDefenseFulfilled : GameTriggerHandler
+        private class OathOfDefenseFulfilled : ITriggerHandler<Game>
         {
             public string HeroName { get; set; }
 
-            public override void HandleTrigger(Game game, TriggerContext context)
+            public void HandleTrigger(Game game, string source, TriggerContext context)
             {
                 var location = context.GetState<Location>();
                 var hero = game.GetHero(HeroName);
@@ -49,19 +49,19 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             }
         }
 
-        private class OathOfDefenseActive : HeroTriggerHandler
+        private class OathOfDefenseActive : ITriggerHandler<Hero>
         {
-            public override void HandleTrigger(Hero registrar, TriggerContext context)
+            public void HandleTrigger(Hero registrar, string source, TriggerContext context)
             {
                 var hero = registrar;
                 hero.GainGrace(1, hero.DefaultGrace);
             }
         }
-        private class OathOfDefenseBroken : HeroTriggerHandler
+        private class OathOfDefenseBroken : ITriggerHandler<Hero>
         {
-            public override void HandleTrigger(Hero hero, TriggerContext context)
+            public void HandleTrigger(Hero hero, string source, TriggerContext context)
             {
-                var oath = (IOath)hero.GetPower(Name);
+                var oath = (IOath)hero.GetPower(source);
                 oath.Break(hero);
             }
         }

@@ -19,8 +19,8 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         {
             base.Activate(hero);
             hero.AddRollModifier(new StaticRollBonus {Name = Name, RollType = RollType.Fight, DieCount = 1});
-            hero.Triggers.Register(HeroTrigger.FightWon, new OathOfValorFulfilled {Name = Name} );
-            hero.Triggers.Register(HeroTrigger.Eluding, new OathOfValorBroken {Name = Name});
+            hero.Triggers.Add(HeroTrigger.FightWon, Name, new OathOfValorFulfilled() );
+            hero.Triggers.Add(HeroTrigger.Eluding, Name, new OathOfValorBroken());
         }
 
         public override bool Deactivate(Hero hero)
@@ -48,20 +48,20 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             Deactivate(hero);
         }
 
-        private class OathOfValorFulfilled : HeroTriggerHandler
+        private class OathOfValorFulfilled : ITriggerHandler<Hero>
         {
-            public override void HandleTrigger(Hero hero, TriggerContext context)
+            public void HandleTrigger(Hero hero, string source, TriggerContext context)
             {
-                var oath = (IOath)hero.GetPower(Name);
+                var oath = (IOath)hero.GetPower(source);
                 oath.Fulfill(hero);
             }
         }
 
-        private class OathOfValorBroken : HeroTriggerHandler
+        private class OathOfValorBroken : ITriggerHandler<Hero>
         {
-            public override void HandleTrigger(Hero hero, TriggerContext context)
+            public void HandleTrigger(Hero hero, string source, TriggerContext context)
             {
-                var oath = (IOath)hero.GetPower(Name);
+                var oath = (IOath)hero.GetPower(source);
                 oath.Break(hero);
             }
         }

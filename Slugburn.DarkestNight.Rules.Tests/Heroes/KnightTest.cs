@@ -67,7 +67,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             new TestScenario()
                 .GivenHero("Knight", x => x.Power("Oath of Defense").Grace(0))
                 .WhenPlayerTakesAction("Oath of Defense")
-                .ThenHero(x=>x.Grace(1).HasUsedAction()) // gains grace and deactivates immediately
+                // gains grace and deactivates immediately
+                .ThenHero(x=>x.Grace(1).HasUsedAction()) 
                 .ThenPower("Oath of Defense", x=>x.IsActive(false));
         }
 

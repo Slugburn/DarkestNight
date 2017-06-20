@@ -17,16 +17,14 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            hero.Triggers.Register(HeroTrigger.EventDrawn, new VisionsEventDrawnHandler());
-            hero.Triggers.Register(HeroTrigger.EventOptionSelected, new VisionsEventOptionsSelectedHandler());
+            hero.Triggers.Add(HeroTrigger.EventDrawn, Name, new VisionsEventDrawnHandler());
+            hero.Triggers.Add(HeroTrigger.EventOptionSelected, Name, new VisionsEventOptionsSelectedHandler());
         }
 
 
         private class VisionsEventDrawnHandler : ITriggerHandler<Hero>
         {
-            public string Name => PowerName;
-
-            public void HandleTrigger(Hero registrar, TriggerContext context)
+            public void HandleTrigger(Hero registrar, string source, TriggerContext context)
             {
                 var hero = registrar;
                 var power = hero.GetPower(PowerName);
@@ -39,9 +37,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 
         private class VisionsEventOptionsSelectedHandler : ITriggerHandler<Hero>
         {
-            public string Name => PowerName;
-
-            public void HandleTrigger(Hero registrar, TriggerContext context)
+            public void HandleTrigger(Hero registrar, string source, TriggerContext context)
             {
                 var hero = registrar;
                 var selectedOption = hero.CurrentEvent.SelectedOption;
