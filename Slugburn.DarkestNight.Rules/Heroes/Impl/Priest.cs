@@ -5,12 +5,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 {
     public class Priest : Hero
     {
-        public Priest()
-            : base(
-                "Priest", 6, 6, new Benediction(), new BlessingOfFaith(), new BlessingOfPiety(), new BlessingOfStrength(), new BlessingOfWisdom(), new Calm(),
-                new Censure(), new Intercession(), new Miracle(), new Sanctuary())
-        {
-        }
 
         #region Powers
 

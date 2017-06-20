@@ -4,12 +4,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 {
     public class Seer : Hero
     {
-        public Seer()
-            : base(
-                "Seer", 4, 6, new Destiny(), new Dowse(), new Foreknowledge(), new Hope(), new Prediction(), new Premonition(), new ProphecyOfDoom(),
-                new ProphecyOfFortune(), new ProphecyOfSafety(), new ProphecyOfSanctuary())
-        {
-        }
 
         class Destiny : Bonus
         {
@@ -100,7 +94,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
         {
             public ProphecyOfSanctuary()
             {
-                Name = "Prophecy of Santuary";
+                Name = "Prophecy of Sanctuary";
                 Text = "Exhaust at the start of any hero's turn. That hero gains 1 Secrecy (up to 7) and need not lose or spend Secrecy this turn.";
             }
         }

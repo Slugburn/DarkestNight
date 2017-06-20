@@ -10,13 +10,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 {
     public class Druid : Hero
     {
-        public Druid()
-            : base(
-                "Druid", 5, 6, new AnimalCompanion(), new Camouflage(), new Celerity(), new RavenForm(), new SpriteForm(), new TreeForm(), new Tranquility(),
-                new Vines(), new Visions(), new WolfForm())
-        {
-        }
-
         private interface IDruidForm : IPower, IActivateable
         {
             
@@ -164,7 +157,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        private class DruidFormPower : ActivateablePower, IDruidForm
+        private abstract class DruidFormPower : ActivateablePower, IDruidForm
         {
             public override void Learn(Hero hero)
             {

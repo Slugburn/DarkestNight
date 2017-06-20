@@ -5,13 +5,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 {
     public class Prince : Hero
     {
-        public Prince()
-            : base(
-                "Prince", 4, 3, new Chapel(), new DivineRight(), new Inspire(), new Loyalty(), new Rebellion(), new Resistance(), new SafeHouse(), new Scouts(),
-                new SecretPassage(), new Strategy())
-        {
-        }
-
+    
         #region Powers
 
         class Chapel : ActionPower

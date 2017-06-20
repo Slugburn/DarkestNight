@@ -109,6 +109,7 @@
     <Compile Include="Events\IEventCard.cs" />
     <Compile Include="Extensions\CardExtensions.cs" />
     <Compile Include="Heroes\HeroFactory.cs" />
+    <Compile Include="Heroes\IHeroFactory.cs" />
     <Compile Include="Heroes\Impl\Acolyte.cs" />
     <Compile Include="Heroes\Impl\Druid.cs" />
     <Compile Include="Heroes\Impl\Knight.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="IPlayer.cs" />
     <Compile Include="Powers\ActivateablePower.cs" />
     <Compile Include="Powers\IActivateable.cs" />
+    <Compile Include="Powers\PowerFactory.cs" />
     <Compile Include="Rolls\Dice.cs" />
     <Compile Include="Rolls\DiceDetail.cs" />
     <Compile Include="Rolls\Die.cs" />
@@ -136,7 +138,6 @@
     <Compile Include="Tactics\ITactic.cs" />
     <Compile Include="Maps\Map.cs" />
     <Compile Include="Maps\MapFactory.cs" />
-    <Compile Include="Powers\AfterRollState.cs" />
     <Compile Include="Powers\IBonusAction.cs" />
     <Compile Include="Powers\IPowerEffect.cs" />
     <Compile Include="Powers\PowerNotUsableException.cs" />

@@ -4,12 +4,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 {
     public class Rogue : Hero
     {
-        public Rogue()
-            : base(
-                "Rogue", 4, 7, new Ambush(), new Contacts(), new Diversion(), new Eavesdrop(), new Sabotage(), new Sap(), new ShadowCloak(), new Skulk(),
-                new Stealth(), new Vanish())
-        {
-        }
 
         class Ambush : TacticPower
         {

@@ -23,8 +23,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
         [TestCase("Wizard")]
         public void HasFullComplementOfPowers(string name)
         {
-            var type = typeof(Hero).Assembly.GetType($"Slugburn.DarkestNight.Rules.Heroes.Impl.{name}");
-            var hero = (Hero)Activator.CreateInstance(type);
+            var hero = HeroFactory.Create(name);
             var powers = hero.PowerDeck.ToList();
             Assert.That(powers.Count, Is.EqualTo(10));
             Assert.That(powers.Count(x => x.StartingPower), Is.EqualTo(4), string.Join(",", powers.Where(x => x.StartingPower).Select(x => x.Name)));

@@ -4,12 +4,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 {
     public class Scholar : Hero
     {
-        public Scholar()
-            : base(
-                "Scholar", 4, 6, new FindWeakness(), new Foresight(), new Preparation(), new Thoroughness(), new AncientCharm(), new AncientDefense(),
-                new AncientSword(), new Counterspell(), new ForgottenSancutary(), new ResearchMaterials())
-        {
-        }
 
         class FindWeakness : TacticPower
         {

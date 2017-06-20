@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
-using Slugburn.DarkestNight.Rules.Blights.Implementations;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Rolls;
@@ -28,7 +27,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
 
         public TestScenario GivenHero(string name, Action<HeroContext> def) 
         {
-            var hero = new HeroFactory().Create(name);
+            var hero = HeroFactory.Create(name);
             _game.AddHero(hero, _player);
             var ctx = new HeroContext(hero);
             def(ctx);

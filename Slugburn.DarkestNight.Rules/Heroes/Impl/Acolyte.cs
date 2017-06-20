@@ -11,12 +11,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 {
     public class Acolyte : Hero
     {
-        public Acolyte()
-            : base(
-                "Acolyte", 3, 7, new BlindingBlack(), new CallToDeath(), new DarkVeil(), new DeathMask(), new FadeToBlack(), new FalseLife(), new FalseOrders(),
-                new FinalRest(), new ForbiddenArts(), new LeechLife())
-        {
-        }
 
         #region Powers
 

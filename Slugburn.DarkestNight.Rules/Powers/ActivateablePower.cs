@@ -3,7 +3,7 @@ using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Powers
 {
-    public class ActivateablePower : ActionPower, IActivateable
+    public abstract class ActivateablePower : ActionPower, IActivateable
     {
         public bool IsActive { get; private set; }
 

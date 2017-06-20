@@ -4,12 +4,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 {
     public class Wizard : Hero
     {
-        public Wizard()
-            : base(
-                "Wizard", 3, 5, new ArcaneEnergy(), new Divination(), new Fiendfire(), new Invisibility(), new LightningStrike(), new RuneOfClairvoyance(),
-                new RuneOfInterference(), new RuneOfMisdirection(), new RuneOfNullification(), new Teleport())
-        {
-        }
 
         class Teleport : ActionPower
         {

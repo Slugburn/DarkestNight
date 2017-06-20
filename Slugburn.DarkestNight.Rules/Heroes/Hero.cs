@@ -12,7 +12,7 @@ using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Heroes
 {
-    public abstract class Hero
+    public class Hero
     {
         private readonly Dictionary<string, IAction> _actions;
         private readonly List<IPower> _powerDeck;
@@ -23,24 +23,17 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         private ILocationSelectedHandler _locationSelectedHandler;
         private List<IRollHandler> _rollHandlers;
 
-        protected Hero(string name, int defaultGrace, int defaultSecrecy, params IPower[] powers)
+        public Hero()
         {
-            Name = name;
-            DefaultGrace = defaultGrace;
-            Grace = defaultGrace;
-            DefaultSecrecy = defaultSecrecy;
-            Secrecy = defaultSecrecy;
+            _powerDeck = new List<IPower>();
             Powers = new List<IPower>();
-            _powerDeck = new List<IPower>(powers);
             _stash = new Stash();
             Triggers = new TriggerRegistry<HeroTrigger, Hero>(this);
             IsActionAvailable = true;
             CanGainGrace = true;
 
-            _actions = new IAction[] {new Travel(), new Hide(), new Attack(), new Search(), new Pray()}
-                .ToDictionary(x => x.Name, StringComparer.InvariantCultureIgnoreCase);
-            _tactics = new ITactic[] {new BasicFightTactic(), new BasicEludeTactic()}
-                .ToDictionary(x => x.Name, StringComparer.InvariantCultureIgnoreCase);
+            _actions = new Dictionary<string, IAction>(StringComparer.InvariantCultureIgnoreCase);
+            _tactics = new Dictionary<string, ITactic>(StringComparer.InvariantCultureIgnoreCase);
             _rollModifiers = new List<IRollModifier>();
             _actionFilters = new List<ActionFilter>();
 
@@ -52,7 +45,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public TriggerRegistry<HeroTrigger, Hero> Triggers { get; }
         public List<int> Roll { get; set; }
 
-        public IEnumerable<IPower> PowerDeck => _powerDeck;
+        public List<IPower> PowerDeck
+        {
+            get { return _powerDeck; }
+        }
 
         public int DefaultGrace { get; set; }
         public int DefaultSecrecy { get; set; }

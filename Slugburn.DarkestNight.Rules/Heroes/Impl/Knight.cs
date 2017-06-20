@@ -9,13 +9,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 {
     public class Knight : Hero
     {
-        public Knight()
-            : base(
-                "Knight", 5, 6, new Charge(), new ConsecratedBlade(), new HardRide(), new HolyMantle(), new OathOfDefense(), new OathOfPurging(),
-                new OathOfValor(), new OathOfVengeance(), new RecklessAbandon(), new Sprint())
-        {
-        }
-
         class Charge : TacticPower
         {
             private const string PowerName = "Charge";
