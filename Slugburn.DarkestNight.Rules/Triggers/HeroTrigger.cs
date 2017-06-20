@@ -10,6 +10,7 @@ namespace Slugburn.DarkestNight.Rules.Triggers
         FailedAttack,
         LoseSecrecy,
         EventDrawn,
-        EventOptionSelected
+        EventOptionSelected,
+        ChangeLocation
     }
 }

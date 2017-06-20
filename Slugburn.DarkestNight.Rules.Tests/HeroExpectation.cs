@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -23,6 +22,8 @@ namespace Slugburn.DarkestNight.Rules.Tests
         private int _expectedSearchDice;
         private int _expectedFightDice;
         private int _expectedEludeDice;
+        private int _expectedAvailableMovement;
+        private int[] _expectedRolls;
 
         public HeroExpectation(Hero hero)
         {
@@ -59,6 +60,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
                 Assert.That(ignoredBlights, Is.EquivalentTo(_expectedIgnoredBlights), "Unexpected ignored blights.");
             }
             Assert.That(_hero.TravelSpeed, Is.EqualTo(_expectedTravelSpeed), "Unexpected TravelSpeed.");
+            Assert.That(_hero.AvailableMovement, Is.EqualTo(_expectedAvailableMovement), "Unexpected AvailableMovement.");
 
             var fightDice = _hero.GetDice(RollType.Fight, null, 1).Total;
             Assert.That(fightDice, Is.EqualTo(_expectedFightDice), "Unexpected number of Fight dice.");
@@ -66,6 +68,8 @@ namespace Slugburn.DarkestNight.Rules.Tests
             Assert.That(eludeDice, Is.EqualTo(_expectedEludeDice), "Unexpected number of Elude dice.");
             var searchDice = _hero.GetSearchDice().Total;
             Assert.That(searchDice, Is.EqualTo(_expectedSearchDice), "Unexpected number of Search dice.");
+            if (_expectedRolls != null)
+                Assert.That(_hero.Roll, Is.EquivalentTo(_expectedRolls));
         }
 
 
@@ -192,6 +196,18 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public HeroExpectation EludeDice(int expected)
         {
             _expectedEludeDice = expected;
+            return this;
+        }
+
+        public HeroExpectation AvailableMovement(int distance)
+        {
+            _expectedAvailableMovement = distance;
+            return this;
+        }
+
+        public HeroExpectation Rolled(params int[] expected)
+        {
+            _expectedRolls = expected;
             return this;
         }
     }

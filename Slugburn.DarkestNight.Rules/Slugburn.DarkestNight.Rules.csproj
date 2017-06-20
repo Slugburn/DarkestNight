@@ -147,7 +147,9 @@
     <Compile Include="Tactics\TacticInfo.cs" />
     <Compile Include="TargetInfo.cs" />
     <Compile Include="Triggers\GameTrigger.cs" />
+    <Compile Include="Triggers\GameTriggerHandler.cs" />
     <Compile Include="Triggers\HeroTrigger.cs" />
+    <Compile Include="Triggers\HeroTriggerHandler.cs" />
     <Compile Include="Triggers\TriggerContext.cs" />
     <Compile Include="Triggers\ITriggerHandler.cs" />
     <Compile Include="Game.cs" />

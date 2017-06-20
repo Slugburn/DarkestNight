@@ -10,6 +10,8 @@
         SelectingTarget,
         RollAvailable,
         AssigningDice,
-        SelectingLocation
+        SelectingLocation,
+        Moving,
+        Praying
     }
 }

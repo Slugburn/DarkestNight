@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Rolls;
+using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
@@ -8,7 +11,13 @@ namespace Slugburn.DarkestNight.Rules.Actions
         public string Name => "Pray";
         public void Act(Hero hero)
         {
-            throw new NotImplementedException();
+            hero.State = HeroState.Praying;
+            var dice = hero.GetDice(RollType.Pray, "Pray", 2);
+            hero.Roll = Die.Roll(dice.Total);
+            hero.Triggers.Handle(HeroTrigger.AfterRoll);
+            var successes = hero.Roll.Count(x => x>=3);
+            hero.GainGrace(successes, hero.DefaultGrace);
+            hero.RefreshPowers();
         }
 
         public bool IsAvailable(Hero hero)

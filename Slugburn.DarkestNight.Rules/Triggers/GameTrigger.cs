@@ -2,6 +2,7 @@
 {
     public enum GameTrigger
     {
+        BlightDestroyed,
         NecromancerDetectsHeroes,
     }
 }

@@ -40,5 +40,11 @@ namespace Slugburn.DarkestNight.Rules.Triggers
             var handlers = _handlers[trigger];
             handlers.RemoveAll(x => x.Name == name);
         }
+
+        public void UnregisterAll(string name)
+        {
+            foreach (var key in _handlers.Keys)
+                Unregister(key, name);
+        }
     }
 }

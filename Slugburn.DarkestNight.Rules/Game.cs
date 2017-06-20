@@ -8,6 +8,7 @@ using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Maps;
 using Slugburn.DarkestNight.Rules.Powers;
+using Slugburn.DarkestNight.Rules.Spaces;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules
@@ -142,6 +143,13 @@ namespace Slugburn.DarkestNight.Rules
         public void DecreaseDarkness()
         {
             Darkness = Math.Max(0, Darkness - 1);
+        }
+
+        public void DestroyBlight(Location location, Blight blight)
+        {
+            var space = (Space) Board[location];
+            space.RemoveBlight(blight);
+            Triggers.Handle(GameTrigger.BlightDestroyed, location);
         }
     }
 }

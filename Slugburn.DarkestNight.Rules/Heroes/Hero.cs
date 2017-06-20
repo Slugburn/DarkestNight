@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
-using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Events;
 using Slugburn.DarkestNight.Rules.Extensions;
-using Slugburn.DarkestNight.Rules.Heroes.Impl;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tactics;
@@ -19,11 +17,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         private readonly Dictionary<string, IAction> _actions;
         private readonly List<IPower> _powerDeck;
         private readonly List<IRollModifier> _rollModifiers;
+        private readonly Stash _stash;
         private readonly Dictionary<string, ITactic> _tactics;
+        private readonly List<ActionFilter> _actionFilters;
         private ILocationSelectedHandler _locationSelectedHandler;
         private List<IRollHandler> _rollHandlers;
-        private readonly Stash _stash;
-        private List<ActionFilter> _actionFilters;
 
         protected Hero(string name, int defaultGrace, int defaultSecrecy, params IPower[] powers)
         {
@@ -49,24 +47,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             Location = Location.Monastery;
             TravelSpeed = 1;
             Enemies = new List<string>();
-        }
-
-        public void AddActionFilter(string name, HeroState state, ICollection<string> allowed)
-        {
-            var filter = new ActionFilter {Name=name, State=state, Allowed = allowed};
-            _actionFilters.Add(filter);
-        }
-
-        public void RemoveActionFilter(string name)
-        {
-            _actionFilters.RemoveAll(x => x.Name == name);
-        }
-
-        private class ActionFilter
-        {
-            public string Name {get;set;}
-            public HeroState State { get; set; }
-            public ICollection<string> Allowed { get; set; }
         }
 
         public TriggerRegistry<HeroTrigger, Hero> Triggers { get; }
@@ -97,6 +77,21 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public List<string> Enemies { get; set; }
 
         public int TravelSpeed { get; set; }
+
+        public HeroEvent CurrentEvent { get; set; }
+
+        public int AvailableMovement { get; set; }
+
+        public void AddActionFilter(string name, HeroState state, ICollection<string> allowed)
+        {
+            var filter = new ActionFilter {Name = name, State = state, Allowed = allowed};
+            _actionFilters.Add(filter);
+        }
+
+        public void RemoveActionFilter(string name)
+        {
+            _actionFilters.RemoveAll(x => x.Name == name);
+        }
 
         public ICollection<Blight> GetBlights()
         {
@@ -148,19 +143,18 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 power.Exhaust(this);
         }
 
-        public void LoseGrace()
+        public void LoseGrace(int amount = 1)
         {
-            Grace--;
-            if (Grace < 0) Grace = 0;
+            Grace = Math.Max(Grace - amount, 0);
         }
 
         public void SpendGrace(int amount)
         {
-            if (Grace-amount < 0)
+            if (Grace - amount < 0)
                 throw new Exception("Insufficient Grace.");
             Grace -= amount;
         }
-        
+
         public void TakeWound()
         {
             if (Grace > 0)
@@ -181,8 +175,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             CurrentEvent = card.GetHeroEvent(this);
             Triggers.Handle(HeroTrigger.EventDrawn);
         }
-
-        public HeroEvent CurrentEvent { get; set; }
 
         public void LoseSecrecy(string sourceName)
         {
@@ -222,6 +214,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void MoveTo(Location location)
         {
             Location = location;
+            Triggers.Handle(HeroTrigger.ChangeLocation);
         }
 
         public void GainSecrecy(int amount, int max)
@@ -259,7 +252,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         internal void ResolveAttack(Blight blight, int result)
         {
             LoseSecrecy("Attack");
-            var space = GetSpace();
             var blightInfo = blight.GetDetail();
             if (result < blightInfo.Might)
             {
@@ -268,7 +260,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             }
             else
             {
-                space.RemoveBlight(blight);
+                Game.DestroyBlight(Location, blight);
             }
         }
 
@@ -311,7 +303,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             ValidateState(HeroState.SelectingTarget);
             var targetCount = targetIds.Count;
-            var targetsAreValid = ConflictState.AvailableTargets.Select(x=>x.Id).Intersect(targetIds).Count() == targetCount
+            var targetsAreValid = ConflictState.AvailableTargets.Select(x => x.Id).Intersect(targetIds).Count() == targetCount
                                   && targetCount >= ConflictState.MinTarget && targetCount <= ConflictState.MaxTarget;
             if (!targetsAreValid)
                 throw new Exception("Invalid targets.");
@@ -366,7 +358,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var validRolls = assignments.Select(x => x.DieValue).Intersect(Roll).Count() == assignments.Count;
             if (!validRolls)
                 throw new Exception("Invalid die values specified.");
-            var validTargets = assignments.Select(x => x.Blight.ToString()).Intersect(ConflictState.SelectedTargets.Select(x=>x.Name)).Count() == assignments.Count;
+            var validTargets = assignments.Select(x => x.Blight.ToString()).Intersect(ConflictState.SelectedTargets.Select(x => x.Name)).Count() == assignments.Count;
             if (!validTargets)
                 throw new Exception("Invalid targets specified.");
             foreach (var assignment in assignments)
@@ -510,5 +502,19 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             CurrentEvent = null;
         }
+
+        public void RefreshPowers()
+        {
+            foreach (var power in Powers)
+                power.Refresh();
+        }
+
+        private class ActionFilter
+        {
+            public string Name { get; set; }
+            public HeroState State { get; set; }
+            public ICollection<string> Allowed { get; set; }
+        }
+
     }
 }

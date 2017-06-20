@@ -300,5 +300,17 @@ namespace Slugburn.DarkestNight.Rules.Tests
             _game.Events.Insert(0, eventName);
             return this;
         }
+
+        public TestScenario WhenBlightIsDestroyed(Location location, Blight blight)
+        {
+            _game.DestroyBlight(location, blight);
+            return this;
+        }
+
+        public TestScenario WhenHeroMovesTo(Location location)
+        {
+            _game.ActingHero.MoveTo(location);
+            return this;
+        }
     }
 }

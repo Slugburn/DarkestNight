@@ -3,6 +3,7 @@ using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Rolls;
+using Slugburn.DarkestNight.Rules.Spaces;
 using Slugburn.DarkestNight.Rules.Tactics;
 using Slugburn.DarkestNight.Rules.Triggers;
 
@@ -201,30 +202,28 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         class FadeToBlack : Bonus
         {
+            private const string PowerName = "Fade to Black";
+
             public FadeToBlack()
             {
-                Name = "Fade to Black";
+                Name = PowerName;
                 Text = "+1 die in fights when Darkness is 10 or more. Another +1 die in fights when Darkness is 20 or more.";
             }
 
             public override void Learn(Hero hero)
             {
                 base.Learn(hero);
-                hero.AddRollModifier(new FadeToBlackRollModifer(Name));
+                hero.AddRollModifier(new FadeToBlackRollModifer());
             }
 
             private class FadeToBlackRollModifer : IRollModifier
             {
-                private readonly string _powerName;
-
-                public FadeToBlackRollModifer(string powerName)
-                {
-                    _powerName = powerName;
-                }
+                public string Name => PowerName;
 
                 public int GetModifier(Hero hero, RollType rollType)
                 {
-                    var power = hero.GetPower(_powerName);
+                    if (rollType != RollType.Fight) return 0;
+                    var power = hero.GetPower(PowerName);
                     if (!power.IsUsable(hero)) return 0;
                     var game = hero.Game;
                     if (game.Darkness < 10) return 0;
@@ -232,7 +231,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                     return 2;
                 }
 
-                public string Name => _powerName;
             }
         }
 
@@ -289,7 +287,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
                 public override void Act(Hero hero)
                 {
-                    var space = hero.GetSpace();
+                    var space = (Space) hero.GetSpace();
                     var potentialDestinations = space.AdjacentLocations;
                     var destination = hero.Player.ChooseLocation(potentialDestinations);
                     if (destination == Location.None)

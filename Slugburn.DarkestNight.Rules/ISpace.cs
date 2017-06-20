@@ -16,7 +16,6 @@ namespace Slugburn.DarkestNight.Rules
         bool HasRelic { get; set; }
 
         void AddBlight(Blight blight);
-        void RemoveBlight(Blight blight);
         void Add<T>(T item);
         void Remove<T>(T item);
         Blight GetBlight(Blight type);

@@ -1,6 +1,7 @@
 ﻿using System;
 using Slugburn.DarkestNight.Rules.Events.Cards;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Spaces;
 
 namespace Slugburn.DarkestNight.Rules.Events
 {
@@ -88,8 +89,9 @@ namespace Slugburn.DarkestNight.Rules.Events
         private static void Upheaval(Hero hero)
         {
             var count = hero.GetBlights().Count;
+            var space = (Space) hero.GetSpace();
             foreach (var blight in hero.GetBlights())
-                hero.GetSpace().RemoveBlight(blight);
+                space.RemoveBlight(blight);
             hero.Game.CreateBlights(hero.Location, count);
         }
     }
