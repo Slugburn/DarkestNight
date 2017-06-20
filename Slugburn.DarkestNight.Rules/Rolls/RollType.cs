@@ -2,6 +2,7 @@
 {
     public enum RollType
     {
+        None = 0,
         Pray,
         Any,
         Elude,

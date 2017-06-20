@@ -7,10 +7,12 @@ namespace Slugburn.DarkestNight.Rules.Triggers
         Praying,
         AfterRoll,
         StartTurn,
-        FailedAttack,
+        BeforeBlightDefends,
         LoseSecrecy,
         EventDrawn,
         EventOptionSelected,
-        ChangeLocation
+        LocationChanged,
+        AttackFailed,
+        DestroyedBlight
     }
 }

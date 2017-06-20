@@ -139,10 +139,10 @@ namespace Slugburn.DarkestNight.Rules.Tests
             return this;
         }
 
-        public TestScenario WhenPlayerTakesAttackAction(Action<FightContext> actions)
+        public TestScenario WhenPlayerTakesAttackAction(Action<FightContext> actions = null)
         {
             var context=  new FightContext(_die, _player, _game.ActingHero);
-            actions(context);
+            actions?.Invoke(context);
             WhenPlayerTakesAction(context.GetAction());
             WhenPlayerSelectsTactic(context.GetTactic(), context.GetTargets());
             WhenPlayerAcceptsRoll();
@@ -311,5 +311,6 @@ namespace Slugburn.DarkestNight.Rules.Tests
             _game.ActingHero.MoveTo(location);
             return this;
         }
+
     }
 }

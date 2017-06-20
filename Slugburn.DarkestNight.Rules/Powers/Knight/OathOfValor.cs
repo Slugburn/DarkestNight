@@ -1,3 +1,5 @@
+using Slugburn.DarkestNight.Rules.Heroes;
+
 namespace Slugburn.DarkestNight.Rules.Powers.Knight
 {
     class OathOfValor : Oath
@@ -10,5 +12,14 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             BreakText = "Attempt to elude; you lose 1 Grace.";
         }
 
+        public override void Fulfill(Hero hero)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Break(Hero hero)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

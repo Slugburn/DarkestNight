@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Tests
@@ -9,7 +11,8 @@ namespace Slugburn.DarkestNight.Rules.Tests
 
         public int Roll()
         {
-            return _upcomingRolls.Dequeue();
+            var roll = _upcomingRolls.Any() ? _upcomingRolls.Dequeue() : 6;
+            return roll;
         }
 
         public void AddUpcomingRoll(int value)

@@ -20,7 +20,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         {
             base.Learn(hero);
             hero.AddAction(new DarkVeilAction());
-            hero.Triggers.Register(HeroTrigger.FailedAttack, new FailedAttackHandler());
+            hero.Triggers.Register(HeroTrigger.BeforeBlightDefends, new FailedAttackHandler());
         }
 
         private class FailedAttackHandler : ITriggerHandler<Hero>

@@ -116,5 +116,49 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .ThenHero(x => x.Grace(0))
                 .ThenPower("Oath of Defense", x => x.IsActive(false));
         }
+
+        [Test]
+        public void OathOfPurging_Activate()
+        {
+            new TestScenario()
+                .GivenHero("Knight", x => x.Power("Oath of Purging").Location(Location.Village))
+                .GivenSpace(Location.Village, x=>x.Blight(Blight.Skeletons))
+                .WhenPlayerTakesAction("Oath of Purging")
+                .ThenPower("Oath of Purging", x => x.IsActive());
+        }
+
+        [Test]
+        public void OathOfPurging_ActiveAndFulfill()
+        {
+            // +2 dice in fights when attacking blights.
+            // Destroy a blight; you gain 1 Grace.
+            new TestScenario()
+                .GivenHero("Knight", x => x.Power("Oath of Purging").Location(Location.Village).Grace(0))
+                .GivenSpace(Location.Village, x=>x.Blight(Blight.Skeletons))
+                .GivenPower("Oath of Purging", x=>x.IsActive())
+                .WhenPlayerTakesAttackAction()
+                .ThenHero(x => x.Grace(1).HasUsedAction().LostSecrecy().FightDice(3).RolledNumberOfDice(3))
+                .ThenPower("Oath of Purging", x=>x.IsActive(false));
+        }
+
+        [Test]
+        public void OathOfPurging_Break()
+        {
+            // Enter the Monastery; you lose 1 Grace.
+            new TestScenario()
+                .GivenHero("Knight", x => x.Power("Oath of Purging").Location(Location.Village))
+                .GivenPower("Oath of Purging", x => x.IsActive())
+                .WhenHeroMovesTo(Location.Monastery)
+                .ThenHero(x => x.LostGrace())
+                .ThenPower("Oath of Purging", x => x.IsActive(false));
+        }
+
+        // Oath of Valor
+
+        // Oath of Vengeance
+
+        // Reckless Abandon
+
+        // Sprint
     }
 }

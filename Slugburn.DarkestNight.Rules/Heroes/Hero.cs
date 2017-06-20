@@ -210,7 +210,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void MoveTo(Location location)
         {
             Location = location;
-            Triggers.Handle(HeroTrigger.ChangeLocation);
+            Triggers.Handle(HeroTrigger.LocationChanged);
         }
 
         public void GainSecrecy(int amount, int max)
@@ -251,12 +251,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var blightInfo = blight.GetDetail();
             if (result < blightInfo.Might)
             {
-                if (Triggers.Handle(HeroTrigger.FailedAttack))
+                Triggers.Handle(HeroTrigger.AttackFailed);
+                if (Triggers.Handle(HeroTrigger.BeforeBlightDefends))
                     blightInfo.Defend(this);
             }
             else
             {
                 Game.DestroyBlight(Location, blight);
+                Triggers.Handle(HeroTrigger.DestroyedBlight);
             }
         }
 

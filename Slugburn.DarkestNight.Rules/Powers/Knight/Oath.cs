@@ -36,6 +36,8 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
 
         public string FulfillText { get; set; }
         public string BreakText { get; set; }
+        public abstract void Fulfill(Hero hero);
+        public abstract void Break(Hero hero);
 
         public override bool IsUsable(Hero hero)
         {

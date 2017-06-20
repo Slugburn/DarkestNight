@@ -22,13 +22,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             // fullfill immediately if no blights are at the current location
             if (!hero.GetBlights().Any())
             {
-                FulfillOath(hero);
+                Fulfill(hero);
             }
             else
             {
                 hero.Triggers.Register(HeroTrigger.StartTurn, new OathOfDefenseActive() { Name = Name });
                 hero.Game.Triggers.Register(GameTrigger.BlightDestroyed, new OathOfDefenseFulfilled { Name = Name, HeroName = hero.Name });
-                hero.Triggers.Register(HeroTrigger.ChangeLocation, new OathOfDefenseBroken() { Name = Name });
+                hero.Triggers.Register(HeroTrigger.LocationChanged, new OathOfDefenseBroken() { Name = Name });
             }
             hero.IsActionAvailable = false;
         }
@@ -44,15 +44,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
                 if (location != hero.Location) return;
                 var space = game.Board[location];
                 if (space.Blights.Any()) return;
-                var power = (OathOfDefense)hero.GetPower(PowerName);
-                power.FulfillOath(hero);
+                var power = (IOath)hero.GetPower(PowerName);
+                power.Fulfill(hero);
             }
-        }
-
-        private void FulfillOath(Hero hero)
-        {
-            hero.GainGrace(1, int.MaxValue);
-            Deactivate(hero);
         }
 
         private class OathOfDefenseActive : HeroTriggerHandler
@@ -67,10 +61,21 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         {
             public override void HandleTrigger(Hero hero, TriggerContext context)
             {
-                hero.LoseGrace(hero.Grace);
-                var power = (OathOfDefense)hero.GetPower(Name);
-                power.Deactivate(hero);
+                var oath = (IOath)hero.GetPower(Name);
+                oath.Break(hero);
             }
+        }
+
+        public override void Fulfill(Hero hero)
+        {
+            hero.GainGrace(1, int.MaxValue);
+            Deactivate(hero);
+        }
+
+        public override void Break(Hero hero)
+        {
+            hero.LoseGrace(hero.Grace);
+            Deactivate(hero);
         }
     }
 }

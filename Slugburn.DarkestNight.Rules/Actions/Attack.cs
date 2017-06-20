@@ -14,15 +14,17 @@ namespace Slugburn.DarkestNight.Rules.Actions
         public void Act(Hero hero)
         {
             hero.ValidateState(HeroState.ChoosingAction);
-            hero.ConflictState = new ConflictState
+            var conflictState = new ConflictState
             {
                 ConflictType = ConflictType.Attack,
-                AvailableTactics = hero.GetAvailableFightTactics().GetInfo(hero),
-                AvailableTargets = hero.GetSpace().Blights.GetTargetInfo(),
                 MinTarget = 1,
-                MaxTarget = 1
+                MaxTarget = 1,
+                AvailableTargets = hero.GetSpace().Blights.GetTargetInfo()
             };
+            hero.ConflictState = conflictState;
             hero.SetRollHandler(this);
+            // hero.ConflictState.ConflictType needs to be set before calling hero.GetAvailableFightTactics()
+            conflictState.AvailableTactics = hero.GetAvailableFightTactics().GetInfo(hero);
             hero.State = HeroState.SelectingTarget;
         }
 
