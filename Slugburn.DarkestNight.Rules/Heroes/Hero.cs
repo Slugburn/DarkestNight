@@ -257,6 +257,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             }
             else
             {
+                Triggers.Handle(HeroTrigger.FightWon);
                 Game.DestroyBlight(Location, blight);
                 Triggers.Handle(HeroTrigger.DestroyedBlight);
             }

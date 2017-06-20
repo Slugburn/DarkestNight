@@ -137,7 +137,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenSpace(Location.Village, x=>x.Blight(Blight.Skeletons))
                 .GivenPower("Oath of Purging", x=>x.IsActive())
                 .WhenPlayerTakesAttackAction()
-                .ThenHero(x => x.Grace(1).HasUsedAction().LostSecrecy().FightDice(3).RolledNumberOfDice(3))
+                .ThenHero(x => x.Grace(1).HasUsedAction().LostSecrecy().RolledNumberOfDice(3))
                 .ThenPower("Oath of Purging", x=>x.IsActive(false));
         }
 
@@ -154,6 +154,67 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         }
 
         // Oath of Valor
+        [Test]
+        public void OathOfValor_Activate()
+        {
+            new TestScenario()
+                .GivenHero("Knight", x => x.Power("Oath of Valor").Location(Location.Village))
+                .GivenSpace(Location.Village, x => x.Blight(Blight.Skeletons))
+                .WhenPlayerTakesAction("Oath of Valor")
+                .ThenPower("Oath of Valor", x => x.IsActive());
+        }
+
+        [Test]
+        public void OathOfValor_Active()
+        {
+            // +1 die in fights.
+            const string powerName = "Oath of Valor";
+            new TestScenario()
+                .GivenHero("Knight", x => x.Power(powerName))
+                .GivenPower(powerName, x => x.IsActive())
+                .ThenHero(x=>x.FightDice(2));
+        }
+
+        [Test]
+        public void OathOfValor_FulfillOnAttack()
+        {
+            // Win a fight; You may activate any Oath immediately.
+            const string powerName = "Oath of Valor";
+            new TestScenario()
+                .GivenHero("Knight", x => x.Power(powerName).Location(Location.Village))
+                .GivenSpace(Location.Village, x=>x.Blight(Blight.Skeletons))
+                .GivenPower(powerName, x => x.IsActive())
+                .WhenPlayerTakesAttackAction(x=>x.Rolls(6,6))
+                .ThenHero(x=>x.HasUsedAction().LostSecrecy())
+                .ThenPower(powerName, x=>x.IsActive(false))
+                .ThenAvailableActions(powerName);
+        }
+
+        [Test]
+        public void OathOfValor_FulfillOnDefense()
+        {
+            // Win a fight; You may activate any Oath immediately.
+            new TestScenario()
+                .GivenHero("Knight", x => x.Power("Oath of Valor", "Oath of Vengeance").Location(Location.Village))
+                .GivenSpace(Location.Village, x=>x.Blight(Blight.Skeletons))
+                .GivenPower("Oath of Valor", x => x.IsActive())
+                .WhenHeroFights(x=>x.Rolls(6,6))
+                .ThenPower("Oath of Valor", x => x.IsActive(false))
+                .ThenAvailableActions("Oath of Valor", "Oath of Vengeance");
+        }
+
+        [Test]
+        public void OathOfValor_Break()
+        {
+            // Attempt to elude; you lose 1 Grace.
+            new TestScenario()
+                .GivenHero("Knight", x => x.Power("Oath of Valor", "Oath of Vengeance").Location(Location.Village))
+                .GivenSpace(Location.Village, x => x.Blight(Blight.Skeletons))
+                .GivenPower("Oath of Valor", x => x.IsActive())
+                .WhenHeroEludes(x => x.Rolls(6))
+                .ThenHero(x=>x.LostGrace())
+                .ThenPower("Oath of Valor", x => x.IsActive(false));
+        }
 
         // Oath of Vengeance
 

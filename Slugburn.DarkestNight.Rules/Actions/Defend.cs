@@ -7,6 +7,7 @@ using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tactics;
+using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
@@ -37,10 +38,20 @@ namespace Slugburn.DarkestNight.Rules.Actions
         {
             var target = hero.ConflictState.SelectedTargets.Single();
             var tactic = hero.ConflictState.SelectedTactic;
-            var targetNumber = tactic.Type == TacticType.Fight ? target.FightTarget : target.EludeTarget;
+            var tacticType = tactic.Type;
+            if (tacticType == TacticType.Elude)
+                hero.Triggers.Handle(HeroTrigger.Eluding);
+            var targetNumber = tacticType == TacticType.Fight ? target.FightTarget : target.EludeTarget;
             var result = hero.Roll.Max();
+            var enemy = EnemyFactory.Create(target.Name);
             if (result < targetNumber)
-                hero.TakeWound();
+                enemy.Failure(hero);
+            else
+            {
+                enemy.Win(hero);
+                if (tacticType == TacticType.Fight)
+                    hero.Triggers.Handle(HeroTrigger.FightWon);
+            }
         }
     }
 }

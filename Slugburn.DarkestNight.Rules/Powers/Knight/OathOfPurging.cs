@@ -25,6 +25,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             hero.Triggers.Register(HeroTrigger.LocationChanged, new OathOfPurgingBroken {Name = Name});
         }
 
+        public override bool Deactivate(Hero hero)
+        {
+            if (!base.Deactivate(hero)) return false;
+            hero.RemoveRollModifiers(Name);
+            return true;
+        }
+
         public override void Fulfill(Hero hero)
         {
             hero.GainGrace(1, int.MaxValue);
@@ -50,7 +57,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             }
 
         }
-        internal class OathOfPurgingFulfilled : HeroTriggerHandler
+        private class OathOfPurgingFulfilled : HeroTriggerHandler
         {
 
             public override void HandleTrigger(Hero hero, TriggerContext context)
@@ -60,7 +67,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             }
         }
 
-        internal class OathOfPurgingBroken : HeroTriggerHandler
+        private class OathOfPurgingBroken : HeroTriggerHandler
         {
             public override void HandleTrigger(Hero hero, TriggerContext context)
             {

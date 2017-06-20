@@ -10,10 +10,10 @@ namespace Slugburn.DarkestNight.Rules.Tests
     {
         private readonly FakeDie _die;
 
-        public TacticContext(Hero hero, FakeDie die)
+        public TacticContext(Hero hero, FakeDie die, string defaultTactic)
         {
             _die = die;
-            _tactic = "Fight";
+            _tactic = defaultTactic;
             var blights = hero.GetBlights();
             if (blights.Count != 1) return;
             var blight = blights.First();

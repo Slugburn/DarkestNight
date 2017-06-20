@@ -195,9 +195,9 @@ namespace Slugburn.DarkestNight.Rules.Tests
             }
         }
 
-        public TestScenario WhenPlayerSelectsTactic(Action<TacticContext> define = null)
+        public TestScenario WhenPlayerSelectsTactic(Action<TacticContext> define = null, string defaultTactic = "Fight")
         {
-            var context = new TacticContext(_game.ActingHero, _die);
+            var context = new TacticContext(_game.ActingHero, _die, defaultTactic);
             define?.Invoke(context);
             var blights = context.GetTargets();
             var targetIds = GetTargetIds(blights).ToList();
@@ -235,7 +235,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public TestScenario WhenHeroFights(Action<TacticContext> actions)
         {
             WhenHeroDefends();
-            WhenPlayerSelectsTactic(actions);
+            WhenPlayerSelectsTactic(actions, "Fight");
             WhenPlayerAcceptsRoll();
             return this;
         }
@@ -243,7 +243,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
         public TestScenario WhenHeroEludes(Action<TacticContext> actions)
         {
             WhenHeroDefends();
-            WhenPlayerSelectsTactic(actions);
+            WhenPlayerSelectsTactic(actions, "Elude");
             WhenPlayerAcceptsRoll();
             return this;
         }
