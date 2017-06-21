@@ -9,7 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
         public int Fate { get; }
 
         public EventDetail Detail => EventDetail.Create(x => x
-            .Text("Count the blights in your location", "0: Lose 1 Secrecy", "1-2: Spend 1 Secrecy or Lose 1 Grace", "3-4: Spend 1 Grace or +1 Darkness"));
+            .Text("Count the blights in your location, 0: Lose 1 Secrecy, 1-2: Spend 1 Secrecy or Lose 1 Grace, 3-4: Spend 1 Grace or +1 Darkness"));
 
         public void Resolve(Hero hero, string option)
         {

@@ -11,7 +11,8 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
         public int Fate { get; }
 
         public EventDetail Detail => EventDetail.Create(x => x
-            .Text("Roll 1 die and take the highest", "6: Gain 1 Secrecy", "4-5: No effect", "1-3: Spend 1 Grace or lose 1 Secrecy")
+            .Text("Roll 1 die and take the highest")
+            .Row(6, "Gain 1 Secrecy").Row(4, 5, "No effect").Row(1, 3, "Spend 1 Grace or lose 1 Secrecy")
             .Option("cont", "Continue"));
 
         public void Resolve(Hero hero, string option)

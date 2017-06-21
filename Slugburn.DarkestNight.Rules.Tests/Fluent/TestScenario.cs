@@ -25,7 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             _game.AddPlayer(_player);
         }
 
-        public TestScenario GivenActingHero(string name, Action<HeroContext> def = null) 
+        public TestScenario GivenHero(string name, Action<HeroContext> def = null) 
         {
             var hero = HeroFactory.Create(name);
             _game.AddHero(hero, _player);

@@ -11,13 +11,12 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
         public int Fate { get; }
 
         public EventDetail Detail => EventDetail.Create(x => x
-            .Text("Lose 1 Secrecy. Then, spend 1 Grace or discard this event without further effect.",
-                "Roll 1 die and take the highest",
-                "6: Destroy a blight of your choice anywhere on the board",
-                "5: Draw a power card",
-                "4: Move to any other location",
-                "1-3: No effect")
-            .Option("grace", "Spend Grace", hero=>hero.Grace > 0)
+            .Text("Lose 1 Secrecy. Then, spend 1 Grace or discard this event without further effect.\nRoll 1 die and take the highest")
+            .Row(6, "Destroy a blight of your choice anywhere on the board")
+            .Row(5, "Draw a power card")
+            .Row(4, "Move to any other location")
+            .Row(1, 3, "No effect")
+            .Option("grace", "Spend Grace", hero => hero.Grace > 0)
             .Option("discard", "Discard Event"));
 
         public void Resolve(Hero hero, string option)

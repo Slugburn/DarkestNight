@@ -11,7 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Events
         private readonly List<EventRow> _rows = new List<EventRow>();
         private readonly List<EventEnemy> _enemies = new List<EventEnemy>();
 
-        private readonly List<string> _text = new List<string>();
+        private string _text;
 
         public static EventDetail Create(Action<EventDetailCreation> create)
         {
@@ -35,7 +35,7 @@ namespace Slugburn.DarkestNight.Rules.Events
             return new List<EventOption> {defaultOption};
         }
 
-        public List<string> GetText()
+        public string GetText()
         {
             return _text;
         }
@@ -64,9 +64,9 @@ namespace Slugburn.DarkestNight.Rules.Events
                 _detail = detail;
             }
 
-            public EventDetailCreation Text(params string[] text)
+            public EventDetailCreation Text(string text)
             {
-                _detail._text.AddRange(text);
+                _detail._text = text;
                 return this;
             }
 

@@ -1,4 +1,5 @@
-﻿using Slugburn.DarkestNight.Rules.Heroes;
+﻿using System.Linq;
+using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Events
 {

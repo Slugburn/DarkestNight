@@ -6,6 +6,7 @@ namespace Slugburn.DarkestNight.Rules.Players.Models
     public class PlayerEvent
     {
         public string Title { get; set; }
+        public string Text { get; set; }
         public int Fate { get; set; }
         public Option[] Options { get; set; }
 
@@ -20,6 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Players.Models
             return new PlayerEvent
             {
                 Title = obj.Title,
+                Text = obj.Text,
                 Fate = obj.Fate,
                 Options = obj.Options.Select(o => new Option {Code = o.Code, Text = o.Text}).ToArray()
             };

@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\AltarTest.cs" />
+    <Compile Include="Events\CloseCallTest.cs" />
     <Compile Include="Events\EnemyEventCardTest.cs" />
     <Compile Include="Fakes\FakeDie.cs" />
     <Compile Include="Fakes\FakePlayer.cs" />

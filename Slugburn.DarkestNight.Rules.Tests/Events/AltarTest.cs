@@ -16,11 +16,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 ? new[] {"Spend Secrecy", "Continue"}
                 : new[] {"Continue"};
             new TestScenario()
-                .GivenActingHero("Acolyte", x => x.Grace(0).Secrecy(startingSecrecy))
+                .GivenHero("Acolyte", x => x.Grace(0).Secrecy(startingSecrecy))
                 .WhenHero(x => x.DrawsEvent("Altar"))
-                .ThenPlayer(p => p.SeesEvent("Altar", 3, "Roll"))
+                .ThenPlayer(p => p.SeesEvent("Altar", "Roll 1d and take the highest", 3, "Roll"))
                 .WhenPlayer(p => p.SelectsEventOption("Roll", x => x.Rolls(4)).AcceptsRoll())
-                .ThenPlayer(p => p.SeesEvent("Pure Altar", 3, expectedOptions))
+                .ThenPlayer(p => p.SeesEvent("Pure Altar", "You may spend 1 Secrecy to gain 1 Grace", 3, expectedOptions))
                 .WhenPlayer(p => p.SelectsEventOption(option))
                 .ThenHero(h => h.Grace(expectedGrace).Secrecy(expectedSecrecy));
         }
@@ -35,11 +35,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 : new[] { "+1 Darkness" };
             new TestScenario()
                 .GivenDarkness(0)
-                .GivenActingHero("Acolyte", x => x.Grace(startingGrace))
+                .GivenHero("Acolyte", x => x.Grace(startingGrace))
                 .WhenHero(x => x.DrawsEvent("Altar"))
-                .ThenPlayer(p => p.SeesEvent("Altar", 3, "Roll"))
+                .ThenPlayer(p => p.SeesEvent("Altar", "Roll 1d and take the highest", 3, "Roll"))
                 .WhenPlayer(p => p.SelectsEventOption("Roll", x => x.Rolls(3)).AcceptsRoll())
-                .ThenPlayer(p => p.SeesEvent("Defiled Altar", 3, expectedOptions))
+                .ThenPlayer(p => p.SeesEvent("Defiled Altar", "Spend 1 Grace or +1 Darkness", 3, expectedOptions))
                 .WhenPlayer(p => p.SelectsEventOption(option))
                 .ThenHero(h => h.Grace(expectedGrace))
                 .ThenDarkness(expectedDarkness);

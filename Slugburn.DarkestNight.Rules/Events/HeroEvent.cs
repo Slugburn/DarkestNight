@@ -6,7 +6,7 @@ namespace Slugburn.DarkestNight.Rules.Events
     {
         public string Name { get; set; }
         public string Title { get; set; }
-        public List<string> Text { get; set; }
+        public string Text { get; set; }
         public List<EventOption> Options { get; set; }
         public bool IsIgnorable { get; set; }
         public string SelectedOption { get; set; }

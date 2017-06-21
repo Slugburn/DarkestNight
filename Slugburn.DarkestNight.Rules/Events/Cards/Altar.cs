@@ -13,7 +13,9 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
         public int Fate => 3;
 
         public EventDetail Detail => EventDetail
-            .Create(x => x.Text("Roll 1 die and take the highest.", "4-6: Pure Altar", PureAltarText, "1-3: Defiled Altar", DefiledAltarText)
+            .Create(x => x.Text("Roll 1d and take the highest")
+                .Row(4, 6, "Pure Altar", PureAltarText)
+                .Row(1, 3, "Defiled Altar", DefiledAltarText)
                 .Option("roll", "Roll"));
         public void Resolve(Hero hero, string option)
         {
@@ -49,7 +51,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 if (result > 3)
                 {
                     e.Title = "Pure Altar";
-                    e.Text = new List<string> {PureAltarText};
+                    e.Text = PureAltarText;
                     if (hero.Secrecy > 0)
                         e.Options.Add(new EventOption {Code = "secrecy", Text = "Spend Secrecy"});
                     e.Options.Add(EventOption.Continue());
@@ -57,7 +59,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 else
                 {
                     e.Title = "Defiled Altar";
-                    e.Text = new List<string> {DefiledAltarText};
+                    e.Text = DefiledAltarText;
                     if (hero.Grace > 0)
                         e.Options.Add(new EventOption {Code = "grace", Text = "Spend Grace"});
                     e.Options.Add(new EventOption {Code = "darkness", Text = "+1 Darkness"});

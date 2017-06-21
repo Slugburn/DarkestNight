@@ -32,7 +32,7 @@ namespace Slugburn.DarkestNight.Rules.Events
                     return new EventCard("Betrayal",5, "Lose 1 Secrecy.", hero => hero.LoseSecrecy("Event"));
                 case "Black Banner":
                     return new BlackBanner();
-                case "CloseCall":
+                case "Close Call":
                     return new CloseCall();
                 case "Cultist":
                     return new SingleEnemyEventCard(name,1);

@@ -18,11 +18,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         {
         }
 
-        public PlayerExpectation SeesEvent(string title, int fate, params string[] options)
+        public PlayerExpectation SeesEvent(string title, string text, int fate, params string[] options)
         {
             Assert.That(_player.State, Is.EqualTo(PlayerState.Event));
             var e = _player.Event;
             Assert.That(e.Title, Is.EqualTo(title));
+            Assert.That(e.Text, Is.EqualTo(text));
             Assert.That(e.Fate, Is.EqualTo(fate));
             Assert.That(e.Options.Select(x=>x.Text), Is.EquivalentTo(options));
             return this;
