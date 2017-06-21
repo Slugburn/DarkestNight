@@ -29,7 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                     hero.GainSecrecy(1, int.MaxValue);
                 if (result < 4)
                 {
-                    var e = new EventCard("Sloppy Search", x =>
+                    var e = new EventCard("Sloppy Search", 0, x =>
                         x.Text("Spend 1 Grace or lose 1 Secrecy")
                             .Option("grace", "Spend Grace", h => h.Grace > 0)
                             .Option("secrecy", "Lose Secrecy"),

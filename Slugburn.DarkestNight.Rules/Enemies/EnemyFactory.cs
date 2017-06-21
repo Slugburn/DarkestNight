@@ -52,6 +52,8 @@ namespace Slugburn.DarkestNight.Rules.Enemies
                     return Enemy.Create(name, 6, 5);
                 case "Small Horde":
                     return Enemy.Create(name, 4, 3);
+                case "Tracker":
+                    return new Tracker();
                 case "Vampire":
                     return Enemy.Create(name, 4, 4);
                 case "Vile Messenger":

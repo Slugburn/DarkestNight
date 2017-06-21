@@ -1,4 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
 using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Events

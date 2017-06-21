@@ -27,6 +27,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         private int _expectedDiceCount;
         private int _expectedFreeActions;
         private bool _expectedOutstandingEvents;
+        private bool _strictVerification;
 
         public HeroExpectation(Hero hero)
         {
@@ -46,11 +47,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 
         public void Verify()
         {
+            if (_strictVerification)
+            {
+                Assert.That(_hero.Grace, Is.EqualTo(_expectedGrace), "Unexpected Grace.");
+                Assert.That(_hero.Secrecy, Is.EqualTo(_expectedSecrecy), "Unexpected Secrecy.");
+            }
             Assert.That(_hero.IsActionAvailable, Is.EqualTo(_expectedActionAvailable),
                 _expectedActionAvailable ? "Should not have used action." : "Should have used action.");
             Assert.That(_hero.CanGainGrace, Is.EqualTo(_expectedCanGainGrace), "Unexpected CanGrainGrace");
-            Assert.That(_hero.Grace, Is.EqualTo(_expectedGrace), "Unexpected Grace.");
-            Assert.That(_hero.Secrecy, Is.EqualTo(_expectedSecrecy), "Unexpected Secrecy.");
             Assert.That(_hero.Location, Is.EqualTo(_expectedLocation));
             var validLocations = _hero.GetValidMovementLocations().ToList();
             var disallowedMovement = validLocations.Intersect(_invalidLocations);
@@ -81,7 +85,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             Assert.That(_hero.FreeActions, Is.EqualTo(_expectedFreeActions));
             var outstandingEvents = _hero.CurrentEvent != null;
             Assert.That(outstandingEvents, Is.EqualTo(_expectedOutstandingEvents),
-                () => _expectedOutstandingEvents ? "Hero should have unresolved events." : "Hero has unresolved event");
+                () => _expectedOutstandingEvents ? "Hero should have outstanding events." : "Hero has outstanding event");
         }
 
 
@@ -250,5 +254,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
+        public HeroExpectation HasOutstandingEvents(bool expected = true)
+        {
+            _expectedOutstandingEvents = expected;
+            return this;
+        }
+
+        public void StrictVerification(bool value = true)
+        {
+            _strictVerification = value;
+        }
     }
 }

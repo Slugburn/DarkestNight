@@ -10,7 +10,7 @@ using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 {
-    public class TestScenario
+    public class TestScenario : IFakeRollContext
     {
         private readonly Game _game;
         private readonly FakePlayer _player;
@@ -25,7 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             _game.AddPlayer(_player);
         }
 
-        public TestScenario GivenHero(string name, Action<HeroContext> def = null) 
+        public TestScenario GivenActingHero(string name, Action<HeroContext> def = null) 
         {
             var hero = HeroFactory.Create(name);
             _game.AddHero(hero, _player);
@@ -36,16 +36,24 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
+        public TestScenario GivenActingHero(Action<HeroContext> def)
+        {
+            var hero = _game.ActingHero;
+            var ctx = new HeroContext(hero);
+            def(ctx);
+            return this;
+        }
+
         public TestScenario GivenNecromancerLocation(Location location)
         {
             _game.Necromancer.Location = location;
             return this;
         }
 
-        public TestScenario WhenNecromancerRollsForMovement(int value, Action<PlayerActionContext> actions = null)
+        public TestScenario WhenNecromancerTakesTurn(Action<IFakeRollContext> roll, Action<PlayerActionContext> action = null)
         {
-            actions?.Invoke(new PlayerActionContext(_player));
-            _die.AddUpcomingRoll(value);
+            roll(this);
+            action?.Invoke(new PlayerActionContext(_player));
             _game.Necromancer.TakeTurn();
             return this;
         }
@@ -177,7 +185,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public TestScenario WhenPlayerAssignsRolledDiceToBlights( params Tuple<Blight,int>[]  assignments)
+        public TestScenario WhenPlayerAssignsRolledDiceToBlights( params Tuple<Blight, int>[]  assignments)
         {
             var targets = _game.ActingHero.ConflictState.SelectedTargets;
             var a = assignments.Select(x => new TargetDieAssignment {TargetId = targets.Single(t => t.Name == x.Item1.ToString()).Id, DieValue = x.Item2}).ToList();
@@ -218,6 +226,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             var context = new PlayerActionContext(_player);
             action(context);
             return this;
+        }
+
+        public TestScenario Configure(Func<TestScenario, TestScenario> setConditions)
+        {
+            return setConditions(this);
         }
     }
 }

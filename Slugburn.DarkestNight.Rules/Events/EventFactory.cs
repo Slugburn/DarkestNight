@@ -1,5 +1,6 @@
 ﻿using System;
 using Slugburn.DarkestNight.Rules.Events.Cards;
+using Slugburn.DarkestNight.Rules.Events.Cards.Enemies;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Spaces;
 
@@ -26,15 +27,15 @@ namespace Slugburn.DarkestNight.Rules.Events
                 case "Altar":
                     return new Altar();
                 case "Anathema":
-                    return new EventCard("Anathema", "Lose 1 Grace.", hero => hero.LoseGrace());
+                    return new EventCard("Anathema", 6, "Lose 1 Grace.", hero => hero.LoseGrace());
                 case "Betrayal":
-                    return new EventCard("Betrayal", "Lose 1 Secrecy.", hero => hero.LoseSecrecy("Event"));
+                    return new EventCard("Betrayal",5, "Lose 1 Secrecy.", hero => hero.LoseSecrecy("Event"));
                 case "Black Banner":
                     return new BlackBanner();
                 case "CloseCall":
                     return new CloseCall();
                 case "Cultist":
-                    return new EventCard("Cultist", "Fight: 5, Elude: 3", hero => hero.FaceEnemy(name));
+                    return new SingleEnemyEventCard(name,1);
                 case "Dark Champion":
                     return new DarkChampion();
                 case "Dark Scrying":
@@ -46,17 +47,19 @@ namespace Slugburn.DarkestNight.Rules.Events
                 case "Evil Day":
                     return new EvilDay();
                 case "Guarded Trove":
-                    return new EventCard(name, "Fight: 6, Elude: 6", hero=>hero.FaceEnemy(name));
+                    return new SingleEnemyEventCard(name, 1);
                 case "Horde":
                     return new Horde();
                 case "Latent Spell":
                     return new LatentSpell();
                 case "Lich":
-                    return new EventCard(name, "Fight: 5, Elude: 5", hero => hero.FaceEnemy(name));
+                    return new SingleEnemyEventCard(name, 4);
                 case "Looters":
-                    return new EventCard(name, "Elude: 4", hero=>hero.FaceEnemy(name));
+                    return new SingleEnemyEventCard(name,2);
                 case "Midnight":
-                    return new EventCard(name, "+1 Darkness.", hero=>hero.Game.IncreaseDarkness());
+                    return new EventCard(name,7, "+1 Darkness.", hero=>hero.Game.IncreaseDarkness());
+                case "Patrols":
+                    return new Patrols();
                 case "Raid":
                     return new Raid();
                 case "Renewal":
@@ -68,19 +71,17 @@ namespace Slugburn.DarkestNight.Rules.Events
                 case "Sloppy Search":
                     return new SloppySearch();
                 case "Tracker":
-                    return new EventCard(name, x => x
-                        .Text("Fight: 4, Elude: 5", "Win fight: Lose 1 Secrecy", "Win elude: No effect", "Failure: Lose 2 Secrecy)"),
-                        (h, o) => h.FaceEnemy(name));
+                    return new SingleEnemyEventCard(name, 5);
                 case "Twist of Fate":
                     return new TwistOfFate();
                 case "Unfriendly Eyes":
                     return new UnfriendlyEyes();
                 case "Upheaval":
-                    return new EventCard(name, "Remove all blights from your current location and create an equal number of new blights", Upheaval);
+                    return new EventCard(name,2, "Remove all blights from your current location and create an equal number of new blights", Upheaval);
                 case "Vengeful Spirit":
                     return new VengefulSpirit();
                 case "Vile Messenger":
-                    return new EventCard(name, x => x.Text("Fight: 4, Elude: -", "Failure: +1 Darkness"), (h, o) => h.FaceEnemy(name));
+                    return new SingleEnemyEventCard(name,4);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(name),name, "Unknown event name");
             }

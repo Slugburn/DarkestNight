@@ -105,6 +105,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             Event = playerEvent;
         }
 
+        public void DisplayConflict(PlayerConflict conflict)
+        {
+            Conflict = conflict;
+        }
+
+        public PlayerConflict Conflict { get; set; }
+
         public PlayerEvent Event { get; set; }
         public string ActiveHero { get; set; }
 
@@ -134,6 +141,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         {
             var hero = _game.GetHero(ActiveHero);
             hero.SelectLocation(location);
+        }
+
+        public void SelectTactic(string tacticName, ICollection<int> targetIds)
+        {
+            var hero = _game.GetHero(ActiveHero);
+            hero.SelectTactic(tacticName, targetIds);
         }
     }
 }

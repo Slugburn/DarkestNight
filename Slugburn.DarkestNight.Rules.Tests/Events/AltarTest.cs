@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Slugburn.DarkestNight.Rules.Tests.Fakes;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Events
@@ -15,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 ? new[] {"Spend Secrecy", "Continue"}
                 : new[] {"Continue"};
             new TestScenario()
-                .GivenHero("Acolyte", x => x.Grace(0).Secrecy(startingSecrecy))
+                .GivenActingHero("Acolyte", x => x.Grace(0).Secrecy(startingSecrecy))
                 .WhenHero(x => x.DrawsEvent("Altar"))
                 .ThenPlayer(p => p.SeesEvent("Altar", 3, "Roll"))
                 .WhenPlayer(p => p.SelectsEventOption("Roll", x => x.Rolls(4)).AcceptsRoll())
@@ -34,7 +35,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 : new[] { "+1 Darkness" };
             new TestScenario()
                 .GivenDarkness(0)
-                .GivenHero("Acolyte", x => x.Grace(startingGrace))
+                .GivenActingHero("Acolyte", x => x.Grace(startingGrace))
                 .WhenHero(x => x.DrawsEvent("Altar"))
                 .ThenPlayer(p => p.SeesEvent("Altar", 3, "Roll"))
                 .WhenPlayer(p => p.SelectsEventOption("Roll", x => x.Rolls(3)).AcceptsRoll())

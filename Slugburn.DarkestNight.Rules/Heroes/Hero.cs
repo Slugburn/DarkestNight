@@ -490,7 +490,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void FaceEnemy(string enemyName)
         {
             Enemies.Add(enemyName);
-            throw new NotImplementedException();
+            new Defend().Act(this);
         }
 
         public void DrawSearchResult()

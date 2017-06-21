@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
-using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent
@@ -74,19 +74,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             _player.SelectLocation(location);
             return this;
         }
-    }
 
-    public interface IFakeRollContext
-    {
-    }
-
-    public static class FakeRollExtension
-    {
-        public static T Rolls<T>(this T context, params int[] upcomingRolls) where T : IFakeRollContext
+        public PlayerActionContext SelectsTactic(string tactic, params string[] targets)
         {
-            var die = (FakeDie) Die.Implementation;
-            die.AddUpcomingRolls(upcomingRolls);
-            return context;
-        } 
+            var targetIds = _player.Conflict.Targets.Where(x => targets.Contains(x.Name)).Select(x => x.Id).ToList();
+            _player.SelectTactic(tactic, targetIds);
+            return this;
+        }
     }
 }

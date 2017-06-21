@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Slugburn.DarkestNight.Rules.Blights;
-using Slugburn.DarkestNight.Rules.Blights.Implementations;
+﻿using System.Linq;
 using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Players;
+using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tactics;
@@ -27,6 +26,8 @@ namespace Slugburn.DarkestNight.Rules.Actions
             };
             hero.SetRollHandler(this);
             hero.State = HeroState.SelectingTarget;
+            hero.Player.DisplayConflict(PlayerConflict.FromConflictState(hero.ConflictState));
+            hero.Player.State = PlayerState.Conflict;
         }
 
         public bool IsAvailable(Hero hero)
@@ -45,7 +46,9 @@ namespace Slugburn.DarkestNight.Rules.Actions
             var result = hero.Roll.Max();
             var enemy = EnemyFactory.Create(target.Name);
             if (result < targetNumber)
+            {
                 enemy.Failure(hero);
+            }
             else
             {
                 enemy.Win(hero);

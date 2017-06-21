@@ -20,11 +20,11 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 return;
             }
             var e = count < 3
-                ? new EventCard(Name, x => x
+                ? new EventCard(Name,0, x => x
                     .Text("Spend 1 Secrecy or Lose 1 Grace")
                     .Option("secrecy", "Spend Secrecy", h => h.Secrecy > 0)
                     .Option("grace", "Lose Grace"), SecrecyOrGrace)
-                : new EventCard(Name, x => x
+                : new EventCard(Name,0, x => x
                     .Text("Spend 1 Grace or +1 Darkness")
                     .Option("grace", "Spend Grace", h => h.Grace > 0)
                     .Option("darkness", "+1 Darkness"), GraceOrDarkness);
