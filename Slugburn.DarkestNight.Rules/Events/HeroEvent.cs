@@ -11,6 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Events
         public bool IsIgnorable { get; set; }
         public string SelectedOption { get; set; }
         public int Fate { get; set; }
+        public List<EventRow> Rows { get; set; }
 
         public void AddOption(string code, string optionText)
         {

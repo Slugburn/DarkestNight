@@ -7,21 +7,21 @@ namespace Slugburn.DarkestNight.Rules.Events
 {
     public class EventDetail
     {
+        private readonly List<EventEnemy> _enemies = new List<EventEnemy>();
         private readonly Dictionary<string, EventConfig> _options = new Dictionary<string, EventConfig>();
         private readonly List<EventRow> _rows = new List<EventRow>();
-        private readonly List<EventEnemy> _enemies = new List<EventEnemy>();
 
         private string _text;
+
+        private EventDetail()
+        {
+        }
 
         public static EventDetail Create(Action<EventDetailCreation> create)
         {
             var detail = new EventDetail();
             create(new EventDetailCreation(detail));
             return detail;
-        }
-
-        private EventDetail()
-        {
         }
 
         public List<EventOption> GetOptions(Hero hero)
@@ -40,19 +40,14 @@ namespace Slugburn.DarkestNight.Rules.Events
             return _text;
         }
 
-        public class EventEnemy
+        public List<EventEnemy> GetEnemies()
         {
-            public int Min { get; set; }
-            public int Max { get; set; }
-            public string Name { get; set; }
+            return _enemies.ToList();
         }
 
-        private class EventRow
+        public List<EventRow> GetRows()
         {
-            public int Min { get; set; }
-            public int Max { get; set; }
-            public string Text { get; set; }
-            public string SubText { get; set; }
+            return _rows.ToList();
         }
 
         public class EventDetailCreation
@@ -90,7 +85,7 @@ namespace Slugburn.DarkestNight.Rules.Events
 
             public EventDetailCreation Enemy(int min, int max, string name)
             {
-                _detail._enemies.Add(new EventEnemy() {Min = min, Max = max, Name = name});
+                _detail._enemies.Add(new EventEnemy {Min = min, Max = max, Name = name});
                 return this;
             }
 
@@ -98,22 +93,17 @@ namespace Slugburn.DarkestNight.Rules.Events
             {
                 return Enemy(number, number, name);
             }
+
             public EventDetailCreation Enemy(string name)
             {
                 return Enemy(0, 0, name);
             }
-
-       }
+        }
 
         private class EventConfig
         {
             public string Text { get; set; }
             public Func<Hero, bool> Condition { get; set; }
-        }
-
-        public List<EventEnemy> GetEnemies()
-        {
-            return _enemies.ToList();
         }
     }
 }

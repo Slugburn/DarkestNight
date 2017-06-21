@@ -23,6 +23,9 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             {
                 case "roll":
                     hero.RollEventDice(new AltarRollHandler());
+                    var result = hero.Roll.Max();
+                    hero.CurrentEvent.Rows.Activate(result);
+                    hero.PresentCurrentEvent();
                     break;
                 case "secrecy":
                     hero.SpendSecrecy(1);

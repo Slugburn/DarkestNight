@@ -105,9 +105,11 @@
     <Compile Include="Events\Cards\UnfriendlyEyes.cs" />
     <Compile Include="Events\EventCard.cs" />
     <Compile Include="Events\EventDetail.cs" />
+    <Compile Include="Events\EventEnemy.cs" />
     <Compile Include="Events\EventExtension.cs" />
     <Compile Include="Events\EventFactory.cs" />
     <Compile Include="Events\EventOption.cs" />
+    <Compile Include="Events\EventRow.cs" />
     <Compile Include="Events\HeroEvent.cs" />
     <Compile Include="Events\IEventCard.cs" />
     <Compile Include="Extensions\CardExtensions.cs" />
