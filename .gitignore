@@ -15,3 +15,5 @@
 UpgradeLog.*
 _UpgradeReport_Files/*
 *.suo
+.vs/config/applicationhost.config
+*.TMP
