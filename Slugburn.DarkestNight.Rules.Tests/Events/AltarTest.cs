@@ -20,11 +20,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .GivenDarkness(0)
                 .GivenHero("Acolyte", x => x.Secrecy(startingSecrecy))
                 .WhenHero(x => x.DrawsEvent("Altar"))
-                .ThenPlayer(p => p.Event(e => e.Body("Altar", "Roll 1d and take the highest", 3).Option("Roll")))
+                .ThenPlayer(p => p.Event(e => e.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")))
                 .WhenPlayer(p => p.SelectsEventOption("Roll", x => x.Rolls(roll)))
                 .ThenPlayer(p => p.Event(e => e.ActiveRow(4, 6, "Pure Altar", "You may spend 1 Secrecy to gain 1 Grace")))
                 .WhenPlayer(p => p.AcceptsRoll())
-                .ThenPlayer(p => p.Event(e => e.Option(expectedOptions)))
+                .ThenPlayer(p => p.Event(e => e.HasOptions(expectedOptions)))
                 .WhenPlayer(p => p.SelectsEventOption(option))
                 .ThenHero(h => h.Grace(expectedGrace).Secrecy(expectedSecrecy));
         }
@@ -42,11 +42,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .GivenDarkness(0)
                 .GivenHero("Acolyte", x => x.Grace(startingGrace))
                 .WhenHero(x => x.DrawsEvent("Altar"))
-                .ThenPlayer(p => p.Event(e => e.Body("Altar", "Roll 1d and take the highest", 3).Option("Roll")))
+                .ThenPlayer(p => p.Event(e => e.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")))
                 .WhenPlayer(p => p.SelectsEventOption("Roll", x => x.Rolls(roll)))
                 .ThenPlayer(p => p.Event(e => e.ActiveRow(1, 3, "Defiled Altar", "Spend 1 Grace or +1 Darkness")))
                 .WhenPlayer(p => p.AcceptsRoll())
-                .ThenPlayer(p => p.Event(e => e.Option(expectedOptions)))
+                .ThenPlayer(p => p.Event(e => e.HasOptions(expectedOptions)))
                 .WhenPlayer(p => p.SelectsEventOption(option))
                 .ThenHero(h => h.Grace(expectedGrace))
                 .ThenDarkness(expectedDarkness);

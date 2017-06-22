@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             _playerEvent = playerEvent;
         }
 
-        public PlayerEventExpectation Body(string title, string text, int fate)
+        public PlayerEventExpectation HasBody(string title, int fate, string text)
         {
             var e = _playerEvent;
             e.Title.ShouldBe(title);
@@ -23,7 +23,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public PlayerEventExpectation Option(params string[] options)
+        public PlayerEventExpectation HasOptions(params string[] options)
         {
             _playerEvent.Options.Select(x=>x.Text).ShouldBe(options);
             return this;

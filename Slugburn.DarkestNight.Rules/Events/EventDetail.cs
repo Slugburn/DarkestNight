@@ -29,7 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Events
             return detail;
         }
 
-        public List<HeroEventOption> GetOptions(Hero hero, int? rowIndex)
+        public List<HeroEventOption> GetHeroEventOptions(Hero hero, int? rowIndex)
         {
             if (rowIndex != null)
             {
@@ -178,7 +178,7 @@ namespace Slugburn.DarkestNight.Rules.Events
                 Fate = Fate,
                 Text = GetText(),
                 Rows = CreateHeroRows(),
-                Options = GetOptions(hero, null),
+                Options = GetHeroEventOptions(hero, null),
                 IsIgnorable = Fate > 0
             };
         }

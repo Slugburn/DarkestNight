@@ -81,5 +81,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             _player.SelectTactic(tactic, targetIds);
             return this;
         }
+
+        public PlayerActionContext SelectsPower(string powerName)
+        {
+            _player.SelectPower(powerName);
+            return this;
+        }
     }
 }

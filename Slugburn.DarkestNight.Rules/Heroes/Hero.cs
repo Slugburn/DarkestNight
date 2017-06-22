@@ -81,6 +81,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public int AvailableMovement { get; set; }
         public int FreeActions { get; set; }
+        public IPower SelectedPower { get; set; }
+        public Queue<string> EventQueue { get; } = new Queue<string>();
 
         public void AddActionFilter(string name, HeroState state, ICollection<string> allowed)
         {
@@ -474,14 +476,20 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void EndEvent()
         {
             CurrentEvent = null;
+            ContinueTurn();
         }
 
-        public int RollEventDice(IRollHandler rollHandler)
+        private void ContinueTurn()
+        {
+            // what should go here?
+        }
+
+        public void RollEventDice(IRollHandler rollHandler)
         {
             SetRollHandler(rollHandler);
             var dice = GetDice(RollType.Event, "Event", 1);
             var rollState = RollDice(dice);
-            return rollState.Result;
+            PresentCurrentEvent();
         }
 
         private RollState RollDice(Dice dice)

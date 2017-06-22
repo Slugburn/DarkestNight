@@ -108,6 +108,7 @@
     <Compile Include="Events\EventEnemy.cs" />
     <Compile Include="Events\EventExtension.cs" />
     <Compile Include="Events\EventFactory.cs" />
+    <Compile Include="Events\EventRollHandler.cs" />
     <Compile Include="Events\HeroEventOption.cs" />
     <Compile Include="Events\HeroEventRow.cs" />
     <Compile Include="Events\HeroEvent.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Players\IPlayer.cs" />
     <Compile Include="Players\Models\PlayerConflict.cs" />
     <Compile Include="Players\Models\PlayerEvent.cs" />
+    <Compile Include="Players\Models\PlayerPower.cs" />
     <Compile Include="Players\PlayerState.cs" />
     <Compile Include="Powers\Acolyte\BlindingBlack.cs" />
     <Compile Include="Powers\Acolyte\CallToDeath.cs" />

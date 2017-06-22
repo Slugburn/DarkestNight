@@ -12,5 +12,6 @@ namespace Slugburn.DarkestNight.Rules.Players
         PlayerState State { get; set; }
         void DisplayEvent(PlayerEvent playerEvent);
         void DisplayConflict(PlayerConflict conflict);
+        void DisplayPowers(ICollection<PlayerPower> powers);
     }
 }

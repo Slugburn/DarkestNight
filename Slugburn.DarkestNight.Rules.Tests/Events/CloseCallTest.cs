@@ -18,7 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 new TestScenario()
                     .GivenHero("Acolyte")
                     .WhenHero(x => x.DrawsEvent("Close Call"))
-                    .ThenPlayer(p => p.Event(e => e.Body("Close Call", "Roll 1d and take the highest", 4).Option("Roll")))
+                    .ThenPlayer(p => p.Event(e => e.HasBody("Close Call", 4, "Roll 1d and take the highest").HasOptions("Roll")))
                     .WhenPlayer(p => p.SelectsEventOption("Roll", x => x.Rolls(roll)))
                     .ThenPlayer(p => p.Event(e => e.ActiveRow(min, max, effect)))
                     .WhenPlayer(p => p.SelectsEventOption("Continue"))

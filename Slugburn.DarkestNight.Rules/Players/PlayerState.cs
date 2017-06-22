@@ -3,6 +3,7 @@
     public enum PlayerState
     {
         Event,
-        Conflict
+        Conflict,
+        SelectPower
     }
 }

@@ -157,5 +157,10 @@ namespace Slugburn.DarkestNight.Rules
             space.RemoveBlight(blight);
             Triggers.Send(GameTrigger.BlightDestroyed, location);
         }
+
+        public void SelectPower(string powerName)
+        {
+            Triggers.Send(GameTrigger.PlayerSelectedPower, powerName);
+        }
     }
 }

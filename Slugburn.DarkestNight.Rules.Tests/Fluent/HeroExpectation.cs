@@ -26,7 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         private int[] _expectedRoll;
         private int _expectedDiceCount;
         private int _expectedFreeActions;
-        private bool _expectedOutstandingEvents;
+        private int _expectedOutstandingEvents;
         private bool _strictVerification;
 
         public HeroExpectation(Hero hero)
@@ -83,9 +83,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
                 Assert.That(_hero.Roll.AdjustedRoll, Is.EquivalentTo(_expectedRoll));
             }
             Assert.That(_hero.FreeActions, Is.EqualTo(_expectedFreeActions));
-            var outstandingEvents = _hero.CurrentEvent != null;
+            var outstandingEvents = (_hero.CurrentEvent != null ? 1 : 0) + _hero.EventQueue.Count() ;
             Assert.That(outstandingEvents, Is.EqualTo(_expectedOutstandingEvents),
-                () => _expectedOutstandingEvents ? "Hero should have outstanding events." : "Hero has outstanding event");
+                () => _expectedOutstandingEvents > 0 ? $"Hero should have {_expectedOutstandingEvents} outstanding events." : "Hero has outstanding event");
         }
 
 
@@ -254,7 +254,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public HeroExpectation HasOutstandingEvents(bool expected = true)
+        public HeroExpectation HasOutstandingEvents(int expected = 1)
         {
             _expectedOutstandingEvents = expected;
             return this;

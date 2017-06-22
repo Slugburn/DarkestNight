@@ -4,5 +4,6 @@
     {
         BlightDestroyed,
         NecromancerDetectsHeroes,
+        PlayerSelectedPower
     }
 }

@@ -110,10 +110,16 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             Conflict = conflict;
         }
 
+        public void DisplayPowers(ICollection<PlayerPower> powers)
+        {
+            Powers = powers;
+        }
+
         public PlayerConflict Conflict { get; set; }
 
         public PlayerEvent Event { get; set; }
         public string ActiveHero { get; set; }
+        public ICollection<PlayerPower> Powers { get; set; }
 
         public void SelectEventOption(string option)
         {
@@ -144,6 +150,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         {
             var hero = _game.GetHero(ActiveHero);
             hero.SelectTactic(tacticName, targetIds);
+        }
+
+        public void SelectPower(string powerName)
+        {
+            _game.SelectPower(powerName);
         }
     }
 }

@@ -69,5 +69,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
+        public PlayerExpectation Powers(params string[] powerNames)
+        {
+            _player.State.ShouldBe(PlayerState.SelectPower);
+            _player.Powers.Select(x=>x.Name).ShouldBe(powerNames);
+            return this;
+        }
     }
 }
