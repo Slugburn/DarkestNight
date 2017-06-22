@@ -108,8 +108,8 @@
     <Compile Include="Events\EventEnemy.cs" />
     <Compile Include="Events\EventExtension.cs" />
     <Compile Include="Events\EventFactory.cs" />
-    <Compile Include="Events\EventOption.cs" />
-    <Compile Include="Events\EventRow.cs" />
+    <Compile Include="Events\HeroEventOption.cs" />
+    <Compile Include="Events\HeroEventRow.cs" />
     <Compile Include="Events\HeroEvent.cs" />
     <Compile Include="Events\IEventCard.cs" />
     <Compile Include="Extensions\CardExtensions.cs" />

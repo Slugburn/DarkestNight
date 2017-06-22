@@ -6,13 +6,11 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
     public class EvilDay : IEventCard
     {
-        public string Name => "Event";
-        public int Fate { get; }
-
-        public EventDetail Detail => EventDetail.Create(x => x
-            .Text("Exhaust a power or draw 2 more events.")
-            .Option("exhaust", "Exhaust a power", hero => hero.Powers.Any(power => !power.Exhausted))
-            .Option("draw", "Draw 2 events"));
+        public EventDetail Detail => EventDetail.Create("Evil Day", 0,
+            x => x
+                .Text("Exhaust a power or draw 2 more events.")
+                .Option("exhaust", "Exhaust a power", hero => hero.Powers.Any(power => !power.Exhausted))
+                .Option("draw", "Draw 2 events"));
 
         public void Resolve(Hero hero, string option)
         {

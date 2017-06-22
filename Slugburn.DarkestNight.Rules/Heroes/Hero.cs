@@ -172,7 +172,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             var eventName = Game.Events.Draw();
             var card = EventFactory.CreateCard(eventName);
-            CurrentEvent = card.GetHeroEvent(this);
+            CurrentEvent = card.Detail.GetHeroEvent(this);
             Triggers.Send(HeroTrigger.EventDrawn);
             Player.DisplayEvent(Players.Models.PlayerEvent.From(CurrentEvent));
         }

@@ -11,20 +11,13 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards.Enemies
         public EnemyEventCard(string name, int fate, Func<Hero, int> designator, Action<EventDetail.EventDetailCreation> def)
         {
             _designator = designator;
-            Name = name;
-            Fate = fate;
-            Detail = EventDetail.Create(def);
+            Detail = EventDetail.Create(name,fate,  def);
         }
 
         protected EnemyEventCard(string name, int fate, Action<EventDetail.EventDetailCreation> def)
         {
-            Name = name;
-            Fate = fate;
-            Detail = EventDetail.Create(def);
+            Detail = EventDetail.Create(name, fate, def);
         }
-
-        public string Name { get; set; }
-        public int Fate { get; set; }
 
         public EventDetail Detail { get; set; }
 

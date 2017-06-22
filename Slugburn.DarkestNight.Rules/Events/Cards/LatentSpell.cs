@@ -8,10 +8,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
     public class LatentSpell : IEventCard
     {
-        public string Name => "Latent Spell";
-        public int Fate { get; }
-
-        public EventDetail Detail => EventDetail.Create(x => x
+        public EventDetail Detail => EventDetail.Create("Latent Spell",0, x => x
             .Text("Lose 1 Secrecy. Then, spend 1 Grace or discard this event without further effect.\nRoll 1d and take the highest")
             .Row(6, "Destroy a blight of your choice anywhere on the board")
             .Row(5, "Draw a power card")
@@ -43,7 +40,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             {
                 var e = hero.CurrentEvent;
                 e.Rows.Activate(rollState.Result);
-                e.Options = new List<EventOption> { EventOption.Continue() };
+                e.Options = new List<HeroEventOption> { HeroEventOption.Continue() };
                 hero.PresentCurrentEvent();
                 return rollState;
             }

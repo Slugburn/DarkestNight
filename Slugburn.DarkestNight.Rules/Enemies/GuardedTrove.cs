@@ -36,27 +36,6 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             yield return new ConflictResult("Fail fight", "Take wound");
             yield return new ConflictResult("Fail elude", "Spend 1 Secrecy or draw another event");
         }
-
-        public class GuardedTroveEludeFailureEvent : IEventCard
-        {
-            public string Name => "Guarded Trove (Fail elude)";
-            public int Fate { get; }
-
-            public EventDetail Detail => EventDetail.Create(x => x
-                .Text("Spend 1 Secrecy or draw another event")
-                .Option("secrecy", "Spend Secrecy", hero => hero.Secrecy > 0)
-                .Option("event", "Draw Event"));
-
-            public void Resolve(Hero hero, string option)
-            {
-                if (option == "secrecy")
-                    hero.SpendSecrecy(1);
-                else if (option == "event")
-                    hero.DrawEvent();
-                else
-                    throw new ArgumentOutOfRangeException(nameof(option));
-            }
-        }
     }
 
 }

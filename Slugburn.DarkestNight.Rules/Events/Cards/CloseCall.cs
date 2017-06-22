@@ -8,14 +8,12 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
     public class CloseCall : IEventCard
     {
-        public string Name => "Close Call";
-        public int Fate => 4;
-
-        public EventDetail Detail { get; } = EventDetail.Create(x => x.Text("Roll 1d and take the highest")
-            .Row(5, 6, "No effect")
-            .Row(3, 4, "Lose 1 Secrecy")
-            .Row(1, 2, "Lose 1 Grace")
-            .Option("roll", "Roll"));
+        public EventDetail Detail { get; } = EventDetail.Create("Close Call", 4,
+            x => x.Text("Roll 1d and take the highest")
+                .Row(5, 6, "No effect")
+                .Row(3, 4, "Lose 1 Secrecy")
+                .Row(1, 2, "Lose 1 Grace")
+                .Option("roll", "Roll"));
 
         public void Resolve(Hero hero, string option)
         {
@@ -52,7 +50,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 {
                     throw new InvalidOperationException("Unexpected roll.");
                 }
-                e.Options = new List<EventOption> { EventOption.Continue() };
+                e.Options = new List<HeroEventOption> { HeroEventOption.Continue() };
                 hero.PresentCurrentEvent();
             }
 
@@ -60,7 +58,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             {
                 var e = hero.CurrentEvent;
                 e.Rows.Activate(rollState.Result);
-                e.Options = new List<EventOption> { EventOption.Continue() };
+                e.Options = new List<HeroEventOption> { HeroEventOption.Continue() };
                 hero.PresentCurrentEvent();
                 return rollState;
             }

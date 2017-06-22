@@ -1,6 +1,6 @@
 namespace Slugburn.DarkestNight.Rules.Events
 {
-    public class EventRow
+    public class HeroEventRow
     {
         public int Min { get; set; }
         public int Max { get; set; }

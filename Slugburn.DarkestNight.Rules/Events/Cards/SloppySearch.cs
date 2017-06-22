@@ -8,10 +8,8 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
     public class SloppySearch : IEventCard
     {
-        public string Name => "Sloppy Search";
-        public int Fate { get; }
-
-        public EventDetail Detail => EventDetail.Create(x => x
+        public EventDetail Detail => EventDetail.Create("Sloppy Search", 0, 
+            x => x
             .Text("Roll 1 die and take the highest")
             .Row(6, "Gain 1 Secrecy")
             .Row(4, 5, "No effect")
@@ -43,11 +41,11 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 var e = hero.CurrentEvent;
                 e.Rows.Activate(rollState.Result);
                 if (rollState.Result == 6)
-                    e.Options = new List<EventOption> {new EventOption("gain-secrecy", "Gain Secrecy")};
+                    e.Options = new List<HeroEventOption> {new HeroEventOption("gain-secrecy", "Gain Secrecy")};
                 else if (rollState.Result > 3)
-                    e.Options = new List<EventOption> { EventOption.Continue() };
+                    e.Options = new List<HeroEventOption> { HeroEventOption.Continue() };
                 else
-                    e.Options = new List<EventOption> { new EventOption("spend-grace", "Spend Grace"), new EventOption("lose-secrecy", "Lose Secrecy") };
+                    e.Options = new List<HeroEventOption> { new HeroEventOption("spend-grace", "Spend Grace"), new HeroEventOption("lose-secrecy", "Lose Secrecy") };
                 hero.PresentCurrentEvent();
                 return rollState;
             }

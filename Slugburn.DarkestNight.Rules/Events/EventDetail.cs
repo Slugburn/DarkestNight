@@ -8,31 +8,47 @@ namespace Slugburn.DarkestNight.Rules.Events
     public class EventDetail
     {
         private readonly List<EventEnemy> _enemies = new List<EventEnemy>();
-        private readonly Dictionary<string, EventConfig> _options = new Dictionary<string, EventConfig>();
+        private readonly Dictionary<string, EventOption> _options = new Dictionary<string, EventOption>();
         private readonly List<EventRow> _rows = new List<EventRow>();
 
         private string _text;
 
-        private EventDetail()
+        private EventDetail(string name, int fate)
         {
+            Name = name;
+            Fate = fate;
         }
 
-        public static EventDetail Create(Action<EventDetailCreation> create)
+        public string Name { get; }
+        public int Fate { get; }
+
+        public static EventDetail Create(string name, int fate, Action<EventDetailCreation> create)
         {
-            var detail = new EventDetail();
+            var detail = new EventDetail(name, fate);
             create(new EventDetailCreation(detail));
             return detail;
         }
 
-        public List<EventOption> GetOptions(Hero hero)
+        public List<HeroEventOption> GetOptions(Hero hero, int? rowIndex)
         {
+            if (rowIndex != null)
+            {
+                var row = _rows.SingleOrDefault(r => r.Min <= rowIndex.Value && rowIndex.Value <= r.Max);
+                if (row != null)
+                    return CreateHeroEventOptions(hero, row._options);
+            }
             if (_options.Any())
             {
-                var activeOptions = _options.Where(x => x.Value.Condition == null || x.Value.Condition(hero));
-                return activeOptions.Select(x => new EventOption {Code = x.Key, Text = x.Value.Text}).ToList();
+                return CreateHeroEventOptions(hero, _options.Select(x=>x.Value));
             }
-            var defaultOption = new EventOption {Code = "cont", Text = "Continue"};
-            return new List<EventOption> {defaultOption};
+            var defaultOption = new HeroEventOption {Code = "cont", Text = "Continue"};
+            return new List<HeroEventOption> {defaultOption};
+        }
+
+        private List<HeroEventOption> CreateHeroEventOptions(Hero hero, IEnumerable<EventOption> eventOptions)
+        {
+            var activeOptions = eventOptions.Where(x => x.Condition == null || x.Condition(hero));
+            return activeOptions.Select(x => new HeroEventOption {Code = x.Code, Text = x.Text}).ToList();
         }
 
         public string GetText()
@@ -45,9 +61,9 @@ namespace Slugburn.DarkestNight.Rules.Events
             return _enemies.ToList();
         }
 
-        public List<EventRow> GetRows()
+        public List<HeroEventRow> CreateHeroRows()
         {
-            return _rows.ToList();
+            return _rows.Select(row=>new HeroEventRow {Min = row.Min, Max=row.Max, Text=row.Text, SubText = row.SubText}).ToList();
         }
 
         public class EventDetailCreation
@@ -65,22 +81,35 @@ namespace Slugburn.DarkestNight.Rules.Events
                 return this;
             }
 
-            public EventDetailCreation Option(string option, string optionText, Func<Hero, bool> condition = null)
+            public EventDetailCreation Option(string code, string text, Func<Hero, bool> condition = null)
             {
-                _detail._options[option] = new EventConfig {Text = optionText, Condition = condition};
+                _detail._options[code] = new EventOption(code, text, condition);
                 return this;
             }
 
-            public EventDetailCreation Row(int min, int max, string text, string subText = null)
+
+            public EventDetailCreation Row(int min, int max, string text, string subText, Action<EventRowCreation> create = null)
             {
-                _detail._rows.Add(new EventRow {Min = min, Max = max, Text = text, SubText = subText});
+                var row = new EventRow {Min = min, Max = max, Text = text, SubText = subText};
+                var ctx = new EventRowCreation(row);
+                create?.Invoke(ctx);
+                _detail._rows.Add(row);
                 return this;
             }
 
-            public EventDetailCreation Row(int number, string text, string subText = null)
+            public EventDetailCreation Row(int number, string text, string subText, Action<EventRowCreation> create = null)
             {
-                _detail._rows.Add(new EventRow {Min = number, Max = number, Text = text, SubText = subText});
-                return this;
+                return Row(number, number, text, subText, create);
+            }
+
+            public EventDetailCreation Row(int min, int max, string text, Action<EventRowCreation> create = null)
+            {
+                return Row(min, max, text, null, create);
+            }
+
+            public EventDetailCreation Row(int number, string text, Action<EventRowCreation> create = null)
+            {
+                return Row(number, number, text, null, create);
             }
 
             public EventDetailCreation Enemy(int min, int max, string name)
@@ -98,12 +127,60 @@ namespace Slugburn.DarkestNight.Rules.Events
             {
                 return Enemy(0, 0, name);
             }
+
+            public class EventRowCreation
+            {
+                private readonly EventRow _row;
+
+                internal EventRowCreation(EventRow row)
+                {
+                    _row = row;
+                }
+
+                public EventRowCreation Option(string code, string text, Func<Hero, bool> condition = null)
+                {
+                    _row._options.Add(new EventOption(code, text, condition));
+                    return this;
+                }
+            }
         }
 
-        private class EventConfig
+        internal class EventOption
         {
+            public EventOption(string code, string text, Func<Hero, bool> condition)
+            {
+                Code = code;
+                Text = text;
+                Condition = condition;
+            }
+
+            public string Code { get; set; }
+            public string Text { get; }
+            public Func<Hero, bool> Condition { get; }
+        }
+
+        internal class EventRow
+        {
+            public readonly List<EventOption> _options = new List<EventOption>();
+
+            public int Min { get; set; }
+            public int Max { get; set; }
             public string Text { get; set; }
-            public Func<Hero, bool> Condition { get; set; }
+            public string SubText { get; set; }
+        }
+
+        public HeroEvent GetHeroEvent(Hero hero)
+        {
+            return new HeroEvent
+            {
+                Name = Name,
+                Title = Name,
+                Fate = Fate,
+                Text = GetText(),
+                Rows = CreateHeroRows(),
+                Options = GetOptions(hero, null),
+                IsIgnorable = Fate > 0
+            };
         }
     }
 }

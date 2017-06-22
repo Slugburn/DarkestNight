@@ -4,15 +4,13 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
     public class Raid : IEventCard
     {
-        public string Name => "Raid";
-        public int Fate { get; }
-
-        public EventDetail Detail => EventDetail.Create(x => x
-            .Text("Count the blights in your location")
-            .Row(0, 1, " Lose 2 Secrecy")
-            .Row(2, 3, "Lose 1 Grace and 1 Secrecy")
-            .Row(4, "+1 Darkness")
-            .Option("cont", "Continue"));
+        public EventDetail Detail => EventDetail.Create("Raid", 0,
+            x => x
+                .Text("Count the blights in your location")
+                .Row(0, 1, " Lose 2 Secrecy")
+                .Row(2, 3, "Lose 1 Grace and 1 Secrecy")
+                .Row(4, "+1 Darkness")
+                .Option("cont", "Continue"));
 
         public void Resolve(Hero hero, string option)
         {

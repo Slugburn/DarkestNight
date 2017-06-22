@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Triggers;
@@ -9,10 +8,8 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
     public class TwistOfFate : IEventCard
     {
         private const string EventName = "Twist of Fate";
-        public string Name => EventName;
-        public int Fate { get; }
 
-        public EventDetail Detail => EventDetail.Create(x => x
+        public EventDetail Detail => EventDetail.Create("Twist of Fate", 0, x => x
             .Text("Roll 1d and take the highest")
             .Row(5, 6, "+1d on all rolls for the rest of this turn")
             .Row(1, 4, "-1d (to a minimum of 1d) on all rolls for the rest of this turn")
