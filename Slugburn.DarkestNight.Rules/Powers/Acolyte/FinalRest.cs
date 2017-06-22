@@ -7,9 +7,11 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 {
     class FinalRest : TacticPower
     {
+        private const string PowerName = "Final Rest";
+
         public FinalRest() : base(TacticType.Fight)
         {
-            Name = "Final Rest";
+            Name = PowerName;
             StartingPower = true;
             Text = "Fight with 2d or 3d. If any die comes up a 1, lose 1 Grace.";
         }
@@ -17,16 +19,15 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            hero.AddTactic(new FinalRestTactic(Name, 2));
-            hero.AddTactic(new FinalRestTactic(Name, 3));
+            hero.AddTactic(new FinalRestTactic {DiceCount = 2});
+            hero.AddTactic(new FinalRestTactic {DiceCount = 3});
         }
 
-        private class FinalRestTactic : PowerTactic, IRollHandler
+        private class FinalRestTactic : PowerTactic
         {
-            public FinalRestTactic(string powerName, int diceCount)
+            public FinalRestTactic()
             {
-                PowerName = powerName;
-                DiceCount = diceCount;
+                PowerName = FinalRest.PowerName;
                 Type = TacticType.Fight;
             }
 
@@ -35,9 +36,12 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             public override void Use(Hero hero)
             {
                 base.Use(hero);
-                hero.AddRollHandler(this);
+                hero.AddRollHandler(new FinalRestRollHandler());
             }
+        }
 
+        private class FinalRestRollHandler : IRollHandler
+        {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
                 return rollState;
@@ -50,5 +54,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                 hero.RemoveRollHandler(this);
             }
         }
+
     }
 }

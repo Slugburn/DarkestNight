@@ -25,7 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             return base.IsUsable(hero) && hero.Location != Location.Monastery;
         }
 
-        private class LeechLifeTactic : PowerTactic, IRollHandler
+        private class LeechLifeTactic : PowerTactic
         {
             public LeechLifeTactic()
             {
@@ -37,10 +37,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             public override void Use(Hero hero)
             {
                 base.Use(hero);
-                hero.AddRollHandler(this);
+                hero.AddRollHandler(new LeechLifeRollHandler());
                 hero.GetPower(PowerName).Exhaust(hero);
             }
+        }
 
+        private class LeechLifeRollHandler : IRollHandler
+        {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
                 return rollState;
@@ -54,5 +57,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                 hero.RemoveRollHandler(this);
             }
         }
+
     }
 }

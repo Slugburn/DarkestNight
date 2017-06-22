@@ -19,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             hero.AddTactic(new RecklessAbandonTactic {PowerName = Name} );
         }
 
-        internal class RecklessAbandonTactic : PowerTactic, IRollHandler
+        internal class RecklessAbandonTactic : PowerTactic
         {
             public RecklessAbandonTactic()
             {
@@ -30,9 +30,12 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             public override void Use(Hero hero)
             {
                 base.Use(hero);
-                hero.AddRollHandler(this);
+                hero.AddRollHandler(new RecklessAbandonRollHandler());
             }
+        }
 
+        private class RecklessAbandonRollHandler : IRollHandler
+        {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
                 return rollState;
@@ -40,12 +43,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
 
             public void AcceptRoll(Hero hero, RollState rollState)
             {
-                hero.Roll.TargetNumber = hero.ConflictState.SelectedTargets.Single().FightTarget;
-                var successes = hero.Roll.Successes;
+                rollState.TargetNumber = hero.ConflictState.SelectedTargets.Single().FightTarget;
+                var successes = rollState.Successes;
                 if (successes < 2)
                     hero.LoseGrace();
                 hero.RemoveRollHandler(this);
             }
         }
+
     }
 }

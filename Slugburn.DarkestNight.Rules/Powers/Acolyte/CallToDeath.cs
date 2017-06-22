@@ -7,7 +7,7 @@ using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 {
-    class CallToDeath : ActionPower
+    internal class CallToDeath : ActionPower
     {
         private const string PowerName = "Call to Death";
 
@@ -24,8 +24,15 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             hero.AddAction(new CallToDeathAction());
         }
 
-        private class CallToDeathAction : PowerAction, IRollHandler
+
+        public override bool IsUsable(Hero hero)
         {
+            return base.IsUsable(hero) && hero.GetBlights().Count() > 1;
+        }
+
+        private class CallToDeathAction : PowerAction
+        {
+
             public CallToDeathAction() : base(PowerName)
             {
             }
@@ -33,7 +40,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             public override void Act(Hero hero)
             {
                 hero.ValidateState(HeroState.ChoosingAction);
-                hero.SetRollHandler(this);
+                hero.SetRollHandler(new CallToDeathRollHandler());
                 hero.AddRollModifier(StaticRollBonus.Create(Name, RollType.Fight, 1));
                 hero.ConflictState = new ConflictState
                 {
@@ -46,7 +53,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                 hero.State = HeroState.SelectingTarget;
                 hero.IsActionAvailable = false;
             }
+        }
 
+        private class CallToDeathRollHandler : IRollHandler
+        {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
                 return rollState;
@@ -54,16 +64,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
             public void AcceptRoll(Hero hero, RollState rollState)
             {
-                hero.RemoveRollModifiers(Name);
+                hero.RemoveRollModifiers(PowerName);
                 hero.State = HeroState.AssigningDice;
                 hero.RemoveRollHandler(this);
             }
-        }
-
-
-        public override bool IsUsable(Hero hero)
-        {
-            return base.IsUsable(hero) && hero.GetBlights().Count() > 1;
         }
     }
 }

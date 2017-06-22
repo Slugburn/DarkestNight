@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -8,7 +7,7 @@ using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
-    public class FightNecromancer : IAction, IRollHandler
+    public class FightNecromancer : IAction
     {
         public const string ActionName = "Fight Necromancer";
         public string Name => ActionName;
@@ -26,7 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 AvailableTargets = necromancerTargetInfo
             };
             hero.ConflictState = conflictState;
-            hero.SetRollHandler(this);
+            hero.SetRollHandler(new FightNecromancerRollHandler());
             // hero.ConflictState.ConflictType needs to be set before calling hero.GetAvailableFightTactics()
             conflictState.AvailableTactics = hero.GetAvailableFightTactics().GetInfo(hero);
             hero.State = HeroState.SelectingTarget;
@@ -37,20 +36,24 @@ namespace Slugburn.DarkestNight.Rules.Actions
             return hero.IsActionAvailable && hero.GetBlights().Any();
         }
 
-        public RollState HandleRoll(Hero hero, RollState rollState)
+        private class FightNecromancerRollHandler : IRollHandler
         {
-            hero.IsActionAvailable = false;
-            rollState.TargetNumber = hero.Game.Necromancer.Fight;
-            return rollState;
+            public RollState HandleRoll(Hero hero, RollState rollState)
+            {
+                hero.IsActionAvailable = false;
+                rollState.TargetNumber = hero.Game.Necromancer.Fight;
+                return rollState;
+            }
+
+            public void AcceptRoll(Hero hero, RollState rollState)
+            {
+                rollState.TargetNumber = hero.Game.Necromancer.Fight;
+                var target = hero.ConflictState.SelectedTargets.Single();
+                var assignment = TargetDieAssignment.Create(target.Id, rollState.Result);
+                hero.State = HeroState.AssigningDice;
+                hero.AssignDiceToTargets(new[] { assignment });
+            }
         }
 
-        public void AcceptRoll(Hero hero, RollState rollState)
-        {
-            rollState.TargetNumber = hero.Game.Necromancer.Fight;
-            var target = hero.ConflictState.SelectedTargets.Single();
-            var assignment = TargetDieAssignment.Create(target.Id, rollState.Result);
-            hero.State = HeroState.AssigningDice;
-            hero.AssignDiceToTargets(new[] { assignment });
-        }
     }
 }

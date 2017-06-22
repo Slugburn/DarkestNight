@@ -177,7 +177,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var card = EventFactory.CreateCard(eventName);
             CurrentEvent = card.Detail.GetHeroEvent(this);
             Triggers.Send(HeroTrigger.EventDrawn);
-            Player.DisplayEvent(Players.Models.PlayerEvent.From(CurrentEvent));
+            Player.DisplayEvent(PlayerEvent.From(CurrentEvent));
         }
 
         public void LoseSecrecy(string sourceName)
@@ -460,11 +460,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             var dice = GetDice(RollType.Search, "Search", 1);
             return dice;
-        }
-
-        public void ResolveEvent(IEventCard e, string option)
-        {
-            throw new NotImplementedException();
         }
 
         public void PresentCurrentEvent()

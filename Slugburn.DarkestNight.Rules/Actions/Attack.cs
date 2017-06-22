@@ -6,7 +6,7 @@ using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
-    public class Attack : IAction, IRollHandler
+    public class Attack : IAction
     {
         public string Name => "Attack";
 
@@ -21,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 AvailableTargets = hero.GetSpace().Blights.GetTargetInfo()
             };
             hero.ConflictState = conflictState;
-            hero.SetRollHandler(this);
+            hero.SetRollHandler(new AttackRollHandler());
             // hero.ConflictState.ConflictType needs to be set before calling hero.GetAvailableFightTactics()
             conflictState.AvailableTactics = hero.GetAvailableFightTactics().GetInfo(hero);
             hero.State = HeroState.SelectingTarget;
@@ -32,24 +32,23 @@ namespace Slugburn.DarkestNight.Rules.Actions
             return hero.IsActionAvailable && hero.GetBlights().Any();
         }
 
-        public void HandleRoll(Hero hero)
+        private class AttackRollHandler : IRollHandler
         {
-        }
+            public RollState HandleRoll(Hero hero, RollState rollState)
+            {
+                hero.IsActionAvailable = false;
+                rollState.TargetNumber = hero.ConflictState.SelectedTargets.Single().FightTarget;
+                return rollState;
+            }
 
-        public RollState HandleRoll(Hero hero, RollState rollState)
-        {
-            hero.IsActionAvailable = false;
-            rollState.TargetNumber = hero.ConflictState.SelectedTargets.Single().FightTarget;
-            return rollState;
-        }
-
-        public void AcceptRoll(Hero hero, RollState rollState)
-        {
-            var result = rollState.Result;
-            var target = hero.ConflictState.SelectedTargets.Single();
-            var assignment = TargetDieAssignment.Create(target.Id, result);
-            hero.State = HeroState.AssigningDice;
-            hero.AssignDiceToTargets(new[] { assignment });
+            public void AcceptRoll(Hero hero, RollState rollState)
+            {
+                var result = rollState.Result;
+                var target = hero.ConflictState.SelectedTargets.Single();
+                var assignment = TargetDieAssignment.Create(target.Id, result);
+                hero.State = HeroState.AssigningDice;
+                hero.AssignDiceToTargets(new[] { assignment });
+            }
         }
     }
 }

@@ -73,10 +73,5 @@ namespace Slugburn.DarkestNight.Rules.Actions
         {
             return hero.IsActionAvailable && hero.Location != Location.Monastery;
         }
-
-        public void HandleRoll(Hero hero)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
