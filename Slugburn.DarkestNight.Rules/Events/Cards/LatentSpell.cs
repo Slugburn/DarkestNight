@@ -47,7 +47,6 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
 
             public void AcceptRoll(Hero hero, RollState rollState)
             {
-                hero.RemoveRollHandler(this);
                 var result = rollState.Result;
                 if (result == 6)
                 {

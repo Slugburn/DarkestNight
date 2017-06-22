@@ -41,9 +41,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             {
                 if (hero.ConflictState == null) return;
                 if (!hero.IsTargetNecromancer()) return;
-                var originalRoll = hero.Roll.AdjustedRoll.OrderByDescending(x=>x).ToList();
+                var originalRoll = hero.CurrentRoll.AdjustedRoll.OrderByDescending(x=>x).ToList();
                 var newRoll = new[] {originalRoll.First() + 1}.Concat(originalRoll.Skip(1)).ToList();
-                hero.Roll.AdjustedRoll = newRoll;
+                hero.CurrentRoll.AdjustedRoll = newRoll;
             }
         }
 

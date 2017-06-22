@@ -26,21 +26,21 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             public override void Use(Hero hero)
             {
                 base.Use(hero);
-                hero.AddRollHandler(new ExhaustPowerRollHandler { PowerName = PowerName });
+                hero.CurrentRoll.AddRollHandler(new ExhaustPowerRollHandler { PowerName = PowerName });
+            }
+        }
+
+        private class ExhaustPowerRollHandler : IRollHandler
+        {
+            public string PowerName { get; set; }
+            public RollState HandleRoll(Hero hero, RollState rollState)
+            {
+                return rollState;
             }
 
-            private class ExhaustPowerRollHandler : IRollHandler
+            public void AcceptRoll(Hero hero, RollState rollState)
             {
-                public string PowerName { get; set; }
-                public RollState HandleRoll(Hero hero, RollState rollState)
-                {
-                    return rollState;
-                }
-
-                public void AcceptRoll(Hero hero, RollState rollState)
-                {
-                    hero.GetPower(PowerName).Exhaust(hero);
-                }
+                hero.GetPower(PowerName).Exhaust(hero);
             }
         }
     }

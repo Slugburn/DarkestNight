@@ -36,11 +36,11 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             public override void Use(Hero hero)
             {
                 base.Use(hero);
-                hero.AddRollHandler(new FinalRestRollHandler());
+                hero.CurrentRoll.AddRollHandler<FinalRestRoll>();
             }
         }
 
-        private class FinalRestRollHandler : IRollHandler
+        private class FinalRestRoll : IRollHandler
         {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
@@ -49,9 +49,8 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
             public void AcceptRoll(Hero hero, RollState rollState)
             {
-                if (hero.Roll.AdjustedRoll.Any(x => x == 1))
+                if (hero.CurrentRoll.AdjustedRoll.Any(x => x == 1))
                     hero.LoseGrace();
-                hero.RemoveRollHandler(this);
             }
         }
 

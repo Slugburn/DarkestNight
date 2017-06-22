@@ -191,6 +191,8 @@
     <Compile Include="Rolls\IDie.cs" />
     <Compile Include="Rolls\IRollHandler.cs" />
     <Compile Include="Rolls\IRollModifier.cs" />
+    <Compile Include="Rolls\IRollStateCreation.cs" />
+    <Compile Include="Rolls\RollBuilder.cs" />
     <Compile Include="Rolls\RollState.cs" />
     <Compile Include="Rolls\RollType.cs" />
     <Compile Include="Rolls\StaticRollBonus.cs" />

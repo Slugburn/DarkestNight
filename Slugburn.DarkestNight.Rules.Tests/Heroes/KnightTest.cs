@@ -60,6 +60,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenHero("Knight", x => x.Power("Holy Mantle").Grace(0))
                 .ThenHero(x => x.DefaultGrace(6).Grace(0))
                 .WhenPlayerTakesAction("Pray", x => x.Rolls(2, 3))
+                .WhenPlayerAcceptsRoll()
                 .ThenHero(x => x.Rolled(3, 4).DefaultGrace(6).Grace(2));
         }
 

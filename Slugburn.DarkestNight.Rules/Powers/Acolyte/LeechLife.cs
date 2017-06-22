@@ -37,12 +37,12 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             public override void Use(Hero hero)
             {
                 base.Use(hero);
-                hero.AddRollHandler(new LeechLifeRollHandler());
+                hero.CurrentRoll.AddRollHandler<LeechLifeRoll>();
                 hero.GetPower(PowerName).Exhaust(hero);
             }
         }
 
-        private class LeechLifeRollHandler : IRollHandler
+        private class LeechLifeRoll : IRollHandler
         {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
@@ -51,10 +51,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
             public void AcceptRoll(Hero hero, RollState rollState)
             {
-                hero.Roll.TargetNumber = hero.ConflictState.SelectedTargets.Select(x => x.FightTarget).Min();
-                if (hero.Roll.Successes > 1)
+                hero.CurrentRoll.TargetNumber = hero.ConflictState.SelectedTargets.Select(x => x.FightTarget).Min();
+                if (hero.CurrentRoll.Successes > 1)
                     hero.GainGrace(1, hero.DefaultGrace);
-                hero.RemoveRollHandler(this);
             }
         }
 

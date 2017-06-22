@@ -148,7 +148,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .WhenHero(x => x.DrawsEvent(eventName))
                 .ThenPlayer(x => x.SeesEvent(eventName, text, expectedFate, "Continue"))
                 .WhenPlayer(x => x.SelectsEventOption("Continue"))
-                .ThenHero(x => x.HasOutstandingEvents(0).StrictVerification(false))
+                .ThenHero(x => x.HasOutstandingEvents(0).Secrecy(null))
                 .ThenPlayer(x => x.SeesTarget(enemy));
         }
     }

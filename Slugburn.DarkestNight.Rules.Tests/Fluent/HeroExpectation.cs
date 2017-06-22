@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
     {
         private readonly Hero _hero;
         private int _expectedGrace;
-        private int _expectedSecrecy;
+        private int? _expectedSecrecy;
         private readonly List<Location> _invalidLocations;
         private readonly List<Location> _specifiedLocations;
         private bool _expectedActionAvailable;
@@ -28,7 +28,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         private int _expectedDiceCount;
         private int _expectedFreeActions;
         private int _expectedOutstandingEvents;
-        private bool _strictVerification;
         private string[] _expectedInventory = new string[0];
 
         public HeroExpectation(Hero hero)
@@ -49,11 +48,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 
         public void Verify()
         {
-            if (_strictVerification)
-            {
-                Assert.That(_hero.Grace, Is.EqualTo(_expectedGrace), "Unexpected Grace.");
+            Assert.That(_hero.Grace, Is.EqualTo(_expectedGrace), "Unexpected Grace.");
+            if (_expectedSecrecy.HasValue)
                 Assert.That(_hero.Secrecy, Is.EqualTo(_expectedSecrecy), "Unexpected Secrecy.");
-            }
             Assert.That(_hero.IsActionAvailable, Is.EqualTo(_expectedActionAvailable),
                 _expectedActionAvailable ? "Should not have used action." : "Should have used action.");
             Assert.That(_hero.CanGainGrace, Is.EqualTo(_expectedCanGainGrace), "Unexpected CanGrainGrace");
@@ -71,18 +68,18 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             Assert.That(_hero.TravelSpeed, Is.EqualTo(_expectedTravelSpeed), "Unexpected TravelSpeed.");
             Assert.That(_hero.AvailableMovement, Is.EqualTo(_expectedAvailableMovement), "Unexpected AvailableMovement.");
 
-            var fightDice = _hero.GetDice(RollType.Fight, null, 1).Total;
+            var fightDice = Dice.Create(_hero, RollType.Fight, null, 1).Total;
             Assert.That(fightDice, Is.EqualTo(_expectedFightDice), "Unexpected number of Fight dice.");
-            var eludeDice = _hero.GetDice(RollType.Elude, null, 1).Total;
+            var eludeDice = Dice.Create(_hero, RollType.Elude, null, 1).Total;
             Assert.That(eludeDice, Is.EqualTo(_expectedEludeDice), "Unexpected number of Elude dice.");
             var searchDice = _hero.GetSearchDice().Total;
             Assert.That(searchDice, Is.EqualTo(_expectedSearchDice), "Unexpected number of Search dice.");
             if (_expectedDiceCount > 0)
-                Assert.That(_hero.Roll.AdjustedRoll.Count, Is.EqualTo(_expectedDiceCount));
+                Assert.That(_hero.CurrentRoll.AdjustedRoll.Count, Is.EqualTo(_expectedDiceCount));
             if (_expectedRoll != null)
             {
-                Assert.That(_hero.Roll, Is.Not.Null, "No roll was made");
-                Assert.That(_hero.Roll.AdjustedRoll, Is.EquivalentTo(_expectedRoll));
+                Assert.That(_hero.CurrentRoll, Is.Not.Null, "No roll was made");
+                Assert.That(_hero.CurrentRoll.AdjustedRoll, Is.EquivalentTo(_expectedRoll));
             }
             Assert.That(_hero.FreeActions, Is.EqualTo(_expectedFreeActions));
             var outstandingEvents = (_hero.CurrentEvent != null ? 1 : 0) + _hero.EventQueue.Count() ;
@@ -99,7 +96,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public HeroExpectation Secrecy(int expected)
+        public HeroExpectation Secrecy(int? expected)
         {
             _expectedSecrecy = expected;
             return this;
@@ -262,11 +259,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         {
             _expectedOutstandingEvents = expected;
             return this;
-        }
-
-        public void StrictVerification(bool value = true)
-        {
-            _strictVerification = value;
         }
 
         public HeroExpectation HasItem(params string[] items)

@@ -25,7 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 AvailableTargets = necromancerTargetInfo
             };
             hero.ConflictState = conflictState;
-            hero.SetRollHandler(new FightNecromancerRollHandler());
+            hero.SetRoll(RollBuilder.Create<FightNecromancerRoll>());
             // hero.ConflictState.ConflictType needs to be set before calling hero.GetAvailableFightTactics()
             conflictState.AvailableTactics = hero.GetAvailableFightTactics().GetInfo(hero);
             hero.State = HeroState.SelectingTarget;
@@ -36,7 +36,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             return hero.IsActionAvailable && hero.GetBlights().Any();
         }
 
-        private class FightNecromancerRollHandler : IRollHandler
+        private class FightNecromancerRoll : IRollHandler
         {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {

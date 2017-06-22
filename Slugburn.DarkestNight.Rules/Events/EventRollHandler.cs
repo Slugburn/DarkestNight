@@ -24,7 +24,6 @@ namespace Slugburn.DarkestNight.Rules.Events
 
         public void AcceptRoll(Hero hero, RollState rollState)
         {
-            hero.RemoveRollHandler(this);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Knight
@@ -23,15 +24,15 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
 
         private class HolyMantleAfterRoll : ITriggerHandler<Hero>
         {
-            public void HandleTrigger(Hero registrar, string source, TriggerContext context)
+            public void HandleTrigger(Hero hero, string source, TriggerContext context)
             {
-                var hero = registrar;
+                if (context.GetState<RollType>() != RollType.Pray) return;
                 if (hero.State != HeroState.Praying) return;
                 var power = hero.GetPower(PowerName);
                 if (!power.IsUsable(hero)) return;
 
                 // Increase each die by 1
-                hero.Roll.AdjustedRoll = hero.Roll.AdjustedRoll.Select(x => x + 1).ToList();
+                hero.CurrentRoll.AdjustedRoll = hero.CurrentRoll.AdjustedRoll.Select(x => x + 1).ToList();
             }
         }
     }

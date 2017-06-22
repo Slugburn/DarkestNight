@@ -40,7 +40,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             public override void Act(Hero hero)
             {
                 hero.ValidateState(HeroState.ChoosingAction);
-                hero.SetRollHandler(new CallToDeathRollHandler());
                 hero.AddRollModifier(StaticRollBonus.Create(Name, RollType.Fight, 1));
                 hero.ConflictState = new ConflictState
                 {
@@ -50,12 +49,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                     MinTarget = 2,
                     MaxTarget = 2
                 };
+                hero.SetRoll(RollBuilder.Create<CallToDeathRoll>());
                 hero.State = HeroState.SelectingTarget;
                 hero.IsActionAvailable = false;
             }
         }
 
-        private class CallToDeathRollHandler : IRollHandler
+        private class CallToDeathRoll : IRollHandler
         {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
@@ -66,7 +66,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             {
                 hero.RemoveRollModifiers(PowerName);
                 hero.State = HeroState.AssigningDice;
-                hero.RemoveRollHandler(this);
             }
         }
     }

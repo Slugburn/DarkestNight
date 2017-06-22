@@ -18,7 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             const int roll = 4;
             new TestScenario()
                 .GivenDarkness(0)
-                .GivenHero("Acolyte", x => x.Secrecy(startingSecrecy))
+                .GivenHero("Acolyte", x => x.Secrecy(startingSecrecy).Grace(0))
                 .WhenHero(x => x.DrawsEvent("Altar"))
                 .ThenPlayer(p => p.Event(e => e.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")))
                 .WhenPlayer(p => p.SelectsEventOption("Roll", x => x.Rolls(roll)))

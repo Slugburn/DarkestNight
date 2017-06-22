@@ -24,7 +24,7 @@ namespace Slugburn.DarkestNight.Rules.Tactics
         public static Dice GetDice(this ITactic tactic, Hero hero)
         {
             var rollType = tactic.Type == TacticType.Fight ? RollType.Fight : RollType.Elude;
-            var dice = hero.GetDice(rollType, tactic.Name, tactic.GetDiceCount());
+            var dice = Dice.Create(hero, rollType, tactic.Name, tactic.GetDiceCount());
             return dice;
         }
     }

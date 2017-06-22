@@ -24,7 +24,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         private readonly Dictionary<string, ITactic> _tactics;
         private readonly List<ActionFilter> _actionFilters;
         private ILocationSelectedHandler _locationSelectedHandler;
-        private List<IRollHandler> _rollHandlers;
 
         public Hero()
         {
@@ -46,7 +45,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         }
 
         public TriggerRegistry<HeroTrigger, Hero> Triggers { get; }
-        public RollState Roll { get; set; }
+        public RollState CurrentRoll { get; set; }
 
         public List<IPower> PowerDeck
         {
@@ -332,15 +331,18 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             ConflictState.SelectedTactic = tacticInfo;
             var tactic = _tactics[tacticName];
             tactic.Use(this);
-            var dice = tactic.GetDice(this);
-            RollDice(dice);
-            State = HeroState.RollAvailable;
+
+            CurrentRoll.RollType = tactic.Type == TacticType.Fight ? RollType.Fight : RollType.Elude;
+            CurrentRoll.TargetNumber = ConflictState.SelectedTargets.Min(x => tactic.Type == TacticType.Fight ? x.FightTarget : x.EludeTarget);
+            CurrentRoll.BaseDiceCount = tactic.GetDiceCount();
+            CurrentRoll.BaseName = tactic.Name;
+
+            CurrentRoll.Roll();
         }
 
         public void AcceptRoll()
         {
-            ValidateState(HeroState.RollAvailable);
-            _rollHandlers.ToList().ForEach(h=>h.AcceptRoll(this, this.Roll));
+            CurrentRoll.Accept();
         }
 
         public void ValidateState(HeroState expected)
@@ -367,7 +369,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void AssignDiceToTargets(ICollection<TargetDieAssignment> assignments)
         {
             ValidateState(HeroState.AssigningDice);
-            var validRolls = assignments.Select(x => x.DieValue).Intersect(Roll.AdjustedRoll).Count() == assignments.Count;
+            var validRolls = assignments.Select(x => x.DieValue).Intersect(CurrentRoll.AdjustedRoll).Count() == assignments.Count;
             if (!validRolls)
                 throw new Exception("Invalid die values specified.");
             var validTargets = assignments.Select(x => x.TargetId).Intersect(ConflictState.SelectedTargets.Select(x => x.Id)).Count() == assignments.Count;
@@ -377,11 +379,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             {
                 ResolveAttack(assignment.TargetId, assignment.DieValue);
             }
-        }
-
-        public void SetRollHandler(IRollHandler rollHandler)
-        {
-            _rollHandlers = new List<IRollHandler> {rollHandler};
         }
 
         public void RemoveRollModifiers(string name)
@@ -400,16 +397,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 throw new Exception($"Unknown action {name} requested.");
             var action = _actions[name];
             return action;
-        }
-
-        public void RemoveRollHandler(IRollHandler rollHandler)
-        {
-            _rollHandlers.Remove(rollHandler);
-        }
-
-        public void AddRollHandler(IRollHandler handler)
-        {
-            _rollHandlers.Add(handler);
         }
 
         public bool IsAffectedByBlight(Blight blight)
@@ -444,21 +431,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             _actions.Remove(name);
         }
 
-        public Dice GetDice(RollType rollType, string baseName, int baseDiceCount)
-        {
-            var baseDetail = new DiceDetail {Name = baseName, Modifier = baseDiceCount};
-            var otherDetails = from rollMod in GetRollModifiers()
-                let mod = rollMod.GetModifier(this, rollType)
-                where mod != 0
-                select new DiceDetail {Name = rollMod.Name, Modifier = mod};
-            var details = new[] {baseDetail}.Concat(otherDetails).ToList();
-            var dice = new Dice(details);
-            return dice;
-        }
-
         public Dice GetSearchDice()
         {
-            var dice = GetDice(RollType.Search, "Search", 1);
+            var dice = Dice.Create(this, RollType.Search, "Search", 1);
             return dice;
         }
 
@@ -480,21 +455,15 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void RollEventDice(IRollHandler rollHandler)
         {
-            SetRollHandler(rollHandler);
-            var dice = GetDice(RollType.Event, "Event", 1);
-            RollDice(dice);
+            var state = SetRoll(RollBuilder.Create(rollHandler).Type(RollType.Event).Base("Event", 1));
+            state.Roll();
             PresentCurrentEvent();
         }
 
-        public RollState RollDice(Dice dice, int? targetNumber = null)
+        public RollState SetRoll(IRollStateCreation creation)
         {
-            var roll = Die.Roll(dice.Total);
-            var rollState = RollState.Create(roll, targetNumber ?? 0);
-            Roll = rollState;
-            foreach (var handler in _rollHandlers)
-                handler.HandleRoll(this, rollState);
-            State = HeroState.RollAvailable;
-            Triggers.Send(HeroTrigger.AfterRoll);
+            var rollState = ((RollBuilder.RollStateCreation) creation).Create(this);
+            CurrentRoll = rollState;
             return rollState;
         }
 
@@ -551,14 +520,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var conflictState = ConflictState;
             if (conflictState?.SelectedTargets == null || conflictState.SelectedTargets.Count != 1) return false;
             return conflictState.SelectedTargets.First().Name == "Necromancer";
-        }
-
-        public void AdjustRoll()
-        {
-            // reset the adjusted roll back to the actual roll
-            Roll.AdjustedRoll = Roll.ActualRoll.ToList();
-            foreach (var handler in _rollHandlers)
-                Roll = handler.HandleRoll(this, Roll);
         }
     }
 }

@@ -21,9 +21,9 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 AvailableTargets = hero.GetSpace().Blights.GetTargetInfo()
             };
             hero.ConflictState = conflictState;
-            hero.SetRollHandler(new AttackRollHandler());
             // hero.ConflictState.ConflictType needs to be set before calling hero.GetAvailableFightTactics()
             conflictState.AvailableTactics = hero.GetAvailableFightTactics().GetInfo(hero);
+            hero.SetRoll(RollBuilder.Create<AttackRoll>());
             hero.State = HeroState.SelectingTarget;
         }
 
@@ -32,7 +32,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             return hero.IsActionAvailable && hero.GetBlights().Any();
         }
 
-        private class AttackRollHandler : IRollHandler
+        private class AttackRoll : IRollHandler
         {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {

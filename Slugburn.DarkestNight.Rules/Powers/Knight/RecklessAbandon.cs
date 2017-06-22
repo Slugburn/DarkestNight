@@ -30,7 +30,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             public override void Use(Hero hero)
             {
                 base.Use(hero);
-                hero.AddRollHandler(new RecklessAbandonRollHandler());
+                hero.CurrentRoll.AddRollHandler<RecklessAbandonRollHandler>();
             }
         }
 
@@ -47,7 +47,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
                 var successes = rollState.Successes;
                 if (successes < 2)
                     hero.LoseGrace();
-                hero.RemoveRollHandler(this);
             }
         }
 

@@ -28,7 +28,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
         {
             public void HandleRoll(Hero hero)
             {
-                var result = hero.Roll.Result;
+                var result = hero.CurrentRoll.Result;
                 var dieCount = result >= 5 ? 1 : -1;
                 hero.AddRollModifier(new StaticRollBonus {Name = EventName, RollType = RollType.Any, DieCount = dieCount});
                 hero.Triggers.Add(HeroTrigger.EndOfTurn, EventName, new TwistOfFateEndOfTurnHandler() );

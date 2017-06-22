@@ -24,7 +24,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 AvailableTargets = enemies.GetTargetInfo(),
                 AvailableTactics = hero.GetAvailableTactics().GetInfo(hero)
             };
-            hero.SetRollHandler(new DefendRollHandler());
+            hero.SetRoll(RollBuilder.Create<DefendRoll>());
             hero.State = HeroState.SelectingTarget;
             hero.Player.DisplayConflict(PlayerConflict.FromConflictState(hero.ConflictState));
             hero.Player.State = PlayerState.Conflict;
@@ -35,7 +35,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             return hero.Enemies != null && hero.Enemies.Any();
         }
 
-        private class DefendRollHandler : IRollHandler
+        private class DefendRoll : IRollHandler
         {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
