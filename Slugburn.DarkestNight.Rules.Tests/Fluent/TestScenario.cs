@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Maps;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
@@ -231,6 +232,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         public TestScenario Configure(Func<TestScenario, TestScenario> setConditions)
         {
             return setConditions(this);
+        }
+
+        public TestScenario GivenNextSearchResult(Find result)
+        {
+            _game.Maps.Insert(0, new Map(new Blight[7], Enumerable.Repeat(result, 6).ToArray()));
+            return this;
         }
     }
 }

@@ -83,6 +83,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public int FreeActions { get; set; }
         public IPower SelectedPower { get; set; }
         public Queue<string> EventQueue { get; } = new Queue<string>();
+        public List<string> Inventory { get; set; } = new List<string>();
 
         public void AddActionFilter(string name, HeroState state, ICollection<string> allowed)
         {
@@ -309,8 +310,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void TakeAction(IAction action)
         {
-            if (!IsActionAvailable)
-                throw new InvalidOperationException($"{Name} does not have an action available.");
             action.Act(this);
         }
 
@@ -492,7 +491,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             PresentCurrentEvent();
         }
 
-        private RollState RollDice(Dice dice)
+        public RollState RollDice(Dice dice)
         {
             var roll = Die.Roll(dice.Total);
             var rollState = RollState.Create(roll);
@@ -561,6 +560,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void AdjustRoll()
         {
+            // reset the adjusted roll back to the actual roll
+            Roll.AdjustedRoll = Roll.ActualRoll.ToList();
             foreach (var handler in _rollHandlers)
                 Roll = handler.HandleRoll(this, Roll);
         }

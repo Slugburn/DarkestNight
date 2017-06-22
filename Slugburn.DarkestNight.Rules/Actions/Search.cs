@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Triggers;
@@ -14,10 +14,9 @@ namespace Slugburn.DarkestNight.Rules.Actions
             hero.Triggers.Send(HeroTrigger.Searching);
             hero.SetRollHandler(new SearchRollHandler());
             var dice = hero.GetSearchDice();
-            var roll = Die.Roll(dice.Total);
-            hero.Roll = RollState.Create(roll);
-            hero.Triggers.Send(HeroTrigger.AfterRoll);
-            hero.State = HeroState.RollAvailable;
+            var rollState = hero.RollDice(dice);
+            var space = hero.GetSpace();
+            rollState.TargetNumber = space.SearchTarget;
             hero.IsActionAvailable = false;
         }
 
@@ -25,12 +24,48 @@ namespace Slugburn.DarkestNight.Rules.Actions
         {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
-                throw new NotImplementedException();
+                return rollState;
             }
 
             public void AcceptRoll(Hero hero, RollState rollState)
             {
-                throw new NotImplementedException();
+                if (rollState.Win)
+                {
+                    var map = hero.Game.Maps.Draw();
+                    var space = hero.GetSpace();
+                    var result = map.GetSearchResult(space.Location);
+                    switch (result)
+                    {
+                            case Find.Key:
+                            hero.Inventory.Add("Key");
+                            break;
+                        case Find.BottledMagic:
+                            hero.Inventory.Add("Bottled Magic");
+                            break;
+                        case Find.SupplyCache:
+                            break;
+                        case Find.TreasureChest:
+                            hero.Inventory.Add("Treasure Chest");
+                            break;
+                        case Find.Waystone:
+                            hero.Inventory.Add("Waystone");
+                            break;
+                        case Find.ForgottenShrine:
+                            break;
+                        case Find.VanishingDust:
+                            hero.Inventory.Add("Vanishing Dust");
+                            break;
+                        case Find.Epiphany:
+                            break;
+                        case Find.Artifact:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
+                else
+                {
+                }
             }
         }
 

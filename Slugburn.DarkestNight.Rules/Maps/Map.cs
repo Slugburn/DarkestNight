@@ -3,7 +3,7 @@ using Slugburn.DarkestNight.Rules.Blights;
 
 namespace Slugburn.DarkestNight.Rules.Maps
 {
-    class Map : IMap
+    public class Map : IMap
     {
         private readonly Dictionary<Location, Blight> _blights;
         private readonly Dictionary<Location, Find> _finds;

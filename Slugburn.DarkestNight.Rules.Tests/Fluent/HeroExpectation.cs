@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Shouldly;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
@@ -28,6 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         private int _expectedFreeActions;
         private int _expectedOutstandingEvents;
         private bool _strictVerification;
+        private string[] _expectedInventory = new string[0];
 
         public HeroExpectation(Hero hero)
         {
@@ -86,6 +88,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             var outstandingEvents = (_hero.CurrentEvent != null ? 1 : 0) + _hero.EventQueue.Count() ;
             Assert.That(outstandingEvents, Is.EqualTo(_expectedOutstandingEvents),
                 () => _expectedOutstandingEvents > 0 ? $"Hero should have {_expectedOutstandingEvents} outstanding events." : "Hero has outstanding event");
+
+            _hero.Inventory.ShouldBe(_expectedInventory);
         }
 
 
@@ -263,6 +267,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         public void StrictVerification(bool value = true)
         {
             _strictVerification = value;
+        }
+
+        public HeroExpectation HasItem(params string[] items)
+        {
+            _expectedInventory = items;
+            return this;
         }
     }
 }
