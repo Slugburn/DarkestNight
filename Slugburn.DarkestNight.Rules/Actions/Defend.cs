@@ -35,26 +35,51 @@ namespace Slugburn.DarkestNight.Rules.Actions
             return hero.Enemies != null && hero.Enemies.Any();
         }
 
-        public void HandleRoll(Hero hero)
+        public RollState HandleRoll(Hero hero, RollState rollState)
         {
-            var target = hero.ConflictState.SelectedTargets.Single();
-            var tactic = hero.ConflictState.SelectedTactic;
-            var tacticType = tactic.Type;
+            var enemy = GetEnemy(hero);
+            var tacticType = GetTacticType(hero);
             if (tacticType == TacticType.Elude)
                 hero.Triggers.Send(HeroTrigger.Eluding);
-            var targetNumber = tacticType == TacticType.Fight ? target.FightTarget : target.EludeTarget;
-            var result = hero.Roll.Max();
-            var enemy = EnemyFactory.Create(target.Name);
-            if (result < targetNumber)
-            {
-                enemy.Failure(hero);
-            }
-            else
+            UpdateTargetNumber(rollState, tacticType, enemy);
+            return rollState;
+        }
+
+        public void AcceptRoll(Hero hero, RollState rollState)
+        {
+            var enemy = GetEnemy(hero);
+            var tacticType = GetTacticType(hero);
+            UpdateTargetNumber(rollState, tacticType, enemy);
+            if (rollState.Win)
             {
                 enemy.Win(hero);
                 if (tacticType == TacticType.Fight)
                     hero.Triggers.Send(HeroTrigger.FightWon);
             }
+            else
+            {
+                enemy.Failure(hero);
+            }
+        }
+
+        private static TacticType GetTacticType(Hero hero)
+        {
+            var tactic = hero.ConflictState.SelectedTactic;
+            var tacticType = tactic.Type;
+            return tacticType;
+        }
+
+        private static IEnemy GetEnemy(Hero hero)
+        {
+            var target = hero.ConflictState.SelectedTargets.Single();
+            var enemy = EnemyFactory.Create(target.Name);
+            return enemy;
+        }
+        
+        private static void UpdateTargetNumber(RollState rollState, TacticType tacticType, IEnemy enemy)
+        {
+            var targetNumber = tacticType == TacticType.Fight ? enemy.Fight : enemy.Elude;
+            rollState.TargetNumber = targetNumber;
         }
     }
 }

@@ -41,10 +41,15 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                 hero.GetPower(PowerName).Exhaust(hero);
             }
 
-            public void HandleRoll(Hero hero)
+            public RollState HandleRoll(Hero hero, RollState rollState)
             {
-                var target = hero.ConflictState.SelectedTargets.Select(x => x.FightTarget).Min();
-                if (hero.Roll.Count(roll => roll >= target) > 1)
+                return rollState;
+            }
+
+            public void AcceptRoll(Hero hero, RollState rollState)
+            {
+                hero.Roll.TargetNumber = hero.ConflictState.SelectedTargets.Select(x => x.FightTarget).Min();
+                if (hero.Roll.Successes > 1)
                     hero.GainGrace(1, hero.DefaultGrace);
                 hero.RemoveRollHandler(this);
             }

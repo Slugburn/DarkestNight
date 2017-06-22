@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Slugburn.DarkestNight.Rules.Heroes;
+﻿using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
@@ -23,8 +21,6 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             {
                 case "roll":
                     hero.RollEventDice(new AltarRollHandler());
-                    var result = hero.Roll.Max();
-                    hero.CurrentEvent.Rows.Activate(result);
                     hero.PresentCurrentEvent();
                     break;
                 case "secrecy":
@@ -46,28 +42,31 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
 
         public class AltarRollHandler : IRollHandler
         {
-            public void HandleRoll(Hero hero)
+            public RollState HandleRoll(Hero hero, RollState rollState)
             {
                 var e = hero.CurrentEvent;
-                var result = hero.Roll.Max();
+                e.Rows.Activate(rollState.Result);
+                var result = rollState.Result;
                 e.Options.Clear();
                 if (result > 3)
                 {
-                    e.Title = "Pure Altar";
-                    e.Text = PureAltarText;
                     if (hero.Secrecy > 0)
-                        e.Options.Add(new EventOption {Code = "secrecy", Text = "Spend Secrecy"});
+                        e.Options.Add(new EventOption("secrecy", "Spend Secrecy"));
                     e.Options.Add(EventOption.Continue());
                 }
                 else
                 {
-                    e.Title = "Defiled Altar";
-                    e.Text = DefiledAltarText;
                     if (hero.Grace > 0)
-                        e.Options.Add(new EventOption {Code = "grace", Text = "Spend Grace"});
-                    e.Options.Add(new EventOption {Code = "darkness", Text = "+1 Darkness"});
+                        e.Options.Add(new EventOption("grace", "Spend Grace"));
+                    e.Options.Add(new EventOption("darkness", "+1 Darkness"));
                 }
                 hero.PresentCurrentEvent();
+                return rollState;
+            }
+
+            public void AcceptRoll(Hero hero, RollState rollState)
+            {
+                hero.RemoveRollHandler(this);
             }
         }
     }

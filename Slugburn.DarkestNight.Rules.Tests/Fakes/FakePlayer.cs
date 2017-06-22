@@ -118,10 +118,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         public void SelectEventOption(string option)
         {
             var matching = Event.Options.SingleOrDefault(x => x.Text == option);
-            if (matching==null)
-                throw new ArgumentOutOfRangeException(nameof(option), option, "No matching option found");
-
-            var code = matching.Code;
+            var code = matching?.Code ?? "<unknown>";
             _game.ActingHero.SelectEventOption(code);
         }
 

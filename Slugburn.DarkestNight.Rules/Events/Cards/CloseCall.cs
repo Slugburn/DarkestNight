@@ -22,10 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             switch (option)
             {
                 case "roll":
-                    var dice = hero.GetDice(RollType.Event, "Event", 1);
-                    hero.Roll = Die.Roll(dice.Total);
-                    hero.SetRollHandler(new CloseCallRollHandler());
-                    hero.State = HeroState.RollAvailable;
+                    hero.RollEventDice(new CloseCallRollHandler());
                     break;
                 case "cont":
                     hero.EndEvent();
@@ -39,20 +36,17 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             {
                 hero.RemoveRollHandler(this);
                 var e = hero.CurrentEvent;
-                var result = hero.Roll.Max();
+                var result = hero.Roll.Result;
                 if (result == 5 || result == 6)
                 {
-                    e.Text = "No effect";
                 }
                 else if (result == 3 || result == 4)
                 {
                     hero.LoseSecrecy("Event");
-                    e.Text = "Lose 1 Secrecy";
                 }
                 else if (result == 1 || result == 2)
                 {
                     hero.LoseGrace();
-                    e.Text = "Lose 1 Grace";
                 }
                 else
                 {
@@ -60,6 +54,30 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 }
                 e.Options = new List<EventOption> { EventOption.Continue() };
                 hero.PresentCurrentEvent();
+            }
+
+            public RollState HandleRoll(Hero hero, RollState rollState)
+            {
+                var e = hero.CurrentEvent;
+                e.Rows.Activate(rollState.Result);
+                e.Options = new List<EventOption> { EventOption.Continue() };
+                hero.PresentCurrentEvent();
+                return rollState;
+            }
+
+            public void AcceptRoll(Hero hero, RollState rollState)
+            {
+                hero.RemoveRollHandler(this);
+                var result = rollState.Result;
+                 if (result == 3 || result == 4)
+                {
+                    hero.LoseSecrecy("Event");
+                }
+                else if (result == 1 || result == 2)
+                {
+                    hero.LoseGrace();
+                }
+                 hero.EndEvent();
             }
         }
     }

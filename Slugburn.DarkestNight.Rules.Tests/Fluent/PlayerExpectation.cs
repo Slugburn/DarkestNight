@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
+using Shouldly;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
@@ -29,7 +31,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public PlayerExpectation SeesActiveEventRow(int min, int max, string text)
+        public PlayerExpectation Event(Action<PlayerEventExpectation> expect)
+        {
+            Assert.That(_player.State, Is.EqualTo(PlayerState.Event));
+            var expectation = new PlayerEventExpectation(_player.Event);
+            expect(expectation);
+            return this;
+        }
+
+        public PlayerExpectation SeesActiveEventRow(int min, int max, string text, string subText = null)
         {
             Assert.That(_player.State, Is.EqualTo(PlayerState.Event));
             var e = _player.Event;
@@ -39,6 +49,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
                 Assert.Fail();
             Assert.That(row.IsActive, Is.True, "Event row is not active");
             Assert.That(row.Text, Is.EqualTo(text));
+            row.SubText.ShouldBe(subText);
             return this;
         }
 

@@ -13,24 +13,42 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
         public int Fate { get; }
 
         public EventDetail Detail => EventDetail.Create(x => x
-            .Text("Roll 1 die and take the highest, 5-6: +1 die on all rolls for the rest of this turn, 1-4: -1 die (to a minimum of 1 die) on all rolls for the rest of this turn"));
+            .Text("Roll 1d and take the highest")
+            .Row(5, 6, "+1d on all rolls for the rest of this turn")
+            .Row(1, 4, "-1d (to a minimum of 1d) on all rolls for the rest of this turn")
+            .Option("roll", "Roll"));
 
         public void Resolve(Hero hero, string option)
         {
-            hero.RollEventDice(new TwistOfFateRollHandler());
+            if (option == "roll")
+            {
+                hero.RollEventDice(new TwistOfFateRollHandler());
+                return;
+            }
         }
 
         public class TwistOfFateRollHandler : IRollHandler
         {
             public void HandleRoll(Hero hero)
             {
-                var roll = hero.Roll;
-                var result = roll.Max();
+                var result = hero.Roll.Result;
                 var dieCount = result >= 5 ? 1 : -1;
                 hero.AddRollModifier(new StaticRollBonus {Name = EventName, RollType = RollType.Any, DieCount = dieCount});
                 hero.Triggers.Add(HeroTrigger.EndOfTurn, EventName, new TwistOfFateEndOfTurnHandler() );
             }
-            
+
+            public RollState HandleRoll(Hero hero, RollState rollState)
+            {
+                var e = hero.CurrentEvent;
+                e.Rows.Activate(rollState.Result);
+                throw new NotImplementedException();
+            }
+
+            public void AcceptRoll(Hero hero, RollState rollState)
+            {
+                throw new NotImplementedException();
+            }
+
             public class TwistOfFateEndOfTurnHandler : ITriggerHandler<Hero>
             {
                 public void HandleTrigger(Hero registrar, string source, TriggerContext context)

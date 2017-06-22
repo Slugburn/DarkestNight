@@ -4,6 +4,7 @@ namespace Slugburn.DarkestNight.Rules.Rolls
 {
     public interface IRollHandler
     {
-        void HandleRoll(Hero hero);
+        RollState HandleRoll(Hero hero, RollState rollState);
+        void AcceptRoll(Hero hero, RollState rollState);
     }
 }

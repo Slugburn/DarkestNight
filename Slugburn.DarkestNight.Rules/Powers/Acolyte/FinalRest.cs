@@ -38,9 +38,14 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                 hero.AddRollHandler(this);
             }
 
-            public void HandleRoll(Hero hero)
+            public RollState HandleRoll(Hero hero, RollState rollState)
             {
-                if (hero.Roll.Any(x => x == 1))
+                return rollState;
+            }
+
+            public void AcceptRoll(Hero hero, RollState rollState)
+            {
+                if (hero.Roll.AdjustedRoll.Any(x => x == 1))
                     hero.LoseGrace();
                 hero.RemoveRollHandler(this);
             }

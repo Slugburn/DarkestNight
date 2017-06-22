@@ -47,7 +47,12 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                 hero.IsActionAvailable = false;
             }
 
-            public void HandleRoll(Hero hero)
+            public RollState HandleRoll(Hero hero, RollState rollState)
+            {
+                return rollState;
+            }
+
+            public void AcceptRoll(Hero hero, RollState rollState)
             {
                 hero.RemoveRollModifiers(Name);
                 hero.State = HeroState.AssigningDice;

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Linq;
+using System.Net.Mime;
 using Slugburn.DarkestNight.Rules.Events;
 
 namespace Slugburn.DarkestNight.Rules.Players.Models
@@ -17,6 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Players.Models
             public int Min { get; set; }
             public int Max { get; set; }
             public string Text { get; set; }
+            public string SubText { get; set; }
             public bool IsActive { get; set; }
         }
 
@@ -36,7 +38,14 @@ namespace Slugburn.DarkestNight.Rules.Players.Models
                 Options = obj.Options.Select(o => new Option {Code = o.Code, Text = o.Text}).ToArray()
             };
             if (obj.Rows != null)
-                e.Rows = obj.Rows.Select(r=> new Row { Min = r.Min, Max = r.Max, Text = r.Text, IsActive = r.IsActive}).ToArray();
+                e.Rows = obj.Rows.Select(r=> new Row
+                {
+                    Min = r.Min,
+                    Max = r.Max,
+                    Text = r.Text,
+                    SubText = r.SubText,
+                    IsActive = r.IsActive
+                }).ToArray();
             return e;
         }
     }

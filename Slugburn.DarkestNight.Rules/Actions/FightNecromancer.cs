@@ -37,14 +37,20 @@ namespace Slugburn.DarkestNight.Rules.Actions
             return hero.IsActionAvailable && hero.GetBlights().Any();
         }
 
-        public void HandleRoll(Hero hero)
+        public RollState HandleRoll(Hero hero, RollState rollState)
         {
-            var result = hero.Roll.Max();
-            var target = hero.ConflictState.SelectedTargets.Single();
-            var assignment = TargetDieAssignment.Create(target.Id , result);
-            hero.State = HeroState.AssigningDice;
-            hero.AssignDiceToBlights(new[] {assignment});
             hero.IsActionAvailable = false;
+            rollState.TargetNumber = hero.Game.Necromancer.Fight;
+            return rollState;
+        }
+
+        public void AcceptRoll(Hero hero, RollState rollState)
+        {
+            rollState.TargetNumber = hero.Game.Necromancer.Fight;
+            var target = hero.ConflictState.SelectedTargets.Single();
+            var assignment = TargetDieAssignment.Create(target.Id, rollState.Result);
+            hero.State = HeroState.AssigningDice;
+            hero.AssignDiceToTargets(new[] { assignment });
         }
     }
 }

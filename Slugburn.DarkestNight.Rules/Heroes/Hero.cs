@@ -46,7 +46,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         }
 
         public TriggerRegistry<HeroTrigger, Hero> Triggers { get; }
-        public List<int> Roll { get; set; }
+        public RollState Roll { get; set; }
 
         public List<IPower> PowerDeck
         {
@@ -329,20 +329,17 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var selectedTargets = from id in targetIds join target in ConflictState.AvailableTargets on id equals target.Id select target;
             ConflictState.SelectedTargets = selectedTargets.ToList();
             ConflictState.SelectedTactic = tacticInfo;
-            var diceCount = tacticInfo.DiceCount;
             var tactic = _tactics[tacticName];
             tactic.Use(this);
-            var roll = Die.Roll(diceCount).ToList();
-            Roll = roll;
-            Triggers.Send(HeroTrigger.AfterRoll);
+            var dice = tactic.GetDice(this);
+            RollDice(dice);
             State = HeroState.RollAvailable;
         }
 
         public void AcceptRoll()
         {
             ValidateState(HeroState.RollAvailable);
-            foreach (var handler in _rollHandlers.ToList())
-                handler.HandleRoll(this);
+            _rollHandlers.ToList().ForEach(h=>h.AcceptRoll(this, this.Roll));
         }
 
         public void ValidateState(HeroState expected)
@@ -366,10 +363,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             return _rollModifiers;
         }
 
-        public void AssignDiceToBlights(ICollection<TargetDieAssignment> assignments)
+        public void AssignDiceToTargets(ICollection<TargetDieAssignment> assignments)
         {
             ValidateState(HeroState.AssigningDice);
-            var validRolls = assignments.Select(x => x.DieValue).Intersect(Roll).Count() == assignments.Count;
+            var validRolls = assignments.Select(x => x.DieValue).Intersect(Roll.AdjustedRoll).Count() == assignments.Count;
             if (!validRolls)
                 throw new Exception("Invalid die values specified.");
             var validTargets = assignments.Select(x => x.TargetId).Intersect(ConflictState.SelectedTargets.Select(x => x.Id)).Count() == assignments.Count;
@@ -479,12 +476,24 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             CurrentEvent = null;
         }
 
-        public void RollEventDice(IRollHandler rollHandler)
+        public int RollEventDice(IRollHandler rollHandler)
         {
-            var dice = GetDice(RollType.Event, "Event", 1);
-            Roll = Die.Roll(dice.Total);
             SetRollHandler(rollHandler);
+            var dice = GetDice(RollType.Event, "Event", 1);
+            var rollState = RollDice(dice);
+            return rollState.Result;
+        }
+
+        private RollState RollDice(Dice dice)
+        {
+            var roll = Die.Roll(dice.Total);
+            var rollState = RollState.Create(roll);
+            Roll = rollState;
+            foreach (var handler in _rollHandlers)
+                handler.HandleRoll(this, rollState);
             State = HeroState.RollAvailable;
+            Triggers.Send(HeroTrigger.AfterRoll);
+            return rollState;
         }
 
         public void FaceEnemy(string enemyName)
@@ -505,6 +514,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void SelectEventOption(string optionCode)
         {
+            var validCodes = CurrentEvent.Options.Select(x=>x.Code).ToList();
+            if (!validCodes.Contains(optionCode))
+                throw new ArgumentOutOfRangeException(nameof(optionCode), optionCode, $"Valid codes: {validCodes.ToCsv()}");
             CurrentEvent.SelectedOption = optionCode;
             if (!Triggers.Send(HeroTrigger.EventOptionSelected))
                 return;
@@ -537,6 +549,12 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var conflictState = ConflictState;
             if (conflictState?.SelectedTargets == null || conflictState.SelectedTargets.Count != 1) return false;
             return conflictState.SelectedTargets.First().Name == "Necromancer";
+        }
+
+        public void AdjustRoll()
+        {
+            foreach (var handler in _rollHandlers)
+                Roll = handler.HandleRoll(this, Roll);
         }
     }
 }

@@ -31,7 +31,8 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                 var roll = Die.Roll();
                 if (roll == 1)
                     hero.Game.IncreaseDarkness();
-                hero.Roll.Add(roll);
+                hero.Roll.ActualRoll.Add(roll);
+                hero.AdjustRoll();
             }
         }
     }

@@ -31,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
                 if (!power.IsUsable(hero)) return;
 
                 // Increase each die by 1
-                hero.Roll = hero.Roll.Select(x => x + 1).ToList();
+                hero.Roll.AdjustedRoll = hero.Roll.AdjustedRoll.Select(x => x + 1).ToList();
             }
         }
     }

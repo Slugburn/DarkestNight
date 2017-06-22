@@ -31,12 +31,16 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 
             private class ExhaustPowerRollHandler : IRollHandler
             {
-                public void HandleRoll(Hero hero)
+                public string PowerName { get; set; }
+                public RollState HandleRoll(Hero hero, RollState rollState)
+                {
+                    return rollState;
+                }
+
+                public void AcceptRoll(Hero hero, RollState rollState)
                 {
                     hero.GetPower(PowerName).Exhaust(hero);
                 }
-
-                public string PowerName { get; set; }
             }
         }
     }

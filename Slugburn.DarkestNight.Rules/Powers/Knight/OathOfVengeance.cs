@@ -9,7 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         public OathOfVengeance()
         {
             Name = "Oath of Vengeance";
-            ActiveText = "Add 1 to highest die when fighting the Necormancer.";
+            ActiveText = "Add 1 to highest die when fighting the Necromancer.";
             FulfillText = "Win fight versus the Necromancer; you get a free action.";
             BreakText = "Hide or search; you lose 1 Grace.";
         }
@@ -41,9 +41,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             {
                 if (hero.ConflictState == null) return;
                 if (!hero.IsTargetNecromancer()) return;
-                var originalRoll = hero.Roll.OrderByDescending(x=>x).ToList();
+                var originalRoll = hero.Roll.AdjustedRoll.OrderByDescending(x=>x).ToList();
                 var newRoll = new[] {originalRoll.First() + 1}.Concat(originalRoll.Skip(1)).ToList();
-                hero.Roll = newRoll;
+                hero.Roll.AdjustedRoll = newRoll;
             }
         }
 

@@ -14,7 +14,8 @@ namespace Slugburn.DarkestNight.Rules.Actions
             hero.Triggers.Send(HeroTrigger.Searching);
             hero.SetRollHandler(new SearchRollHandler());
             var dice = hero.GetSearchDice();
-            hero.Roll = Die.Roll(dice.Total).ToList();
+            var roll = Die.Roll(dice.Total);
+            hero.Roll = RollState.Create(roll);
             hero.Triggers.Send(HeroTrigger.AfterRoll);
             hero.State = HeroState.RollAvailable;
             hero.IsActionAvailable = false;
@@ -22,7 +23,12 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public class SearchRollHandler : IRollHandler
         {
-            public void HandleRoll(Hero hero)
+            public RollState HandleRoll(Hero hero, RollState rollState)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void AcceptRoll(Hero hero, RollState rollState)
             {
                 throw new NotImplementedException();
             }

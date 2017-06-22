@@ -33,10 +33,15 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
                 hero.AddRollHandler(this);
             }
 
-            public void HandleRoll(Hero hero)
+            public RollState HandleRoll(Hero hero, RollState rollState)
             {
-                var targetNumber = hero.ConflictState.SelectedTargets.Single().FightTarget;
-                var successes = hero.Roll.Count(x => x >= targetNumber);
+                return rollState;
+            }
+
+            public void AcceptRoll(Hero hero, RollState rollState)
+            {
+                hero.Roll.TargetNumber = hero.ConflictState.SelectedTargets.Single().FightTarget;
+                var successes = hero.Roll.Successes;
                 if (successes < 2)
                     hero.LoseGrace();
                 hero.RemoveRollHandler(this);

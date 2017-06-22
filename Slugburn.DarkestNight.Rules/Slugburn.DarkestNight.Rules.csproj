@@ -113,6 +113,7 @@
     <Compile Include="Events\HeroEvent.cs" />
     <Compile Include="Events\IEventCard.cs" />
     <Compile Include="Extensions\CardExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Heroes\HeroFactory.cs" />
     <Compile Include="Heroes\IHeroFactory.cs" />
     <Compile Include="Heroes\Impl\Prince.cs" />
@@ -188,6 +189,7 @@
     <Compile Include="Rolls\IDie.cs" />
     <Compile Include="Rolls\IRollHandler.cs" />
     <Compile Include="Rolls\IRollModifier.cs" />
+    <Compile Include="Rolls\RollState.cs" />
     <Compile Include="Rolls\RollType.cs" />
     <Compile Include="Rolls\StaticRollBonus.cs" />
     <Compile Include="Tactics\BasicEludeTactic.cs" />

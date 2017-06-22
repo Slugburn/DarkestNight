@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
@@ -11,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
         public int Fate { get; }
 
         public EventDetail Detail => EventDetail.Create(x => x
-            .Text("Lose 1 Secrecy. Then, spend 1 Grace or discard this event without further effect.\nRoll 1 die and take the highest")
+            .Text("Lose 1 Secrecy. Then, spend 1 Grace or discard this event without further effect.\nRoll 1d and take the highest")
             .Row(6, "Destroy a blight of your choice anywhere on the board")
             .Row(5, "Draw a power card")
             .Row(4, "Move to any other location")
@@ -21,23 +22,36 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
 
         public void Resolve(Hero hero, string option)
         {
-            if (option == "grace")
+            switch (option)
             {
-                hero.SpendGrace(1);
-                hero.RollEventDice(new LatentSpellRollHandler());
-            }
-            else if (option == "discard")
-            {
-                hero.EndEvent();
+                case "discard":
+                    hero.EndEvent();
+                    break;
+                case "grace":
+                    hero.SpendGrace(1);
+                    hero.RollEventDice(new LatentSpellRollHandler());
+                    break;
+                case "cont":
+                    hero.AcceptRoll();
+                    break;
             }
         }
 
         public class LatentSpellRollHandler : IRollHandler
         {
-            public void HandleRoll(Hero hero)
+            public RollState HandleRoll(Hero hero, RollState rollState)
             {
-                var roll = hero.Roll;
-                var result = roll.Max();
+                var e = hero.CurrentEvent;
+                e.Rows.Activate(rollState.Result);
+                e.Options = new List<EventOption> { EventOption.Continue() };
+                hero.PresentCurrentEvent();
+                return rollState;
+            }
+
+            public void AcceptRoll(Hero hero, RollState rollState)
+            {
+                hero.RemoveRollHandler(this);
+                var result = rollState.Result;
                 if (result == 6)
                 {
                     // destroy a blight of your choice anywhere on the board
@@ -57,6 +71,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 {
                     // no effect
                 }
+                hero.EndEvent();
             }
         }
     }

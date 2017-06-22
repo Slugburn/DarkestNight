@@ -76,11 +76,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             var searchDice = _hero.GetSearchDice().Total;
             Assert.That(searchDice, Is.EqualTo(_expectedSearchDice), "Unexpected number of Search dice.");
             if (_expectedDiceCount > 0)
-                Assert.That(_hero.Roll.Count, Is.EqualTo(_expectedDiceCount));
+                Assert.That(_hero.Roll.AdjustedRoll.Count, Is.EqualTo(_expectedDiceCount));
             if (_expectedRoll != null)
             {
                 Assert.That(_hero.Roll, Is.Not.Null, "No roll was made");
-                Assert.That(_hero.Roll, Is.EquivalentTo(_expectedRoll));
+                Assert.That(_hero.Roll.AdjustedRoll, Is.EquivalentTo(_expectedRoll));
             }
             Assert.That(_hero.FreeActions, Is.EqualTo(_expectedFreeActions));
             var outstandingEvents = _hero.CurrentEvent != null;

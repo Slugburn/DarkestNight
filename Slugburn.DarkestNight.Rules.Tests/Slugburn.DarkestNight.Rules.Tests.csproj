@@ -35,6 +35,10 @@
       <HintPath>..\packages\NUnit.3.7.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Shouldly, Version=2.8.2.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shouldly.2.8.2\lib\net451\Shouldly.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -57,6 +61,7 @@
     <Compile Include="Fluent\HeroContext.cs" />
     <Compile Include="Fluent\HeroExpectation.cs" />
     <Compile Include="Fluent\PlayerActionContext.cs" />
+    <Compile Include="Fluent\PlayerEventExpectation.cs" />
     <Compile Include="Fluent\PlayerExpectation.cs" />
     <Compile Include="Fluent\PowerContext.cs" />
     <Compile Include="Fluent\PowerExpectation.cs" />

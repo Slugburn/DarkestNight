@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
@@ -35,12 +34,22 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public void HandleRoll(Hero hero)
         {
-            var result = hero.Roll.Max();
+        }
+
+        public RollState HandleRoll(Hero hero, RollState rollState)
+        {
+            hero.IsActionAvailable = false;
+            rollState.TargetNumber = hero.ConflictState.SelectedTargets.Single().FightTarget;
+            return rollState;
+        }
+
+        public void AcceptRoll(Hero hero, RollState rollState)
+        {
+            var result = rollState.Result;
             var target = hero.ConflictState.SelectedTargets.Single();
             var assignment = TargetDieAssignment.Create(target.Id, result);
             hero.State = HeroState.AssigningDice;
-            hero.AssignDiceToBlights(new[] {assignment});
-            hero.IsActionAvailable = false;
+            hero.AssignDiceToTargets(new[] { assignment });
         }
     }
 }

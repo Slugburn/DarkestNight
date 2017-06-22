@@ -189,7 +189,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         {
             var targets = _game.ActingHero.ConflictState.SelectedTargets;
             var a = assignments.Select(x => new TargetDieAssignment {TargetId = targets.Single(t => t.Name == x.Item1.ToString()).Id, DieValue = x.Item2}).ToList();
-            _game.ActingHero.AssignDiceToBlights(a);
+            _game.ActingHero.AssignDiceToTargets(a);
             return this;
         }
 
