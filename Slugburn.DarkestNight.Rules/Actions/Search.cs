@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Sockets;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
@@ -14,9 +15,8 @@ namespace Slugburn.DarkestNight.Rules.Actions
             hero.Triggers.Send(HeroTrigger.Searching);
             hero.SetRollHandler(new SearchRollHandler());
             var dice = hero.GetSearchDice();
-            var rollState = hero.RollDice(dice);
             var space = hero.GetSpace();
-            rollState.TargetNumber = space.SearchTarget;
+            hero.RollDice(dice, space.SearchTarget);
             hero.IsActionAvailable = false;
         }
 

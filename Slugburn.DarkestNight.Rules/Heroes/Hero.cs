@@ -487,14 +487,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             SetRollHandler(rollHandler);
             var dice = GetDice(RollType.Event, "Event", 1);
-            var rollState = RollDice(dice);
+            RollDice(dice);
             PresentCurrentEvent();
         }
 
-        public RollState RollDice(Dice dice)
+        public RollState RollDice(Dice dice, int? targetNumber = null)
         {
             var roll = Die.Roll(dice.Total);
-            var rollState = RollState.Create(roll);
+            var rollState = RollState.Create(roll, targetNumber ?? 0);
             Roll = rollState;
             foreach (var handler in _rollHandlers)
                 handler.HandleRoll(this, rollState);

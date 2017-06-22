@@ -5,11 +5,11 @@ namespace Slugburn.DarkestNight.Rules.Rolls
 {
     public class RollState
     {
-        public static RollState Create(IEnumerable<int> roll)
+        public static RollState Create(IEnumerable<int> roll, int targetNumber)
         {
             var actualRoll = roll.ToList();
             var adjustedRoll = actualRoll.ToList();
-            return new RollState {ActualRoll = actualRoll, AdjustedRoll = adjustedRoll};
+            return new RollState {ActualRoll = actualRoll, AdjustedRoll = adjustedRoll, TargetNumber = targetNumber};
         }
 
         private RollState()
