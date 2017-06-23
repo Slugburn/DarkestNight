@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Extensions;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 {
@@ -25,9 +27,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public SpaceExpectation Blights(params Blight[] blights)
+        public SpaceExpectation Blights(params string[] blights)
         {
-            _expectedBlights.AddRange(blights);
+            _expectedBlights.AddRange(blights.Select(x=>x.ToEnum<Blight>()));
             return this;
         }
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Powers;
 
@@ -36,9 +37,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public HeroActionContext MovesTo(Location location)
+        public HeroActionContext MovesTo(string location)
         {
-            _hero.MoveTo(location);
+            _hero.MoveTo(location.ToEnum<Location>());
             return this;
         }
 

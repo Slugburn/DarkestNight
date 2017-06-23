@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Powers;
 
@@ -20,9 +21,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public HeroContext Location(Location location)
+        public HeroContext Location(string location)
         {
-            _hero.Location = location;
+            _hero.Location = location.ToEnum<Location>();
             return this;
         }
 

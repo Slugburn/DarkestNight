@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Events
@@ -16,9 +15,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         [TestCase(4, "Reaper")]
         public void BlackBanner(int blightCount, string target)
         {
-            var blights = Enumerable.Range(0, blightCount).Select(x => Blight.Desecration).ToArray();
+            var blights = Enumerable.Repeat("Desecration", blightCount).ToArray();
             TestEnemyGeneratorEvent("Black Banner", target,"Count the blights in your location", 4, 
-                scenario => scenario.GivenActingHero(x=>x.Location(Location.Village)).GivenLocation(Location.Village, x => x.Blight(blights)));
+                scenario => scenario.GivenActingHero(x=>x.Location("Village")).GivenLocation("Village", x => x.Blight(blights)));
         }
 
         [Test]
@@ -143,7 +142,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             designator = designator ?? (s=>s);
             new TestScenario()
-                .GivenHero("Acolyte", x => x.Location(Location.Village))
+                .GivenHero("Acolyte", x => x.Location("Village"))
                 .Configure(designator)
                 .WhenHero(x => x.DrawsEvent(eventName))
                 .ThenPlayer(x => x.SeesEvent(eventName, text, expectedFate, "Continue"))

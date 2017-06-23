@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
 
@@ -40,12 +39,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .WhenHero(h => h.DrawsEvent("Latent Spell"))
                 .WhenPlayer(p => p.SelectsEventOption("Spend Grace", x => x.Rolls(6)))
                 .ThenPlayer(p => p.Event(e => e.ActiveRow(6, "Destroy a blight of your choice anywhere on the board")))
-                .GivenLocation(Location.Village, s => s.Blight(Blight.Confusion, Blight.Vampire))
-                .GivenLocation(Location.Castle, s => s.Blight(Blight.Desecration))
+                .GivenLocation("Village", s => s.Blight("Confusion", "Vampire"))
+                .GivenLocation("Castle", s => s.Blight("Desecration"))
                 .WhenPlayer(p => p.SelectsEventOption("Continue"))
                 .ThenPlayer(p => p.Blights(b => b.Location("Village", "Confusion", "Vampire").Location("Castle", "Desecration")))
                 .WhenPlayer(p => p.SelectsBlight("Village", "Vampire"))
-                .ThenSpace(Location.Village, l => l.Blights(Blight.Confusion))
+                .ThenSpace("Village", l => l.Blights("Confusion"))
                 .ThenHero(h => h.LostSecrecy().LostGrace());
         }
 
@@ -67,14 +66,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void LatentSpell_Move()
         {
             new TestScenario()
-                .GivenHero(x => x.Location(Location.Ruins))
+                .GivenHero(x => x.Location("Ruins"))
                 .WhenHero(h => h.DrawsEvent("Latent Spell"))
                 .WhenPlayer(p => p.SelectsEventOption("Spend Grace", x => x.Rolls(4)))
                 .ThenPlayer(p => p.Event(e => e.ActiveRow(4, "Move to any other location")))
                 .WhenPlayer(p => p.SelectsEventOption("Continue"))
                 .ThenPlayer(p => p.SelectingLocation("Monastery", "Mountains", "Castle", "Swamp", "Village", "Forest"))
-                .WhenPlayer(p => p.SelectsLocation(Location.Monastery))
-                .ThenHero(h => h.LostSecrecy().LostGrace().Location(Location.Monastery));
+                .WhenPlayer(p => p.SelectsLocation("Monastery"))
+                .ThenHero(h => h.LostSecrecy().LostGrace().Location("Monastery"));
         }
 
         [TestCase(3)]
@@ -83,7 +82,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void LatentSpell_NoEffect(int roll)
         {
             new TestScenario()
-                .GivenHero(x => x.Location(Location.Ruins))
+                .GivenHero(x => x.Location("Ruins"))
                 .WhenHero(h => h.DrawsEvent("Latent Spell"))
                 .WhenPlayer(p => p.SelectsEventOption("Spend Grace", x => x.Rolls(roll)))
                 .ThenPlayer(p => p.Event(e => e.ActiveRow(1, 3, "No effect")))

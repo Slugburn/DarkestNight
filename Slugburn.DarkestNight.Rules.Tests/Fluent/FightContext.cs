@@ -46,11 +46,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             _targets = targets;
             return this;
         }
-        public FightContext Target(params Blight[] targets)
-        {
-            _targets = targets.Select(x=>x.ToString()).ToArray();
-            return this;
-        }
 
         public FightContext UsePower(string powerName)
         {

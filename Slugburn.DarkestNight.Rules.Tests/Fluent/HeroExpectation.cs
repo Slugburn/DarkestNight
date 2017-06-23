@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Shouldly;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
 
@@ -107,15 +108,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public HeroExpectation CannotMoveTo(Location location)
+        public HeroExpectation CannotMoveTo(string location)
         {
-            _invalidLocations.Add(location);
+            _invalidLocations.Add(location.ToEnum<Location>());
             return this;
         }
 
-        public HeroExpectation CanMoveTo(params Location[] location)
+        public HeroExpectation CanMoveTo(params string[] location)
         {
-            _specifiedLocations.AddRange(location);
+            _specifiedLocations.AddRange(location.Select(l=>l.ToEnum<Location>()));
             return this;
         }
 
@@ -179,9 +180,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             };
         }
 
-        public HeroExpectation Location(Location location)
+        public HeroExpectation Location(string location)
         {
-            _expectedLocation = location;
+            _expectedLocation = location.ToEnum<Location>();
             return this;
         }
 

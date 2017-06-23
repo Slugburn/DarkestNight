@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Events
@@ -16,10 +15,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             for (var i = min; i <= max; i++)
             {
                 var blightCount = i;
-                var blights = Enumerable.Repeat(Blight.Lich, blightCount).ToArray();
+                var blights = Enumerable.Repeat("Lich", blightCount).ToArray();
                 new TestScenario()
-                    .GivenHero(x => x.Location(Location.Forest))
-                    .GivenLocation(Location.Forest, x => x.Blight(blights))
+                    .GivenHero(x => x.Location("Forest"))
+                    .GivenLocation("Forest", x => x.Blight(blights))
                     .WhenHero(x => x.DrawsEvent("Raid"))
                     .ThenPlayer(p => p.Event(e => e
                         .HasBody("Raid", 6, "Count the blights in your location")

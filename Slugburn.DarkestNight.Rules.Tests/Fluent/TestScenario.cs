@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Maps;
 using Slugburn.DarkestNight.Rules.Powers;
@@ -56,9 +57,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public TestScenario GivenNecromancerLocation(Location location)
+        public TestScenario GivenNecromancerLocation(string location)
         {
-            _game.Necromancer.Location = location;
+            _game.Necromancer.Location = location.ToEnum<Location>();
             return this;
         }
 
@@ -70,9 +71,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public TestScenario ThenNecromancerLocation(Location location)
+        public TestScenario ThenNecromancerLocation(string location)
         {
-            Assert.That(_game.Necromancer.Location, Is.EqualTo(location));
+            Assert.That(_game.Necromancer.Location, Is.EqualTo(location.ToEnum<Location>()));
             return this;
         }
 
@@ -85,9 +86,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public TestScenario GivenLocation(Location location, Action<SpaceDefContext> def)
+        public TestScenario GivenLocation(string location, Action<SpaceDefContext> def)
         {
-            var space = _game.Board[location];
+            var space = _game.Board[location.ToEnum<Location>()];
             var context = new SpaceDefContext(space);
             def(context);
             return this;
@@ -121,9 +122,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public TestScenario ThenSpace(Location location, Action<SpaceExpectation> define)
+        public TestScenario ThenSpace(string location, Action<SpaceExpectation> define)
         {
-            var space = _game.Board[location];
+            var space = _game.Board[location.ToEnum<Location>()];
             var expectation = new SpaceExpectation(space);
             define(expectation);
             expectation.Verify();
@@ -197,7 +198,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public TestScenario WhenPlayerAssignsRolledDiceToBlights( params Tuple<Blight, int>[]  assignments)
+        public TestScenario WhenPlayerAssignsRolledDiceToBlights( params Tuple<string, int>[]  assignments)
         {
             var targets = _game.ActingHero.ConflictState.SelectedTargets;
             var a = assignments.Select(x => new TargetDieAssignment {TargetId = targets.Single(t => t.Name == x.Item1.ToString()).Id, DieValue = x.Item2}).ToList();
@@ -220,9 +221,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public TestScenario WhenBlightIsDestroyed(Location location, Blight blight)
+        public TestScenario WhenBlightIsDestroyed(string location, string blight)
         {
-            _game.DestroyBlight(location, blight);
+            _game.DestroyBlight(location.ToEnum<Location>(), blight.ToEnum<Blight>());
             return this;
         }
 

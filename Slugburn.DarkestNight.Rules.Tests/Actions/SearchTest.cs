@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
         public void FindItem(Find find, string itemName)
         {
             new TestScenario()
-                .GivenHero("Acolyte", x => x.Location(Location.Village))
+                .GivenHero("Acolyte", x => x.Location("Village"))
                 .GivenNextSearchResult(find)
                 .WhenPlayer(x => x.TakesAction("Search"))
                 .WhenPlayer(x=>x.AcceptsRoll())

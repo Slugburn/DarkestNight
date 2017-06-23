@@ -34,9 +34,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public PlayerActionContext ChoosesBlight(params Blight[] blights)
+        public PlayerActionContext ChoosesBlight(params string[] blights)
         {
-            _player.SetBlightChoice(blights);
+            _player.SetBlightChoice(blights.Select(x=>x.ToEnum<Blight>()).ToArray());
             return this;
         }
 
@@ -71,16 +71,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public PlayerActionContext SelectsLocation(Location location)
+        public PlayerActionContext SelectsLocation(string location)
         {
-            _player.SelectLocation(location);
-            return this;
-        }
-
-        public PlayerActionContext ResolvesConflict(string tactic, params string[] targets)
-        {
-            var targetIds = _player.Conflict.Targets.Where(x => targets.Contains(x.Name)).Select(x => x.Id).ToList();
-            _player.ResolveConflict(tactic, targetIds);
+            _player.SelectLocation(location.ToEnum<Location>());
             return this;
         }
 
