@@ -85,7 +85,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public TestScenario GivenSpace(Location location, Action<SpaceDefContext> def)
+        public TestScenario GivenLocation(Location location, Action<SpaceDefContext> def)
         {
             var space = _game.Board[location];
             var context = new SpaceDefContext(space);

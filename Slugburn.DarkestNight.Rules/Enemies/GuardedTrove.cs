@@ -37,7 +37,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
                     options.Add(new HeroEventOption("spend-secrecy","Spend Secrecy"));
                 options.Add(new HeroEventOption("draw-event", "Draw Event"));
                 hero.CurrentEvent.Options = options;
-                hero.PresentCurrentEvent();
+                hero.DisplayCurrentEvent();
             }
         }
 

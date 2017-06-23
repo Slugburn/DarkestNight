@@ -162,5 +162,24 @@ namespace Slugburn.DarkestNight.Rules
         {
             Triggers.Send(GameTrigger.PlayerSelectedPower, powerName);
         }
+
+        public void SelectBlight(Location location, Blight blight)
+        {
+            Triggers.Send(GameTrigger.PlayerSelectedBlight, new BlightSelection(location, blight));
+        }
+
+        public static ICollection<Location> GetAllLocations()
+        {
+            return new[]
+            {
+                Location.Village,
+                Location.Castle,
+                Location.Forest,
+                Location.Monastery,
+                Location.Mountains,
+                Location.Ruins,
+                Location.Swamp
+            };
+        }
     }
 }

@@ -191,7 +191,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             LoseSecrecy(1, sourceName);
         }
 
-        public void LoseSecrecy(int amount, string sourceName)
+        public void LoseSecrecy(int amount, string sourceName = null)
         {
             if (!Triggers.Send(HeroTrigger.LoseSecrecy, sourceName)) return;
             Secrecy = Math.Max(Secrecy - amount, 0);
@@ -272,7 +272,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 return;
             }
             LoseSecrecy("Attack");
-            var blight = (Blight) Enum.Parse(typeof (Blight), targetInfo.Name);
+            var blight = targetInfo.Name.ToEnum<Blight>();
             var blightInfo = blight.GetDetail();
             if (isWin)
             {
@@ -424,7 +424,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void SelectLocation(Location location)
         {
-            ValidateState(HeroState.SelectingLocation);
             _locationSelectedHandler.Handle(this, location);
         }
 
@@ -438,7 +437,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             _actions.Remove(name);
         }
 
-        public void PresentCurrentEvent()
+        public void DisplayCurrentEvent()
         {
             Player.DisplayEvent(PlayerEvent.From(CurrentEvent));
             Player.State = PlayerState.Event;
@@ -459,7 +458,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             var state = SetRoll(RollBuilder.Create(rollHandler).Type(RollType.Event).Base("Event", 1));
             state.Roll();
-            PresentCurrentEvent();
+            DisplayCurrentEvent();
         }
 
         public RollState SetRoll(IRollStateCreation creation)

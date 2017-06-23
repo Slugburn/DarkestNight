@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 hero.LoseSecrecy("Event");
                 return;
             }
-            hero.PresentCurrentEvent();
+            hero.DisplayCurrentEvent();
         }
 
         private void SecrecyOrGrace(Hero hero, string option)

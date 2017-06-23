@@ -5,6 +5,7 @@ using Shouldly;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
+using Slugburn.DarkestNight.Rules.Tests.Fluent;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 {
@@ -116,11 +117,23 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             Powers = powers;
         }
 
+        public void DisplayBlights(ICollection<PlayerBlight> blights)
+        {
+            Blights = blights;
+        }
+
+        public void DisplayValidLocations(ICollection<string> locations)
+        {
+            ValidLocations = locations;
+        }
+
         public PlayerConflict Conflict { get; set; }
 
         public PlayerEvent Event { get; set; }
         public string ActiveHero { get; set; }
         public ICollection<PlayerPower> Powers { get; set; }
+        public ICollection<PlayerBlight> Blights { get; set; }
+        public ICollection<string> ValidLocations { get; set; }
 
         public void SelectEventOption(string option)
         {
@@ -157,6 +170,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         public void SelectPower(string powerName)
         {
             _game.SelectPower(powerName);
+        }
+
+        public void SelectBlight(Location location, Blight blight)
+        {
+            _game.SelectBlight(location, blight);
         }
     }
 }

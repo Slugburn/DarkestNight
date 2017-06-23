@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Shouldly;
+using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Players;
+using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent
@@ -67,6 +70,47 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             var expectation = new PlayerConflictExpectation(_player.Conflict);
             expect(expectation);
             return this;
+        }
+
+        public PlayerExpectation Blights(Action<PlayerBlightExpectation> expect)
+        {
+            var expectation = new PlayerBlightExpectation(_player.Blights);
+            expect(expectation);
+            expectation.Verify();
+            return this;
+        }
+
+        public PlayerExpectation SelectingLocation(params string[] locations)
+        {
+            _player.State.ShouldBe(PlayerState.SelectLocation);
+            var actual = _player.ValidLocations.OrderBy(x => x);
+            var expected = locations.OrderBy(x => x);
+            actual.ShouldBe(expected);
+            return this;
+        }
+    }
+
+    public class PlayerBlightExpectation
+    {
+        private ICollection<PlayerBlight> _blights;
+        private List<string> _expected = new List<string>();
+
+        public PlayerBlightExpectation(ICollection<PlayerBlight> blights)
+        {
+            blights.ShouldNotBeNull("Player.Blights has not been set.");
+            _blights = blights;
+        }
+
+        public PlayerBlightExpectation Location(string location, params string[] blights)
+        {
+            _expected.AddRange(blights.Select(b => $"{location}:{b}"));
+            return this;
+        }
+
+        internal void Verify()
+        {
+            var actual = _blights.Select(x => $"{x.Location}:{x.Blight}").OrderBy(x=>x);
+            actual.ShouldBe(_expected.OrderBy(x=>x));
         }
     }
 }

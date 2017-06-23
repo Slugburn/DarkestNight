@@ -1,4 +1,6 @@
-﻿using Slugburn.DarkestNight.Rules.Heroes;
+﻿using System.Linq;
+using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Powers;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 {
@@ -33,6 +35,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         public HeroContext Grace(int value)
         {
             _hero.Grace = value;
+            return this;
+        }
+
+        public HeroContext PowerDeck(params string[] powers)
+        {
+            _hero.PowerDeck.Clear();
+            _hero.PowerDeck.AddRange(powers.Select(PowerFactory.Create));
             return this;
         }
     }

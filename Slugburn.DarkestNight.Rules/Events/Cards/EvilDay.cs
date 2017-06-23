@@ -21,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             switch (option)
             {
                 case "exhaust":
-                    var powers = hero.Powers.Where(x => !x.Exhausted).Select(x => new PlayerPower {Name = x.Name}).ToList();
+                    var powers = hero.Powers.Where(x => !x.Exhausted).Select(PlayerPower.FromPower).ToList();
                     var player = hero.Player;
                     hero.Game.Triggers.Add(GameTrigger.PlayerSelectedPower, Detail.Name, new EvilDayPowerSelected());
                     player.State = PlayerState.SelectPower;

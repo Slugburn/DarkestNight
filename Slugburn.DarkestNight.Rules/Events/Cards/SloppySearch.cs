@@ -46,7 +46,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                     e.Options = new List<HeroEventOption> { HeroEventOption.Continue() };
                 else
                     e.Options = new List<HeroEventOption> { new HeroEventOption("spend-grace", "Spend Grace"), new HeroEventOption("lose-secrecy", "Lose Secrecy") };
-                hero.PresentCurrentEvent();
+                hero.DisplayCurrentEvent();
                 return rollState;
             }
 

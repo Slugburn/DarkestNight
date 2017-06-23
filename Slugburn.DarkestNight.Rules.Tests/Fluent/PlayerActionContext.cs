@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent
@@ -64,9 +65,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public void AcceptsRoll()
+        public PlayerActionContext AcceptsRoll()
         {
             _player.AcceptRoll();
+            return this;
         }
 
         public PlayerActionContext SelectsLocation(Location location)
@@ -93,6 +95,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         public PlayerActionContext SelectsPower(string powerName)
         {
             _player.SelectPower(powerName);
+            return this;
+        }
+
+        public PlayerActionContext SelectsBlight(string location, string blight)
+        {
+            _player.SelectBlight(location.ToEnum<Location>(), blight.ToEnum<Blight>());
             return this;
         }
     }

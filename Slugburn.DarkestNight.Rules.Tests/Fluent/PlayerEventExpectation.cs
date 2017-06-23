@@ -29,6 +29,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
+        public PlayerEventExpectation ActiveRow(int index, string text, string subText = null)
+        {
+            return ActiveRow(index, index, text, subText);
+        }
+
         public PlayerEventExpectation ActiveRow(int min, int max, string text, string subText = null)
         {
             var e = _playerEvent;
@@ -42,7 +47,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
                 if (actual == null)
                     Assert.Fail("No row is active");
                 else
-                    Assert.Fail($"{actual.Text} is active");
+                    Assert.Fail($"\"{actual.Text}\" is the active row.");
             }
             row.IsActive.ShouldBeTrue();
             row.Text.ShouldBe(text);

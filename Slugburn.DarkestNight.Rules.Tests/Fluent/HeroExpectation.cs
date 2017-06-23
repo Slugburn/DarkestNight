@@ -278,5 +278,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             _expectedGrace = _hero.DefaultGrace - 1;
             return this;
         }
+
+        public HeroExpectation Powers(params string[] powerNames)
+        {
+            var actual = _hero.Powers.Select(x => x.Name).OrderBy(x => x);
+            var expected = powerNames.OrderBy(x => x);
+            actual.ShouldBe(expected);
+            return this;
+        }
     }
 }

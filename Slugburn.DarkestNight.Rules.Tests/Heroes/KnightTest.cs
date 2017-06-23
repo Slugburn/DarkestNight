@@ -13,7 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Knight", x => x.Power("Charge").Location(Location.Village))
-                .GivenSpace(Location.Village, x=>x.Blight(Blight.Skeletons))
+                .GivenLocation(Location.Village, x=>x.Blight(Blight.Skeletons))
                 .WhenPlayerTakesAttackAction(x => x.Tactic("Charge").Rolls(1,6))
                 .ThenHero(x => x.RolledNumberOfDice(2).HasUsedAction().LostSecrecy());
         }
@@ -31,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Knight", x => x.Power("Consecrated Blade").Location(Location.Village))
-                .GivenSpace(Location.Village, x=>x.Blight(Blight.Corruption))
+                .GivenLocation(Location.Village, x=>x.Blight(Blight.Corruption))
                 .ThenHero(x => x.FightDice(1));
         }
 
@@ -80,7 +80,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Knight", x => x.Power("Oath of Defense").Grace(0).Location(Location.Village))
-                .GivenSpace(Location.Village, x=>x.Blight(Blight.Shades))
+                .GivenLocation(Location.Village, x=>x.Blight(Blight.Shades))
                 .WhenPlayerTakesAction("Oath of Defense")
                 .ThenHero(x => x.Grace(0).HasUsedAction())
                 .ThenPower("Oath of Defense", x => x.IsActive());
@@ -91,7 +91,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Knight", x => x.Power("Oath of Defense").Grace(0).Location(Location.Village))
-                .GivenSpace(Location.Village, x => x.Blight(Blight.Shades))
+                .GivenLocation(Location.Village, x => x.Blight(Blight.Shades))
                 .GivenPower("Oath of Defense", x => x.IsActive())
                 .WhenHero(x=>x.StartsTurn())
                 .ThenHero(x => x.Grace(1));
@@ -102,7 +102,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Knight", x => x.Power("Oath of Defense").Grace(0).Location(Location.Village))
-                .GivenSpace(Location.Village, x=>x.Blight(Blight.Shades))
+                .GivenLocation(Location.Village, x=>x.Blight(Blight.Shades))
                 .GivenPower("Oath of Defense", x=>x.IsActive())
                 .WhenBlightIsDestroyed(Location.Village, Blight.Shades)
                 .ThenHero(x => x.Grace(1))
@@ -114,7 +114,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Knight", x => x.Power("Oath of Defense").Grace(4).Location(Location.Village))
-                .GivenSpace(Location.Village, x => x.Blight(Blight.Shades))
+                .GivenLocation(Location.Village, x => x.Blight(Blight.Shades))
                 .GivenPower("Oath of Defense", x => x.IsActive())
                 .WhenHero(x=>x.MovesTo(Location.Mountains))
                 .ThenHero(x => x.Grace(0))
@@ -126,7 +126,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Knight", x => x.Power("Oath of Purging").Location(Location.Village))
-                .GivenSpace(Location.Village, x=>x.Blight(Blight.Skeletons))
+                .GivenLocation(Location.Village, x=>x.Blight(Blight.Skeletons))
                 .WhenPlayerTakesAction("Oath of Purging")
                 .ThenPower("Oath of Purging", x => x.IsActive());
         }
@@ -138,7 +138,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             // Destroy a blight; you gain 1 Grace.
             new TestScenario()
                 .GivenHero("Knight", x => x.Power("Oath of Purging").Location(Location.Village).Grace(0))
-                .GivenSpace(Location.Village, x=>x.Blight(Blight.Skeletons))
+                .GivenLocation(Location.Village, x=>x.Blight(Blight.Skeletons))
                 .GivenPower("Oath of Purging", x=>x.IsActive())
                 .WhenPlayerTakesAttackAction()
                 .ThenHero(x => x.Grace(1).HasUsedAction().LostSecrecy().RolledNumberOfDice(3))
@@ -163,7 +163,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Knight", x => x.Power("Oath of Valor").Location(Location.Village))
-                .GivenSpace(Location.Village, x => x.Blight(Blight.Skeletons))
+                .GivenLocation(Location.Village, x => x.Blight(Blight.Skeletons))
                 .WhenPlayerTakesAction("Oath of Valor")
                 .ThenPower("Oath of Valor", x => x.IsActive());
         }
@@ -186,7 +186,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             const string powerName = "Oath of Valor";
             new TestScenario()
                 .GivenHero("Knight", x => x.Power(powerName).Location(Location.Village))
-                .GivenSpace(Location.Village, x=>x.Blight(Blight.Skeletons))
+                .GivenLocation(Location.Village, x=>x.Blight(Blight.Skeletons))
                 .GivenPower(powerName, x => x.IsActive())
                 .WhenPlayerTakesAttackAction(x=>x.Rolls(6,6))
                 .ThenHero(x=>x.HasUsedAction().LostSecrecy().HasAvailableActions(powerName))
@@ -199,7 +199,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             // Win a fight; You may activate any Oath immediately.
             new TestScenario()
                 .GivenHero("Knight", x => x.Power("Oath of Valor", "Oath of Vengeance").Location(Location.Village))
-                .GivenSpace(Location.Village, x=>x.Blight(Blight.Skeletons))
+                .GivenLocation(Location.Village, x=>x.Blight(Blight.Skeletons))
                 .GivenPower("Oath of Valor", x => x.IsActive())
                 .WhenHero(h=>h.Fights(x => x.Rolls(6, 6)))
                 .ThenHero(x=>x.HasAvailableActions("Oath of Valor", "Oath of Vengeance"))
@@ -212,7 +212,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             // Attempt to elude; you lose 1 Grace.
             new TestScenario()
                 .GivenHero("Knight", x => x.Power("Oath of Valor", "Oath of Vengeance").Location(Location.Village))
-                .GivenSpace(Location.Village, x => x.Blight(Blight.Skeletons))
+                .GivenLocation(Location.Village, x => x.Blight(Blight.Skeletons))
                 .GivenPower("Oath of Valor", x => x.IsActive())
                 .WhenHero(h=>h.Eludes(x => x.Rolls(6)))
                 .ThenHero(x=>x.LostGrace())
@@ -263,7 +263,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Knight", x => x.Power("Reckless Abandon").Location(Location.Village))
-                .GivenSpace(Location.Village, x => x.Blight(Blight.Vampire))
+                .GivenLocation(Location.Village, x => x.Blight(Blight.Vampire))
                 .WhenHero(h => h.Fights(x => x.Tactic("Reckless Abandon").Rolls(1, 2, 3, 4)))
                 .ThenHero(x => x.RolledNumberOfDice(4).LostGrace());
         }
@@ -275,7 +275,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Knight", x => x.Power("Sprint").Location(Location.Village))
-                .GivenSpace(Location.Village, x => x.Blight(Blight.Skeletons))
+                .GivenLocation(Location.Village, x => x.Blight(Blight.Skeletons))
                 .WhenHero(h => h.Eludes(x => x.Tactic("Sprint")))
                 .ThenHero(x => x.RolledNumberOfDice(2));
         }

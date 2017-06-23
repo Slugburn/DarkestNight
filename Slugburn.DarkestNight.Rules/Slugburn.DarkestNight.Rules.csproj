@@ -51,6 +51,7 @@
     <Compile Include="Actions\Search.cs" />
     <Compile Include="Actions\Travel.cs" />
     <Compile Include="ActionType.cs" />
+    <Compile Include="BlightSelection.cs" />
     <Compile Include="Blights\BlightDetail.cs" />
     <Compile Include="Blights\TargetDieAssignment.cs" />
     <Compile Include="Blights\BlightExtension.cs" />
@@ -134,9 +135,11 @@
     <Compile Include="Items\Artifacts\StarryVeil.cs" />
     <Compile Include="Items\Artifacts\VanishingCowl.cs" />
     <Compile Include="Players\IPlayer.cs" />
+    <Compile Include="Players\Models\PlayerBlight.cs" />
     <Compile Include="Players\Models\PlayerConflict.cs" />
     <Compile Include="Players\Models\PlayerEvent.cs" />
     <Compile Include="Players\Models\PlayerPower.cs" />
+    <Compile Include="Players\PlayerModelExtension.cs" />
     <Compile Include="Players\PlayerState.cs" />
     <Compile Include="Powers\Acolyte\BlindingBlack.cs" />
     <Compile Include="Powers\Acolyte\CallToDeath.cs" />

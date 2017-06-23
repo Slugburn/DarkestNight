@@ -5,6 +5,8 @@
         None = 0,
         Event,
         Conflict,
-        SelectPower
+        SelectPower,
+        SelectBlight,
+        SelectLocation
     }
 }
