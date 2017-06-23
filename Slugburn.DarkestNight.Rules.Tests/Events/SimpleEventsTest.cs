@@ -16,5 +16,18 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .WhenPlayer(p => p.SelectsEventOption("Continue"))
                 .ThenDarkness(4);
         }
+
+        [TestCase]
+        public void Renewal()
+        {
+            new TestScenario()
+                .GivenHero()
+                .GivenEventsHaveBeenDrawn(10)
+                .WhenHero(h => h.DrawsEvent("Renewal"))
+                .ThenHero(h => h.Event(e => e.HasOutstanding(1).CanBeIgnored(false)))
+                .WhenPlayer(p => p.SelectsEventOption("Continue"))
+                .ThenEventDeckIsReshuffled()
+                .ThenHero(h => h.Event(e => e.HasOutstanding(1)));
+        }
     }
 }

@@ -488,12 +488,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (!Triggers.Send(HeroTrigger.EventOptionSelected))
                 return;
             var card = EventFactory.CreateCard(CurrentEvent.Name);
+            // An event can't be ignored after it has been resolved
+            CurrentEvent.IsIgnorable = false;
             card.Resolve(this, optionCode);
-        }
-
-        public void CancelCurrentEvent()
-        {
-            CurrentEvent = null;
         }
 
         public void RefreshPowers()

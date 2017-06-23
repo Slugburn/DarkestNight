@@ -23,6 +23,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .ThenPlayer(p => p.Event(e => e.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")))
                 .WhenPlayer(p => p.SelectsEventOption("Roll", x => x.Rolls(roll)))
                 .ThenPlayer(p => p.Event(e => e.ActiveRow(4, 6, "Pure Altar", "You may spend 1 Secrecy to gain 1 Grace")))
+                .ThenHero(h => h.Event(e => e.HasOutstanding(1).CanBeIgnored(false)).Grace(0).Secrecy(startingSecrecy))
                 .WhenPlayer(p => p.AcceptsRoll())
                 .ThenPlayer(p => p.Event(e => e.HasOptions(expectedOptions)))
                 .WhenPlayer(p => p.SelectsEventOption(option))

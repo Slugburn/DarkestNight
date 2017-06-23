@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -28,9 +29,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         private int[] _expectedRoll;
         private int _expectedDiceCount;
         private int _expectedFreeActions;
-        private int _expectedOutstandingEvents;
         private string[] _expectedInventory = new string[0];
         private bool _expectedWounded;
+        private readonly HeroEventExpectation _eventExpectation;
 
         public HeroExpectation(Hero hero)
         {
@@ -46,6 +47,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             _expectedFightDice = 1;
             _expectedEludeDice = 1;
             _expectedSearchDice = 1;
+            _eventExpectation = new HeroEventExpectation(hero);
         }
 
         public void Verify()
@@ -88,10 +90,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
                 Assert.That(_hero.CurrentRoll.AdjustedRoll, Is.EquivalentTo(_expectedRoll));
             }
             Assert.That(_hero.FreeActions, Is.EqualTo(_expectedFreeActions));
-            var outstandingEvents = (_hero.CurrentEvent != null ? 1 : 0) + _hero.EventQueue.Count() ;
-            Assert.That(outstandingEvents, Is.EqualTo(_expectedOutstandingEvents),
-                () => _expectedOutstandingEvents > 0 ? $"Hero should have {_expectedOutstandingEvents} outstanding events." : "Hero has outstanding event");
-
+            _eventExpectation.Verify();
             _hero.Inventory.ShouldBe(_expectedInventory);
         }
 
@@ -261,12 +260,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public HeroExpectation HasOutstandingEvents(int expected)
-        {
-            _expectedOutstandingEvents = expected;
-            return this;
-        }
-
         public HeroExpectation HasItem(params string[] items)
         {
             _expectedInventory = items;
@@ -285,6 +278,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             var actual = _hero.Powers.Select(x => x.Name).OrderBy(x => x);
             var expected = powerNames.OrderBy(x => x);
             actual.ShouldBe(expected);
+            return this;
+        }
+
+        public HeroExpectation Event(Action<HeroEventExpectation> expect)
+        {
+            expect(_eventExpectation);
             return this;
         }
     }

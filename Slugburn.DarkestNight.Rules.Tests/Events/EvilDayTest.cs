@@ -32,7 +32,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                     .HasBody("Evil Day", 5, "Exhaust a power or draw 2 more events.")
                     .HasOptions("Exhaust Power", "Draw Events")))
                 .WhenPlayer(p => p.SelectsEventOption("Draw Events"))
-                .ThenHero(h=>h.HasOutstandingEvents(2));
+                .ThenHero(h => h.Event(e => e.HasOutstanding(2)));
         }
 
         [Test]

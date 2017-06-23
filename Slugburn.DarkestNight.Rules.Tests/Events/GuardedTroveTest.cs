@@ -59,7 +59,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .WhenPlayer(p => p.ResolvesConflict(c => c.Tactic("Elude").Target("Guarded Trove").Rolls(5)).AcceptsRoll())
                 .ThenPlayer(p => p.Event(e => e.HasOptions("Spend Secrecy", "Draw Event")))
                 .WhenPlayer(p => p.SelectsEventOption("Draw Event"))
-                .ThenHero(h => h.HasOutstandingEvents(1));
+                .ThenHero(h => h.Event(e => e.HasOutstanding(1)));
         }
 
         [Test]

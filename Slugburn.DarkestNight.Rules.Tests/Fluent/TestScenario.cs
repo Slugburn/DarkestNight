@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Shouldly;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -249,6 +250,19 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         public TestScenario GivenNextSearchResult(Find result)
         {
             _game.Maps.Insert(0, new Map(new Blight[7], Enumerable.Repeat(result, 6).ToArray()));
+            return this;
+        }
+
+        public TestScenario ThenEventDeckIsReshuffled()
+        {
+            _game.Events.Count.ShouldBe(33);
+            return this;
+        }
+
+        public TestScenario GivenEventsHaveBeenDrawn(int count)
+        {
+            var drawnCards = _game.Events.Except(new[] {"Renewal"}).Take(count).ToList();
+            drawnCards.ForEach(c => _game.Events.Remove(c));
             return this;
         }
     }

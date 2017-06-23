@@ -49,7 +49,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
                 if (!card.IsIgnorable) return;
 
                 context.Cancel = true;
-                hero.CancelCurrentEvent();
+                hero.EndEvent();
                 power.Exhaust(hero);
             }
         }

@@ -66,6 +66,7 @@
     <Compile Include="Fluent\FightContext.cs" />
     <Compile Include="Fluent\HeroActionContext.cs" />
     <Compile Include="Fluent\HeroContext.cs" />
+    <Compile Include="Fluent\HeroEventExpectation.cs" />
     <Compile Include="Fluent\HeroExpectation.cs" />
     <Compile Include="Fluent\PlayerActionContext.cs" />
     <Compile Include="Fluent\PlayerConflictExpectation.cs" />
