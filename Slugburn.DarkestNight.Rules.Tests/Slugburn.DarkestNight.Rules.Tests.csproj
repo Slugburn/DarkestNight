@@ -57,6 +57,8 @@
     <Compile Include="Events\EvilDayTest.cs" />
     <Compile Include="Events\GuardedTroveTest.cs" />
     <Compile Include="Events\LatentSpellTest.cs" />
+    <Compile Include="Events\RaidTest.cs" />
+    <Compile Include="Events\SimpleEventsTest.cs" />
     <Compile Include="Fakes\FakeDie.cs" />
     <Compile Include="Fakes\FakePlayer.cs" />
     <Compile Include="Fakes\FakeRollExtension.cs" />

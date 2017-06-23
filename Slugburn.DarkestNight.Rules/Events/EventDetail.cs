@@ -12,6 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Events
         private readonly List<EventRow> _rows = new List<EventRow>();
 
         private string _text;
+        private Func<Hero, int,int, bool> _rowSelector;
 
         private EventDetail(string name, int fate)
         {
@@ -61,9 +62,16 @@ namespace Slugburn.DarkestNight.Rules.Events
             return _enemies.ToList();
         }
 
-        public List<HeroEventRow> CreateHeroRows()
+        public List<HeroEventRow> CreateHeroRows(Hero hero)
         {
-            return _rows.Select(row=>new HeroEventRow {Min = row.Min, Max=row.Max, Text=row.Text, SubText = row.SubText}).ToList();
+            return _rows.Select(row => new HeroEventRow
+            {
+                Min = row.Min,
+                Max = row.Max,
+                Text = row.Text,
+                SubText = row.SubText,
+                IsActive = _rowSelector?.Invoke(hero, row.Min, row.Max) ?? false
+            }).ToList();
         }
 
         public class EventDetailCreation
@@ -143,6 +151,16 @@ namespace Slugburn.DarkestNight.Rules.Events
                     return this;
                 }
             }
+
+            public EventDetailCreation RowSelector(Func<Hero, int> func)
+            {
+                _detail._rowSelector= (hero, min, max) =>
+                {
+                    var index = func(hero);
+                    return min <= index && index <= max;
+                };
+                return this;
+            }
         }
 
         internal class EventOption
@@ -177,7 +195,7 @@ namespace Slugburn.DarkestNight.Rules.Events
                 Title = Name,
                 Fate = Fate,
                 Text = GetText(),
-                Rows = CreateHeroRows(),
+                Rows = CreateHeroRows(hero),
                 Options = GetHeroEventOptions(hero, null),
                 IsIgnorable = Fate > 0
             };

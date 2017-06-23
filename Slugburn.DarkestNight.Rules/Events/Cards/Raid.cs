@@ -4,10 +4,11 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
     public class Raid : IEventCard
     {
-        public EventDetail Detail => EventDetail.Create("Raid", 0,
+        public EventDetail Detail => EventDetail.Create("Raid", 6,
             x => x
                 .Text("Count the blights in your location")
-                .Row(0, 1, " Lose 2 Secrecy")
+                .RowSelector(h => h.GetBlights().Count)
+                .Row(0, 1, "Lose 2 Secrecy")
                 .Row(2, 3, "Lose 1 Grace and 1 Secrecy")
                 .Row(4, "+1 Darkness")
                 .Option("cont", "Continue"));
@@ -18,15 +19,17 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             if (count< 2)
             {
                 hero.LoseSecrecy(2, "Event");
-                return;
             }
-            if (count < 4)
+            else if (count < 4)
             {
                 hero.LoseGrace();
                 hero.LoseSecrecy("Event");
-                return;
             }
-            hero.Game.IncreaseDarkness();
+            else
+            {
+                hero.Game.IncreaseDarkness();
+            }
+            hero.EndEvent();
         }
     }
 }
