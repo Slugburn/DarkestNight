@@ -29,18 +29,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public PlayerEventExpectation ActiveRow(int index, string text, string subText = null)
-        {
-            return ActiveRow(index, index, text, subText);
-        }
-
-        public PlayerEventExpectation ActiveRow(int min, int max, string text, string subText = null)
+        public PlayerEventExpectation ActiveRow(string text, string subText = null)
         {
             var e = _playerEvent;
             e.Rows.ShouldNotBeNull();
-            var row = e.Rows.SingleOrDefault(r => r.Min == min && r.Max == max);
+            var row = e.Rows.SingleOrDefault(r => r.Text == text);
             if (row == null)
-                Assert.Fail();
+                Assert.Fail($"Row for \"{text}\" was not found.");
             if (!row.IsActive)
             {
                 var actual = e.Rows.SingleOrDefault(x => x.IsActive);

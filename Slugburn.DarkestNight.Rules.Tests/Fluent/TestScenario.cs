@@ -18,14 +18,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
     {
         private readonly Game _game;
         private readonly FakePlayer _player;
-        private readonly FakeDie _die;
 
         public TestScenario()
         {
             _game = new Game();
             _player = new FakePlayer(_game);
-            _die = new FakeDie();
-            Die.Implementation = _die;
+            Die.Implementation = new FakeDie();
             _game.AddPlayer(_player);
         }
 
@@ -263,6 +261,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         {
             var drawnCards = _game.Events.Except(new[] {"Renewal"}).Take(count).ToList();
             drawnCards.ForEach(c => _game.Events.Remove(c));
+            return this;
+        }
+
+        public TestScenario GivenNextBlight(string blightName)
+        {
+            var blight = blightName.ToEnum<Blight>();
+            _game.Maps.Insert(0, new Map(Enumerable.Repeat(blight, 7).ToArray(), new Find[6]));
             return this;
         }
     }

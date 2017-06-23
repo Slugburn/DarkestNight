@@ -4,12 +4,13 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
     public class Ritual : IEventCard
     {
-        public EventDetail Detail => EventDetail.Create("Ritual", 0, x => x.Text(
-            "You may spend 1 Grace and lose 1 Secrecy to cancel this event.\nCount the blights in your location")
+        public EventDetail Detail => EventDetail.Create("Ritual", 0, x => x
+            .Text("You may spend 1 Grace and lose 1 Secrecy to cancel this event.\nCount the blights in your location")
+            .RowSelector(hero => hero.GetBlights().Count)
             .Row(0, "Necromancer moves there")
             .Row(1, 2, "New blight there")
             .Row(3, 4, "+1 Darkness")
-            .Option("cancel", "Cancel Event", hero => hero.Grace > 0)
+            .Option("cancel", "Cancel", hero => hero.Grace > 0)
             .Option("cont", "Continue"));
 
         public void Resolve(Hero hero, string option)
@@ -17,7 +18,8 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             if (option == "cancel")
             {
                 hero.SpendGrace(1);
-                hero.LoseSecrecy("Event");
+                hero.LoseSecrecy(1);
+                hero.EndEvent();
                 return;
             }
             var count = hero.GetBlights().Count;
@@ -28,6 +30,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 game.CreateBlight(hero.Location);
             else
                 game.IncreaseDarkness();
+            hero.EndEvent();
         }
     }
 }

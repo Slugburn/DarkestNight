@@ -32,7 +32,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             var outstandingEvents = (_hero.CurrentEvent != null ? 1 : 0) + _hero.EventQueue.Count;
             outstandingEvents.ShouldBe(_expectedOutstandingEvents);
             if (_hero.CurrentEvent == null) return;
-            _hero.CurrentEvent.IsIgnorable.ShouldBe(_expectIsIgnorable);
+            _hero.CurrentEvent.IsIgnorable.ShouldBe(_expectIsIgnorable, _hero.CurrentEvent.Name);
         }
     }
 }
