@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Shouldly;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
@@ -124,6 +125,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         public void SelectEventOption(string option)
         {
             var matching = Event.Options.SingleOrDefault(x => x.Text == option);
+            matching.ShouldNotBeNull($"No matching event with Text '{option}'.");
             var code = matching?.Code ?? "<unknown>";
             _game.ActingHero.SelectEventOption(code);
         }
@@ -146,7 +148,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             hero.SelectLocation(location);
         }
 
-        public void SelectTactic(string tacticName, ICollection<int> targetIds)
+        public void ResolveConflict(string tacticName, ICollection<int> targetIds)
         {
             var hero = _game.GetHero(ActiveHero);
             hero.SelectTactic(tacticName, targetIds);

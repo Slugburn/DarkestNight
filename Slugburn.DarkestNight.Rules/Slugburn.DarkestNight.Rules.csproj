@@ -90,6 +90,7 @@
     <Compile Include="Events\Cards\Enemies\DeadServant.cs" />
     <Compile Include="Events\Cards\Enemies\Demon.cs" />
     <Compile Include="Events\Cards\Enemies\EnemyEventCard.cs" />
+    <Compile Include="Events\Cards\Enemies\GuardedTroveEventCard.cs" />
     <Compile Include="Events\Cards\Enemies\Horde.cs" />
     <Compile Include="Events\Cards\Enemies\Patrols.cs" />
     <Compile Include="Events\Cards\Enemies\ShamblingHorror.cs" />

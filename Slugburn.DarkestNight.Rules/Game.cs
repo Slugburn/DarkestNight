@@ -121,13 +121,13 @@ namespace Slugburn.DarkestNight.Rules
             return Heroes.SelectMany(x=>x.Powers).SingleOrDefault(x=>x.Name==name);
         }
 
-        public Hero GetHero(string name)
+        public Hero GetHero(string heroName)
         {
-            if (name==null)
-                throw new ArgumentNullException(nameof(name));
-            var hero = Heroes.SingleOrDefault(x => x.Name == name);
+            if (heroName==null)
+                throw new ArgumentNullException(nameof(heroName));
+            var hero = Heroes.SingleOrDefault(x => x.Name == heroName);
             if (hero == null)
-                throw new ArgumentOutOfRangeException(nameof(name), name, "Unknown hero.");
+                throw new ArgumentOutOfRangeException(nameof(heroName), heroName);
             return hero;
         }
 

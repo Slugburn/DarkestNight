@@ -49,7 +49,7 @@ namespace Slugburn.DarkestNight.Rules.Blights
                 case Blight.Zombies:
                     return new EnemyGenerator(Blight.Zombies, "Zombies", 5, "Zombie");
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(blight), blight, "Unknown blight type");
+                    throw new ArgumentOutOfRangeException(nameof(blight), blight.ToString());
             }
         }
 

@@ -21,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards.Enemies
 
         public EventDetail Detail { get; set; }
 
-        public void Resolve(Hero hero, string option)
+        public virtual void Resolve(Hero hero, string option)
         {
             if (option != "cont") return;
             var enemy = GetEnemy(hero);
@@ -29,7 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards.Enemies
             hero.FaceEnemy(enemy);
         }
 
-        private string GetEnemy(Hero hero)
+        protected string GetEnemy(Hero hero)
         {
             string enemy;
             if (_designator != null)

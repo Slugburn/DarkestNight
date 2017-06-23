@@ -29,6 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         private int _expectedFreeActions;
         private int _expectedOutstandingEvents;
         private string[] _expectedInventory = new string[0];
+        private bool _expectedWounded;
 
         public HeroExpectation(Hero hero)
         {
@@ -48,6 +49,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 
         public void Verify()
         {
+            _hero.SavedByGrace.ShouldBe(_expectedWounded);
             Assert.That(_hero.Grace, Is.EqualTo(_expectedGrace), "Unexpected Grace.");
             if (_expectedSecrecy.HasValue)
                 Assert.That(_hero.Secrecy, Is.EqualTo(_expectedSecrecy), "Unexpected Secrecy.");
@@ -258,7 +260,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public HeroExpectation HasOutstandingEvents(int expected = 1)
+        public HeroExpectation HasOutstandingEvents(int expected)
         {
             _expectedOutstandingEvents = expected;
             return this;
@@ -267,6 +269,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         public HeroExpectation HasItem(params string[] items)
         {
             _expectedInventory = items;
+            return this;
+        }
+
+        public HeroExpectation WasWounded(bool expected = true)
+        {
+            _expectedWounded = true;
+            _expectedGrace = _hero.DefaultGrace - 1;
             return this;
         }
     }

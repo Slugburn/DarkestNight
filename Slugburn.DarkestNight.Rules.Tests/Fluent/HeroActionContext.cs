@@ -23,6 +23,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         {
             if (eventName != null)
                 _hero.Game.Events.Insert(0, eventName);
+            if (_hero.Location == Location.Monastery)
+                _hero.Location = Location.Village;
             _hero.DrawEvent();
             return this;
         }

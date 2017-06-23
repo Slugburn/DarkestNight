@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         private readonly string[] _powers;
         private readonly int _secrecy;
 
-        private HeroFactory(string name, int grace, int secrecy, params string[] powers)
+        protected HeroFactory(string name, int grace, int secrecy, params string[] powers)
         {
             Name = name;
             _grace = grace;
@@ -66,11 +66,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 "Rune of Interference", "Rune of Misdirection", "Rune of Nullification", "Teleport");
         }
 
-        public static Hero Create(string name)
+        public static Hero Create(string heroName)
         {
-            if (!Factories.ContainsKey(name))
-                throw new ArgumentOutOfRangeException(nameof(name), name, "Unknown hero name");
-            return Factories[name].Create();
+            if (!Factories.ContainsKey(heroName))
+                throw new ArgumentOutOfRangeException(nameof(heroName), heroName);
+            return Factories[heroName].Create();
         }
     }
 }

@@ -19,15 +19,26 @@ namespace Slugburn.DarkestNight.Rules.Enemies
         {
             hero.LoseSecrecy("Enemy");
             hero.DrawSearchResult();
+            hero.EndEvent();
         }
 
         public override void Failure(Hero hero)
         {
             var tacticType = hero.ConflictState.SelectedTactic.Type;
             if (tacticType == TacticType.Fight)
+            {
                 hero.TakeWound();
+                hero.EndEvent();
+            }
             else
+            {
+                var options = new List<HeroEventOption>();
+                if (hero.Secrecy > 0)
+                    options.Add(new HeroEventOption("spend-secrecy","Spend Secrecy"));
+                options.Add(new HeroEventOption("draw-event", "Draw Event"));
+                hero.CurrentEvent.Options = options;
                 hero.PresentCurrentEvent();
+            }
         }
 
         public override IEnumerable<ConflictResult> GetResults()

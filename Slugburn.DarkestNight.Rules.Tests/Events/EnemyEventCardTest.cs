@@ -61,9 +61,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         }
 
         [Test]
+        [Ignore("Has own text fixture")]
         public void GuardedTrove()
         {
-            TestEnemyGeneratorEvent("Guarded Trove", "Guarded Trove", 1);
         }
 
         [TestCase(4, "Small Horde")]

@@ -30,7 +30,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             else if (option == "lose-secrecy")
                 hero.LoseSecrecy(1, "Event");
             else if (option != "cont")
-                throw new ArgumentOutOfRangeException(nameof(option), option, "Unknown option.");
+                throw new ArgumentOutOfRangeException(nameof(option), option);
             hero.AcceptRoll();
         }
 

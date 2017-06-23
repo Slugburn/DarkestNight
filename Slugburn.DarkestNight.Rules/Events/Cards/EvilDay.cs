@@ -36,7 +36,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                     hero.EndEvent();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(option), option, "Unknown option.");
+                    throw new ArgumentOutOfRangeException(nameof(option), option);
             }
         }
 

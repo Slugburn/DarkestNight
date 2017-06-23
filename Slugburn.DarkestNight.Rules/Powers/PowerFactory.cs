@@ -23,11 +23,11 @@ namespace Slugburn.DarkestNight.Rules.Powers
             return power;
         }
 
-        public static IPower Create(string name)
+        public static IPower Create(string powerName)
         {
-            if (!Activators.ContainsKey(name))
-                throw new ArgumentOutOfRangeException(nameof(name), name, "No activator is available for the requested name.");
-            return Activators[name]();
+            if (!Activators.ContainsKey(powerName))
+                throw new ArgumentOutOfRangeException(nameof(powerName), powerName, "No activator is available for the requested name.");
+            return Activators[powerName]();
         }
     }
 }

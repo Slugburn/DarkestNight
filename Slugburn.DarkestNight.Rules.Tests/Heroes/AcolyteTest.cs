@@ -43,6 +43,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WhenPlayerAssignsRolledDiceToBlights(Tuple.Create(Blight.Shades, 5), Tuple.Create(Blight.Skeletons, 3))
                 .ThenSpace(Location.Swamp, x => x.Blights(Blight.Skeletons))
                 .ThenHero(x => x.HasUsedAction()
+                    .WasWounded()
                     .LostGrace(2)       // loses Grace from failing to kill Skeletons and rolling a 1 with Final Rest
                     .LostSecrecy(2));   // loses 2 Secrecy from making 2 attacks
         }

@@ -83,6 +83,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public IPower SelectedPower { get; set; }
         public Queue<string> EventQueue { get; } = new Queue<string>();
         public List<string> Inventory { get; set; } = new List<string>();
+        public bool SavedByGrace { get; private set; }
 
         public void AddActionFilter(string name, HeroState state, ICollection<string> allowed)
         {
@@ -160,9 +161,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void TakeWound()
         {
             if (Grace > 0)
+            {
                 LoseGrace();
+                SavedByGrace = true;
+            }
             else
+            {
                 Death();
+            }
         }
 
         private void Death()
@@ -176,6 +182,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var card = EventFactory.CreateCard(eventName);
             CurrentEvent = card.Detail.GetHeroEvent(this);
             Triggers.Send(HeroTrigger.EventDrawn);
+            Player.State = PlayerState.Event;
             Player.DisplayEvent(PlayerEvent.From(CurrentEvent));
         }
 
@@ -434,6 +441,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void PresentCurrentEvent()
         {
             Player.DisplayEvent(PlayerEvent.From(CurrentEvent));
+            Player.State = PlayerState.Event;
         }
 
         public void EndEvent()
@@ -465,11 +473,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             Enemies.Add(enemyName);
             new Defend().Act(this);
-        }
-
-        public void DrawSearchResult()
-        {
-            throw new NotImplementedException();
         }
 
         public IPower DrawPower()
@@ -514,6 +517,41 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var conflictState = ConflictState;
             if (conflictState?.SelectedTargets == null || conflictState.SelectedTargets.Count != 1) return false;
             return conflictState.SelectedTargets.First().Name == "Necromancer";
+        }
+
+        public void DrawSearchResult()
+        {
+            var map = Game.Maps.Draw();
+            var space = GetSpace();
+            var result = map.GetSearchResult(space.Location);
+            switch (result)
+            {
+                case Find.Key:
+                    Inventory.Add("Key");
+                    break;
+                case Find.BottledMagic:
+                    Inventory.Add("Bottled Magic");
+                    break;
+                case Find.SupplyCache:
+                    break;
+                case Find.TreasureChest:
+                    Inventory.Add("Treasure Chest");
+                    break;
+                case Find.Waystone:
+                    Inventory.Add("Waystone");
+                    break;
+                case Find.ForgottenShrine:
+                    break;
+                case Find.VanishingDust:
+                    Inventory.Add("Vanishing Dust");
+                    break;
+                case Find.Epiphany:
+                    break;
+                case Find.Artifact:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

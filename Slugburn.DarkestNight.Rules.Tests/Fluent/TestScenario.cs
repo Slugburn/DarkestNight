@@ -8,6 +8,7 @@ using Slugburn.DarkestNight.Rules.Maps;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
+using Slugburn.DarkestNight.Rules.Tests.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 {
@@ -28,13 +29,23 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 
         public TestScenario GivenHero(string name, Action<HeroContext> def = null) 
         {
-            var hero = HeroFactory.Create(name);
+            AddHero(HeroFactory.Create(name), def);
+            return this;
+        }
+
+        public TestScenario GivenHero(Action<HeroContext> def = null)
+        {
+            AddHero(GenericHeroFactory.Create(),def);
+            return this;
+        }
+
+        private void AddHero(Hero hero, Action<HeroContext> def)
+        {
             _game.AddHero(hero, _player);
             var ctx = new HeroContext(hero);
             def?.Invoke(ctx);
             _game.ActingHero = hero;
             _player.ActiveHero = hero.Name;
-            return this;
         }
 
         public TestScenario GivenActingHero(Action<HeroContext> def)

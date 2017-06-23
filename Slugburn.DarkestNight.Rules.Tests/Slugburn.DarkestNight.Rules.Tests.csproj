@@ -55,6 +55,7 @@
     <Compile Include="Events\DarkScryingTest.cs" />
     <Compile Include="Events\EnemyEventCardTest.cs" />
     <Compile Include="Events\EvilDayTest.cs" />
+    <Compile Include="Events\GuardedTroveTest.cs" />
     <Compile Include="Fakes\FakeDie.cs" />
     <Compile Include="Fakes\FakePlayer.cs" />
     <Compile Include="Fakes\FakeRollExtension.cs" />
@@ -64,16 +65,19 @@
     <Compile Include="Fluent\HeroContext.cs" />
     <Compile Include="Fluent\HeroExpectation.cs" />
     <Compile Include="Fluent\PlayerActionContext.cs" />
+    <Compile Include="Fluent\PlayerConflictExpectation.cs" />
     <Compile Include="Fluent\PlayerEventExpectation.cs" />
     <Compile Include="Fluent\PlayerExpectation.cs" />
     <Compile Include="Fluent\PowerContext.cs" />
     <Compile Include="Fluent\PowerExpectation.cs" />
+    <Compile Include="Fluent\ResolveConflictContext.cs" />
     <Compile Include="Fluent\SpaceDefContext.cs" />
     <Compile Include="Fluent\SpaceExpectation.cs" />
     <Compile Include="Fluent\TacticContext.cs" />
     <Compile Include="Fluent\TestScenario.cs" />
     <Compile Include="Heroes\AcolyteTest.cs" />
     <Compile Include="Heroes\DruidTest.cs" />
+    <Compile Include="Heroes\GenericHeroFactory.cs" />
     <Compile Include="Heroes\HeroFactoryTest.cs" />
     <Compile Include="Heroes\KnightTest.cs" />
     <Compile Include="Heroes\PriestTest.cs" />

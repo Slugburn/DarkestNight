@@ -39,20 +39,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public PlayerExpectation SeesActiveEventRow(int min, int max, string text, string subText = null)
-        {
-            Assert.That(_player.State, Is.EqualTo(PlayerState.Event));
-            var e = _player.Event;
-            Assert.That(e.Rows, Is.Not.Null, "No event rows");
-            var row = e.Rows.SingleOrDefault(r => r.Min == min && r.Max == max);
-            if (row==null)
-                Assert.Fail();
-            Assert.That(row.IsActive, Is.True, "Event row is not active");
-            Assert.That(row.Text, Is.EqualTo(text));
-            row.SubText.ShouldBe(subText);
-            return this;
-        }
-
         public PlayerExpectation SeesTarget(params string[] targetNames)
         {
             Assert.That(_player.State, Is.EqualTo(PlayerState.Conflict));
@@ -73,6 +59,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         {
             _player.State.ShouldBe(PlayerState.SelectPower);
             _player.Powers.Select(x=>x.Name).ShouldBe(powerNames);
+            return this;
+        }
+
+        public PlayerExpectation Conflict(Action<PlayerConflictExpectation> expect)
+        {
+            var expectation = new PlayerConflictExpectation(_player.Conflict);
+            expect(expectation);
             return this;
         }
     }

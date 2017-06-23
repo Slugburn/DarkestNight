@@ -20,9 +20,9 @@ namespace Slugburn.DarkestNight.Rules.Events
             };
         } 
 
-        public static IEventCard CreateCard(string name)
+        public static IEventCard CreateCard(string eventName)
         {
-            switch (name)
+            switch (eventName)
             {
                 case "Altar":
                     return new Altar();
@@ -35,7 +35,7 @@ namespace Slugburn.DarkestNight.Rules.Events
                 case "Close Call":
                     return new CloseCall();
                 case "Cultist":
-                    return new SingleEnemyEventCard(name,1);
+                    return new SingleEnemyEventCard(eventName,1);
                 case "Dark Champion":
                     return new DarkChampion();
                 case "Dark Scrying":
@@ -47,17 +47,17 @@ namespace Slugburn.DarkestNight.Rules.Events
                 case "Evil Day":
                     return new EvilDay();
                 case "Guarded Trove":
-                    return new SingleEnemyEventCard(name, 1);
+                    return new GuardedTroveEventCard();
                 case "Horde":
                     return new Horde();
                 case "Latent Spell":
                     return new LatentSpell();
                 case "Lich":
-                    return new SingleEnemyEventCard(name, 4);
+                    return new SingleEnemyEventCard(eventName, 4);
                 case "Looters":
-                    return new SingleEnemyEventCard(name,2);
+                    return new SingleEnemyEventCard(eventName,2);
                 case "Midnight":
-                    return new EventCard(name,7, "+1 Darkness.", hero=>hero.Game.IncreaseDarkness());
+                    return new EventCard(eventName,7, "+1 Darkness.", hero=>hero.Game.IncreaseDarkness());
                 case "Patrols":
                     return new Patrols();
                 case "Raid":
@@ -71,19 +71,19 @@ namespace Slugburn.DarkestNight.Rules.Events
                 case "Sloppy Search":
                     return new SloppySearch();
                 case "Tracker":
-                    return new SingleEnemyEventCard(name, 5);
+                    return new SingleEnemyEventCard(eventName, 5);
                 case "Twist of Fate":
                     return new TwistOfFate();
                 case "Unfriendly Eyes":
                     return new UnfriendlyEyes();
                 case "Upheaval":
-                    return new EventCard(name,2, "Remove all blights from your current location and create an equal number of new blights", Upheaval);
+                    return new EventCard(eventName,2, "Remove all blights from your current location and create an equal number of new blights", Upheaval);
                 case "Vengeful Spirit":
                     return new VengefulSpirit();
                 case "Vile Messenger":
-                    return new SingleEnemyEventCard(name,4);
+                    return new SingleEnemyEventCard(eventName,4);
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(name),name, "Unknown event name");
+                    throw new ArgumentOutOfRangeException(nameof(eventName), eventName);
             }
         }
 

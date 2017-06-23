@@ -75,10 +75,18 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public PlayerActionContext SelectsTactic(string tactic, params string[] targets)
+        public PlayerActionContext ResolvesConflict(string tactic, params string[] targets)
         {
             var targetIds = _player.Conflict.Targets.Where(x => targets.Contains(x.Name)).Select(x => x.Id).ToList();
-            _player.SelectTactic(tactic, targetIds);
+            _player.ResolveConflict(tactic, targetIds);
+            return this;
+        }
+
+        public PlayerActionContext ResolvesConflict(Action<ResolveConflictContext> action)
+        {
+            var context = new ResolveConflictContext(_player.Conflict);
+            action(context);
+            _player.ResolveConflict(context.GetTactic(), context.GetTargetIds());
             return this;
         }
 
