@@ -30,7 +30,7 @@ namespace Slugburn.DarkestNight.Rules.Rolls
 
         public void Roll()
         {
-            var dice = Dice.Create(Hero, RollType, BaseName, BaseDiceCount);
+            var dice = GetDice(RollType, BaseName, BaseDiceCount);
             var total = dice.Total;
             ActualRoll = Die.Roll(total);
             AdjustedRoll = ActualRoll.ToList();
@@ -59,6 +59,18 @@ namespace Slugburn.DarkestNight.Rules.Rolls
             AdjustedRoll = ActualRoll.ToList();
             foreach (var handler in _rollHandlers)
                 handler.HandleRoll(Hero, this);
+        }
+
+        public Dice GetDice(RollType rollType, string baseName, int baseDiceCount)
+        {
+            var baseDetail = new DiceDetail {Name = baseName, Modifier = baseDiceCount};
+            var otherDetails = from rollMod in Hero.GetRollModifiers()
+                let mod = rollMod.GetModifier(Hero, rollType)
+                where mod != 0
+                select new DiceDetail {Name = rollMod.Name, Modifier = mod};
+            var details = new[] {baseDetail}.Concat(otherDetails).ToList();
+            var dice = new Dice(details);
+            return dice;
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Slugburn.DarkestNight.Rules.Rolls
 {
     public static class RollBuilder
     {
-        internal static IRollStateCreation Create(IRollHandler rollHandler)
+        public static IRollStateCreation Create(IRollHandler rollHandler)
         {
             return new RollStateCreation(rollHandler);
         }

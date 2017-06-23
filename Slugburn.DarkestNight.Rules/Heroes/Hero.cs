@@ -332,7 +332,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var tactic = _tactics[tacticName];
             tactic.Use(this);
 
-            CurrentRoll.RollType = tactic.Type == TacticType.Fight ? RollType.Fight : RollType.Elude;
+            CurrentRoll.RollType = tactic.GetRollType();
             CurrentRoll.TargetNumber = ConflictState.SelectedTargets.Min(x => tactic.Type == TacticType.Fight ? x.FightTarget : x.EludeTarget);
             CurrentRoll.BaseDiceCount = tactic.GetDiceCount();
             CurrentRoll.BaseName = tactic.Name;
@@ -429,12 +429,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void RemoveAction(string name)
         {
             _actions.Remove(name);
-        }
-
-        public Dice GetSearchDice()
-        {
-            var dice = Dice.Create(this, RollType.Search, "Search", 1);
-            return dice;
         }
 
         public void PresentCurrentEvent()

@@ -17,6 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
         public void Act(Hero hero)
         {
             var enemies = hero.Enemies.Select(EnemyFactory.Create);
+            hero.SetRoll(RollBuilder.Create<DefendRoll>());
             hero.ConflictState = new ConflictState
             {
                 MaxTarget = 1,
@@ -24,7 +25,6 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 AvailableTargets = enemies.GetTargetInfo(),
                 AvailableTactics = hero.GetAvailableTactics().GetInfo(hero)
             };
-            hero.SetRoll(RollBuilder.Create<DefendRoll>());
             hero.State = HeroState.SelectingTarget;
             hero.Player.DisplayConflict(PlayerConflict.FromConflictState(hero.ConflictState));
             hero.Player.State = PlayerState.Conflict;

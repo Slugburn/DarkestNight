@@ -68,11 +68,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             Assert.That(_hero.TravelSpeed, Is.EqualTo(_expectedTravelSpeed), "Unexpected TravelSpeed.");
             Assert.That(_hero.AvailableMovement, Is.EqualTo(_expectedAvailableMovement), "Unexpected AvailableMovement.");
 
-            var fightDice = Dice.Create(_hero, RollType.Fight, null, 1).Total;
+            if (_hero.CurrentRoll == null)
+                _hero.SetRoll(RollBuilder.Create(null));
+            var fightDice = _hero.CurrentRoll.GetDice(RollType.Fight, "Fight", 1).Total;
             Assert.That(fightDice, Is.EqualTo(_expectedFightDice), "Unexpected number of Fight dice.");
-            var eludeDice = Dice.Create(_hero, RollType.Elude, null, 1).Total;
+            var eludeDice = _hero.CurrentRoll.GetDice(RollType.Elude, "Elude", 1).Total;
             Assert.That(eludeDice, Is.EqualTo(_expectedEludeDice), "Unexpected number of Elude dice.");
-            var searchDice = _hero.GetSearchDice().Total;
+            var dice = _hero.CurrentRoll.GetDice(RollType.Search, "Search", 1);
+            var searchDice = dice.Total;
             Assert.That(searchDice, Is.EqualTo(_expectedSearchDice), "Unexpected number of Search dice.");
             if (_expectedDiceCount > 0)
                 Assert.That(_hero.CurrentRoll.AdjustedRoll.Count, Is.EqualTo(_expectedDiceCount));

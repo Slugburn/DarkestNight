@@ -41,6 +41,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             {
                 hero.ValidateState(HeroState.ChoosingAction);
                 hero.AddRollModifier(StaticRollBonus.Create(Name, RollType.Fight, 1));
+                hero.SetRoll(RollBuilder.Create<CallToDeathRoll>());
                 hero.ConflictState = new ConflictState
                 {
                     ConflictType = ConflictType.Attack,
@@ -49,7 +50,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                     MinTarget = 2,
                     MaxTarget = 2
                 };
-                hero.SetRoll(RollBuilder.Create<CallToDeathRoll>());
                 hero.State = HeroState.SelectingTarget;
                 hero.IsActionAvailable = false;
             }
