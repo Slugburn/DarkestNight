@@ -17,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Given.Game.WithHero().At("Village")
                 .Given.Location("Village").Blights(blights)
                 .When.Hero.DrawsEvent("Ritual")
-                .Then().Player.EventView.ActiveRow("New blight there").HasOptions("Cancel", "Continue")
+                .Then(Verify.Player.EventView.ActiveRow("New blight there").HasOptions("Cancel", "Continue"))
                 .Given.Game.NextBlight("Desecration")
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Location("Village").Blights(after))
@@ -32,9 +32,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.WithHero().At("Village").Darkness(3)
                 .Given.Location("Village").Blights(blights)
-                .When.Hero.DrawsEvent("Ritual").Then().Player.EventView
-                .ActiveRow("+1 Darkness")
-                .HasOptions("Cancel", "Continue")
+                .When.Hero.DrawsEvent("Ritual")
+                .Then(Verify.Player.EventView
+                    .ActiveRow("+1 Darkness")
+                    .HasOptions("Cancel", "Continue"))
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Game.Darkness(4))
                 .Then(Verify.Hero.HasUnresolvedEvents(0));
@@ -45,9 +46,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Given.Game.WithHero()
-                .When.Hero.DrawsEvent("Ritual").Then().Player.EventView.HasBody("Ritual", 6,
+                .When.Hero.DrawsEvent("Ritual")
+                .Then(Verify.Player.EventView.HasBody("Ritual", 6,
                     "You may spend 1 Grace and lose 1 Secrecy to cancel this event.\nCount the blights in your location")
-                .HasOptions("Cancel", "Continue")
+                    .HasOptions("Cancel", "Continue"))
                 .When.Player.SelectsEventOption("Cancel")
                 .Then(Verify.Hero.HasUnresolvedEvents(0).LostGrace().LostSecrecy());
         }
@@ -59,7 +61,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Given.Game.WithHero().At("Village").NecromancerIn("Ruins")
                 .Given.Location("Village").Blights()
                 .When.Hero.DrawsEvent("Ritual")
-                .Then().Player.EventView.ActiveRow("Necromancer moves there").HasOptions("Cancel", "Continue")
+                .Then(Verify.Player.EventView.ActiveRow("Necromancer moves there").HasOptions("Cancel", "Continue"))
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Game.NecromancerAt("Village"))
                 .Then(Verify.Hero.HasUnresolvedEvents(0));

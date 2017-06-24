@@ -220,7 +220,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario
                 .Given.Game.WithHero("Druid").HasPowers("Visions")
                 .When.Hero.DrawsEvent("Anathema")
-                .Then().Player.EventView.HasOptions("Continue", "Ignore [Visions]")
+                .Then(Verify.Player.EventView.HasOptions("Continue", "Ignore [Visions]"))
                 .When.Player.SelectsEventOption("Ignore [Visions]")
                 .Then(Verify.Hero.LostGrace(0)) // Anathema causes hero to lose 1 Grace unless ignored
                 .Then(Verify.Power("Visions").IsExhausted());

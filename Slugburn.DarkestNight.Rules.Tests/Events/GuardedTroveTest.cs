@@ -31,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .When.Player.SelectsEventOption("Continue")
                 .Then().Player.Conflict(c => c.Target("Guarded Trove"))
                 .When.Player.ResolvesConflict(c => c.Tactic("Elude").Target("Guarded Trove").Rolls(5)).AcceptsRoll()
-                .Then().Player.EventView.HasOptions("Spend Secrecy", "Draw Event")
+                .Then(Verify.Player.EventView.HasOptions("Spend Secrecy", "Draw Event"))
                 .When.Player.SelectsEventOption("Draw Event")
                 .Then(Verify.Hero.HasUnresolvedEvents(1));
         }
@@ -42,9 +42,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.WithHero()
                 .When.Hero.DrawsEvent("Guarded Trove")
-                .When.Player.SelectsEventOption("Continue").Then().Player.Conflict(c => c.Target("Guarded Trove"))
+                .When.Player.SelectsEventOption("Continue")
+                .Then().Player.Conflict(c => c.Target("Guarded Trove"))
                 .When.Player.ResolvesConflict(c => c.Tactic("Elude").Target("Guarded Trove").Rolls(5)).AcceptsRoll()
-                .Then().Player.EventView.HasOptions("Spend Secrecy", "Draw Event")
+                .Then(Verify.Player.EventView.HasOptions("Spend Secrecy", "Draw Event"))
                 .When.Player.SelectsEventOption("Spend Secrecy")
                 .Then(Verify.Hero.LostSecrecy());
         }
@@ -58,7 +59,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .When.Player.SelectsEventOption("Continue")
                 .Then().Player.Conflict(c => c.Target("Guarded Trove"))
                 .When.Player.ResolvesConflict(c => c.Tactic("Elude").Target("Guarded Trove").Rolls(5)).AcceptsRoll()
-                .Then().Player.EventView.HasOptions("Draw Event");
+                .Then(Verify.Player.EventView.HasOptions("Draw Event"));
         }
 
         [Test]

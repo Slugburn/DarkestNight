@@ -65,8 +65,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         public void Verify(ITestRoot root)
         {
-            var r = (TestRoot) root;
-            var hero = r.GetGame().ActingHero;
+            var hero = root.Get<Game>().ActingHero;
             SetExpectations(hero);
             hero.SavedByGrace.ShouldBe(_expectedWounded);
             hero.DefaultGrace.ShouldBe(_expectedDefaultGrace ?? 0);

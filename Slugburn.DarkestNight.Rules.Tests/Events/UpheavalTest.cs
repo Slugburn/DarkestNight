@@ -20,9 +20,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Given.Game.WithHero().At("Village")
                 .Given.Location("Village").Blights(blights)
                 .When.Hero.DrawsEvent("Upheaval")
-                .Then().Player.EventView
+                .Then(Verify.Player.EventView
                     .HasBody("Upheaval", 2, "Remove all blights from your current location and create an equal number of new blights.")
-                    .HasOptions("Continue")
+                    .HasOptions("Continue"))
                 .Given.Game.NextBlight(newBlights)
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Location("Village").Blights(newBlights));

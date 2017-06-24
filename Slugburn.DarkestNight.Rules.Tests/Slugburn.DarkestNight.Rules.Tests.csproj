@@ -83,6 +83,9 @@
     <Compile Include="Fluent\Arrangements\IHeroContext.cs" />
     <Compile Include="Fluent\Arrangements\ILocationContext.cs" />
     <Compile Include="Fluent\Arrangements\IPowerContext.cs" />
+    <Compile Include="Fluent\Assertions\BlightSelectionViewVerification.cs" />
+    <Compile Include="Fluent\Assertions\EventViewVerification.cs" />
+    <Compile Include="Fluent\Assertions\GameVerification.cs" />
     <Compile Include="Fluent\Assertions\HeroEventExpectation.cs" />
     <Compile Include="Fluent\Assertions\HeroEventVerification.cs" />
     <Compile Include="Fluent\Assertions\HeroExpectation.cs" />
@@ -92,11 +95,13 @@
     <Compile Include="Fluent\Assertions\IPlayerExpectation.cs" />
     <Compile Include="Fluent\Assertions\IThen.cs" />
     <Compile Include="Fluent\Assertions\IVerifiable.cs" />
+    <Compile Include="Fluent\Assertions\LocationVerification.cs" />
     <Compile Include="Fluent\Assertions\PlayerBlightExpectation.cs" />
     <Compile Include="Fluent\Assertions\PlayerConflictExpectation.cs" />
     <Compile Include="Fluent\Assertions\PlayerEventExpectation.cs" />
     <Compile Include="Fluent\Assertions\PlayerExpectation.cs" />
     <Compile Include="Fluent\Arrangements\PowerContext.cs" />
+    <Compile Include="Fluent\Assertions\PlayerVerification.cs" />
     <Compile Include="Fluent\Assertions\PowerExpectation.cs" />
     <Compile Include="Fluent\Arrangements\ResolveConflictContext.cs" />
     <Compile Include="Fluent\Arrangements\LocationContext.cs" />
@@ -104,10 +109,8 @@
     <Compile Include="Fluent\Arrangements\TacticContext.cs" />
     <Compile Include="Fluent\Assertions\PowerVerification.cs" />
     <Compile Include="Fluent\Assertions\ThenContext.cs" />
-    <Compile Include="Fluent\GameVerification.cs" />
     <Compile Include="Fluent\ITestRoot.cs" />
     <Compile Include="Fluent\Fake.cs" />
-    <Compile Include="Fluent\LocationVerification.cs" />
     <Compile Include="Fluent\TestRoot.cs" />
     <Compile Include="Fluent\TestScenario.cs" />
     <Compile Include="Fluent\Verify.cs" />

@@ -1,8 +1,7 @@
 ﻿using Shouldly;
 using Slugburn.DarkestNight.Rules.Extensions;
-using Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions;
 
-namespace Slugburn.DarkestNight.Rules.Tests.Fluent
+namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
     public class GameVerification : IVerifiable
     {
@@ -12,7 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 
         public void Verify(ITestRoot root)
         {
-            var game = ((TestRoot) root).GetGame();
+            var game = root.Get<Game>();
             game.Darkness.ShouldBe(_darkness);
             game.Necromancer.Location.ShouldBe(_necromancerAt);
             if (_eventDeckIsReshuffled ?? false)

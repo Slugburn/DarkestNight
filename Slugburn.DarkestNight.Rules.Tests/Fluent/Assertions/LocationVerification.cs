@@ -3,9 +3,8 @@ using System.Linq;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
-using Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions;
 
-namespace Slugburn.DarkestNight.Rules.Tests.Fluent
+namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
     public class LocationVerification : IVerifiable
     {
@@ -19,14 +18,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 
         public void Verify(ITestRoot root)
         {
-            var game = ((TestRoot) root).GetGame();
+            var game = root.Get<Game>();
             var space = game.Board[_location.ToEnum<Location>()];
             Assert.That(space.Blights, Is.EquivalentTo(_blights));
         }
 
         public LocationVerification Blights(params string[] blights)
         {
-            _blights = blights.Select(b=>StringExtensions.ToEnum<Blight>(b)).ToList();
+            _blights = blights.Select(b=>b.ToEnum<Blight>()).ToList();
             return this;
         }
 

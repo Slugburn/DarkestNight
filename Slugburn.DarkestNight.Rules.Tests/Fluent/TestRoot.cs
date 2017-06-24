@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 using Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements;
@@ -10,6 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
     {
         private readonly Game _game;
         private readonly FakePlayer _player;
+        private readonly Dictionary<Type, object> _state = new Dictionary<Type, object>();
 
         public Game GetGame() => _game;
 
@@ -19,6 +21,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         {
             _game = game;
             _player = player;
+            Set(game);
+            Set(player);
         }
 
         public IGiven Given => new GivenContext(GetGame(), GetPlayer());
@@ -34,6 +38,17 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         public IGiven Configure(Func<IGiven, IGiven> setConditions)
         {
             return setConditions(Given);
+        }
+
+        public T Set<T>(T state)
+        {
+            _state[typeof (T)] = state;
+            return state;
+        }
+
+        public T Get<T>()
+        {
+            return (T)_state[typeof (T)];
         }
     }
 }

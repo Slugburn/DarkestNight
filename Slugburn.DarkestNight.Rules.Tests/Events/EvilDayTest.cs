@@ -11,9 +11,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Given.Game.WithHero("Acolyte").HasPowers("Blinding Black", "Dark Veil", "False Life")
-                .When.Hero.DrawsEvent("Evil Day").Then().Player.EventView
-                .HasBody("Evil Day", 5, "Exhaust a power or draw 2 more events.")
-                .HasOptions("Exhaust Power", "Draw Events")
+                .When.Hero.DrawsEvent("Evil Day")
+                .Then(Verify.Player.EventView
+                    .HasBody("Evil Day", 5, "Exhaust a power or draw 2 more events.")
+                    .HasOptions("Exhaust Power", "Draw Events"))
                 .When.Player.SelectsEventOption("Draw Events")
                 .Then(Verify.Hero.HasUnresolvedEvents(2));
         }
@@ -25,9 +26,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Given.Game.WithHero("Acolyte").HasPowers("Blinding Black", "Dark Veil", "False Life")
                 .Power("Dark Veil").IsExhausted()
                 .When.Hero.DrawsEvent("Evil Day")
-                .Then().Player.EventView.HasBody("Evil Day", 5, "Exhaust a power or draw 2 more events.").HasOptions("Exhaust Power", "Draw Events")
+                .Then(Verify.Player.EventView
+                    .HasBody("Evil Day", 5, "Exhaust a power or draw 2 more events.")
+                    .HasOptions("Exhaust Power", "Draw Events"))
                 .When.Player.SelectsEventOption("Exhaust Power")
-                .Then().Player.PowerSelectionView("Blinding Black", "False Life")
+                .Then(Verify.Player.PowerSelectionView("Blinding Black", "False Life"))
                 .When.Player.SelectsPower("False Life")
                 .Then(Verify.Power("False Life").IsExhausted());
         }
@@ -38,7 +41,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.WithHero("Acolyte").HasPowers()
                 .When.Hero.DrawsEvent("Evil Day")
-                .Then().Player.EventView.HasOptions("Draw Events");
+                .Then(Verify.Player.EventView.HasOptions("Draw Events"));
         }
     }
 }

@@ -18,11 +18,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.Darkness(0).WithHero("Acolyte").Secrecy(startingSecrecy).Grace(0)
                 .When.Hero.DrawsEvent("Altar")
-                .Then().Player.EventView.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")
+                .Then(Verify.Player.EventView.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll"))
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
-                .Then().Player.EventView.ActiveRow("Pure Altar", "You may spend 1 Secrecy to gain 1 Grace")
+                .Then(Verify.Player.EventView.ActiveRow("Pure Altar", "You may spend 1 Secrecy to gain 1 Grace"))
                 .Then(Verify.Hero.HasUnresolvedEvents(1).Grace(0).Secrecy(startingSecrecy))
-                .Then().Player.EventView.HasOptions(expectedOptions)
+                .Then(Verify.Player.EventView.HasOptions(expectedOptions))
                 .When.Player.SelectsEventOption(option)
                 .Then(Verify.Hero.Grace(expectedGrace).Secrecy(expectedSecrecy));
         }
@@ -39,9 +39,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.Darkness(0).WithHero("Acolyte").Grace(startingGrace)
                 .When.Hero.DrawsEvent("Altar")
-                .Then().Player.EventView.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")
+                .Then(Verify.Player.EventView.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll"))
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
-                .Then().Player.EventView.ActiveRow("Defiled Altar", "Spend 1 Grace or +1 Darkness").HasOptions(expectedOptions)
+                .Then(Verify.Player.EventView.ActiveRow("Defiled Altar", "Spend 1 Grace or +1 Darkness").HasOptions(expectedOptions))
                 .When.Player.SelectsEventOption(option)
                 .Then(Verify.Hero.Grace(expectedGrace))
                 .Then(Verify.Game.Darkness(expectedDarkness));
