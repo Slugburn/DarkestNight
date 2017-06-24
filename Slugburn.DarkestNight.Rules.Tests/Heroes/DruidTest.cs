@@ -37,7 +37,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario
                 .Given.Game.WithHero("Druid").HasPowers("Celerity", "Raven Form", "Wolf Form").At("Monastery")
-                .Given.Power("Wolf Form").IsActive()
+                .Power("Wolf Form").IsActive()
                 .When.Player.TakesAction("Celerity")
                 .Then(Verify.Power("Wolf Form").IsActive(false))
                 .When.Player.SelectsLocation("Village")

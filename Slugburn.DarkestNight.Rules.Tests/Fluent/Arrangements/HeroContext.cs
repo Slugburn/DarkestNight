@@ -48,5 +48,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             _hero.PowerDeck.AddRange(powers.Select(PowerFactory.Create));
             return this;
         }
+
+        public IPowerContext Power(string powerName)
+        {
+            var power = _hero.GetPower(powerName);
+            return new PowerContext(GetGame(), GetPlayer(), _hero, power );
+        }
     }
 }

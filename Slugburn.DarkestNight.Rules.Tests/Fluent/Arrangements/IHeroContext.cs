@@ -7,5 +7,7 @@
         IHeroContext Secrecy(int value);
         IHeroContext Grace(int value);
         IHeroContext PowerDeck(params string[] powers);
+
+        IPowerContext Power(string powerName);
     }
 }

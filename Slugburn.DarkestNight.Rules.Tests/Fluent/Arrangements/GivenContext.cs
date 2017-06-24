@@ -18,18 +18,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             return new LocationContext(base.GetGame(), GetPlayer(), space);
         }
 
-        public IPowerContext Power(string powerName)
-        {
-            var power = GetGame().GetPower(powerName);
-            return new PowerContext(GetGame(), GetPlayer(), power);
-        }
-
-        public IGiven ActingHero(Action<HeroContext> def)
+        public IHeroContext ActingHero()
         {
             var hero = base.GetGame().ActingHero;
-            var ctx = new HeroContext(GetGame(), GetPlayer(), hero);
-            def(ctx);
-            return this;
+            return new HeroContext(GetGame(), GetPlayer(), hero);
         }
     }
 }

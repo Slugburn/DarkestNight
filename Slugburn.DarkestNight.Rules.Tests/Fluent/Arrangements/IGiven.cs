@@ -7,8 +7,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
         IGameContext Game { get; }
 
         ILocationContext Location(string location);
-        IGiven ActingHero(Action<HeroContext> def = null);
-
-        IPowerContext Power(string powerName);
+        IHeroContext ActingHero();
     }
 }

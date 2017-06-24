@@ -201,7 +201,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         {
             var hero = _game.ActingHero;
             var power = hero.GetPower(powerName);
-            var context = new PowerContext(_game, _player, power);
+            var context = new PowerContext(_game, _player, hero, power);
             actions(context);
             return this;
         }

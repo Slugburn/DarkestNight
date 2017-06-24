@@ -54,7 +54,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Given.Game.WithHero("Acolyte")
                 .When.Hero.DrawsEvent("Latent Spell")
                 .When.Player.SelectsEventOption("Spend Grace", Fake.Rolls(5)).Then().Player.EventView.ActiveRow("Draw a power card")
-                .Given.ActingHero(h => h.PowerDeck("Leech Life"))
+                .Given.ActingHero().PowerDeck("Leech Life")
                 .When.Player.SelectsEventOption("Continue").Then().Player.PowerSelectionView("Leech Life")
                 .Then(Verify.Hero.LostSecrecy().LostGrace().HasPowers("Leech Life"));
         }

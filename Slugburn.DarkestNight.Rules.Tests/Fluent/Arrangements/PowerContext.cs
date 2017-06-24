@@ -4,12 +4,12 @@ using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 {
-    public class PowerContext : GivenContext, IPowerContext
+    public class PowerContext : HeroContext, IPowerContext
     {
         private readonly Hero _hero;
         private readonly IPower _power;
 
-        public PowerContext(Game game, FakePlayer player, IPower power) :base(game, player)
+        public PowerContext(Game game, FakePlayer player, Hero hero, IPower power) :base(game, player, hero)
         {
             _hero = game.ActingHero;
             _power = power;
