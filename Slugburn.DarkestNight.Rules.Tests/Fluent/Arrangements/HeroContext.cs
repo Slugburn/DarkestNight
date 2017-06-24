@@ -22,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             return this;
         }
 
-        public HeroContext Location(string location)
+        public HeroContext At(string location)
         {
             _hero.Location = location.ToEnum<Location>();
             return this;

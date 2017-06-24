@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             var roll = attackSucceeds ? new[] {1, 6} : new[] {3, 4};
             var expectedBlights = attackSucceeds ? new string[0] : new[] {"Corruption"};
             new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Animal Companion").Location("Village"))
+                .GivenHero("Druid", x => x.HasPowers("Animal Companion").At("Village"))
                 .GivenLocation("Village", x => x.Blight("Corruption"))
                 .WhenPlayerTakesAttackAction(x => x.Tactic("Animal Companion").Rolls(roll))
                 .ThenSpace("Village", x => x.Blights(expectedBlights))
@@ -26,7 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Camouflage()
         {
             new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Camouflage").Location("Village"))
+                .GivenHero("Druid", x => x.HasPowers("Camouflage").At("Village"))
                 .GivenLocation("Village", x => x.Blight("Skeletons"))
                 .WhenHero(h => h.Eludes(x => x.Tactic("Camouflage").Rolls(1, 6)))
                 .ThenHero(x => x.RolledNumberOfDice(2).LostGrace(0));
@@ -38,7 +38,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario
                 .Given.Game.WithHero("Druid", x => x
                     .HasPowers("Celerity", "Raven Form", "Wolf Form")
-                    .Location("Monastery")
+                    .At("Monastery")
                     .Power("Wolf Form", p => p.IsActive()))
                 .When.Player.TakesAction("Celerity")
                 .Then(Verify.Power("Wolf Form").IsActive(false))
@@ -53,7 +53,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Celerity_NoNewFormSelected()
         {
             TestScenario
-                .Given.Game.WithHero("Druid", x => x.HasPowers("Celerity").Location("Monastery"))
+                .Given.Game.WithHero("Druid", x => x.HasPowers("Celerity").At("Monastery"))
                 .When.Player.TakesAction("Celerity")
                 .When.Player.SelectsLocation("Village")
                 .Then(Verify.Hero.Location("Village").HasAvailableActions("Continue"))
@@ -97,7 +97,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void SpriteForm_DoesNotIgnoreBlightsWhenNecromancerIsPresent()
         {
             new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Sprite Form").Location("Ruins"))
+                .GivenHero("Druid", x => x.HasPowers("Sprite Form").At("Ruins"))
                 .GivenNecromancerLocation("Ruins")
                 .GivenPower("Sprite Form", x => x.IsActive())
                 .ThenHero(x => x.CanGainGrace(false).IsNotIgnoringBlights());
@@ -148,7 +148,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void TreeForm_Deactivate()
         {
             new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Tree Form").Grace(0).Location("Monastery"))
+                .GivenHero("Druid", x => x.HasPowers("Tree Form").Grace(0).At("Monastery"))
                 .GivenPower("Tree Form", x => x.IsActive())
                 .WhenPlayerTakesAction("Deactivate Form")
                 .WhenHero(x => x.StartsTurn())
@@ -189,7 +189,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Vines_Elude()
         {
             new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Vines").Location("Mountains"))
+                .GivenHero("Druid", x => x.HasPowers("Vines").At("Mountains"))
                 .GivenLocation("Mountains", x => x.Blight("Zombies"))
                 .WhenHero(h => h.Eludes(x => x.Tactic("Vines [Elude]").Rolls(1, 2, 3, 4)))
                 .ThenHero(x => x.RolledNumberOfDice(4))
@@ -200,7 +200,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Vines_Fight()
         {
             new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Vines").Location("Mountains"))
+                .GivenHero("Druid", x => x.HasPowers("Vines").At("Mountains"))
                 .GivenLocation("Mountains", x => x.Blight("Zombies"))
                 .WhenHero(h => h.Fights(x => x.Tactic("Vines [Fight]").Rolls(2, 3, 4, 5)))
                 .ThenHero(x => x.RolledNumberOfDice(4))

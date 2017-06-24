@@ -62,6 +62,7 @@
     <Compile Include="Events\SimpleEventsTest.cs" />
     <Compile Include="Events\SloppySearchTest.cs" />
     <Compile Include="Events\TwistOfFateTest.cs" />
+    <Compile Include="Events\UnfriendlyEyesTest.cs" />
     <Compile Include="Fakes\FakeDie.cs" />
     <Compile Include="Fakes\FakePlayer.cs" />
     <Compile Include="Fakes\FakeRollExtension.cs" />

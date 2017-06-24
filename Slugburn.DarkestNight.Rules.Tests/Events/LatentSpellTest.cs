@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void LatentSpell_NoEffect(int roll)
         {
             TestScenario
-                .Given.Game.WithHero(x => x.Location("Ruins"))
+                .Given.Game.WithHero(x => x.At("Ruins"))
                 .When.Hero.DrawsEvent("Latent Spell")
                 .When.Player.SelectsEventOption("Spend Grace", Fake.Rolls(roll))
                 .Then().Player.Event.ActiveRow("No effect")
@@ -63,7 +63,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void LatentSpell_Move()
         {
             TestScenario
-                .Given.Game.WithHero(x => x.Location("Ruins"))
+                .Given.Game.WithHero(x => x.At("Ruins"))
                 .When.Hero.DrawsEvent("Latent Spell")
                 .When.Player.SelectsEventOption("Spend Grace", Fake.Rolls(4)).Then().Player.Event.ActiveRow("Move to any other location")
                 .When.Player.SelectsEventOption("Continue")

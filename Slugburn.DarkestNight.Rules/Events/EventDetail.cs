@@ -13,6 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Events
 
         private string _text;
         private Func<Hero, int,int, bool> _rowSelector;
+        private Func<Hero, int> _indexSelector;
 
         private EventDetail(string name, int fate)
         {
@@ -32,16 +33,20 @@ namespace Slugburn.DarkestNight.Rules.Events
 
         public List<HeroEventOption> GetHeroEventOptions(Hero hero, int? rowIndex)
         {
+            // If we haven't been supplied an index, try to use the row index selector
+            if (rowIndex == null && _indexSelector != null)
+                rowIndex = _indexSelector(hero);
             if (rowIndex != null)
             {
+                // Find the matching row. If it has any options, use those
                 var row = _rows.SingleOrDefault(r => r.Min <= rowIndex.Value && rowIndex.Value <= r.Max);
-                if (row != null)
+                if (row != null && row.Options.Any())
                     return CreateHeroEventOptions(hero, row.Options);
             }
             if (_options.Any())
-            {
-                return CreateHeroEventOptions(hero, _options.Select(x=>x.Value));
-            }
+                return CreateHeroEventOptions(hero, _options.Select(x => x.Value));
+
+            // Create a default option if none are presented
             var defaultOption = new HeroEventOption {Code = "cont", Text = "Continue"};
             return new List<HeroEventOption> {defaultOption};
         }
@@ -154,6 +159,7 @@ namespace Slugburn.DarkestNight.Rules.Events
 
             public EventDetailCreation RowSelector(Func<Hero, int> func)
             {
+                _detail._indexSelector = func;
                 _detail._rowSelector= (hero, min, max) =>
                 {
                     var index = func(hero);
@@ -189,14 +195,16 @@ namespace Slugburn.DarkestNight.Rules.Events
 
         public HeroEvent GetHeroEvent(Hero hero)
         {
+            var rows = CreateHeroRows(hero);
+            var options = GetHeroEventOptions(hero, null);
             return new HeroEvent
             {
                 Name = Name,
                 Title = Name,
                 Fate = Fate,
                 Text = GetText(),
-                Rows = CreateHeroRows(hero),
-                Options = GetHeroEventOptions(hero, null),
+                Rows = rows,
+                Options = options,
                 IsIgnorable = Name != "Renewal"
             };
         }
