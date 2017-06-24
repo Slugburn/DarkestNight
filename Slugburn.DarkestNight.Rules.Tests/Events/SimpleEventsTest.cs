@@ -12,7 +12,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.Darkness(3).WithHero()
                 .When.Hero.DrawsEvent("Midnight")
-                .When.Player.SelectsEventOption("Continue").Then().Game.Darkness(4);
+                .Then().Player.EventView.HasBody("Midnight", 7, "+1 Darkness.")
+                .When.Player.SelectsEventOption("Continue")
+                .Then(Verify.Game.Darkness(4));
         }
 
         [TestCase]
@@ -21,8 +23,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.WithHero().DrawEvents(10)
                 .When.Hero.DrawsEvent("Renewal")
+                .Then().Player.EventView.HasBody("Renewal", 0, "Reshuffle the Event Deck and draw another card.")
                 .Then(Verify.Hero.HasUnresolvedEvents(1).CurrentEvent.CanBeIgnored(false))
-                .When.Player.SelectsEventOption("Continue").Then().Game.EventDeckIsReshuffled()
+                .When.Player.SelectsEventOption("Continue")
+                .Then(Verify.Game.EventDeckIsReshuffled())
                 .Then(Verify.Hero.HasUnresolvedEvents(1));
         }
     }

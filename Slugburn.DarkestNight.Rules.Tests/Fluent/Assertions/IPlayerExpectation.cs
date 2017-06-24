@@ -4,7 +4,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
     public interface IPlayerExpectation : IThen
     {
-        IPlayerEventExpectation Event { get; }
+        IPlayerEventExpectation EventView { get; }
         IPlayerExpectation SeesEvent(string title, string text, int fate, params string[] options);
         IPlayerExpectation SeesTarget(params string[] targetNames);
         IPlayerExpectation SeesTactics(params string[] tacticNames);

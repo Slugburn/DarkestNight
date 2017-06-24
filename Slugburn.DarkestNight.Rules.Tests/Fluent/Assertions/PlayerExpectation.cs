@@ -24,7 +24,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public IPlayerEventExpectation Event => new PlayerEventExpectation(GetGame(), GetPlayer());
+        public IPlayerEventExpectation EventView => new PlayerEventExpectation(GetGame(), GetPlayer());
 
         public IPlayerExpectation SeesTarget(params string[] targetNames)
         {

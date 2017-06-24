@@ -104,8 +104,10 @@
     <Compile Include="Fluent\Arrangements\TacticContext.cs" />
     <Compile Include="Fluent\Assertions\PowerVerification.cs" />
     <Compile Include="Fluent\Assertions\ThenContext.cs" />
+    <Compile Include="Fluent\GameVerification.cs" />
     <Compile Include="Fluent\ITestRoot.cs" />
     <Compile Include="Fluent\Fake.cs" />
+    <Compile Include="Fluent\LocationVerification.cs" />
     <Compile Include="Fluent\TestRoot.cs" />
     <Compile Include="Fluent\TestScenario.cs" />
     <Compile Include="Fluent\Verify.cs" />

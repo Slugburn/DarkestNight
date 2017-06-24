@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Given.Game.WithHero()
                 .When.Hero.DrawsEvent("Sloppy Search")
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
-                .Then().Player.Event.ActiveRow("No effect").HasOptions("No Effect")
+                .Then().Player.EventView.ActiveRow("No effect").HasOptions("No Effect")
                 .When.Player.SelectsEventOption("No Effect")
                 .Then(Verify.Hero.HasUnresolvedEvents(0));
         }
@@ -27,7 +27,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.WithHero()
                 .When.Hero.DrawsEvent("Sloppy Search")
-                .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll)).Then().Player.Event.ActiveRow("Spend 1 Grace or lose 1 Secrecy").HasOptions("Spend Grace", "Lose Secrecy")
+                .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll)).Then().Player.EventView.ActiveRow("Spend 1 Grace or lose 1 Secrecy").HasOptions("Spend Grace", "Lose Secrecy")
                 .When.Player.SelectsEventOption("Spend Grace")
                 .Then(Verify.Hero.LostGrace().HasUnresolvedEvents(0));
         }
@@ -51,9 +51,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.WithHero(h => h.Secrecy(0))
                 .When.Hero.DrawsEvent("Sloppy Search")
-                .Then().Player.Event.HasBody("Sloppy Search", 2, "Roll 1d and take the highest").HasOptions("Roll")
+                .Then().Player.EventView.HasBody("Sloppy Search", 2, "Roll 1d and take the highest").HasOptions("Roll")
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(6))
-                .Then().Player.Event.ActiveRow("Gain 1 Secrecy").HasOptions("Gain Secrecy")
+                .Then().Player.EventView.ActiveRow("Gain 1 Secrecy").HasOptions("Gain Secrecy")
                 .When.Player.SelectsEventOption("Gain Secrecy")
                 .Then(Verify.Hero.Secrecy(1).HasUnresolvedEvents(0));
         }
@@ -64,7 +64,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.WithHero(h => h.Grace(0))
                 .When.Hero.DrawsEvent("Sloppy Search")
-                .When.Player.SelectsEventOption("Roll", Fake.Rolls(1)).Then().Player.Event.ActiveRow("Spend 1 Grace or lose 1 Secrecy").HasOptions("Lose Secrecy");
+                .When.Player.SelectsEventOption("Roll", Fake.Rolls(1)).Then().Player.EventView.ActiveRow("Spend 1 Grace or lose 1 Secrecy").HasOptions("Lose Secrecy");
         }
     }
 }
