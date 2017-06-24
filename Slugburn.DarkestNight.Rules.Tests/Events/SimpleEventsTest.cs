@@ -9,25 +9,26 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         [TestCase]
         public void Midnight()
         {
-            new TestScenario()
-                .GivenHero()
-                .GivenDarkness(3)
-                .WhenHero(h => h.DrawsEvent("Midnight"))
-                .WhenPlayer(p => p.SelectsEventOption("Continue"))
-                .ThenDarkness(4);
+            TestScenario
+                .Given.Game(g => g.Hero())
+                .Given.Game(g => g.Darkness(3))
+                .When.Hero(h => h.DrawsEvent("Midnight"))
+                .When.Player(p => p.SelectsEventOption("Continue"))
+                .Then.Game(g => g.Darkness(4));
         }
 
         [TestCase]
         public void Renewal()
         {
-            new TestScenario()
-                .GivenHero()
-                .GivenEventsHaveBeenDrawn(10)
-                .WhenHero(h => h.DrawsEvent("Renewal"))
-                .ThenHero(h => h.Event(e => e.HasOutstanding(1).CanBeIgnored(false)))
-                .WhenPlayer(p => p.SelectsEventOption("Continue"))
-                .ThenEventDeckIsReshuffled()
-                .ThenHero(h => h.Event(e => e.HasOutstanding(1)));
+            TestScenario
+                .Given.Game(g => g.Hero())
+                .Given.Game(g => g.DrawEvents(10))
+                .When.Hero(h => h.DrawsEvent("Renewal"))
+                .Then.Hero(h => h.Event(e => e.HasOutstanding(1).CanBeIgnored(false)))
+                .When.Player(p => p.SelectsEventOption("Continue"))
+                .Then.Game(g => g.EventDeckIsReshuffled())
+                .Then.Hero(h => h.Event(e => e.HasOutstanding(1)));
         }
+
     }
 }

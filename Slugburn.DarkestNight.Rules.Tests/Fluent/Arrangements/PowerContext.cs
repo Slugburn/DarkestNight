@@ -1,7 +1,7 @@
 ﻿using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Powers;
 
-namespace Slugburn.DarkestNight.Rules.Tests.Fluent
+namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 {
     public class PowerContext
     {

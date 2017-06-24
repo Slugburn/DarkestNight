@@ -16,18 +16,18 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 ? new[] {"Spend Secrecy", "Continue"}
                 : new[] {"Continue"};
             const int roll = 4;
-            new TestScenario()
-                .GivenDarkness(0)
-                .GivenHero("Acolyte", x => x.Secrecy(startingSecrecy).Grace(0))
-                .WhenHero(x => x.DrawsEvent("Altar"))
-                .ThenPlayer(p => p.Event(e => e.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")))
-                .WhenPlayer(p => p.SelectsEventOption("Roll", x => x.Rolls(roll)))
-                .ThenPlayer(p => p.Event(e => e.ActiveRow("Pure Altar", "You may spend 1 Secrecy to gain 1 Grace")))
-                .ThenHero(h => h.Event(e => e.HasOutstanding(1).CanBeIgnored(false)).Grace(0).Secrecy(startingSecrecy))
-                .WhenPlayer(p => p.AcceptsRoll())
-                .ThenPlayer(p => p.Event(e => e.HasOptions(expectedOptions)))
-                .WhenPlayer(p => p.SelectsEventOption(option))
-                .ThenHero(h => h.Grace(expectedGrace).Secrecy(expectedSecrecy));
+            TestScenario
+                .Given.Game(g => g.Darkness(0).Hero("Acolyte", x => x.Secrecy(startingSecrecy).Grace(0)))
+                .When.Hero(x => x.DrawsEvent("Altar"))
+                .Then.Player(p => p.Event(e => e.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")))
+                .When.Player(p => p.SelectsEventOption("Roll", x => x.Rolls(roll)))
+                .Then.Player(p => p.Event(e => e.ActiveRow("Pure Altar", "You may spend 1 Secrecy to gain 1 Grace")))
+                .Then.Hero(h => h.Event(e => e.HasOutstanding(1).CanBeIgnored(false))
+                    .Grace(0).Secrecy(startingSecrecy))
+                .When.Player(p => p.AcceptsRoll())
+                .Then.Player(p => p.Event(e => e.HasOptions(expectedOptions)))
+                .When.Player(p => p.SelectsEventOption(option))
+                .Then.Hero(h => h.Grace(expectedGrace).Secrecy(expectedSecrecy));
         }
 
         [TestCase(1, "Spend Grace", 0, 0)]
@@ -39,18 +39,17 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 ? new[] { "Spend Grace", "+1 Darkness" }
                 : new[] { "+1 Darkness" };
             const int roll = 3;
-            new TestScenario()
-                .GivenDarkness(0)
-                .GivenHero("Acolyte", x => x.Grace(startingGrace))
-                .WhenHero(x => x.DrawsEvent("Altar"))
-                .ThenPlayer(p => p.Event(e => e.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")))
-                .WhenPlayer(p => p.SelectsEventOption("Roll", x => x.Rolls(roll)))
-                .ThenPlayer(p => p.Event(e => e.ActiveRow("Defiled Altar", "Spend 1 Grace or +1 Darkness")))
-                .WhenPlayer(p => p.AcceptsRoll())
-                .ThenPlayer(p => p.Event(e => e.HasOptions(expectedOptions)))
-                .WhenPlayer(p => p.SelectsEventOption(option))
-                .ThenHero(h => h.Grace(expectedGrace))
-                .ThenDarkness(expectedDarkness);
+            TestScenario
+                .Given.Game(g => g.Darkness(0).Hero("Acolyte", x => x.Grace(startingGrace)))
+                .When.Hero(x => x.DrawsEvent("Altar"))
+                .Then.Player(p => p.Event(e => e.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")))
+                .When.Player(p => p.SelectsEventOption("Roll", x => x.Rolls(roll)))
+                .Then.Player(p => p.Event(e => e.ActiveRow("Defiled Altar", "Spend 1 Grace or +1 Darkness")))
+                .When.Player(p => p.AcceptsRoll())
+                .Then.Player(p => p.Event(e => e.HasOptions(expectedOptions)))
+                .When.Player(p => p.SelectsEventOption(option))
+                .Then.Hero(h => h.Grace(expectedGrace))
+                .Then.Game(g => g.Darkness(expectedDarkness));
         }
     }
 }

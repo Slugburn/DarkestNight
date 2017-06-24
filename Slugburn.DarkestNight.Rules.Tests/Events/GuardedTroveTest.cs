@@ -11,67 +11,67 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         [TestCase("Elude")]
         public void Win(string tactic)
         {
-            new TestScenario()
-                .GivenHero()
-                .WhenHero(x => x.DrawsEvent("Guarded Trove"))
-                .WhenPlayer(p => p.SelectsEventOption("Continue"))
-                .ThenPlayer(p => p.Conflict(c => c.Target("Guarded Trove")))
-                .WhenPlayer(p => p.ResolvesConflict(c => c.Tactic(tactic).Target("Guarded Trove").Rolls(6)))
-                .GivenNextSearchResult(Find.Waystone)
-                .WhenPlayer(p => p.AcceptsRoll())
-                .ThenHero(h => h.LostSecrecy().HasItem("Waystone"));
+            TestScenario
+                .Given.Game(g => g.Hero())
+                .When.Hero(x => x.DrawsEvent("Guarded Trove"))
+                .When.Player(p => p.SelectsEventOption("Continue"))
+                .Then.Player(p => p.Conflict(c => c.Target("Guarded Trove")))
+                .When.Player(p => p.ResolvesConflict(c => c.Tactic(tactic).Target("Guarded Trove").Rolls(6)))
+                .Given.Game(g => g.NextSearchResult(Find.Waystone))
+                .When.Player(p => p.AcceptsRoll())
+                .Then.Hero(h => h.LostSecrecy().HasItem("Waystone"));
         }
 
         [Test]
         public void FailFight()
         {
-            new TestScenario()
-                .GivenHero()
-                .WhenHero(x => x.DrawsEvent("Guarded Trove"))
-                .WhenPlayer(p => p.SelectsEventOption("Continue"))
-                .ThenPlayer(p => p.Conflict(c => c.Target("Guarded Trove")))
-                .WhenPlayer(p => p.ResolvesConflict(c => c.Tactic("Fight").Target("Guarded Trove").Rolls(5)).AcceptsRoll())
-                .ThenHero(h => h.WasWounded());
+            TestScenario
+                .Given.Game(g => g.Hero())
+                .When.Hero(x => x.DrawsEvent("Guarded Trove"))
+                .When.Player(p => p.SelectsEventOption("Continue"))
+                .Then.Player(p => p.Conflict(c => c.Target("Guarded Trove")))
+                .When.Player(p => p.ResolvesConflict(c => c.Tactic("Fight").Target("Guarded Trove").Rolls(5)).AcceptsRoll())
+                .Then.Hero(h => h.WasWounded());
         }
 
         [Test]
         public void FailElude_LostSecrecy()
         {
-            new TestScenario()
-                .GivenHero()
-                .WhenHero(x => x.DrawsEvent("Guarded Trove"))
-                .WhenPlayer(p => p.SelectsEventOption("Continue"))
-                .ThenPlayer(p => p.Conflict(c => c.Target("Guarded Trove")))
-                .WhenPlayer(p => p.ResolvesConflict(c => c.Tactic("Elude").Target("Guarded Trove").Rolls(5)).AcceptsRoll())
-                .ThenPlayer(p => p.Event(e => e.HasOptions("Spend Secrecy", "Draw Event")))
-                .WhenPlayer(p => p.SelectsEventOption("Spend Secrecy"))
-                .ThenHero(h => h.LostSecrecy());
+            TestScenario
+                .Given.Game(g=>g.Hero())
+                .When.Hero(x => x.DrawsEvent("Guarded Trove"))
+                .When.Player(p => p.SelectsEventOption("Continue"))
+                .Then.Player(p => p.Conflict(c => c.Target("Guarded Trove")))
+                .When.Player(p => p.ResolvesConflict(c => c.Tactic("Elude").Target("Guarded Trove").Rolls(5)).AcceptsRoll())
+                .Then.Player(p => p.Event(e => e.HasOptions("Spend Secrecy", "Draw Event")))
+                .When.Player(p => p.SelectsEventOption("Spend Secrecy"))
+                .Then.Hero(h => h.LostSecrecy());
         }
 
         [Test]
         public void FailElude_DrawEvent()
         {
-            new TestScenario()
-                .GivenHero()
-                .WhenHero(x => x.DrawsEvent("Guarded Trove"))
-                .WhenPlayer(p => p.SelectsEventOption("Continue"))
-                .ThenPlayer(p => p.Conflict(c => c.Target("Guarded Trove")))
-                .WhenPlayer(p => p.ResolvesConflict(c => c.Tactic("Elude").Target("Guarded Trove").Rolls(5)).AcceptsRoll())
-                .ThenPlayer(p => p.Event(e => e.HasOptions("Spend Secrecy", "Draw Event")))
-                .WhenPlayer(p => p.SelectsEventOption("Draw Event"))
-                .ThenHero(h => h.Event(e => e.HasOutstanding(1)));
+            TestScenario
+                .Given.Game(g => g.Hero())
+                .When.Hero(x => x.DrawsEvent("Guarded Trove"))
+                .When.Player(p => p.SelectsEventOption("Continue"))
+                .Then.Player(p => p.Conflict(c => c.Target("Guarded Trove")))
+                .When.Player(p => p.ResolvesConflict(c => c.Tactic("Elude").Target("Guarded Trove").Rolls(5)).AcceptsRoll())
+                .Then.Player(p => p.Event(e => e.HasOptions("Spend Secrecy", "Draw Event")))
+                .When.Player(p => p.SelectsEventOption("Draw Event"))
+                .Then.Hero(h => h.Event(e => e.HasOutstanding(1)));
         }
 
         [Test]
         public void FailElude_NoSecrecy()
         {
-            new TestScenario()
-                .GivenHero(h=>h.Secrecy(0))
-                .WhenHero(x => x.DrawsEvent("Guarded Trove"))
-                .WhenPlayer(p => p.SelectsEventOption("Continue"))
-                .ThenPlayer(p => p.Conflict(c => c.Target("Guarded Trove")))
-                .WhenPlayer(p => p.ResolvesConflict(c => c.Tactic("Elude").Target("Guarded Trove").Rolls(5)).AcceptsRoll())
-                .ThenPlayer(p => p.Event(e => e.HasOptions("Draw Event")));
+            TestScenario
+                .Given.Game(g => g.Hero(h=>h.Secrecy(0)))
+                .When.Hero(x => x.DrawsEvent("Guarded Trove"))
+                .When.Player(p => p.SelectsEventOption("Continue"))
+                .Then.Player(p => p.Conflict(c => c.Target("Guarded Trove")))
+                .When.Player(p => p.ResolvesConflict(c => c.Tactic("Elude").Target("Guarded Trove").Rolls(5)).AcceptsRoll())
+                .Then.Player(p => p.Event(e => e.HasOptions("Draw Event")));
         }
     }
 }

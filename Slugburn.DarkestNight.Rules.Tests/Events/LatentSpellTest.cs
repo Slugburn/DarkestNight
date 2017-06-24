@@ -10,70 +10,70 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         [Test]
         public void LatentSpell_NoGrace()
         {
-            new TestScenario()
-                .GivenHero(h => h.Grace(0))
-                .WhenHero(h => h.DrawsEvent("Latent Spell"))
-                .ThenPlayer(p => p.Event(e => e.HasBody("Latent Spell", 2,
+            TestScenario
+                .Given.Game(g => g.Hero(h => h.Grace(0)))
+                .When.Hero(h => h.DrawsEvent("Latent Spell"))
+                .Then.Player(p => p.Event(e => e.HasBody("Latent Spell", 2,
                     "Lose 1 Secrecy. Then, spend 1 Grace or discard this event without further effect.\nRoll 1d and take the highest")
                     .HasOptions("Discard Event")))
-                .WhenPlayer(x => x.SelectsEventOption("Discard Event"))
-                .ThenHero(h => h.LostSecrecy().Grace(0));
+                .When.Player(x => x.SelectsEventOption("Discard Event"))
+                .Then.Hero(h => h.LostSecrecy().Grace(0));
         }
 
         [Test]
         public void LatentSpell_ChooseDiscardEvent()
         {
-            new TestScenario()
-                .GivenHero()
-                .WhenHero(h => h.DrawsEvent("Latent Spell"))
-                .ThenPlayer(p => p.Event(e => e.HasOptions("Spend Grace", "Discard Event")))
-                .WhenPlayer(x => x.SelectsEventOption("Discard Event"))
-                .ThenHero(h => h.LostSecrecy());
+            TestScenario
+                .Given.Game(g => g.Hero())
+                .When.Hero(h => h.DrawsEvent("Latent Spell"))
+                .Then.Player(p => p.Event(e => e.HasOptions("Spend Grace", "Discard Event")))
+                .When.Player(x => x.SelectsEventOption("Discard Event"))
+                .Then.Hero(h => h.LostSecrecy());
         }
 
         [Test]
         public void LatentSpell_DestroyBlight()
         {
-            new TestScenario()
-                .GivenHero()
-                .WhenHero(h => h.DrawsEvent("Latent Spell"))
-                .WhenPlayer(p => p.SelectsEventOption("Spend Grace", x => x.Rolls(6)))
-                .ThenPlayer(p => p.Event(e => e.ActiveRow("Destroy a blight of your choice anywhere on the board")))
-                .GivenLocation("Village", s => s.Blight("Confusion", "Vampire"))
-                .GivenLocation("Castle", s => s.Blight("Desecration"))
-                .WhenPlayer(p => p.SelectsEventOption("Continue"))
-                .ThenPlayer(p => p.Blights(b => b.Location("Village", "Confusion", "Vampire").Location("Castle", "Desecration")))
-                .WhenPlayer(p => p.SelectsBlight("Village", "Vampire"))
-                .ThenSpace("Village", l => l.Blights("Confusion"))
-                .ThenHero(h => h.LostSecrecy().LostGrace());
+            TestScenario
+                .Given.Game(g => g.Hero())
+                .When.Hero(h => h.DrawsEvent("Latent Spell"))
+                .When.Player(p => p.SelectsEventOption("Spend Grace", x => x.Rolls(6)))
+                .Then.Player(p => p.Event(e => e.ActiveRow("Destroy a blight of your choice anywhere on the board")))
+                .Given.Location("Village", s => s.Blight("Confusion", "Vampire"))
+                .Given.Location("Castle", s => s.Blight("Desecration"))
+                .When.Player(p => p.SelectsEventOption("Continue"))
+                .Then.Player(p => p.Blights(b => b.Location("Village", "Confusion", "Vampire").Location("Castle", "Desecration")))
+                .When.Player(p => p.SelectsBlight("Village", "Vampire"))
+                .Then.Location("Village", l => l.Blights("Confusion"))
+                .Then.Hero(h => h.LostSecrecy().LostGrace());
         }
 
         [Test]
         public void LatentSpell_DrawPower()
         {
-            new TestScenario()
-                .GivenHero("Acolyte")
-                .WhenHero(h => h.DrawsEvent("Latent Spell"))
-                .WhenPlayer(p => p.SelectsEventOption("Spend Grace", x => x.Rolls(5)))
-                .ThenPlayer(p => p.Event(e => e.ActiveRow("Draw a power card")))
-                .GivenActingHero(h => h.PowerDeck("Leech Life"))
-                .WhenPlayer(p => p.SelectsEventOption("Continue"))
-                .ThenPlayer(p => p.Powers("Leech Life"))
-                .ThenHero(p => p.LostSecrecy().LostGrace().Powers("Leech Life"));
+            TestScenario
+                .Given.Game(g => g.Hero("Acolyte"))
+                .When.Hero(h => h.DrawsEvent("Latent Spell"))
+                .When.Player(p => p.SelectsEventOption("Spend Grace", x => x.Rolls(5)))
+                .Then.Player(p => p.Event(e => e.ActiveRow("Draw a power card")))
+                .Given.ActingHero(h => h.PowerDeck("Leech Life"))
+                .When.Player(p => p.SelectsEventOption("Continue"))
+                .Then.Player(p => p.Powers("Leech Life"))
+                .Then.Hero(p => p.LostSecrecy().LostGrace().Powers("Leech Life"));
         }
 
         [Test]
         public void LatentSpell_Move()
         {
-            new TestScenario()
-                .GivenHero(x => x.Location("Ruins"))
-                .WhenHero(h => h.DrawsEvent("Latent Spell"))
-                .WhenPlayer(p => p.SelectsEventOption("Spend Grace", x => x.Rolls(4)))
-                .ThenPlayer(p => p.Event(e => e.ActiveRow("Move to any other location")))
-                .WhenPlayer(p => p.SelectsEventOption("Continue"))
-                .ThenPlayer(p => p.SelectingLocation("Monastery", "Mountains", "Castle", "Swamp", "Village", "Forest"))
-                .WhenPlayer(p => p.SelectsLocation("Monastery"))
-                .ThenHero(h => h.LostSecrecy().LostGrace().Location("Monastery"));
+            TestScenario
+                .Given.Game(g => g.Hero(x => x.Location("Ruins")))
+                .When.Hero(h => h.DrawsEvent("Latent Spell"))
+                .When.Player(p => p.SelectsEventOption("Spend Grace", x => x.Rolls(4)))
+                .Then.Player(p => p.Event(e => e.ActiveRow("Move to any other location")))
+                .When.Player(p => p.SelectsEventOption("Continue"))
+                .Then.Player(p => p.SelectingLocation("Monastery", "Mountains", "Castle", "Swamp", "Village", "Forest"))
+                .When.Player(p => p.SelectsLocation("Monastery"))
+                .Then.Hero(h => h.LostSecrecy().LostGrace().Location("Monastery"));
         }
 
         [TestCase(3)]
@@ -81,13 +81,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         [TestCase(1)]
         public void LatentSpell_NoEffect(int roll)
         {
-            new TestScenario()
-                .GivenHero(x => x.Location("Ruins"))
-                .WhenHero(h => h.DrawsEvent("Latent Spell"))
-                .WhenPlayer(p => p.SelectsEventOption("Spend Grace", x => x.Rolls(roll)))
-                .ThenPlayer(p => p.Event(e => e.ActiveRow("No effect")))
-                .WhenPlayer(p => p.SelectsEventOption("Continue"))
-                .ThenHero(h => h.LostSecrecy().LostGrace());
+            TestScenario
+                .Given.Game(g => g.Hero(x => x.Location("Ruins")))
+                .When.Hero(h => h.DrawsEvent("Latent Spell"))
+                .When.Player(p => p.SelectsEventOption("Spend Grace", x => x.Rolls(roll)))
+                .Then.Player(p => p.Event(e => e.ActiveRow("No effect")))
+                .When.Player(p => p.SelectsEventOption("Continue"))
+                .Then.Hero(h => h.LostSecrecy().LostGrace());
         }
     }
 }

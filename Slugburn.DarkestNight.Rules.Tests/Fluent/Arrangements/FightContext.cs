@@ -1,10 +1,9 @@
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
-using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
-namespace Slugburn.DarkestNight.Rules.Tests.Fluent
+namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 {
     public class FightContext : IFakeRollContext
     {

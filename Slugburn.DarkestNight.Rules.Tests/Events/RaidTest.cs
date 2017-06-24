@@ -15,17 +15,17 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void Raid(int blightCount, string rowText, int lostGrace, int lostSecrecy, int darkness)
         {
             var blights = Enumerable.Repeat("Lich", blightCount).ToArray();
-            new TestScenario()
-                .GivenHero(x => x.Location("Forest"))
-                .GivenLocation("Forest", x => x.Blight(blights))
-                .WhenHero(x => x.DrawsEvent("Raid"))
-                .ThenPlayer(p => p.Event(e => e
+            TestScenario
+                .Given.Game(g=>g.Hero(x => x.Location("Forest")))
+                .Given.Location("Forest", x => x.Blight(blights))
+                .When.Hero(x => x.DrawsEvent("Raid"))
+                .Then.Player(p => p.Event(e => e
                     .HasBody("Raid", 6, "Count the blights in your location")
                     .HasOptions("Continue")
                     .ActiveRow(rowText)))
-                .WhenPlayer(x => x.SelectsEventOption("Continue"))
-                .ThenHero(x => x.LostSecrecy(lostSecrecy).LostGrace(lostGrace))
-                .ThenDarkness(darkness);
+                .When.Player(x => x.SelectsEventOption("Continue"))
+                .Then.Hero(x => x.LostSecrecy(lostSecrecy).LostGrace(lostGrace))
+                .Then.Game(g => g.Darkness(darkness));
         }
     }
 }

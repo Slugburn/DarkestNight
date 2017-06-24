@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 
@@ -11,7 +12,11 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
         public void Resolve(Hero hero, string option)
         {
             var game = hero.Game;
-            game.Events = EventFactory.GetEventDeck().Shuffle();
+            // shuffle until Renewal is not the top card
+            do
+            {
+                game.Events = EventFactory.GetEventDeck().Shuffle();
+            } while (game.Events.First() == "Renewal");
             hero.DrawEvent();
         }
     }

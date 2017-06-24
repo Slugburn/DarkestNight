@@ -13,12 +13,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
         [TestCase(Find.Waystone, "Waystone")]
         public void FindItem(Find find, string itemName)
         {
-            new TestScenario()
-                .GivenHero("Acolyte", x => x.Location("Village"))
-                .GivenNextSearchResult(find)
-                .WhenPlayer(x => x.TakesAction("Search"))
-                .WhenPlayer(x=>x.AcceptsRoll())
-                .ThenHero(x => x.HasUsedAction().HasItem(itemName));
+            TestScenario
+                .Given.Game(g => g
+                    .Hero("Acolyte", x => x.Location("Village"))
+                    .NextSearchResult(find))
+                .When.Player(x => x.TakesAction("Search"))
+                .When.Player(x => x.AcceptsRoll())
+                .Then.Hero(x => x.HasUsedAction().HasItem(itemName));
         }
     }
 }

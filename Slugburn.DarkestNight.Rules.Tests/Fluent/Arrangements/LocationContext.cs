@@ -2,20 +2,20 @@
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
 
-namespace Slugburn.DarkestNight.Rules.Tests.Fluent
+namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 {
-    public class SpaceDefContext
+    public class LocationContext
     {
         private readonly ISpace _space;
 
-        public SpaceDefContext(ISpace space)
+        public LocationContext(ISpace space)
         {
             _space = space;
         }
 
-        public SpaceDefContext Blight(params string[] blights)
+        public LocationContext Blight(params string[] blights)
         {
-            foreach (var blight in blights.Select(b=>b.ToEnum<Blight>()))
+            foreach (var blight in blights.Select(b=>StringExtensions.ToEnum<Blight>(b)))
                 _space.AddBlight(blight);
             return this;
         }

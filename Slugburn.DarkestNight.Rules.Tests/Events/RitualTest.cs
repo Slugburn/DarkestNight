@@ -10,27 +10,26 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         [Test]
         public void Ritual_Cancel()
         {
-            new TestScenario()
-                .GivenHero(x => x.Location("Village"))
-                .WhenHero(h => h.DrawsEvent("Ritual"))
-                .ThenPlayer(p => p.Event(e => e.HasBody("Ritual", 0,
+            TestScenario
+                .Given.Game(g => g.Hero())
+                .When.Hero(h => h.DrawsEvent("Ritual"))
+                .Then.Player(p => p.Event(e => e.HasBody("Ritual", 0,
                         "You may spend 1 Grace and lose 1 Secrecy to cancel this event.\nCount the blights in your location")
                     .HasOptions("Cancel", "Continue")))
-                .WhenPlayer(p => p.SelectsEventOption("Cancel"))
-                .ThenHero(h => h.LostGrace().LostSecrecy().Event(e => e.HasOutstanding(0)));
+                .When.Player(p => p.SelectsEventOption("Cancel"))
+                .Then.Hero(h => h.LostGrace().LostSecrecy().Event(e => e.HasOutstanding(0)));
         }
 
         [Test]
         public void Ritual_NecromancerMoves()
         {
-            new TestScenario()
-                .GivenHero(x => x.Location("Village"))
-                .GivenNecromancerLocation("Ruins")
-                .WhenHero(h => h.DrawsEvent("Ritual"))
-                .ThenPlayer(p => p.Event(e => e.ActiveRow("Necromancer moves there").HasOptions("Cancel", "Continue")))
-                .WhenPlayer(p => p.SelectsEventOption("Continue"))
-                .ThenNecromancerLocation("Village")
-                .ThenHero(h => h.Event(e => e.HasOutstanding(0)));
+            TestScenario
+                .Given.Game(g => g.Hero().NecromancerLocation("Ruins"))
+                .When.Hero(h => h.DrawsEvent("Ritual"))
+                .Then.Player(p => p.Event(e => e.ActiveRow("Necromancer moves there").HasOptions("Cancel", "Continue")))
+                .When.Player(p => p.SelectsEventOption("Continue"))
+                .Then.Game(g => g.NecromancerLocation("Village"))
+                .Then.Hero(h => h.Event(e => e.HasOutstanding(0)));
         }
 
         [TestCase(1)]
@@ -39,17 +38,17 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             var blights = Enumerable.Repeat("Skeletons", blightCount).ToArray();
             var after = blights.Concat(new[] {"Desecration"}).ToArray();
-            new TestScenario()
-                .GivenHero(h => h.Location("Village"))
-                .GivenLocation("Village", l => l.Blight(blights))
-                .WhenHero(h => h.DrawsEvent("Ritual"))
-                .ThenPlayer(p => p.Event(e => e
+            TestScenario
+                .Given.Game(g=>g.Hero(h => h.Location("Village")))
+                .Given.Location("Village", l => l.Blight(blights))
+                .When.Hero(h => h.DrawsEvent("Ritual"))
+                .Then.Player(p => p.Event(e => e
                     .ActiveRow("New blight there")
                     .HasOptions("Cancel", "Continue")))
-                .GivenNextBlight("Desecration")
-                .WhenPlayer(p => p.SelectsEventOption("Continue"))
-                .ThenSpace("Village", x => x.Blights(after))
-                .ThenHero(h => h.Event(e => e.HasOutstanding(0)));
+                .Given.Game(g=>g.NextBlight("Desecration"))
+                .When.Player(p => p.SelectsEventOption("Continue"))
+                .Then.Location("Village", x => x.Blights(after))
+                .Then.Hero(h => h.Event(e => e.HasOutstanding(0)));
         }
 
         [TestCase(3)]
@@ -57,17 +56,17 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void Ritual_DarknessIncrease(int blightCount)
         {
             var blights = Enumerable.Repeat("Skeletons", blightCount).ToArray();
-            new TestScenario()
-                .GivenHero(h => h.Location("Village"))
-                .GivenDarkness(3)
-                .GivenLocation("Village", l => l.Blight(blights))
-                .WhenHero(h => h.DrawsEvent("Ritual"))
-                .ThenPlayer(p => p.Event(e => e
+            TestScenario
+                .Given.Game(g => g.Hero(h => h.Location("Village")))
+                .Given.Game(g => g.Darkness(3))
+                .Given.Location("Village", l => l.Blight(blights))
+                .When.Hero(h => h.DrawsEvent("Ritual"))
+                .Then.Player(p => p.Event(e => e
                     .ActiveRow("+1 Darkness")
                     .HasOptions("Cancel", "Continue")))
-                .WhenPlayer(p => p.SelectsEventOption("Continue"))
-                .ThenDarkness(4)
-                .ThenHero(h => h.Event(e => e.HasOutstanding(0)));
+                .When.Player(p => p.SelectsEventOption("Continue"))
+                .Then.Game(g => g.Darkness(4))
+                .Then.Hero(h => h.Event(e => e.HasOutstanding(0)));
         }
     }
 }

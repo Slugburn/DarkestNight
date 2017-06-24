@@ -13,7 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void BlindingBlack()
         {
             new TestScenario()
-                .GivenHero("Acolyte", x => x.Power("Blinding Black").Location("Swamp").Secrecy(0))
+                .GivenHero("Acolyte", x => x.HasPowers("Blinding Black").Location("Swamp").Secrecy(0))
                 .GivenNecromancerLocation("Castle")
                 .WhenNecromancerTakesTurn(x => x.Rolls(5), player => player.UsePower("Blinding Black"))
                 .ThenNecromancerLocation("Village")
@@ -25,7 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenLocation("Swamp", x => x.Blight("Skeletons", "Shades", "Lich"))
-                .GivenHero("Acolyte", x => x.Power("Call to Death").Location("Swamp"))
+                .GivenHero("Acolyte", x => x.HasPowers("Call to Death").Location("Swamp"))
                 .WhenPlayerTakesAttackAction(x=>x.Action("Call to Death").Target("Skeletons", "Lich").Rolls(5,6))
                 .WhenPlayerAssignsRolledDiceToBlights(Tuple.Create("Lich", 6), Tuple.Create("Skeletons", 5))
                 .ThenSpace("Swamp", x => x.Blights("Shades"))
@@ -37,7 +37,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenLocation("Swamp", x => x.Blight("Skeletons", "Shades"))
-                .GivenHero("Acolyte", x => x.Power("Call to Death", "Final Rest").Location("Swamp"))
+                .GivenHero("Acolyte", x => x.HasPowers("Call to Death", "Final Rest").Location("Swamp"))
                 .WhenPlayerTakesAttackAction(x => x.Action("Call to Death").Tactic("Final Rest (3 dice)").Target("Skeletons", "Shades").Rolls(5, 2, 3, 1))
                 .WhenPlayerAssignsRolledDiceToBlights(Tuple.Create("Shades", 5), Tuple.Create("Skeletons", 3))
                 .ThenSpace("Swamp", x => x.Blights("Skeletons"))
@@ -50,13 +50,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void DarkVeil_IgnoreBlightEffects()
         {
-            new TestScenario()
-                .GivenHero("Acolyte", x => x.Power("Dark Veil"))
-                .WhenPlayer(x=>x.TakesAction("Dark Veil"))
-                .ThenHero(x=>x.IsIgnoringBlights())
-                .ThenPower("Dark Veil", x => x.IsExhausted())
-                .WhenHero(x=>x.StartsTurn())
-                .ThenHero(x=>x.IsNotIgnoringBlights());
+            TestScenario
+                .Given.Game(g => g.Hero("Acolyte", x => x.HasPowers("Dark Veil")))
+                .When.Player(x => x.TakesAction("Dark Veil"))
+                .Then.Hero(x => x.IsIgnoringBlights().Power("Dark Veil", p => p.IsExhausted()))
+                .When.Hero(x => x.StartsTurn())
+                .Then.Hero(x => x.IsNotIgnoringBlights());
         }
 
         [Test]
@@ -64,7 +63,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenLocation("Swamp", x => x.Blight("Spies"))
-                .GivenHero("Acolyte", x => x.Power("Dark Veil").Location("Swamp"))
+                .GivenHero("Acolyte", x => x.HasPowers("Dark Veil").Location("Swamp"))
                 .WhenPlayerTakesAttackAction(player=>player.UsePower("Dark Veil").Rolls(1))
                 .ThenHero(x => x.HasUsedAction().LostSecrecy()) // loses Secrecy for making attack, but not for Spies defense
                 .ThenPower("Dark Veil", x => x.IsExhausted());
@@ -75,7 +74,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenLocation("Swamp", x => x.Blight("Spies"))
-                .GivenHero("Acolyte", x => x.Power("Death Mask").Location("Swamp"))
+                .GivenHero("Acolyte", x => x.HasPowers("Death Mask").Location("Swamp"))
                 .WhenPlayerTakesAttackAction(player=>player.Rolls(1))
                 .ThenHero(x => x.HasUsedAction().LostSecrecy()); // loses Secrecy for Spies defense, but not for making attack
         }
@@ -83,11 +82,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void DeathMask_IgnoreSecrecyLossForBeingInNecromancersLocation()
         {
-            new TestScenario()
-                .GivenHero("Acolyte", x => x.Power("Death Mask").Location("Swamp"))
-                .GivenNecromancerLocation("Swamp")
-                .WhenHero(x=>x.StartsTurn())
-                .ThenHero(x => x.LostSecrecy(0));
+            TestScenario
+                .Given.Game(g => g
+                    .NecromancerLocation("Swamp")
+                    .Hero("Acolyte", x => x.HasPowers("Death Mask").Location("Swamp")))
+                .When.Hero(h => h.StartsTurn())
+                .Then.Hero(h => h.LostSecrecy(0));
         }
 
         [TestCase(9,0)]
@@ -100,7 +100,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             var rolls = Enumerable.Repeat(6, expectedDice).ToArray();
             new TestScenario()
                 .GivenDarkness(darkness)
-                .GivenHero("Acolyte", x => x.Power("Fade to Black").Location("Monastery"))
+                .GivenHero("Acolyte", x => x.HasPowers("Fade to Black").Location("Monastery"))
                 .GivenLocation("Monastery", x => x.Blight("Skeletons"))
                 .WhenPlayerTakesAttackAction(x=>x.Rolls(rolls))
                 .ThenHero(x => x.FightDice(expectedDice).RolledNumberOfDice(expectedDice).HasUsedAction().LostSecrecy());
@@ -112,7 +112,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             var rolls = Enumerable.Repeat(6, 5).ToArray();
             new TestScenario()
                 .GivenDarkness(20)
-                .GivenHero("Acolyte", x => x.Power("Fade to Black", "Final Rest").Location("Monastery"))
+                .GivenHero("Acolyte", x => x.HasPowers("Fade to Black", "Final Rest").Location("Monastery"))
                 .GivenLocation("Monastery", x => x.Blight("Skeletons"))
                 .WhenPlayerTakesAttackAction(x=>x.Tactic("Final Rest (3 dice)").Rolls(rolls))
                 .ThenHero(x => x.FightDice(3).RolledNumberOfDice(5).HasUsedAction().LostSecrecy());
@@ -122,7 +122,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void FalseLife()
         {
             new TestScenario()
-                .GivenHero("Acolyte", x => x.Power("False Life").Location("Swamp").Grace(0))
+                .GivenHero("Acolyte", x => x.HasPowers("False Life").Location("Swamp").Grace(0))
                 .WhenHeroUsesBonusAction("Acolyte", "False Life")
                 .ThenHero(x => x.Grace(1))
                 .ThenPower("False Life", x => x.IsExhausted());
@@ -132,7 +132,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void FalseLife_NotUsableInMonastery()
         {
             new TestScenario()
-                .GivenHero("Acolyte", x => x.Power("False Life").Location("Monastery").Grace(0))
+                .GivenHero("Acolyte", x => x.HasPowers("False Life").Location("Monastery").Grace(0))
                 .ThenHero(x=>x.Grace(0).CanUsePower("False Life", false));
         }
 
@@ -144,27 +144,27 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void FalseLife_NotUsableWhenAtOrAboveDefaultGrace(int grace, bool usable)
         {
             new TestScenario()
-                .GivenHero("Acolyte", x => x.Power("False Life").Location("Swamp").Grace(grace))
+                .GivenHero("Acolyte", x => x.HasPowers("False Life").Location("Swamp").Grace(grace))
                 .ThenHero(x=>x.Grace(grace).CanUsePower("False Life", usable));
         }
 
         [Test]
         public void FalseLife_PreventsMovementToMonasteryWhileExhausted()
         {
-            new TestScenario()
-                .GivenHero("Acolyte", x => x.Power("False Life").Location("Village").Grace(2))
-                .ThenHero(x => x.Grace(2).CanMoveTo("Monastery"))
-                .WhenHeroUsesBonusAction("Acolyte", "False Life")
-                .ThenHero(x => x.CannotMoveTo("Monastery"))
-                .WhenHero(x => x.RefreshesPower("False Life"))
-                .ThenHero(x => x.CanMoveTo("Monastery"));
+            TestScenario
+                .Given.Game(g=>g.Hero("Acolyte", x => x.HasPowers("False Life").Location("Village").Grace(2)))
+                .Then.Hero(x => x.Grace(2).CanMoveTo("Monastery"))
+                .When.Player(p=>p.TakesAction("False Life"))
+                .Then.Hero(x => x.CannotMoveTo("Monastery"))
+                .When.Hero(x => x.RefreshesPower("False Life"))
+                .Then.Hero(x => x.CanMoveTo("Monastery"));
         }
 
         [Test]
         public void FalseOrders()
         {
             new TestScenario()
-                .GivenHero("Acolyte", x => x.Power("False Orders").Location("Village"))
+                .GivenHero("Acolyte", x => x.HasPowers("False Orders").Location("Village"))
                 .GivenLocation("Village", x => x.Blight("Confusion", "Corruption", "Shroud", "Skeletons"))
                 .GivenLocation("Monastery", x => x.Blight("Lich"))
                 .WhenPlayerTakesAction("False Orders",
@@ -179,7 +179,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void FalseOrders_CancelChooseLocation()
         {
             new TestScenario()
-                .GivenHero("Acolyte", x => x.Power("False Orders").Location("Village"))
+                .GivenHero("Acolyte", x => x.HasPowers("False Orders").Location("Village"))
                 .GivenLocation("Village", x => x.Blight("Confusion", "Corruption", "Shroud", "Skeletons"))
                 .GivenLocation("Monastery", x => x.Blight("Lich"))
                 .WhenPlayerTakesAction("False Orders", x => x.ChooseLocation(Location.None))
@@ -190,7 +190,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void FalseOrders_CancelChooseBlights()
         {
             new TestScenario()
-                .GivenHero("Acolyte", x => x.Power("False Orders").Location("Village"))
+                .GivenHero("Acolyte", x => x.HasPowers("False Orders").Location("Village"))
                 .GivenLocation("Village", x => x.Blight("Confusion", "Corruption", "Shroud", "Skeletons"))
                 .GivenLocation("Monastery", x => x.Blight("Lich"))
                 .WhenPlayerTakesAction("False Orders",
@@ -204,7 +204,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             var tacticName = $"Final Rest ({count} dice)";
             new TestScenario()
-                .GivenHero("Acolyte", x => x.Power("Final Rest").Location("Village").Grace(3).Secrecy(7))
+                .GivenHero("Acolyte", x => x.HasPowers("Final Rest").Location("Village").Grace(3).Secrecy(7))
                 .GivenLocation("Village", x => x.Blight("Corruption"))
                 .WhenPlayerTakesAttackAction(x=>x.Tactic(tacticName).Rolls(rolls))
                 .ThenSpace("Village", x => x.NoBlights())
@@ -216,7 +216,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenDarkness(0)
-                .GivenHero("Acolyte", x => x.Power("Forbidden Arts").Location("Village"))
+                .GivenHero("Acolyte", x => x.HasPowers("Forbidden Arts").Location("Village"))
                 .GivenLocation("Village", x => x.Blight("Confusion"))
                 .WhenPlayerTakesAction("Attack")
                 .WhenPlayerSelectsTactic(x=>x.Rolls(1))
@@ -231,7 +231,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void LeechLife()
         {
             new TestScenario()
-                .GivenHero("Acolyte", x => x.Power("Leech Life").Location("Village").Grace(1))
+                .GivenHero("Acolyte", x => x.HasPowers("Leech Life").Location("Village").Grace(1))
                 .GivenLocation("Village", x => x.Blight("Corruption"))
                 .WhenPlayerTakesAttackAction(x => x.Tactic("Leech Life").Rolls(1, 5, 6))
                 .ThenSpace("Village", x => x.NoBlights())
@@ -243,7 +243,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void LeechLife_NotUsableInMonastery()
         {
             new TestScenario()
-                .GivenHero("Acolyte", x => x.Power("Leech Life").Location("Monastery"))
+                .GivenHero("Acolyte", x => x.HasPowers("Leech Life").Location("Monastery"))
                 .ThenHero(x=>x.CanUsePower("Leech Life", false));
         }
 
@@ -251,7 +251,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void LeechLife_PreventsMovementToMonasteryWhileExhausted()
         {
             new TestScenario()
-                .GivenHero("Acolyte", x => x.Power("Leech Life").Location("Village"))
+                .GivenHero("Acolyte", x => x.HasPowers("Leech Life").Location("Village"))
                 .GivenPower("Leech Life", x=>x.IsExhausted())
                 .ThenHero(x => x.CannotMoveTo("Monastery"));
         }

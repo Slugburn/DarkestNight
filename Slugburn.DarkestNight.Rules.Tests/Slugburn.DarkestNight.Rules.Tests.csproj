@@ -64,21 +64,30 @@
     <Compile Include="Fakes\FakePlayer.cs" />
     <Compile Include="Fakes\FakeRollExtension.cs" />
     <Compile Include="Fakes\IFakeRollContext.cs" />
-    <Compile Include="Fluent\FightContext.cs" />
-    <Compile Include="Fluent\HeroActionContext.cs" />
-    <Compile Include="Fluent\HeroContext.cs" />
-    <Compile Include="Fluent\HeroEventExpectation.cs" />
-    <Compile Include="Fluent\HeroExpectation.cs" />
-    <Compile Include="Fluent\PlayerActionContext.cs" />
-    <Compile Include="Fluent\PlayerConflictExpectation.cs" />
-    <Compile Include="Fluent\PlayerEventExpectation.cs" />
-    <Compile Include="Fluent\PlayerExpectation.cs" />
-    <Compile Include="Fluent\PowerContext.cs" />
-    <Compile Include="Fluent\PowerExpectation.cs" />
-    <Compile Include="Fluent\ResolveConflictContext.cs" />
-    <Compile Include="Fluent\SpaceDefContext.cs" />
-    <Compile Include="Fluent\SpaceExpectation.cs" />
-    <Compile Include="Fluent\TacticContext.cs" />
+    <Compile Include="Fluent\Actions\GameActionContext.cs" />
+    <Compile Include="Fluent\Actions\IWhen.cs" />
+    <Compile Include="Fluent\Actions\When.cs" />
+    <Compile Include="Fluent\Arrangements\FightContext.cs" />
+    <Compile Include="Fluent\Actions\HeroActionContext.cs" />
+    <Compile Include="Fluent\Arrangements\GameContext.cs" />
+    <Compile Include="Fluent\Arrangements\Given.cs" />
+    <Compile Include="Fluent\Arrangements\HeroContext.cs" />
+    <Compile Include="Fluent\Arrangements\IGiven.cs" />
+    <Compile Include="Fluent\Assertions\GameExpectation.cs" />
+    <Compile Include="Fluent\Assertions\HeroEventExpectation.cs" />
+    <Compile Include="Fluent\Assertions\HeroExpectation.cs" />
+    <Compile Include="Fluent\Actions\PlayerActionContext.cs" />
+    <Compile Include="Fluent\Assertions\IThen.cs" />
+    <Compile Include="Fluent\Assertions\PlayerConflictExpectation.cs" />
+    <Compile Include="Fluent\Assertions\PlayerEventExpectation.cs" />
+    <Compile Include="Fluent\Assertions\PlayerExpectation.cs" />
+    <Compile Include="Fluent\Arrangements\PowerContext.cs" />
+    <Compile Include="Fluent\Assertions\PowerExpectation.cs" />
+    <Compile Include="Fluent\Arrangements\ResolveConflictContext.cs" />
+    <Compile Include="Fluent\Arrangements\LocationContext.cs" />
+    <Compile Include="Fluent\Assertions\LocationExpectation.cs" />
+    <Compile Include="Fluent\Arrangements\TacticContext.cs" />
+    <Compile Include="Fluent\Assertions\Then.cs" />
     <Compile Include="Fluent\TestScenario.cs" />
     <Compile Include="Heroes\AcolyteTest.cs" />
     <Compile Include="Heroes\DruidTest.cs" />
@@ -97,6 +106,7 @@
       <Name>Slugburn.DarkestNight.Rules</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

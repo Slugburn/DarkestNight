@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
+using Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Events
 {
@@ -17,7 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             var blights = Enumerable.Repeat("Desecration", blightCount).ToArray();
             TestEnemyGeneratorEvent("Black Banner", target,"Count the blights in your location", 4, 
-                scenario => scenario.GivenActingHero(x=>x.Location("Village")).GivenLocation("Village", x => x.Blight(blights)));
+                given => given.ActingHero(x=>x.Location("Village")).Location("Village", x => x.Blight(blights)));
         }
 
         [Test]
@@ -34,7 +35,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void DarkChampion(int darkness, string enemy)
         {
             TestEnemyGeneratorEvent("Dark Champion", enemy, "Compare to Darkness", 3,
-                scenario => scenario.GivenDarkness(darkness));
+                given => given.Game(g => g.Darkness(darkness)));
         }
 
         [TestCase(5, "Scout")]
@@ -45,7 +46,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void DeadServant(int secrecy, string enemy)
         {
             TestEnemyGeneratorEvent("Dead Servant", enemy, "Compare to Secrecy", 3,
-                scenario => scenario.GivenActingHero(x=>x.Secrecy(secrecy)));
+                given => given.ActingHero(x => x.Secrecy(secrecy)));
         }
 
         [TestCase(6, "Flying Demon")]
@@ -56,14 +57,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void Demon(int secrecy, string enemy)
         {
             TestEnemyGeneratorEvent("Demon", enemy, "Compare to Secrecy", 3,
-                scenario => scenario.GivenActingHero(x=>x.Secrecy(secrecy)));
+                given => given.ActingHero(x=>x.Secrecy(secrecy)));
         }
 
-        [Test]
-        [Ignore("Has own text fixture")]
-        public void GuardedTrove()
-        {
-        }
+        //
+        // GuardedTrove has its own test fixture
+        //
 
         [TestCase(4, "Small Horde")]
         [TestCase(3, "Large Horde")]
@@ -73,7 +72,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void Horde(int secrecy, string enemy)
         {
             TestEnemyGeneratorEvent("Horde", enemy, "Compare to Secrecy", 3,
-                scenario => scenario.GivenActingHero(x => x.Secrecy(secrecy)));
+                given => given.ActingHero(x => x.Secrecy(secrecy)));
         }
 
         [Test]
@@ -96,7 +95,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void Patrols(int darkness, string enemy)
         {
             TestEnemyGeneratorEvent("Patrols", enemy, "Compare to Darkness", 4,
-                scenario => scenario.GivenDarkness(darkness));
+                given => given.Game(x => x.Darkness(darkness)));
         }
 
         [TestCase(6, "Zombie")]
@@ -107,7 +106,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void ShamblingHorror(int secrecy, string enemy)
         {
             TestEnemyGeneratorEvent("Shambling Horror", enemy, "Compare to Secrecy", 4,
-                scenario => scenario.GivenActingHero(x => x.Secrecy(secrecy)));
+                given => given.ActingHero(x => x.Secrecy(secrecy)));
         }
 
         [Test]
@@ -124,7 +123,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void VengefulSpirit(int secrecy, string enemy)
         {
             TestEnemyGeneratorEvent("Vengeful Spirit", enemy, "Compare to Secrecy", 4,
-                scenario => scenario.GivenActingHero(x => x.Secrecy(secrecy)));
+                given => given.ActingHero(x => x.Secrecy(secrecy)));
         }
 
         [Test]
@@ -138,17 +137,17 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestEnemyGeneratorEvent(eventName, enemy, null, expectedFate, null);
         }
 
-        private static void TestEnemyGeneratorEvent(string eventName, string enemy, string text, int expectedFate, Func<TestScenario, TestScenario> designator)
+        private static void TestEnemyGeneratorEvent(string eventName, string enemy, string text, int expectedFate, Func<IGiven, IGiven> designator)
         {
             designator = designator ?? (s=>s);
-            new TestScenario()
-                .GivenHero("Acolyte", x => x.Location("Village"))
-                .Configure(designator)
-                .WhenHero(x => x.DrawsEvent(eventName))
-                .ThenPlayer(x => x.SeesEvent(eventName, text, expectedFate, "Continue"))
-                .WhenPlayer(x => x.SelectsEventOption("Continue"))
-                .ThenHero(x => x.Event(e=>e.HasOutstanding(0)).Secrecy(null))
-                .ThenPlayer(x => x.SeesTarget(enemy));
+            TestScenario
+                .Given.Game(g=>g.Hero("Acolyte", x => x.Location("Village")))
+                .Given.Configure(designator)
+                .When.Hero(x => x.DrawsEvent(eventName))
+                .Then.Player(x => x.SeesEvent(eventName, text, expectedFate, "Continue"))
+                .When.Player(x => x.SelectsEventOption("Continue"))
+                .Then.Hero(x => x.Event(e=>e.HasOutstanding(0)).Secrecy(null))
+                .Then.Player(x => x.SeesTarget(enemy));
         }
     }
 }

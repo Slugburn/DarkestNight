@@ -1,9 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Powers;
 
-namespace Slugburn.DarkestNight.Rules.Tests.Fluent
+namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 {
     public class HeroContext
     {
@@ -14,7 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             _hero = hero;
         }
 
-        public HeroContext Power(params string[] names)
+        public HeroContext HasPowers(params string[] names)
         {
             foreach (var name in names)
                 _hero.LearnPower(name);
@@ -43,6 +44,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         {
             _hero.PowerDeck.Clear();
             _hero.PowerDeck.AddRange(powers.Select(PowerFactory.Create));
+            return this;
+        }
+
+        public HeroContext Power(string powerName, Action<PowerContext> action)
+        {
+            var power = _hero.GetPower(powerName);
+            var context = new PowerContext(_hero, power);
+            action(context);
             return this;
         }
     }

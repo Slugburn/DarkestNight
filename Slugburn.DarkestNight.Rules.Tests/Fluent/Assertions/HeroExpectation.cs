@@ -8,7 +8,7 @@ using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
 
-namespace Slugburn.DarkestNight.Rules.Tests.Fluent
+namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
     public class HeroExpectation
     {
@@ -284,6 +284,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         public HeroExpectation Event(Action<HeroEventExpectation> expect)
         {
             expect(_eventExpectation);
+            return this;
+        }
+
+        public HeroExpectation Power(string powerName, Action<PowerExpectation> expect)
+        {
+            var power = _hero.GetPower(powerName);
+            var expectation = new PowerExpectation(power);
+            expect(expectation);
+            expectation.Verify();
             return this;
         }
     }

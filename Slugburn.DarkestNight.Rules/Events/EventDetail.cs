@@ -36,7 +36,7 @@ namespace Slugburn.DarkestNight.Rules.Events
             {
                 var row = _rows.SingleOrDefault(r => r.Min <= rowIndex.Value && rowIndex.Value <= r.Max);
                 if (row != null)
-                    return CreateHeroEventOptions(hero, row._options);
+                    return CreateHeroEventOptions(hero, row.Options);
             }
             if (_options.Any())
             {
@@ -147,7 +147,7 @@ namespace Slugburn.DarkestNight.Rules.Events
 
                 public EventRowCreation Option(string code, string text, Func<Hero, bool> condition = null)
                 {
-                    _row._options.Add(new EventOption(code, text, condition));
+                    _row.Options.Add(new EventOption(code, text, condition));
                     return this;
                 }
             }
@@ -179,7 +179,7 @@ namespace Slugburn.DarkestNight.Rules.Events
 
         internal class EventRow
         {
-            public readonly List<EventOption> _options = new List<EventOption>();
+            public List<EventOption> Options { get; } = new List<EventOption>();
 
             public int Min { get; set; }
             public int Max { get; set; }
@@ -197,7 +197,7 @@ namespace Slugburn.DarkestNight.Rules.Events
                 Text = GetText(),
                 Rows = CreateHeroRows(hero),
                 Options = GetHeroEventOptions(hero, null),
-                IsIgnorable = Fate > 0
+                IsIgnorable = Name != "Renewal"
             };
         }
     }

@@ -4,14 +4,14 @@ using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
 
-namespace Slugburn.DarkestNight.Rules.Tests.Fluent
+namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
-    public class SpaceExpectation
+    public class LocationExpectation
     {
         private readonly ISpace _space;
         private readonly List<Blight> _expectedBlights = new List<Blight>();
 
-        public SpaceExpectation(ISpace space)
+        public LocationExpectation(ISpace space)
         {
             _space = space;
         }
@@ -21,15 +21,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             Assert.That(_space.Blights, Is.EquivalentTo(_expectedBlights), "Unexpected Blights");
         }
 
-        public SpaceExpectation NoBlights()
+        public LocationExpectation NoBlights()
         {
             _expectedBlights.Clear();
             return this;
         }
 
-        public SpaceExpectation Blights(params string[] blights)
+        public LocationExpectation Blights(params string[] blights)
         {
-            _expectedBlights.AddRange(blights.Select(x=>x.ToEnum<Blight>()));
+            _expectedBlights.AddRange(blights.Select(x=>StringExtensions.ToEnum<Blight>(x)));
             return this;
         }
     }

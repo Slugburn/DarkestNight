@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Shouldly;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Maps;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
-using Slugburn.DarkestNight.Rules.Tests.Heroes;
+using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
+using Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements;
+using Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 {
@@ -19,23 +19,32 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         private readonly Game _game;
         private readonly FakePlayer _player;
 
+        static TestScenario()
+        {
+            Die.Implementation = new FakeDie();
+        }
+
         public TestScenario()
         {
             _game = new Game();
             _player = new FakePlayer(_game);
-            Die.Implementation = new FakeDie();
             _game.AddPlayer(_player);
+        }
+
+        public static Given Given => CreateRootGiven();
+
+        private static Given CreateRootGiven()
+        {
+            var game = new Game();
+            var player = new FakePlayer(game);
+            game.AddPlayer(player);
+            var given = new Given(game, player);
+            return given;
         }
 
         public TestScenario GivenHero(string name, Action<HeroContext> def = null) 
         {
             AddHero(HeroFactory.Create(name), def);
-            return this;
-        }
-
-        public TestScenario GivenHero(Action<HeroContext> def = null)
-        {
-            AddHero(GenericHeroFactory.Create(),def);
             return this;
         }
 
@@ -46,14 +55,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             def?.Invoke(ctx);
             _game.ActingHero = hero;
             _player.ActiveHero = hero.Name;
-        }
-
-        public TestScenario GivenActingHero(Action<HeroContext> def)
-        {
-            var hero = _game.ActingHero;
-            var ctx = new HeroContext(hero);
-            def(ctx);
-            return this;
         }
 
         public TestScenario GivenNecromancerLocation(string location)
@@ -85,18 +86,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public TestScenario GivenLocation(string location, Action<SpaceDefContext> def)
+        public TestScenario GivenLocation(string location, Action<LocationContext> def)
         {
             var space = _game.Board[location.ToEnum<Location>()];
-            var context = new SpaceDefContext(space);
+            var context = new LocationContext(space);
             def(context);
             return this;
-        }
-
-        public TestScenario ThenHero(string heroName, Action<HeroExpectation> expect)
-        {
-            var hero = _game.GetHero(heroName);
-            return ThenHero(hero, expect);
         }
 
         public TestScenario ThenHero(Action<HeroExpectation> expect)
@@ -121,10 +116,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public TestScenario ThenSpace(string location, Action<SpaceExpectation> define)
+        public TestScenario ThenSpace(string location, Action<LocationExpectation> define)
         {
             var space = _game.Board[location.ToEnum<Location>()];
-            var expectation = new SpaceExpectation(space);
+            var expectation = new LocationExpectation(space);
             define(expectation);
             expectation.Verify();
             return this;
@@ -220,54 +215,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public TestScenario WhenBlightIsDestroyed(string location, string blight)
-        {
-            _game.DestroyBlight(location.ToEnum<Location>(), blight.ToEnum<Blight>());
-            return this;
-        }
-
         public TestScenario WhenHero(Action<HeroActionContext> action)
         {
             var context = new HeroActionContext(_game.ActingHero);
             action(context);
-            return this;
-        }
-
-        public TestScenario WhenPlayer(Action<PlayerActionContext> action)
-        {
-            var context = new PlayerActionContext(_player);
-            action(context);
-            return this;
-        }
-
-        public TestScenario Configure(Func<TestScenario, TestScenario> setConditions)
-        {
-            return setConditions(this);
-        }
-
-        public TestScenario GivenNextSearchResult(Find result)
-        {
-            _game.Maps.Insert(0, new Map(new Blight[7], Enumerable.Repeat(result, 6).ToArray()));
-            return this;
-        }
-
-        public TestScenario ThenEventDeckIsReshuffled()
-        {
-            _game.Events.Count.ShouldBe(33);
-            return this;
-        }
-
-        public TestScenario GivenEventsHaveBeenDrawn(int count)
-        {
-            var drawnCards = _game.Events.Except(new[] {"Renewal"}).Take(count).ToList();
-            drawnCards.ForEach(c => _game.Events.Remove(c));
-            return this;
-        }
-
-        public TestScenario GivenNextBlight(string blightName)
-        {
-            var blight = blightName.ToEnum<Blight>();
-            _game.Maps.Insert(0, new Map(Enumerable.Repeat(blight, 7).ToArray(), new Find[6]));
             return this;
         }
     }

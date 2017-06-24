@@ -16,14 +16,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         [TestCase(1, "Lose 1 Grace", 0, 1)]
         public void CloseCall(int roll, string effect, int lostSecrecy, int lostGrace)
         {
-            new TestScenario()
-                .GivenHero("Acolyte")
-                .WhenHero(x => x.DrawsEvent("Close Call"))
-                .ThenPlayer(p => p.Event(e => e.HasBody("Close Call", 4, "Roll 1d and take the highest").HasOptions("Roll")))
-                .WhenPlayer(p => p.SelectsEventOption("Roll", x => x.Rolls(roll)))
-                .ThenPlayer(p => p.Event(e => e.ActiveRow(effect)))
-                .WhenPlayer(p => p.SelectsEventOption("Continue"))
-                .ThenHero(h => h.LostSecrecy(lostSecrecy).LostGrace(lostGrace));
+            TestScenario
+                .Given.Game(g => g.Hero())
+                .When.Hero(x => x.DrawsEvent("Close Call"))
+                .Then.Player(p => p.Event(e => e.HasBody("Close Call", 4, "Roll 1d and take the highest").HasOptions("Roll")))
+                .When.Player(p => p.SelectsEventOption("Roll", x => x.Rolls(roll)))
+                .Then.Player(p => p.Event(e => e.ActiveRow(effect)))
+                .When.Player(p => p.SelectsEventOption("Continue"))
+                .Then.Hero(h => h.LostSecrecy(lostSecrecy).LostGrace(lostGrace));
         }
     }
 }

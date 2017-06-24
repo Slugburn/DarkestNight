@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Shouldly;
 using Slugburn.DarkestNight.Rules.Players.Models;
 
-namespace Slugburn.DarkestNight.Rules.Tests.Fluent
+namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
     public class PlayerEventExpectation
     {
