@@ -15,7 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         public PlayerConflictExpectation Target(params string[] names)
         {
-            _conflict.Targets.Select(x=>x.Name).ShouldBe(names);
+            _conflict.Targets.Select(x => x.Name).ShouldBe(names);
             return this;
         }
     }

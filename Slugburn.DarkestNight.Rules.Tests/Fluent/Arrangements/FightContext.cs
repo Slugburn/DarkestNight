@@ -9,8 +9,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
     {
         private readonly FakePlayer _player;
         private string _action;
-        private string[] _targets;
         private string _tactic;
+        private string[] _targets;
 
         public FightContext(FakePlayer player, Hero hero)
         {

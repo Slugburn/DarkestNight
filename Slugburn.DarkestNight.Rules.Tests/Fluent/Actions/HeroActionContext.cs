@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
     {
         private readonly Hero _hero;
 
-        public HeroActionContext(Game game, FakePlayer player) :base (game, player)
+        public HeroActionContext(Game game, FakePlayer player) : base(game, player)
         {
             _hero = game.ActingHero;
         }

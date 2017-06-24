@@ -9,7 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
 {
     public class PlayerActionContext : When, IPlayerActionContext
     {
-        public PlayerActionContext(Game game, FakePlayer player) :base(game, player)
+        public PlayerActionContext(Game game, FakePlayer player) : base(game, player)
         {
         }
 
@@ -28,7 +28,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
 
         public IPlayerActionContext ChoosesBlight(params string[] blights)
         {
-            _player.SetBlightChoice(blights.Select(x=>StringExtensions.ToEnum<Blight>(x)).ToArray());
+            _player.SetBlightChoice(blights.Select(x => x.ToEnum<Blight>()).ToArray());
             return this;
         }
 

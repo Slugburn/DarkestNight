@@ -6,8 +6,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
     public class HeroEventExpectation
     {
         private readonly Hero _hero;
-        private bool _expectIsIgnorable = true;
         private int _expectedOutstandingEvents;
+        private bool _expectIsIgnorable = true;
 
         public HeroEventExpectation(Hero hero)
         {

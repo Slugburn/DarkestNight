@@ -8,8 +8,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
     public class LocationExpectation
     {
-        private readonly ISpace _space;
         private readonly List<Blight> _expectedBlights = new List<Blight>();
+        private readonly ISpace _space;
 
         public LocationExpectation(ISpace space)
         {
@@ -29,7 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         public LocationExpectation Blights(params string[] blights)
         {
-            _expectedBlights.AddRange(blights.Select(x=>StringExtensions.ToEnum<Blight>(x)));
+            _expectedBlights.AddRange(blights.Select(x => x.ToEnum<Blight>()));
             return this;
         }
     }

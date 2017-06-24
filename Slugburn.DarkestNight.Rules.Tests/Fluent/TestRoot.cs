@@ -11,7 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         protected readonly Game _game;
         protected readonly FakePlayer _player;
 
-        public TestRoot(Game game , FakePlayer player)
+        public TestRoot(Game game, FakePlayer player)
         {
             _game = game;
             _player = player;
@@ -25,6 +25,5 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         {
             return setConditions(Given);
         }
-
     }
 }

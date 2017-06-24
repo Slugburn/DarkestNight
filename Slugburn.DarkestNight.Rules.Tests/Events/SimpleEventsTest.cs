@@ -27,6 +27,5 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Then.Game(g => g.EventDeckIsReshuffled())
                 .Then.Hero(h => h.Event(e => e.HasOutstanding(1)));
         }
-
     }
 }

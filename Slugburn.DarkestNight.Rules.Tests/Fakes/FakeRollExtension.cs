@@ -9,6 +9,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             var die = (FakeDie) Die.Implementation;
             die.AddUpcomingRolls(upcomingRolls);
             return context;
-        } 
+        }
     }
 }

@@ -5,7 +5,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
 {
     public class GameActionContext
     {
-        private Game _game;
+        private readonly Game _game;
 
         public GameActionContext(Game _game)
         {

@@ -19,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WhenPlayerTakesAttackAction(x => x.Tactic("Animal Companion").Rolls(roll))
                 .ThenSpace("Village", x => x.Blights(expectedBlights))
                 .ThenHero(x => x.RolledNumberOfDice(2).HasUsedAction().LostSecrecy())
-                .ThenPower("Animal Companion", x=>x.IsExhausted(!attackSucceeds));
+                .ThenPower("Animal Companion", x => x.IsExhausted(!attackSucceeds));
         }
 
         [Test]
@@ -84,28 +84,17 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenHero("Druid", x => x.HasPowers("Raven Form"))
                 .GivenPower("Raven Form", x => x.IsActive())
                 .WhenPlayerTakesAction("Deactivate Form")
-                .ThenHero(x=>x.TravelSpeed(1).SearchDice(1).HasUsedAction());
+                .ThenHero(x => x.TravelSpeed(1).SearchDice(1).HasUsedAction());
         }
 
         [Test]
-        public void SpriteFormActivated()
-        {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Sprite Form", "Raven Form"))
-                .GivenPower("Raven Form", x => x.IsActive())
-                .WhenPlayerTakesAction("Sprite Form")
-                .ThenHero(x=>x.CanGainGrace(false).HasUsedAction())
-                .ThenPower("Sprite Form", x => x.IsActive())
-                .ThenPower("Raven Form", x => x.IsActive(false));
-        }
-
-        [Test]
-        public void SpriteForm_IgnoreBlightsWhileActive()
+        public void SpriteForm_Deactivate()
         {
             new TestScenario()
                 .GivenHero("Druid", x => x.HasPowers("Sprite Form"))
-                .GivenPower("Sprite Form", x=>x.IsActive())
-                .ThenHero(x=>x.CanGainGrace(false).IsIgnoringBlights());
+                .GivenPower("Sprite Form", x => x.IsActive())
+                .WhenPlayerTakesAction("Deactivate Form")
+                .ThenHero(x => x.IsNotIgnoringBlights().HasUsedAction());
         }
 
         [Test]
@@ -119,13 +108,24 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         }
 
         [Test]
-        public void SpriteForm_Deactivate()
+        public void SpriteForm_IgnoreBlightsWhileActive()
         {
             new TestScenario()
                 .GivenHero("Druid", x => x.HasPowers("Sprite Form"))
                 .GivenPower("Sprite Form", x => x.IsActive())
-                .WhenPlayerTakesAction("Deactivate Form")
-                .ThenHero(x => x.IsNotIgnoringBlights().HasUsedAction());
+                .ThenHero(x => x.CanGainGrace(false).IsIgnoringBlights());
+        }
+
+        [Test]
+        public void SpriteFormActivated()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.HasPowers("Sprite Form", "Raven Form"))
+                .GivenPower("Raven Form", x => x.IsActive())
+                .WhenPlayerTakesAction("Sprite Form")
+                .ThenHero(x => x.CanGainGrace(false).HasUsedAction())
+                .ThenPower("Sprite Form", x => x.IsActive())
+                .ThenPower("Raven Form", x => x.IsActive(false));
         }
 
         [Test]
@@ -149,13 +149,24 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         }
 
         [Test]
+        public void TreeForm_Deactivate()
+        {
+            new TestScenario()
+                .GivenHero("Druid", x => x.HasPowers("Tree Form").Grace(0).Location("Monastery"))
+                .GivenPower("Tree Form", x => x.IsActive())
+                .WhenPlayerTakesAction("Deactivate Form")
+                .WhenHero(x => x.StartsTurn())
+                .ThenHero(x => x.Grace(0).HasAvailableActions("Travel", "Hide", "Pray", "Tree Form"));
+        }
+
+        [Test]
         public void TreeForm_GainTwoGraceAtStartOfTurn()
         {
             new TestScenario()
                 .GivenHero("Druid", x => x.HasPowers("Tree Form").Grace(0))
                 .GivenPower("Tree Form", x => x.IsActive())
-                .WhenHero(x=>x.StartsTurn())
-                .ThenHero(x=>x.Grace(2));
+                .WhenHero(x => x.StartsTurn())
+                .ThenHero(x => x.Grace(2));
         }
 
         [Test]
@@ -174,30 +185,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             new TestScenario()
                 .GivenHero("Druid", x => x.HasPowers("Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form"))
                 .GivenPower("Tree Form", x => x.IsActive())
-                .WhenHero(x=>x.StartsTurn())
-                .ThenHero(x=>x.HasAvailableActions("Hide", "Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form"));
-        }
-
-        [Test]
-        public void TreeForm_Deactivate()
-        {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Tree Form").Grace(0).Location("Monastery"))
-                .GivenPower("Tree Form", x => x.IsActive())
-                .WhenPlayerTakesAction("Deactivate Form")
-                .WhenHero(x=>x.StartsTurn())
-                .ThenHero(x => x.Grace(0).HasAvailableActions("Travel", "Hide", "Pray", "Tree Form"));
-        }
-
-        [Test]
-        public void Vines_Fight()
-        {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Vines").Location("Mountains"))
-                .GivenLocation("Mountains", x => x.Blight("Zombies"))
-                .WhenHero(h => h.Fights(x=>x.Tactic("Vines [Fight]").Rolls(2, 3, 4, 5)))
-                .ThenHero(x=>x.RolledNumberOfDice(4))
-                .ThenPower("Vines", x => x.IsExhausted());
+                .WhenHero(x => x.StartsTurn())
+                .ThenHero(x => x.HasAvailableActions("Hide", "Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form"));
         }
 
         [Test]
@@ -212,16 +201,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         }
 
         [Test]
-        public void Visions_IgnoreEvent()
+        public void Vines_Fight()
         {
-            TestScenario
-                .Given.Game.Hero("Druid", x => x.HasPowers("Visions"))
-                .When.Hero.DrawsEvent("Anathema")
-                .Then.Player(x => x.SeesEvent("Anathema", "Lose 1 Grace.", 6, "Continue", "Ignore [Visions]"))
-                .When.Player.SelectsEventOption("Ignore [Visions]")
-                .Then.Hero(x => x
-                    .LostGrace(0) // Anathema causes hero to lose 1 Grace unless ignored
-                    .Power("Visions", p => p.IsExhausted()));
+            new TestScenario()
+                .GivenHero("Druid", x => x.HasPowers("Vines").Location("Mountains"))
+                .GivenLocation("Mountains", x => x.Blight("Zombies"))
+                .WhenHero(h => h.Fights(x => x.Tactic("Vines [Fight]").Rolls(2, 3, 4, 5)))
+                .ThenHero(x => x.RolledNumberOfDice(4))
+                .ThenPower("Vines", x => x.IsExhausted());
         }
 
         [Test]
@@ -234,13 +221,26 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         }
 
         [Test]
+        public void Visions_IgnoreEvent()
+        {
+            TestScenario
+                .Given.Game.Hero("Druid", x => x.HasPowers("Visions"))
+                .When.Hero.DrawsEvent("Anathema")
+                .Then.Player.SeesEvent("Anathema", "Lose 1 Grace.", 6, "Continue", "Ignore [Visions]")
+                .When.Player.SelectsEventOption("Ignore [Visions]")
+                .Then.Hero(x => x
+                    .LostGrace(0) // Anathema causes hero to lose 1 Grace unless ignored
+                    .Power("Visions", p => p.IsExhausted()));
+        }
+
+        [Test]
         public void WolfForm_Activate()
         {
             new TestScenario()
                 .GivenHero("Druid", x => x.HasPowers("Wolf Form"))
                 .WhenPlayerTakesAction("Wolf Form")
                 .ThenPower("Wolf Form", x => x.IsActive())
-                .ThenHero(x=>x.HasUsedAction().CanGainGrace(false).FightDice(2).EludeDice(2));
+                .ThenHero(x => x.HasUsedAction().CanGainGrace(false).FightDice(2).EludeDice(2));
         }
     }
 }

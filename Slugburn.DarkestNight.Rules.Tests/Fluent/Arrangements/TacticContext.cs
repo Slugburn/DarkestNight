@@ -9,6 +9,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 {
     public class TacticContext : IFakeRollContext
     {
+        private string _tactic;
+        private readonly List<string> _targets;
+
         public TacticContext(Hero hero, string defaultTactic)
         {
             _tactic = defaultTactic;
@@ -20,9 +23,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
                 : blight.ToString();
             _targets = new[] {target}.ToList();
         }
-
-        private string _tactic;
-        private List<string> _targets;
 
         public string GetTactic() => _tactic;
 

@@ -5,7 +5,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
 {
     public class When : TestRoot, IWhen
     {
-        public When(Game game, FakePlayer player) :base(game,player)
+        public When(Game game, FakePlayer player) : base(game, player)
         {
         }
 

@@ -1,13 +1,11 @@
 ﻿using System;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
-using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 {
     public class Given : TestRoot, IGiven
     {
-
         public Given(Game game, FakePlayer player) : base(game, player)
         {
         }

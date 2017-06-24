@@ -15,7 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 
         public LocationContext Blight(params string[] blights)
         {
-            foreach (var blight in blights.Select(b=>StringExtensions.ToEnum<Blight>(b)))
+            foreach (var blight in blights.Select(b => b.ToEnum<Blight>()))
                 _space.AddBlight(blight);
             return this;
         }

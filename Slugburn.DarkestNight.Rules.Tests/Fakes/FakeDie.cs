@@ -24,6 +24,5 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             foreach (var roll in dieRolls)
                 _upcomingRolls.Enqueue(roll);
         }
-
     }
 }

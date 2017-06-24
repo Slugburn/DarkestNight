@@ -2,16 +2,17 @@ using System.Linq;
 using NUnit.Framework;
 using Shouldly;
 using Slugburn.DarkestNight.Rules.Players.Models;
+using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
-    public class PlayerEventExpectation
+    public class PlayerEventExpectation : PlayerExpectation, IPlayerEventExpectation
     {
         private readonly PlayerEvent _playerEvent;
 
-        public PlayerEventExpectation(PlayerEvent playerEvent)
+        public PlayerEventExpectation(Game game, FakePlayer player) : base(game, player)
         {
-            _playerEvent = playerEvent;
+            _playerEvent = player.Event;
         }
 
         public PlayerEventExpectation HasBody(string title, int fate, string text)
@@ -25,7 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         public PlayerEventExpectation HasOptions(params string[] options)
         {
-            _playerEvent.Options.Select(x=>x.Text).ShouldBe(options);
+            _playerEvent.Options.Select(x => x.Text).ShouldBe(options);
             return this;
         }
 
@@ -49,6 +50,5 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             row.SubText.ShouldBe(subText);
             return this;
         }
-
     }
 }

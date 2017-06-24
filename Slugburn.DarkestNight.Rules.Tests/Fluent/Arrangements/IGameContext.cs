@@ -1,6 +1,5 @@
 using System;
 
-
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 {
     public interface IGameContext : IGiven

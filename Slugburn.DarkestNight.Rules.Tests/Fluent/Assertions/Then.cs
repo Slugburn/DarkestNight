@@ -1,24 +1,16 @@
 ﻿using System;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
-using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
     public class Then : TestRoot, IThen
     {
-
         public Then(Game game, FakePlayer player) : base(game, player)
         {
         }
 
-        public IThen Player(Action<PlayerExpectation> expect)
-        {
-            var expectation = new PlayerExpectation(_player);
-            expect(expectation);
-            expectation.Verify();
-            return this;
-        }
+        public IPlayerExpectation Player => new PlayerExpectation(_game, _player);
 
         public IThen Hero(Action<HeroExpectation> expect)
         {

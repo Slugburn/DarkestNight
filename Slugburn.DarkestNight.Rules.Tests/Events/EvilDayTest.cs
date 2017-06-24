@@ -7,32 +7,32 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
     public class EvilDayTest
     {
         [Test]
+        public void EvilDay_DrawEvents()
+        {
+            TestScenario
+                .Given.Game.Hero("Acolyte", x => x.HasPowers("Blinding Black", "Dark Veil", "False Life"))
+                .When.Hero.DrawsEvent("Evil Day")
+                .Then.Player.Event
+                .HasBody("Evil Day", 5, "Exhaust a power or draw 2 more events.")
+                .HasOptions("Exhaust Power", "Draw Events")
+                .When.Player.SelectsEventOption("Draw Events")
+                .Then.Hero(h => h.Event(e => e.HasOutstanding(2)));
+        }
+
+        [Test]
         public void EvilDay_ExhaustAPower()
         {
             TestScenario
                 .Given.Game.Hero("Acolyte", x => x.HasPowers("Blinding Black", "Dark Veil", "False Life"))
                 .Given.ActingHero(h => h.Power("Dark Veil", x => x.IsExhausted()))
                 .When.Hero.DrawsEvent("Evil Day")
-                .Then.Player(p => p.Event(e => e
-                    .HasBody("Evil Day", 5, "Exhaust a power or draw 2 more events.")
-                    .HasOptions("Exhaust Power", "Draw Events")))
+                .Then.Player.Event
+                .HasBody("Evil Day", 5, "Exhaust a power or draw 2 more events.")
+                .HasOptions("Exhaust Power", "Draw Events")
                 .When.Player.SelectsEventOption("Exhaust Power")
-                .Then.Player(p => p.Powers("Blinding Black", "False Life"))
+                .Then.Player.Powers("Blinding Black", "False Life")
                 .When.Player.SelectsPower("False Life")
                 .Then.Hero(h => h.Power("False Life", x => x.IsExhausted()));
-        }
-
-        [Test]
-        public void EvilDay_DrawEvents()
-        {
-            TestScenario
-                .Given.Game.Hero("Acolyte", x => x.HasPowers("Blinding Black", "Dark Veil", "False Life"))
-                .When.Hero.DrawsEvent("Evil Day")
-                .Then.Player(p => p.Event(e => e
-                    .HasBody("Evil Day", 5, "Exhaust a power or draw 2 more events.")
-                    .HasOptions("Exhaust Power", "Draw Events")))
-                .When.Player.SelectsEventOption("Draw Events")
-                .Then.Hero(h => h.Event(e => e.HasOutstanding(2)));
         }
 
         [Test]
@@ -41,7 +41,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.Hero("Acolyte", x => x.HasPowers())
                 .When.Hero.DrawsEvent("Evil Day")
-                .Then.Player(p => p.Event(e => e.HasOptions("Draw Events")));
+                .Then.Player.Event.HasOptions("Draw Events");
         }
     }
 }

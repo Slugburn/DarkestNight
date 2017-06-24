@@ -27,15 +27,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             return this;
         }
 
-        private void AddHero(Hero hero, Action<HeroContext> def)
-        {
-            _game.AddHero(hero, _player);
-            var ctx = new HeroContext(hero);
-            def?.Invoke(ctx);
-            _game.ActingHero = hero;
-            _player.ActiveHero = hero.Name;
-        }
-
         public IGameContext NecromancerLocation(string location)
         {
             _game.Necromancer.Location = location.ToEnum<Location>();
@@ -66,6 +57,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
         {
             _game.Maps.Insert(0, new Map(new Blight[7], Enumerable.Repeat(result, 6).ToArray()));
             return this;
+        }
+
+        private void AddHero(Hero hero, Action<HeroContext> def)
+        {
+            _game.AddHero(hero, _player);
+            var ctx = new HeroContext(hero);
+            def?.Invoke(ctx);
+            _game.ActingHero = hero;
+            _player.ActiveHero = hero.Name;
         }
     }
 }

@@ -6,8 +6,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
     public class PowerExpectation
     {
         private readonly IPower _power;
-        private bool _expectExhausted;
         private bool _expectActive;
+        private bool _expectExhausted;
 
         public PowerExpectation(IPower power)
         {

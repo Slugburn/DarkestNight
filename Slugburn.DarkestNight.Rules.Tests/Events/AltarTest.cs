@@ -19,13 +19,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.Darkness(0).Hero("Acolyte", x => x.Secrecy(startingSecrecy).Grace(0))
                 .When.Hero.DrawsEvent("Altar")
-                .Then.Player(p => p.Event(e => e.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")))
+                .Then.Player.Event.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")
                 .When.Player.SelectsEventOption("Roll", x => x.Rolls(roll))
-                .Then.Player(p => p.Event(e => e.ActiveRow("Pure Altar", "You may spend 1 Secrecy to gain 1 Grace")))
+                .Then.Player.Event.ActiveRow("Pure Altar", "You may spend 1 Secrecy to gain 1 Grace")
                 .Then.Hero(h => h.Event(e => e.HasOutstanding(1).CanBeIgnored(false))
                     .Grace(0).Secrecy(startingSecrecy))
-                .When.Player.AcceptsRoll()
-                .Then.Player(p => p.Event(e => e.HasOptions(expectedOptions)))
+                .Then.Player.Event.HasOptions(expectedOptions)
                 .When.Player.SelectsEventOption(option)
                 .Then.Hero(h => h.Grace(expectedGrace).Secrecy(expectedSecrecy));
         }
@@ -36,17 +35,16 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void DefiledAltar(int startingGrace, string option, int expectedGrace, int expectedDarkness)
         {
             var expectedOptions = startingGrace > 0
-                ? new[] { "Spend Grace", "+1 Darkness" }
-                : new[] { "+1 Darkness" };
+                ? new[] {"Spend Grace", "+1 Darkness"}
+                : new[] {"+1 Darkness"};
             const int roll = 3;
             TestScenario
                 .Given.Game.Darkness(0).Hero("Acolyte", x => x.Grace(startingGrace))
                 .When.Hero.DrawsEvent("Altar")
-                .Then.Player(p => p.Event(e => e.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")))
+                .Then.Player.Event.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")
                 .When.Player.SelectsEventOption("Roll", x => x.Rolls(roll))
-                .Then.Player(p => p.Event(e => e.ActiveRow("Defiled Altar", "Spend 1 Grace or +1 Darkness")))
-                .When.Player.AcceptsRoll()
-                .Then.Player(p => p.Event(e => e.HasOptions(expectedOptions)))
+                .Then.Player.Event.ActiveRow("Defiled Altar", "Spend 1 Grace or +1 Darkness")
+                .Then.Player.Event.HasOptions(expectedOptions)
                 .When.Player.SelectsEventOption(option)
                 .Then.Hero(h => h.Grace(expectedGrace))
                 .Then.Game(g => g.Darkness(expectedDarkness));

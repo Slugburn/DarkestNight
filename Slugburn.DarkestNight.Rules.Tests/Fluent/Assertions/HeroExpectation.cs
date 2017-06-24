@@ -12,26 +12,26 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
     public class HeroExpectation
     {
+        private readonly HeroEventExpectation _eventExpectation;
         private readonly Hero _hero;
-        private int _expectedGrace;
-        private int? _expectedSecrecy;
         private readonly List<Location> _invalidLocations;
         private readonly List<Location> _specifiedLocations;
         private bool _expectedActionAvailable;
-        private IEnumerable<Blight> _expectedIgnoredBlights;
-        private Location _expectedLocation;
-        private bool _expectedCanGainGrace;
-        private int _expectedTravelSpeed;
-        private int _expectedSearchDice;
-        private int _expectedFightDice;
-        private int _expectedEludeDice;
         private int _expectedAvailableMovement;
-        private int[] _expectedRoll;
+        private bool _expectedCanGainGrace;
         private int _expectedDiceCount;
+        private int _expectedEludeDice;
+        private int _expectedFightDice;
         private int _expectedFreeActions;
+        private int _expectedGrace;
+        private IEnumerable<Blight> _expectedIgnoredBlights;
         private string[] _expectedInventory = new string[0];
+        private Location _expectedLocation;
+        private int[] _expectedRoll;
+        private int _expectedSearchDice;
+        private int? _expectedSecrecy;
+        private int _expectedTravelSpeed;
         private bool _expectedWounded;
-        private readonly HeroEventExpectation _eventExpectation;
 
         public HeroExpectation(Hero hero)
         {
@@ -115,7 +115,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         public HeroExpectation CanMoveTo(params string[] location)
         {
-            _specifiedLocations.AddRange(location.Select(l=>l.ToEnum<Location>()));
+            _specifiedLocations.AddRange(location.Select(l => l.ToEnum<Location>()));
             return this;
         }
 

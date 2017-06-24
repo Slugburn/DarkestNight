@@ -41,7 +41,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return given;
         }
 
-        public TestScenario GivenHero(string name, Action<HeroContext> def = null) 
+        public TestScenario GivenHero(string name, Action<HeroContext> def = null)
         {
             AddHero(HeroFactory.Create(name), def);
             return this;
@@ -127,7 +127,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 
         public TestScenario WhenPlayerTakesAttackAction(Action<FightContext> actions = null)
         {
-            var context=  new FightContext(_player, _game.ActingHero);
+            var context = new FightContext(_player, _game.ActingHero);
             actions?.Invoke(context);
             WhenPlayerTakesAction(context.GetAction());
             WhenPlayerSelectsTactic(context.GetTactic(), context.GetTargets());
@@ -135,9 +135,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public TestScenario ThenPlayer(Action<PlayerExpectation> expect)
+        public TestScenario ThenPlayer(Action<IPlayerExpectation> expect)
         {
-            var expectation = new PlayerExpectation(_player);
+            var expectation = new PlayerExpectation(_game, _player);
             expect(expectation);
             expectation.Verify();
             return this;
@@ -165,7 +165,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         private IEnumerable<int> GetTargetIds(ICollection<string> targets)
         {
             var source = _game.ActingHero.ConflictState.AvailableTargets.ToList();
-            Assert.That(source.Select(x=>x.Name).Intersect(targets), Is.EquivalentTo(targets), "Requested target is not valid.");
+            Assert.That(source.Select(x => x.Name).Intersect(targets), Is.EquivalentTo(targets), "Requested target is not valid.");
             foreach (var match in targets.Select(target => source.First(x => x.Name == target)))
             {
                 source.Remove(match);
@@ -183,7 +183,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public TestScenario WhenPlayerAssignsRolledDiceToBlights( params Tuple<string, int>[]  assignments)
+        public TestScenario WhenPlayerAssignsRolledDiceToBlights(params Tuple<string, int>[] assignments)
         {
             var targets = _game.ActingHero.ConflictState.SelectedTargets;
             var a = assignments.Select(x => new TargetDieAssignment {TargetId = targets.Single(t => t.Name == x.Item1.ToString()).Id, DieValue = x.Item2}).ToList();

@@ -1,47 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Shouldly;
 using Slugburn.DarkestNight.Rules.Players;
-using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
-    public class PlayerExpectation
+    public class PlayerExpectation : Then, IPlayerExpectation
     {
-        private readonly FakePlayer _player;
-
-        public PlayerExpectation(FakePlayer player)
-        {
-            _player = player;
-        }
-
-        public void Verify()
+        public PlayerExpectation(Game game, FakePlayer player) : base(game, player)
         {
         }
 
-        public PlayerExpectation SeesEvent(string title, string text, int fate, params string[] options)
+        public IPlayerExpectation SeesEvent(string title, string text, int fate, params string[] options)
         {
             Assert.That(_player.State, Is.EqualTo(PlayerState.Event));
             var e = _player.Event;
             Assert.That(e.Title, Is.EqualTo(title));
             Assert.That(e.Text, Is.EqualTo(text));
             Assert.That(e.Fate, Is.EqualTo(fate));
-            Assert.That(e.Options.Select(x=>x.Text), Is.EquivalentTo(options));
+            Assert.That(e.Options.Select(x => x.Text), Is.EquivalentTo(options));
             return this;
         }
 
-        public PlayerExpectation Event(Action<PlayerEventExpectation> expect)
-        {
-            Assert.That(_player.State, Is.EqualTo(PlayerState.Event));
-            var expectation = new PlayerEventExpectation(_player.Event);
-            expect(expectation);
-            return this;
-        }
+        public IPlayerEventExpectation Event => new PlayerEventExpectation(_game, _player);
 
-        public PlayerExpectation SeesTarget(params string[] targetNames)
+        public IPlayerExpectation SeesTarget(params string[] targetNames)
         {
             Assert.That(_player.State, Is.EqualTo(PlayerState.Conflict));
             var actual = _player.Conflict.Targets.Select(x => x.Name);
@@ -49,7 +34,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public PlayerExpectation SeesTactics(params string[] tacticNames)
+        public IPlayerExpectation SeesTactics(params string[] tacticNames)
         {
             Assert.That(_player.State, Is.EqualTo(PlayerState.Conflict));
             var actual = _player.Conflict.Tactics.Select(x => x.Name);
@@ -57,21 +42,21 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public PlayerExpectation Powers(params string[] powerNames)
+        public IPlayerExpectation Powers(params string[] powerNames)
         {
             _player.State.ShouldBe(PlayerState.SelectPower);
-            _player.Powers.Select(x=>x.Name).ShouldBe(powerNames);
+            _player.Powers.Select(x => x.Name).ShouldBe(powerNames);
             return this;
         }
 
-        public PlayerExpectation Conflict(Action<PlayerConflictExpectation> expect)
+        public IPlayerExpectation Conflict(Action<PlayerConflictExpectation> expect)
         {
             var expectation = new PlayerConflictExpectation(_player.Conflict);
             expect(expectation);
             return this;
         }
 
-        public PlayerExpectation Blights(Action<PlayerBlightExpectation> expect)
+        public IPlayerExpectation Blights(Action<PlayerBlightExpectation> expect)
         {
             var expectation = new PlayerBlightExpectation(_player.Blights);
             expect(expectation);
@@ -79,7 +64,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public PlayerExpectation SelectingLocation(params string[] locations)
+        public IPlayerExpectation SelectingLocation(params string[] locations)
         {
             _player.State.ShouldBe(PlayerState.SelectLocation);
             var actual = _player.ValidLocations.OrderBy(x => x);
@@ -87,29 +72,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             actual.ShouldBe(expected);
             return this;
         }
-    }
 
-    public class PlayerBlightExpectation
-    {
-        private ICollection<PlayerBlight> _blights;
-        private List<string> _expected = new List<string>();
-
-        public PlayerBlightExpectation(ICollection<PlayerBlight> blights)
+        public void Verify()
         {
-            blights.ShouldNotBeNull("Player.Blights has not been set.");
-            _blights = blights;
-        }
-
-        public PlayerBlightExpectation Location(string location, params string[] blights)
-        {
-            _expected.AddRange(blights.Select(b => $"{location}:{b}"));
-            return this;
-        }
-
-        internal void Verify()
-        {
-            var actual = _blights.Select(x => $"{x.Location}:{x.Blight}").OrderBy(x=>x);
-            actual.ShouldBe(_expected.OrderBy(x=>x));
         }
     }
 }
