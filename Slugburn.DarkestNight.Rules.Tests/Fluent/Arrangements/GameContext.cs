@@ -9,7 +9,7 @@ using Slugburn.DarkestNight.Rules.Tests.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 {
-    public class GameContext : Given, IGameContext
+    public class GameContext : GivenContext, IGameContext
     {
         public GameContext(Game game, FakePlayer player) : base(game, player)
         {
@@ -27,45 +27,45 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             return this;
         }
 
-        public IGameContext NecromancerLocation(string location)
+        public IGameContext NecromancerIn(string location)
         {
-            _game.Necromancer.Location = location.ToEnum<Location>();
+            ((TestRoot) this).GetGame().Necromancer.Location = location.ToEnum<Location>();
             return this;
         }
 
         public IGameContext NextBlight(string blightName)
         {
             var blight = blightName.ToEnum<Blight>();
-            _game.Maps.Insert(0, new Map(Enumerable.Repeat(blight, 7).ToArray(), new Find[6]));
+            ((TestRoot) this).GetGame().Maps.Insert(0, new Map(Enumerable.Repeat(blight, 7).ToArray(), new Find[6]));
             return this;
         }
 
         public IGameContext Darkness(int value)
         {
-            _game.Darkness = value;
+            ((TestRoot) this).GetGame().Darkness = value;
             return this;
         }
 
         public IGameContext DrawEvents(int count)
         {
-            var drawnCards = _game.Events.Except(new[] {"Renewal"}).Take(count).ToList();
-            drawnCards.ForEach(c => _game.Events.Remove(c));
+            var drawnCards = ((TestRoot) this).GetGame().Events.Except(new[] {"Renewal"}).Take(count).ToList();
+            drawnCards.ForEach(c => ((TestRoot) this).GetGame().Events.Remove(c));
             return this;
         }
 
         public IGameContext NextSearchResult(Find result)
         {
-            _game.Maps.Insert(0, new Map(new Blight[7], Enumerable.Repeat(result, 6).ToArray()));
+            ((TestRoot) this).GetGame().Maps.Insert(0, new Map(new Blight[7], Enumerable.Repeat(result, 6).ToArray()));
             return this;
         }
 
         private void AddHero(Hero hero, Action<HeroContext> def)
         {
-            _game.AddHero(hero, _player);
+            ((TestRoot) this).GetGame().AddHero(hero, GetPlayer());
             var ctx = new HeroContext(hero);
             def?.Invoke(ctx);
-            _game.ActingHero = hero;
-            _player.ActiveHero = hero.Name;
+            ((TestRoot) this).GetGame().ActingHero = hero;
+            GetPlayer().ActiveHero = hero.Name;
         }
     }
 }

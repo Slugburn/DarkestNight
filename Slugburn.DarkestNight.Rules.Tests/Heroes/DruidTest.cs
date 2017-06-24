@@ -41,16 +41,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                     .Location("Monastery")
                     .Power("Wolf Form", p => p.IsActive()))
                 .When.Player.TakesAction("Celerity")
-                .Then.Hero(h => h.Power("Wolf Form", x => x.IsActive(false)))
+                .Then(Verify.Power("Wolf Form").IsActive(false))
                 .When.Player.SelectsLocation("Village")
-                .Then.Hero(x => x.Location("Village").HasAvailableActions("Raven Form", "Wolf Form", "Continue"))
+                .Then(Verify.Hero.Location("Village").HasAvailableActions("Raven Form", "Wolf Form", "Continue"))
                 .When.Player.TakesAction("Raven Form")
-                .Then.Hero(h => h
-                    .Power("Raven Form", x => x.IsActive())
-                    .TravelSpeed(2)
-                    .SearchDice(2)
-                    .HasUsedAction()
-                    .CanGainGrace(false));
+                .Then(Verify.Power("Raven Form").IsActive())
+                .Then(Verify.Hero.TravelSpeed(2).SearchDice(2).HasUsedAction().CanGainGrace(false));
         }
 
         [Test]
@@ -60,9 +56,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Game.WithHero("Druid", x => x.HasPowers("Celerity").Location("Monastery"))
                 .When.Player.TakesAction("Celerity")
                 .When.Player.SelectsLocation("Village")
-                .Then.Hero(x => x.Location("Village").HasAvailableActions("Continue"))
+                .Then(Verify.Hero.Location("Village").HasAvailableActions("Continue"))
                 .When.Player.TakesAction("Continue")
-                .Then.Hero(x => x.HasUsedAction());
+                .Then(Verify.Hero.HasUsedAction());
         }
 
         [Test]
@@ -226,11 +222,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario
                 .Given.Game.WithHero("Druid", x => x.HasPowers("Visions"))
                 .When.Hero.DrawsEvent("Anathema")
-                .Then.Player.SeesEvent("Anathema", "Lose 1 Grace.", 6, "Continue", "Ignore [Visions]")
+                .Then().Player.Event.HasOptions("Continue", "Ignore [Visions]")
                 .When.Player.SelectsEventOption("Ignore [Visions]")
-                .Then.Hero(x => x
-                    .LostGrace(0) // Anathema causes hero to lose 1 Grace unless ignored
-                    .Power("Visions", p => p.IsExhausted()));
+                .Then(Verify.Hero.LostGrace(0)) // Anathema causes hero to lose 1 Grace unless ignored
+                .Then(Verify.Power("Visions").IsExhausted());
         }
 
         [Test]

@@ -18,7 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
                 .NextSearchResult(find)
                 .When.Player.TakesAction("Search")
                 .When.Player.AcceptsRoll()
-                .Then.Hero(x => x.HasUsedAction().HasItem(itemName));
+                .Then(Verify.Hero.HasUsedAction().HasItems(itemName));
         }
     }
 }

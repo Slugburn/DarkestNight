@@ -4,23 +4,23 @@ using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 {
-    public class Given : TestRoot, IGiven
+    public class GivenContext : TestRoot, IGiven
     {
-        public Given(Game game, FakePlayer player) : base(game, player)
+        public GivenContext(Game game, FakePlayer player) : base(game, player)
         {
         }
 
-        public IGameContext Game => new GameContext(_game, _player);
+        public IGameContext Game => new GameContext(base.GetGame(), GetPlayer());
 
         public ILocationContext Location(string location)
         {
-            var space = _game.Board[location.ToEnum<Location>()];
-            return new LocationContext(_game, _player, space);
+            var space = base.GetGame().Board[location.ToEnum<Location>()];
+            return new LocationContext(base.GetGame(), GetPlayer(), space);
         }
 
         public IGiven ActingHero(Action<HeroContext> def)
         {
-            var hero = _game.ActingHero;
+            var hero = base.GetGame().ActingHero;
             var ctx = new HeroContext(hero);
             def(ctx);
             return this;

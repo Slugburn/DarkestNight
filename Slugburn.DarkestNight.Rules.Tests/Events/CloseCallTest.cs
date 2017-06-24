@@ -17,11 +17,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.WithHero()
                 .When.Hero.DrawsEvent("Close Call")
-                .Then.Player.Event.HasBody("Close Call", 4, "Roll 1d and take the highest").HasOptions("Roll")
+                .Then().Player.Event.HasBody("Close Call", 4, "Roll 1d and take the highest").HasOptions("Roll")
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
-                .Then.Player.Event.ActiveRow(effect)
+                .Then().Player.Event.ActiveRow(effect)
                 .When.Player.SelectsEventOption("Continue")
-                .Then.Hero(h => h.LostSecrecy(lostSecrecy).LostGrace(lostGrace));
+                .Then(Verify.Hero.LostSecrecy(lostSecrecy).LostGrace(lostGrace));
         }
     }
 }

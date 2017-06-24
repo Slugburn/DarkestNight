@@ -105,7 +105,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Location("Village").Blight("Shades")
                 .Given.ActingHero(g => g.Power("Oath of Defense", x => x.IsActive()))
                 .When.Hero.StartsTurn()
-                .Then.Hero(x => x.Grace(1));
+                .Then(Verify.Hero.Grace(1));
         }
 
         [Test]
@@ -116,7 +116,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Location("Village").Blight("Shades")
                 .Given.ActingHero(h => h.Power("Oath of Defense", x => x.IsActive()))
                 .When.Hero.MovesTo("Mountains")
-                .Then.Hero(h => h.Grace(0).Power("Oath of Defense", x => x.IsActive(false)));
+                .Then(Verify.Hero.Grace(0))
+                .Then(Verify.Power("Oath of Defense").IsActive(false));
         }
 
         [Test]
@@ -127,7 +128,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Location("Village").Blight("Shades")
                 .Given.ActingHero(h => h.Power("Oath of Defense", x => x.IsActive()))
                 .When.Game(x => x.BlightDestroyed("Village", "Shades"))
-                .Then.Hero(x => x.Grace(1).Power("Oath of Defense", p => p.IsActive(false)));
+                .Then(Verify.Hero.Grace(1))
+                .Then(Verify.Power("Oath of Defense").IsActive(false));
         }
 
         [Test]
@@ -162,9 +164,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Game.WithHero("Knight", x => x.HasPowers("Oath of Purging").Location("Village"))
                 .Given.ActingHero(h => h.Power("Oath of Purging", x => x.IsActive()))
                 .When.Hero.MovesTo("Monastery")
-                .Then.Hero(h => h
-                    .LostGrace()
-                    .Power("Oath of Purging", x => x.IsActive(false)));
+                .Then(Verify.Hero.LostGrace())
+                .Then(Verify.Power("Oath of Purging").IsActive(false));
         }
 
         // Oath of Valor
@@ -198,9 +199,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Location("Village").Blight("Skeletons")
                 .Given.ActingHero(h => h.Power("Oath of Valor", x => x.IsActive()))
                 .When.Hero.Eludes(x => x.Rolls(6))
-                .Then.Hero(h => h
-                    .LostGrace()
-                    .Power("Oath of Valor", p => p.IsActive(false)));
+                .Then(Verify.Hero.LostGrace())
+                .Then(Verify.Power("Oath of Valor").IsActive(false));
         }
 
         [Test]
@@ -226,9 +226,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Location("Village").Blight("Skeletons")
                 .Given.ActingHero(h => h.Power("Oath of Valor", x => x.IsActive()))
                 .When.Hero.Fights(x => x.Rolls(6, 6))
-                .Then.Hero(h => h
-                    .HasAvailableActions("Oath of Valor", "Oath of Vengeance")
-                    .Power("Oath of Valor", x => x.IsActive(false)));
+                .Then(Verify.Hero.HasAvailableActions("Oath of Valor", "Oath of Vengeance"))
+                .Then(Verify.Power("Oath of Valor").IsActive(false));
         }
 
         // Oath of Vengeance
@@ -265,7 +264,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Game.WithHero("Knight", x => x.HasPowers("Reckless Abandon").Location("Village"))
                 .Given.Location("Village").Blight("Vampire")
                 .When.Hero.Fights(x => x.Tactic("Reckless Abandon").Rolls(1, 2, 3, 4))
-                .Then.Hero(x => x.RolledNumberOfDice(4).LostGrace());
+                .Then(Verify.Hero.RolledNumberOfDice(4).LostGrace());
         }
 
         // Sprint
@@ -277,7 +276,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Game.WithHero("Knight", x => x.HasPowers("Sprint").Location("Village"))
                 .Given.Location("Village").Blight("Skeletons")
                 .When.Hero.Eludes(x => x.Tactic("Sprint"))
-                .Then.Hero(x => x.RolledNumberOfDice(2));
+                .Then(Verify.Hero.RolledNumberOfDice(2));
         }
     }
 }

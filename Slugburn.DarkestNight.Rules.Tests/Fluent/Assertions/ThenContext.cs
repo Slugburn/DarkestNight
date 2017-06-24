@@ -4,27 +4,27 @@ using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
-    public class Then : TestRoot, IThen
+    public class ThenContext : TestRoot, IThen
     {
-        public Then(Game game, FakePlayer player) : base(game, player)
+        public ThenContext(Game game, FakePlayer player) : base(game, player)
         {
         }
 
-        public IPlayerExpectation Player => new PlayerExpectation(_game, _player);
+        public IPlayerExpectation Player => new PlayerExpectation(base.GetGame(), base.GetPlayer());
 
         public IThen Hero(Action<HeroExpectation> expect)
         {
-            var expectation = new HeroExpectation(_game.ActingHero);
+            var expectation = new HeroExpectation(base.GetGame().ActingHero);
             expect(expectation);
             expectation.Verify();
             return this;
         }
 
-        public IGameExpectation Game => new GameExpectation(_game, _player);
+        public IGameExpectation Game => new GameExpectation(base.GetGame(), base.GetPlayer());
 
         public IThen Location(string location, Action<LocationExpectation> expect)
         {
-            var space = _game.Board[location.ToEnum<Location>()];
+            var space = base.GetGame().Board[location.ToEnum<Location>()];
             var expectation = new LocationExpectation(space);
             expect(expectation);
             expectation.Verify();

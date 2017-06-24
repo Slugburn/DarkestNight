@@ -12,10 +12,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
     public class HeroExpectation
     {
-        private readonly HeroEventExpectation _eventExpectation;
-        private readonly Hero _hero;
-        private readonly List<Location> _invalidLocations;
-        private readonly List<Location> _specifiedLocations;
+        private HeroEventExpectation _eventExpectation;
+        private Hero _hero;
+        private List<Location> _invalidLocations;
+        private List<Location> _specifiedLocations;
         private bool _expectedActionAvailable;
         private int _expectedAvailableMovement;
         private bool _expectedCanGainGrace;
@@ -34,6 +34,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private bool _expectedWounded;
 
         public HeroExpectation(Hero hero)
+        {
+            SetExpectations(hero);
+        }
+
+        private void SetExpectations(Hero hero)
         {
             _hero = hero;
             _expectedActionAvailable = true;

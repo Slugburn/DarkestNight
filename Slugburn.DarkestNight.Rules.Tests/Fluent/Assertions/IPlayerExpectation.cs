@@ -8,7 +8,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         IPlayerExpectation SeesEvent(string title, string text, int fate, params string[] options);
         IPlayerExpectation SeesTarget(params string[] targetNames);
         IPlayerExpectation SeesTactics(params string[] tacticNames);
-        IPlayerExpectation Powers(params string[] powerNames);
+        IPlayerExpectation PowerSelectionView(params string[] powerNames);
         IPlayerExpectation Conflict(Action<PlayerConflictExpectation> expect);
         IPlayerExpectation BlightSelectionView(Action<PlayerBlightExpectation> expect);
         IPlayerExpectation LocationSelectionView(params string[] locations);

@@ -12,7 +12,7 @@ using Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
 {
-    public class HeroActionContext : When, IHeroActionContext
+    public class HeroActionContext : WhenContext, IHeroActionContext
     {
         private readonly Hero _hero;
 

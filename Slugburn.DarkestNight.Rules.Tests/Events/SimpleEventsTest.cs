@@ -12,8 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.Darkness(3).WithHero()
                 .When.Hero.DrawsEvent("Midnight")
-                .When.Player.SelectsEventOption("Continue")
-                .Then.Game.Darkness(4);
+                .When.Player.SelectsEventOption("Continue").Then().Game.Darkness(4);
         }
 
         [TestCase]
@@ -22,10 +21,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.WithHero().DrawEvents(10)
                 .When.Hero.DrawsEvent("Renewal")
-                .Then.Hero(h => h.Event(e => e.HasOutstanding(1).CanBeIgnored(false)))
-                .When.Player.SelectsEventOption("Continue")
-                .Then.Game.EventDeckIsReshuffled()
-                .Then.Hero(h => h.Event(e => e.HasOutstanding(1)));
+                .Then(Verify.Hero.HasUnresolvedEvents(1).CurrentEvent.CanBeIgnored(false))
+                .When.Player.SelectsEventOption("Continue").Then().Game.EventDeckIsReshuffled()
+                .Then(Verify.Hero.HasUnresolvedEvents(1));
         }
     }
 }

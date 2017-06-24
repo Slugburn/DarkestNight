@@ -18,14 +18,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.WithHero(x => x.Location("Forest"))
                 .Given.Location("Forest").Blight(blights)
-                .When.Hero.DrawsEvent("Raid")
-                .Then.Player.Event
+                .When.Hero.DrawsEvent("Raid").Then().Player.Event
                 .HasBody("Raid", 6, "Count the blights in your location")
                 .HasOptions("Continue")
                 .ActiveRow(rowText)
                 .When.Player.SelectsEventOption("Continue")
-                .Then.Hero(x => x.LostSecrecy(lostSecrecy).LostGrace(lostGrace))
-                .Then.Game.Darkness(darkness);
+                .Then(Verify.Hero.LostSecrecy(lostSecrecy).LostGrace(lostGrace))
+                .Then().Game.Darkness(darkness);
         }
     }
 }

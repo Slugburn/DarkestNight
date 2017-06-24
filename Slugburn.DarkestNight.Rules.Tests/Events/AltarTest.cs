@@ -18,14 +18,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.Darkness(0).WithHero("Acolyte", x => x.Secrecy(startingSecrecy).Grace(0))
                 .When.Hero.DrawsEvent("Altar")
-                .Then.Player.Event.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")
+                .Then().Player.Event.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
-                .Then.Player.Event.ActiveRow("Pure Altar", "You may spend 1 Secrecy to gain 1 Grace")
-                .Then.Hero(h => h.Event(e => e.HasOutstanding(1).CanBeIgnored(false))
-                    .Grace(0).Secrecy(startingSecrecy))
-                .Then.Player.Event.HasOptions(expectedOptions)
+                .Then().Player.Event.ActiveRow("Pure Altar", "You may spend 1 Secrecy to gain 1 Grace")
+                .Then(Verify.Hero.HasUnresolvedEvents(1).Grace(0).Secrecy(startingSecrecy))
+                .Then().Player.Event.HasOptions(expectedOptions)
                 .When.Player.SelectsEventOption(option)
-                .Then.Hero(h => h.Grace(expectedGrace).Secrecy(expectedSecrecy));
+                .Then(Verify.Hero.Grace(expectedGrace).Secrecy(expectedSecrecy));
         }
 
         [TestCase(1, "Spend Grace", 0, 0)]
@@ -39,14 +38,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             const int roll = 3;
             TestScenario
                 .Given.Game.Darkness(0).WithHero("Acolyte", x => x.Grace(startingGrace))
-                .When.Hero.DrawsEvent("Altar")
-                .Then.Player.Event.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")
-                .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
-                .Then.Player.Event.ActiveRow("Defiled Altar", "Spend 1 Grace or +1 Darkness")
-                .Then.Player.Event.HasOptions(expectedOptions)
+                .When.Hero.DrawsEvent("Altar").Then().Player.Event.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")
+                .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll)).Then().Player.Event.ActiveRow("Defiled Altar", "Spend 1 Grace or +1 Darkness").Then().Player.Event.HasOptions(expectedOptions)
                 .When.Player.SelectsEventOption(option)
-                .Then.Hero(h => h.Grace(expectedGrace))
-                .Then.Game.Darkness(expectedDarkness);
+                .Then(Verify.Hero.Grace(expectedGrace))
+                .Then().Game.Darkness(expectedDarkness);
         }
     }
 }

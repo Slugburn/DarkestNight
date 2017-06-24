@@ -7,7 +7,7 @@ using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
-    public class PlayerExpectation : Then, IPlayerExpectation
+    public class PlayerExpectation : ThenContext, IPlayerExpectation
     {
         public PlayerExpectation(Game game, FakePlayer player) : base(game, player)
         {
@@ -15,8 +15,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         public IPlayerExpectation SeesEvent(string title, string text, int fate, params string[] options)
         {
-            Assert.That(_player.State, Is.EqualTo(PlayerState.Event));
-            var e = _player.Event;
+            Assert.That(GetPlayer().State, Is.EqualTo(PlayerState.Event));
+            var e = GetPlayer().Event;
             Assert.That(e.Title, Is.EqualTo(title));
             Assert.That(e.Text, Is.EqualTo(text));
             Assert.That(e.Fate, Is.EqualTo(fate));
@@ -24,41 +24,41 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public IPlayerEventExpectation Event => new PlayerEventExpectation(_game, _player);
+        public IPlayerEventExpectation Event => new PlayerEventExpectation(GetGame(), GetPlayer());
 
         public IPlayerExpectation SeesTarget(params string[] targetNames)
         {
-            Assert.That(_player.State, Is.EqualTo(PlayerState.Conflict));
-            var actual = _player.Conflict.Targets.Select(x => x.Name);
+            Assert.That(GetPlayer().State, Is.EqualTo(PlayerState.Conflict));
+            var actual = GetPlayer().Conflict.Targets.Select(x => x.Name);
             Assert.That(actual, Is.EquivalentTo(targetNames));
             return this;
         }
 
         public IPlayerExpectation SeesTactics(params string[] tacticNames)
         {
-            Assert.That(_player.State, Is.EqualTo(PlayerState.Conflict));
-            var actual = _player.Conflict.Tactics.Select(x => x.Name);
+            Assert.That(GetPlayer().State, Is.EqualTo(PlayerState.Conflict));
+            var actual = GetPlayer().Conflict.Tactics.Select(x => x.Name);
             Assert.That(actual, Is.EquivalentTo(tacticNames));
             return this;
         }
 
-        public IPlayerExpectation Powers(params string[] powerNames)
+        public IPlayerExpectation PowerSelectionView(params string[] powerNames)
         {
-            _player.State.ShouldBe(PlayerState.SelectPower);
-            _player.Powers.Select(x => x.Name).ShouldBe(powerNames);
+            GetPlayer().State.ShouldBe(PlayerState.SelectPower);
+            GetPlayer().Powers.Select(x => x.Name).ShouldBe(powerNames);
             return this;
         }
 
         public IPlayerExpectation Conflict(Action<PlayerConflictExpectation> expect)
         {
-            var expectation = new PlayerConflictExpectation(_player.Conflict);
+            var expectation = new PlayerConflictExpectation(GetPlayer().Conflict);
             expect(expectation);
             return this;
         }
 
         public IPlayerExpectation BlightSelectionView(Action<PlayerBlightExpectation> expect)
         {
-            var expectation = new PlayerBlightExpectation(_player.Blights);
+            var expectation = new PlayerBlightExpectation(GetPlayer().Blights);
             expect(expectation);
             expectation.Verify();
             return this;
@@ -66,8 +66,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         public IPlayerExpectation LocationSelectionView(params string[] locations)
         {
-            _player.State.ShouldBe(PlayerState.SelectLocation);
-            var actual = _player.ValidLocations.OrderBy(x => x);
+            GetPlayer().State.ShouldBe(PlayerState.SelectLocation);
+            var actual = GetPlayer().ValidLocations.OrderBy(x => x);
             var expected = locations.OrderBy(x => x);
             actual.ShouldBe(expected);
             return this;

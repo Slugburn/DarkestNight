@@ -105,9 +105,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario
                 .Given.Game.WithHero("Acolyte", x => x.HasPowers("Dark Veil"))
                 .When.Player.TakesAction("Dark Veil")
-                .Then.Hero(x => x.IsIgnoringBlights().Power("Dark Veil", p => p.IsExhausted()))
+                .Then(Verify.Hero.IsIgnoringBlights())
+                .Then(Verify.Power("Dark Veil").IsExhausted())
                 .When.Hero.StartsTurn()
-                .Then.Hero(x => x.IsNotIgnoringBlights());
+                .Then(Verify.Hero.IsNotIgnoringBlights());
         }
 
         [Test]
@@ -124,11 +125,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void DeathMask_IgnoreSecrecyLossForBeingInNecromancersLocation()
         {
             TestScenario
-                .Given.Game
-                .NecromancerLocation("Swamp")
+                .Given.Game.NecromancerIn("Swamp")
                 .WithHero("Acolyte", x => x.HasPowers("Death Mask").Location("Swamp"))
                 .When.Hero.StartsTurn()
-                .Then.Hero(h => h.LostSecrecy(0));
+                .Then(Verify.Hero.LostSecrecy(0));
         }
 
         [Test]
@@ -149,7 +149,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario
                 .Given.Game.WithHero("Acolyte", x => x.HasPowers("False Life").Location("Swamp").Grace(0))
                 .When.Player.TakesAction("False Life")
-                .Then.Hero(h => h.Grace(1).Power("False Life", x => x.IsExhausted()));
+                .Then(Verify.Hero.Grace(1))
+                .Then(Verify.Power("False Life").IsExhausted());
         }
 
         [Test]
@@ -165,11 +166,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario
                 .Given.Game.WithHero("Acolyte", x => x.HasPowers("False Life").Location("Village").Grace(2))
-                .Then.Hero(x => x.Grace(2).CanMoveTo("Monastery"))
+                .Then(Verify.Hero.Grace(2).CanMoveTo("Monastery"))
                 .When.Player.TakesAction("False Life")
-                .Then.Hero(x => x.CannotMoveTo("Monastery"))
+                .Then(Verify.Hero.CannotMoveTo("Monastery"))
                 .When.Hero.RefreshesPower("False Life")
-                .Then.Hero(x => x.CanMoveTo("Monastery"));
+                .Then(Verify.Hero.CanMoveTo("Monastery"));
         }
 
         [Test]

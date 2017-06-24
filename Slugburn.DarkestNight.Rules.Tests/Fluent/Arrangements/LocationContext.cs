@@ -5,7 +5,7 @@ using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 {
-    public class LocationContext : Given, ILocationContext
+    public class LocationContext : GivenContext, ILocationContext
     {
         private readonly ISpace _space;
 

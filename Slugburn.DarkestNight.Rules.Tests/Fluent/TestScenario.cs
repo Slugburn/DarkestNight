@@ -30,14 +30,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             _game.AddPlayer(_player);
         }
 
-        public static Given Given => CreateRootGiven();
+        public static GivenContext Given => CreateRootGiven();
 
-        private static Given CreateRootGiven()
+        private static GivenContext CreateRootGiven()
         {
             var game = new Game();
             var player = new FakePlayer(game);
             game.AddPlayer(player);
-            var given = new Given(game, player);
+            var given = new GivenContext(game, player);
             return given;
         }
 

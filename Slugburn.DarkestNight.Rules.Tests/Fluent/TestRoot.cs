@@ -8,8 +8,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 {
     public class TestRoot : ITestRoot
     {
-        protected readonly Game _game;
-        protected readonly FakePlayer _player;
+        private readonly Game _game;
+        private readonly FakePlayer _player;
+
+        public Game GetGame() => _game;
+
+        public FakePlayer GetPlayer() => _player;
 
         public TestRoot(Game game, FakePlayer player)
         {
@@ -17,9 +21,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             _player = player;
         }
 
-        public IGiven Given => new Given(_game, _player);
-        public IWhen When => new When(_game, _player);
-        public IThen Then => new Then(_game, _player);
+        public IGiven Given => new GivenContext(GetGame(), GetPlayer());
+        public IWhen When => new WhenContext(GetGame(), GetPlayer());
+        public IThen Then() => new ThenContext(GetGame(), GetPlayer());
+
+        public ITestRoot Then(IVerifiable verifiable)
+        {
+            verifiable.Verify(this);
+            return this;
+        }
 
         public IGiven Configure(Func<IGiven, IGiven> setConditions)
         {
