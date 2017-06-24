@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Slugburn.DarkestNight.Rules.Tests.Fakes;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Events
@@ -16,10 +15,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void CloseCall(int roll, string effect, int lostSecrecy, int lostGrace)
         {
             TestScenario
-                .Given.Game.Hero()
+                .Given.Game.WithHero()
                 .When.Hero.DrawsEvent("Close Call")
                 .Then.Player.Event.HasBody("Close Call", 4, "Roll 1d and take the highest").HasOptions("Roll")
-                .When.Player.SelectsEventOption("Roll", x => x.Rolls(roll))
+                .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
                 .Then.Player.Event.ActiveRow(effect)
                 .When.Player.SelectsEventOption("Continue")
                 .Then.Hero(h => h.LostSecrecy(lostSecrecy).LostGrace(lostGrace));

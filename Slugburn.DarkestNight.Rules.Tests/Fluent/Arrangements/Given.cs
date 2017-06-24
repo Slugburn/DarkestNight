@@ -12,12 +12,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 
         public IGameContext Game => new GameContext(_game, _player);
 
-        public IGiven Location(string location, Action<LocationContext> def)
+        public ILocationContext Location(string location)
         {
             var space = _game.Board[location.ToEnum<Location>()];
-            var context = new LocationContext(space);
-            def(context);
-            return this;
+            return new LocationContext(_game, _player, space);
         }
 
         public IGiven ActingHero(Action<HeroContext> def)

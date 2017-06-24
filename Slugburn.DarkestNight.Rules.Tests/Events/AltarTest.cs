@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Slugburn.DarkestNight.Rules.Tests.Fakes;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Events
@@ -17,10 +16,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 : new[] {"Continue"};
             const int roll = 4;
             TestScenario
-                .Given.Game.Darkness(0).Hero("Acolyte", x => x.Secrecy(startingSecrecy).Grace(0))
+                .Given.Game.Darkness(0).WithHero("Acolyte", x => x.Secrecy(startingSecrecy).Grace(0))
                 .When.Hero.DrawsEvent("Altar")
                 .Then.Player.Event.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")
-                .When.Player.SelectsEventOption("Roll", x => x.Rolls(roll))
+                .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
                 .Then.Player.Event.ActiveRow("Pure Altar", "You may spend 1 Secrecy to gain 1 Grace")
                 .Then.Hero(h => h.Event(e => e.HasOutstanding(1).CanBeIgnored(false))
                     .Grace(0).Secrecy(startingSecrecy))
@@ -39,15 +38,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 : new[] {"+1 Darkness"};
             const int roll = 3;
             TestScenario
-                .Given.Game.Darkness(0).Hero("Acolyte", x => x.Grace(startingGrace))
+                .Given.Game.Darkness(0).WithHero("Acolyte", x => x.Grace(startingGrace))
                 .When.Hero.DrawsEvent("Altar")
                 .Then.Player.Event.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")
-                .When.Player.SelectsEventOption("Roll", x => x.Rolls(roll))
+                .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
                 .Then.Player.Event.ActiveRow("Defiled Altar", "Spend 1 Grace or +1 Darkness")
                 .Then.Player.Event.HasOptions(expectedOptions)
                 .When.Player.SelectsEventOption(option)
                 .Then.Hero(h => h.Grace(expectedGrace))
-                .Then.Game(g => g.Darkness(expectedDarkness));
+                .Then.Game.Darkness(expectedDarkness);
         }
     }
 }

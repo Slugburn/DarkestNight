@@ -56,7 +56,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public IPlayerExpectation Blights(Action<PlayerBlightExpectation> expect)
+        public IPlayerExpectation BlightSelectionView(Action<PlayerBlightExpectation> expect)
         {
             var expectation = new PlayerBlightExpectation(_player.Blights);
             expect(expectation);
@@ -64,7 +64,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public IPlayerExpectation SelectingLocation(params string[] locations)
+        public IPlayerExpectation LocationSelectionView(params string[] locations)
         {
             _player.State.ShouldBe(PlayerState.SelectLocation);
             var actual = _player.ValidLocations.OrderBy(x => x);

@@ -38,9 +38,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             return this;
         }
 
-        public IPlayerActionContext SelectsEventOption(string option, Action<IFakeRollContext> action = null)
+        public IPlayerActionContext SelectsEventOption(string option, IFakeRollContext set = null)
         {
-            action?.Invoke(this);
             _player.SelectEventOption(option);
             return this;
         }

@@ -77,10 +77,12 @@
     <Compile Include="Fluent\Arrangements\HeroContext.cs" />
     <Compile Include="Fluent\Arrangements\IGameContext.cs" />
     <Compile Include="Fluent\Arrangements\IGiven.cs" />
+    <Compile Include="Fluent\Arrangements\ILocationContext.cs" />
     <Compile Include="Fluent\Assertions\GameExpectation.cs" />
     <Compile Include="Fluent\Assertions\HeroEventExpectation.cs" />
     <Compile Include="Fluent\Assertions\HeroExpectation.cs" />
     <Compile Include="Fluent\Actions\PlayerActionContext.cs" />
+    <Compile Include="Fluent\Assertions\IGameExpectation.cs" />
     <Compile Include="Fluent\Assertions\IPlayerEventExpectation.cs" />
     <Compile Include="Fluent\Assertions\IPlayerExpectation.cs" />
     <Compile Include="Fluent\Assertions\IThen.cs" />
@@ -96,6 +98,7 @@
     <Compile Include="Fluent\Arrangements\TacticContext.cs" />
     <Compile Include="Fluent\Assertions\Then.cs" />
     <Compile Include="Fluent\ITestRoot.cs" />
+    <Compile Include="Fluent\Fake.cs" />
     <Compile Include="Fluent\TestRoot.cs" />
     <Compile Include="Fluent\TestScenario.cs" />
     <Compile Include="Heroes\AcolyteTest.cs" />

@@ -9,8 +9,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 {
     public class TacticContext : IFakeRollContext
     {
-        private string _tactic;
         private readonly List<string> _targets;
+        private string _tactic;
 
         public TacticContext(Hero hero, string defaultTactic)
         {

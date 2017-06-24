@@ -1,14 +1,15 @@
 ﻿using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
+using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 {
-    public class LocationContext
+    public class LocationContext : Given, ILocationContext
     {
         private readonly ISpace _space;
 
-        public LocationContext(ISpace space)
+        public LocationContext(Game game, FakePlayer player, ISpace space) : base(game, player)
         {
             _space = space;
         }

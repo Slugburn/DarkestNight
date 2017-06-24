@@ -88,7 +88,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         public TestScenario GivenLocation(string location, Action<LocationContext> def)
         {
             var space = _game.Board[location.ToEnum<Location>()];
-            var context = new LocationContext(space);
+            var context = new LocationContext(_game, _player, space);
             def(context);
             return this;
         }

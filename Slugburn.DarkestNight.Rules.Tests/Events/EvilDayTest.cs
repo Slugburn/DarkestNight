@@ -10,7 +10,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void EvilDay_DrawEvents()
         {
             TestScenario
-                .Given.Game.Hero("Acolyte", x => x.HasPowers("Blinding Black", "Dark Veil", "False Life"))
+                .Given.Game.WithHero("Acolyte", x => x.HasPowers("Blinding Black", "Dark Veil", "False Life"))
                 .When.Hero.DrawsEvent("Evil Day")
                 .Then.Player.Event
                 .HasBody("Evil Day", 5, "Exhaust a power or draw 2 more events.")
@@ -23,7 +23,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void EvilDay_ExhaustAPower()
         {
             TestScenario
-                .Given.Game.Hero("Acolyte", x => x.HasPowers("Blinding Black", "Dark Veil", "False Life"))
+                .Given.Game.WithHero("Acolyte", x => x.HasPowers("Blinding Black", "Dark Veil", "False Life"))
                 .Given.ActingHero(h => h.Power("Dark Veil", x => x.IsExhausted()))
                 .When.Hero.DrawsEvent("Evil Day")
                 .Then.Player.Event
@@ -39,7 +39,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void EvilDay_NoPowerToExhaust()
         {
             TestScenario
-                .Given.Game.Hero("Acolyte", x => x.HasPowers())
+                .Given.Game.WithHero("Acolyte", x => x.HasPowers())
                 .When.Hero.DrawsEvent("Evil Day")
                 .Then.Player.Event.HasOptions("Draw Events");
         }

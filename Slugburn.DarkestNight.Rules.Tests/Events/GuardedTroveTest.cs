@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void Win(string tactic)
         {
             TestScenario
-                .Given.Game.Hero()
+                .Given.Game.WithHero()
                 .When.Hero.DrawsEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
                 .Then.Player.Conflict(c => c.Target("Guarded Trove"))
@@ -26,7 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void FailElude_DrawEvent()
         {
             TestScenario
-                .Given.Game.Hero()
+                .Given.Game.WithHero()
                 .When.Hero.DrawsEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
                 .Then.Player.Conflict(c => c.Target("Guarded Trove"))
@@ -40,7 +40,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void FailElude_LostSecrecy()
         {
             TestScenario
-                .Given.Game.Hero()
+                .Given.Game.WithHero()
                 .When.Hero.DrawsEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
                 .Then.Player.Conflict(c => c.Target("Guarded Trove"))
@@ -54,7 +54,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void FailElude_NoSecrecy()
         {
             TestScenario
-                .Given.Game.Hero(h => h.Secrecy(0))
+                .Given.Game.WithHero(h => h.Secrecy(0))
                 .When.Hero.DrawsEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
                 .Then.Player.Conflict(c => c.Target("Guarded Trove"))
@@ -66,7 +66,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void FailFight()
         {
             TestScenario
-                .Given.Game.Hero()
+                .Given.Game.WithHero()
                 .When.Hero.DrawsEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
                 .Then.Player.Conflict(c => c.Target("Guarded Trove"))

@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         IPlayerExpectation Player { get; }
         IThen Hero(Action<HeroExpectation> expect);
-        IThen Game(Action<GameExpectation> expect);
+        IGameExpectation Game { get; }
         IThen Location(string location, Action<LocationExpectation> expect);
     }
 }

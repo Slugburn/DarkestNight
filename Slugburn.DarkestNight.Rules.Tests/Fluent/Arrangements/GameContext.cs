@@ -15,13 +15,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
         {
         }
 
-        public IGameContext Hero(string name, Action<HeroContext> def = null)
+        public IGameContext WithHero(string name, Action<HeroContext> def = null)
         {
             AddHero(HeroFactory.Create(name), def);
             return this;
         }
 
-        public IGameContext Hero(Action<HeroContext> def = null)
+        public IGameContext WithHero(Action<HeroContext> def = null)
         {
             AddHero(GenericHeroFactory.Create(), def);
             return this;

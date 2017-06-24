@@ -20,12 +20,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public IThen Game(Action<GameExpectation> expect)
-        {
-            var expection = new GameExpectation(_game);
-            expect(expection);
-            return this;
-        }
+        public IGameExpectation Game => new GameExpectation(_game, _player);
 
         public IThen Location(string location, Action<LocationExpectation> expect)
         {

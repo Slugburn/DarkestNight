@@ -12,10 +12,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
     {
         private readonly List<Tuple<Blight, int>> _blightRollAssignments;
         private readonly Game _game;
+        private readonly Queue<bool> _rollAnotherDie;
         private readonly Dictionary<string, bool> _usePowerResponse;
         private Blight[] _blightChoice;
         private Location? _locationChoice;
-        private readonly Queue<bool> _rollAnotherDie;
 
         private string _tacticChoice;
 

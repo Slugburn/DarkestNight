@@ -18,7 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             var blights = Enumerable.Repeat("Desecration", blightCount).ToArray();
             TestEnemyGeneratorEvent("Black Banner", target, "Count the blights in your location", 4,
-                given => given.ActingHero(x => x.Location("Village")).Location("Village", x => x.Blight(blights)));
+                given => given.ActingHero(x => x.Location("Village")).Location("Village").Blight(blights));
         }
 
         [TestCase(0, "Ghoul")]
@@ -111,7 +111,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             designator = designator ?? (s => s);
             TestScenario
-                .Given.Game.Hero("Acolyte", x => x.Location("Village"))
+                .Given.Game.WithHero("Acolyte", x => x.Location("Village"))
                 .Given.Configure(designator)
                 .When.Hero.DrawsEvent(eventName)
                 .Then.Player.SeesEvent(eventName, text, expectedFate, "Continue")

@@ -16,8 +16,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             var blights = Enumerable.Repeat("Lich", blightCount).ToArray();
             TestScenario
-                .Given.Game.Hero(x => x.Location("Forest"))
-                .Given.Location("Forest", x => x.Blight(blights))
+                .Given.Game.WithHero(x => x.Location("Forest"))
+                .Given.Location("Forest").Blight(blights)
                 .When.Hero.DrawsEvent("Raid")
                 .Then.Player.Event
                 .HasBody("Raid", 6, "Count the blights in your location")
@@ -25,7 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .ActiveRow(rowText)
                 .When.Player.SelectsEventOption("Continue")
                 .Then.Hero(x => x.LostSecrecy(lostSecrecy).LostGrace(lostGrace))
-                .Then.Game(g => g.Darkness(darkness));
+                .Then.Game.Darkness(darkness);
         }
     }
 }

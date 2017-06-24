@@ -36,7 +36,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Celerity()
         {
             TestScenario
-                .Given.Game.Hero("Druid", x => x
+                .Given.Game.WithHero("Druid", x => x
                     .HasPowers("Celerity", "Raven Form", "Wolf Form")
                     .Location("Monastery")
                     .Power("Wolf Form", p => p.IsActive()))
@@ -57,7 +57,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Celerity_NoNewFormSelected()
         {
             TestScenario
-                .Given.Game.Hero("Druid", x => x.HasPowers("Celerity").Location("Monastery"))
+                .Given.Game.WithHero("Druid", x => x.HasPowers("Celerity").Location("Monastery"))
                 .When.Player.TakesAction("Celerity")
                 .When.Player.SelectsLocation("Village")
                 .Then.Hero(x => x.Location("Village").HasAvailableActions("Continue"))
@@ -224,7 +224,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Visions_IgnoreEvent()
         {
             TestScenario
-                .Given.Game.Hero("Druid", x => x.HasPowers("Visions"))
+                .Given.Game.WithHero("Druid", x => x.HasPowers("Visions"))
                 .When.Hero.DrawsEvent("Anathema")
                 .Then.Player.SeesEvent("Anathema", "Lose 1 Grace.", 6, "Continue", "Ignore [Visions]")
                 .When.Player.SelectsEventOption("Ignore [Visions]")
