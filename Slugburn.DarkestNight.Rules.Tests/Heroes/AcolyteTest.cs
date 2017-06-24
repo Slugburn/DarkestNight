@@ -121,11 +121,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void FalseLife()
         {
-            new TestScenario()
-                .GivenHero("Acolyte", x => x.HasPowers("False Life").Location("Swamp").Grace(0))
-                .WhenHeroUsesBonusAction("Acolyte", "False Life")
-                .ThenHero(x => x.Grace(1))
-                .ThenPower("False Life", x => x.IsExhausted());
+            TestScenario
+                .Given.Game(g => g.Hero("Acolyte", x => x.HasPowers("False Life").Location("Swamp").Grace(0)))
+                .When.Player(p => p.TakesAction("False Life"))
+                .Then.Hero(h => h.Grace(1).Power("False Life", x => x.IsExhausted()));
         }
 
         [Test]

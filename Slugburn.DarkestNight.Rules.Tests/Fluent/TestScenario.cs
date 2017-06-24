@@ -5,7 +5,6 @@ using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
@@ -105,14 +104,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             var expectation = new HeroExpectation(hero);
             expect(expectation);
             expectation.Verify();
-            return this;
-        }
-
-        public TestScenario WhenHeroUsesBonusAction(string heroName, string powerName)
-        {
-            var hero = _game.GetHero(heroName);
-            var bonusAction = (IBonusAction) hero.Powers.Single(p => p.Name == powerName);
-            bonusAction.Use(hero);
             return this;
         }
 

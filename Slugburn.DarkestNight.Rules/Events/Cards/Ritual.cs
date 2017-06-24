@@ -4,7 +4,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
     public class Ritual : IEventCard
     {
-        public EventDetail Detail => EventDetail.Create("Ritual", 0, x => x
+        public EventDetail Detail => EventDetail.Create("Ritual", 6, x => x
             .Text("You may spend 1 Grace and lose 1 Secrecy to cancel this event.\nCount the blights in your location")
             .RowSelector(hero => hero.GetBlights().Count)
             .Row(0, "Necromancer moves there")

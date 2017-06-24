@@ -29,33 +29,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             return this;
         }
 
-        public PlayerActionContext ChoosesTactic(string powerName)
-        {
-            _player.SetTacticChoice(powerName);
-            return this;
-        }
-
         public PlayerActionContext ChoosesBlight(params string[] blights)
         {
             _player.SetBlightChoice(blights.Select(x=>StringExtensions.ToEnum<Blight>(x)).ToArray());
             return this;
         }
 
-        public PlayerActionContext AssignRollToBlight(int roll, Blight blight)
-        {
-            _player.SetBlightRollAssignment(blight, roll);
-            return this;
-        }
-
         public PlayerActionContext ChooseLocation(Location location)
         {
             _player.SetLocationChoice(location);
-            return this;
-        }
-
-        public PlayerActionContext RollAnotherDie(params bool[] choices)
-        {
-            _player.SetRollAnotherDieChoice(choices);
             return this;
         }
 

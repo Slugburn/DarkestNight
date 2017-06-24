@@ -13,7 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game(g => g.Hero())
                 .When.Hero(h => h.DrawsEvent("Ritual"))
-                .Then.Player(p => p.Event(e => e.HasBody("Ritual", 0,
+                .Then.Player(p => p.Event(e => e.HasBody("Ritual", 6,
                         "You may spend 1 Grace and lose 1 Secrecy to cancel this event.\nCount the blights in your location")
                     .HasOptions("Cancel", "Continue")))
                 .When.Player(p => p.SelectsEventOption("Cancel"))

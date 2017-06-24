@@ -1,8 +1,9 @@
-﻿using Slugburn.DarkestNight.Rules.Heroes;
+﻿using Slugburn.DarkestNight.Rules.Actions;
+using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 {
-    class FalseLife : Bonus, IBonusAction
+    class FalseLife : Bonus
     {
         public FalseLife()
         {
@@ -14,20 +15,26 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
+            hero.AddAction(new FalseLifeAction {Name = Name});
             hero.Add(new PreventMovementEffect(location => Exhausted && location == Location.Monastery));
-        }
-
-        public void Use(Hero hero)
-        {
-            if (!IsUsable(hero))
-                throw new PowerNotUsableException(this);
-            hero.GainGrace(1, hero.DefaultGrace);
-            Exhaust(hero);
         }
 
         public override bool IsUsable(Hero hero)
         {
             return base.IsUsable(hero) && hero.Grace < hero.DefaultGrace && hero.Location != Location.Monastery;
         }
+
+        internal class FalseLifeAction : PowerAction
+        {
+            public override void Act(Hero hero)
+            {
+                var power = hero.GetPower(Name);
+                if (!power.IsUsable(hero))
+                    throw new PowerNotUsableException(power);
+                hero.GainGrace(1, hero.DefaultGrace);
+                power.Exhaust(hero);
+            }
+        }
+
     }
 }
