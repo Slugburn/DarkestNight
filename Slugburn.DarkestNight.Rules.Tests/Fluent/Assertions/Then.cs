@@ -2,24 +2,15 @@
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
-using Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
-    public class Then : IThen
+    public class Then : TestRoot, IThen
     {
-        private readonly Game _game;
-        private readonly FakePlayer _player;
 
-        public Then(Game game, FakePlayer player)
+        public Then(Game game, FakePlayer player) : base(game, player)
         {
-            _game = game;
-            _player = player;
         }
-
-        public IGiven Given => new Given(_game, _player);
-        public IWhen When => new When(_game, _player);
-        IThen IThen.Then => new Then(_game, _player);
 
         public IThen Player(Action<PlayerExpectation> expect)
         {

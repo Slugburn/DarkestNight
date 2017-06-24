@@ -1,6 +1,7 @@
 ﻿using System;
 using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 using Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements;
+using IGiven = Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements.IGiven;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {

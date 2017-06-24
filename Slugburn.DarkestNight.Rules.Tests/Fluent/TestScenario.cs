@@ -62,10 +62,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public TestScenario WhenNecromancerTakesTurn(Action<IFakeRollContext> roll, Action<PlayerActionContext> action = null)
+        public TestScenario WhenNecromancerTakesTurn(Action<IFakeRollContext> roll, Action<IPlayerActionContext> action = null)
         {
             roll(this);
-            action?.Invoke(new PlayerActionContext(_player));
+            action?.Invoke(new PlayerActionContext(_game, _player));
             _game.Necromancer.TakeTurn();
             return this;
         }
@@ -118,7 +118,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 
         public TestScenario WhenPlayerTakesAction(string actionName, Action<PlayerActionContext> actions = null)
         {
-            actions?.Invoke(new PlayerActionContext(_player));
+            actions?.Invoke(new PlayerActionContext(_game, _player));
             var hero = _game.ActingHero;
             var action = hero.GetAction(actionName);
             hero.TakeAction(action);
@@ -206,7 +206,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public TestScenario WhenHero(Action<HeroActionContext> action)
+        public TestScenario WhenHero(Action<IHeroActionContext> action)
         {
             var context = new HeroActionContext(_game.ActingHero);
             action(context);

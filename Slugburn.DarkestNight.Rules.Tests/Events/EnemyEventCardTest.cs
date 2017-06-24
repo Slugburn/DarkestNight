@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
+using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 using Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Events
@@ -35,7 +36,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void DarkChampion(int darkness, string enemy)
         {
             TestEnemyGeneratorEvent("Dark Champion", enemy, "Compare to Darkness", 3,
-                given => given.Game(g => g.Darkness(darkness)));
+                given => given.Game.Darkness(darkness));
         }
 
         [TestCase(5, "Scout")]
@@ -95,7 +96,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void Patrols(int darkness, string enemy)
         {
             TestEnemyGeneratorEvent("Patrols", enemy, "Compare to Darkness", 4,
-                given => given.Game(x => x.Darkness(darkness)));
+                given => given.Game.Darkness(darkness));
         }
 
         [TestCase(6, "Zombie")]
@@ -141,11 +142,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             designator = designator ?? (s=>s);
             TestScenario
-                .Given.Game(g=>g.Hero("Acolyte", x => x.Location("Village")))
+                .Given.Game.Hero("Acolyte", x => x.Location("Village"))
                 .Given.Configure(designator)
                 .When.Hero(x => x.DrawsEvent(eventName))
                 .Then.Player(x => x.SeesEvent(eventName, text, expectedFate, "Continue"))
-                .When.Player(x => x.SelectsEventOption("Continue"))
+                .When.Player().SelectsEventOption("Continue")
                 .Then.Hero(x => x.Event(e=>e.HasOutstanding(0)).Secrecy(null))
                 .Then.Player(x => x.SeesTarget(enemy));
         }

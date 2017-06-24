@@ -11,7 +11,7 @@ using Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
 {
-    public class HeroActionContext
+    public class HeroActionContext : IHeroActionContext
     {
         private readonly Hero _hero;
 
@@ -21,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         }
 
 
-        public HeroActionContext DrawsEvent(string eventName=null)
+        public IHeroActionContext DrawsEvent(string eventName = null)
         {
             if (eventName != null)
             {
@@ -35,27 +35,27 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             return this;
         }
 
-        public HeroActionContext RefreshesPower(string powerName)
+        public IHeroActionContext RefreshesPower(string powerName)
         {
             var power = _hero.GetPower(powerName);
             power.Refresh();
             return this;
         }
 
-        public HeroActionContext MovesTo(string location)
+        public IHeroActionContext MovesTo(string location)
         {
             _hero.MoveTo(location.ToEnum<Location>());
             return this;
         }
 
-        public HeroActionContext StartsTurn()
+        public IHeroActionContext StartsTurn()
         {
             _hero.IsActionAvailable = true;
             _hero.StartTurn();
             return this;
         }
 
-        public HeroActionContext Fights(Action<TacticContext> actions)
+        public IHeroActionContext Fights(Action<TacticContext> actions)
         {
             FacesEnemies();
             SelectsTactic(actions, "Fight");
@@ -64,7 +64,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             return this;
         }
 
-        public HeroActionContext Eludes(Action<TacticContext> actions)
+        public IHeroActionContext Eludes(Action<TacticContext> actions)
         {
             FacesEnemies();
             SelectsTactic(actions, "Elude");
@@ -73,7 +73,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             return this;
         }
 
-        public HeroActionContext SelectsTactic(Action<TacticContext> define = null, string defaultTactic = "Fight")
+        public IHeroActionContext SelectsTactic(Action<TacticContext> define = null, string defaultTactic = "Fight")
         {
             var context = new TacticContext(_hero, defaultTactic);
             define?.Invoke(context);

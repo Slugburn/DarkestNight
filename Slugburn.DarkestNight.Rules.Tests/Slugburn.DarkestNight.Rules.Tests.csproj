@@ -66,6 +66,8 @@
     <Compile Include="Fakes\FakeRollExtension.cs" />
     <Compile Include="Fakes\IFakeRollContext.cs" />
     <Compile Include="Fluent\Actions\GameActionContext.cs" />
+    <Compile Include="Fluent\Actions\IHeroActionContext.cs" />
+    <Compile Include="Fluent\Actions\IPlayerActionContext.cs" />
     <Compile Include="Fluent\Actions\IWhen.cs" />
     <Compile Include="Fluent\Actions\When.cs" />
     <Compile Include="Fluent\Arrangements\FightContext.cs" />
@@ -73,6 +75,7 @@
     <Compile Include="Fluent\Arrangements\GameContext.cs" />
     <Compile Include="Fluent\Arrangements\Given.cs" />
     <Compile Include="Fluent\Arrangements\HeroContext.cs" />
+    <Compile Include="Fluent\Arrangements\IGameContext.cs" />
     <Compile Include="Fluent\Arrangements\IGiven.cs" />
     <Compile Include="Fluent\Assertions\GameExpectation.cs" />
     <Compile Include="Fluent\Assertions\HeroEventExpectation.cs" />
@@ -89,6 +92,8 @@
     <Compile Include="Fluent\Assertions\LocationExpectation.cs" />
     <Compile Include="Fluent\Arrangements\TacticContext.cs" />
     <Compile Include="Fluent\Assertions\Then.cs" />
+    <Compile Include="Fluent\ITestRoot.cs" />
+    <Compile Include="Fluent\TestRoot.cs" />
     <Compile Include="Fluent\TestScenario.cs" />
     <Compile Include="Heroes\AcolyteTest.cs" />
     <Compile Include="Heroes\DruidTest.cs" />

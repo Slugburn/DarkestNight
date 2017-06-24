@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
+using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Events
 {
@@ -17,12 +18,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void CloseCall(int roll, string effect, int lostSecrecy, int lostGrace)
         {
             TestScenario
-                .Given.Game(g => g.Hero())
+                .Given.Game.Hero()
                 .When.Hero(x => x.DrawsEvent("Close Call"))
                 .Then.Player(p => p.Event(e => e.HasBody("Close Call", 4, "Roll 1d and take the highest").HasOptions("Roll")))
-                .When.Player(p => p.SelectsEventOption("Roll", x => x.Rolls(roll)))
+                .When.Player().SelectsEventOption("Roll", x => x.Rolls(roll))
                 .Then.Player(p => p.Event(e => e.ActiveRow(effect)))
-                .When.Player(p => p.SelectsEventOption("Continue"))
+                .When.Player().SelectsEventOption("Continue")
                 .Then.Hero(h => h.LostSecrecy(lostSecrecy).LostGrace(lostGrace));
         }
     }

@@ -51,8 +51,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void DarkVeil_IgnoreBlightEffects()
         {
             TestScenario
-                .Given.Game(g => g.Hero("Acolyte", x => x.HasPowers("Dark Veil")))
-                .When.Player(x => x.TakesAction("Dark Veil"))
+                .Given.Game.Hero("Acolyte", x => x.HasPowers("Dark Veil"))
+                .When.Player().TakesAction("Dark Veil")
                 .Then.Hero(x => x.IsIgnoringBlights().Power("Dark Veil", p => p.IsExhausted()))
                 .When.Hero(x => x.StartsTurn())
                 .Then.Hero(x => x.IsNotIgnoringBlights());
@@ -83,9 +83,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void DeathMask_IgnoreSecrecyLossForBeingInNecromancersLocation()
         {
             TestScenario
-                .Given.Game(g => g
+                .Given.Game
                     .NecromancerLocation("Swamp")
-                    .Hero("Acolyte", x => x.HasPowers("Death Mask").Location("Swamp")))
+                    .Hero("Acolyte", x => x.HasPowers("Death Mask").Location("Swamp"))
                 .When.Hero(h => h.StartsTurn())
                 .Then.Hero(h => h.LostSecrecy(0));
         }
@@ -122,8 +122,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void FalseLife()
         {
             TestScenario
-                .Given.Game(g => g.Hero("Acolyte", x => x.HasPowers("False Life").Location("Swamp").Grace(0)))
-                .When.Player(p => p.TakesAction("False Life"))
+                .Given.Game.Hero("Acolyte", x => x.HasPowers("False Life").Location("Swamp").Grace(0))
+                .When.Player().TakesAction("False Life")
                 .Then.Hero(h => h.Grace(1).Power("False Life", x => x.IsExhausted()));
         }
 
@@ -151,9 +151,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void FalseLife_PreventsMovementToMonasteryWhileExhausted()
         {
             TestScenario
-                .Given.Game(g=>g.Hero("Acolyte", x => x.HasPowers("False Life").Location("Village").Grace(2)))
+                .Given.Game.Hero("Acolyte", x => x.HasPowers("False Life").Location("Village").Grace(2))
                 .Then.Hero(x => x.Grace(2).CanMoveTo("Monastery"))
-                .When.Player(p=>p.TakesAction("False Life"))
+                .When.Player().TakesAction("False Life")
                 .Then.Hero(x => x.CannotMoveTo("Monastery"))
                 .When.Hero(x => x.RefreshesPower("False Life"))
                 .Then.Hero(x => x.CanMoveTo("Monastery"));

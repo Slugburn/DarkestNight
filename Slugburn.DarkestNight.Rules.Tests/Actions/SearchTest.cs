@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
+using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Actions
 {
@@ -14,11 +15,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
         public void FindItem(Find find, string itemName)
         {
             TestScenario
-                .Given.Game(g => g
-                    .Hero("Acolyte", x => x.Location("Village"))
-                    .NextSearchResult(find))
-                .When.Player(x => x.TakesAction("Search"))
-                .When.Player(x => x.AcceptsRoll())
+                .Given.Game.Hero("Acolyte", x => x.Location("Village"))
+                    .NextSearchResult(find)
+                .When.Player().TakesAction("Search")
+                .When.Player().AcceptsRoll()
                 .Then.Hero(x => x.HasUsedAction().HasItem(itemName));
         }
     }

@@ -1,37 +1,24 @@
 ﻿using System;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
-using Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements;
-using Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
 {
-    public class When : IWhen
+    public class When : TestRoot, IWhen
     {
-        private readonly Game _game;
-        private readonly FakePlayer _player;
-
-        public When(Game game, FakePlayer player)
+        public When(Game game, FakePlayer player) :base(game,player)
         {
-            _game = game;
-            _player = player;
         }
 
-        IGiven IWhen.Given => new Given(_game, _player);
-        IWhen IWhen.When => new When(_game, _player);
-        public IThen Then => new Then(_game, _player);
-
-        public IWhen Hero(Action<HeroActionContext> action)
+        public IWhen Hero(Action<IHeroActionContext> action)
         {
             var context = new HeroActionContext(_game.ActingHero);
             action(context);
             return this;
         }
 
-        public IWhen Player(Action<PlayerActionContext> action)
+        public IPlayerActionContext Player()
         {
-            var context = new PlayerActionContext(_player);
-            action(context);
-            return this;
+            return new PlayerActionContext(_game,_player);
         }
 
         public IWhen Game(Action<GameActionContext> action)
