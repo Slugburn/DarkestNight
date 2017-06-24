@@ -2,7 +2,7 @@ using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Rolls
 {
-    internal class StaticRollBonus : IRollModifier
+    public class StaticRollBonus : IRollModifier
     {
         public static StaticRollBonus Create(string name, RollType rollType, int dieCount)
         {

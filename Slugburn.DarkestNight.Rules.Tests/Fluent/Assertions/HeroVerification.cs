@@ -35,6 +35,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private List<string> _expectedPowerNames;
         private int _expectedUnresolvedEvents;
         private string[] _availableActions;
+        private StaticRollBonus _dieModifer;
+        private bool _hasNoDieModifer;
 
 
         public HeroVerification()
@@ -115,6 +117,16 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             unresolvedEvents.ShouldBe(_expectedUnresolvedEvents);
             CurrentEvent.Verify(root);
 
+            if (_hasNoDieModifer)
+                hero.GetRollModifiers().Count().ShouldBe(0);
+            if (_dieModifer != null)
+            {
+                var match = hero.GetRollModifiers().SingleOrDefault(x => x.Name == _dieModifer.Name);
+                if (match == null)
+                    Assert.Fail("No matching die modifier was found.");
+                var mod = match.GetModifier(hero, _dieModifer.RollType);
+                Assert.That(mod, Is.EqualTo(_dieModifer.DieCount));
+            }
         }
 
 
@@ -296,6 +308,18 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         public HeroVerification HasAvailableActions(params string[] expected)
         {
             _availableActions = expected;
+            return this;
+        }
+
+        public HeroVerification HasDieModifier(string name, RollType rollType, int mod)
+        {
+            _dieModifer = new StaticRollBonus() {Name = name, RollType = rollType, DieCount = mod};
+            return this;
+        }
+
+        public HeroVerification HasNoDieModifier()
+        {
+            _hasNoDieModifer = true;
             return this;
         }
     }

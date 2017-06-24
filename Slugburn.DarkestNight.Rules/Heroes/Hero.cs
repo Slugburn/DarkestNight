@@ -131,8 +131,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 foreach (var spy in spies)
                     LoseSecrecy("Spies");
             }
-
             IsTurnTaken = true;
+            Triggers.Send(HeroTrigger.EndOfTurn);
         }
 
         public void LoseTurn()

@@ -152,7 +152,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenPower("Tree Form", x => x.IsActive())
                 .WhenPlayerTakesAction("Deactivate Form")
                 .WhenHero(x => x.StartsTurn())
-                .ThenHero(x => x.Grace(0).HasAvailableActions("Travel", "Hide", "Pray", "Tree Form"));
+                .ThenHero(x => x.Grace(0).HasAvailableActions("Travel", "Hide", "Pray", "Tree Form", "End Turn"));
         }
 
         [Test]
