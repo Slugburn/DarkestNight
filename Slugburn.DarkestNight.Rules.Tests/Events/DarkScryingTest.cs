@@ -12,9 +12,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Given.Game.Hero("Acolyte")
-                .When.Hero(x => x.DrawsEvent("Dark Scrying"))
+                .When.Hero.DrawsEvent("Dark Scrying")
                 .Then.Player(p => p.Event(e => e.HasBody("Dark Scrying", 4, "Spend 1 Grace or lose 2 Secrecy.").HasOptions("Spend Grace", "Lose Secrecy")))
-               .When.Player().SelectsEventOption(option)
+                .When.Player.SelectsEventOption(option)
                 .Then.Hero(h => h.LostSecrecy(lostSecrecy).LostGrace(lostGrace));
         }
 
@@ -23,9 +23,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
        {
            TestScenario
                .Given.Game.Hero("Acolyte", x => x.Grace(0))
-               .When.Hero(x => x.DrawsEvent("Dark Scrying"))
+               .When.Hero.DrawsEvent("Dark Scrying")
                .Then.Player(p => p.Event(e => e.HasBody("Dark Scrying", 4, "Spend 1 Grace or lose 2 Secrecy.").HasOptions("Lose Secrecy")))
-               .When.Player().SelectsEventOption("Lose Secrecy")
+               .When.Player.SelectsEventOption("Lose Secrecy")
                .Then.Hero(h => h.Grace(0).LostSecrecy(2));
        }
     }

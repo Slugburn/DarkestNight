@@ -144,9 +144,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.Hero("Acolyte", x => x.Location("Village"))
                 .Given.Configure(designator)
-                .When.Hero(x => x.DrawsEvent(eventName))
+                .When.Hero.DrawsEvent(eventName)
                 .Then.Player(x => x.SeesEvent(eventName, text, expectedFate, "Continue"))
-                .When.Player().SelectsEventOption("Continue")
+                .When.Player.SelectsEventOption("Continue")
                 .Then.Hero(x => x.Event(e=>e.HasOutstanding(0)).Secrecy(null))
                 .Then.Player(x => x.SeesTarget(enemy));
         }

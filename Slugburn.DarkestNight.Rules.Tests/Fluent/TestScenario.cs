@@ -208,7 +208,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 
         public TestScenario WhenHero(Action<IHeroActionContext> action)
         {
-            var context = new HeroActionContext(_game.ActingHero);
+            var context = new HeroActionContext(_game, _player);
             action(context);
             return this;
         }

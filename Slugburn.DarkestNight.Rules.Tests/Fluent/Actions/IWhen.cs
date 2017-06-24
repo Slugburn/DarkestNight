@@ -4,8 +4,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
 {
     public interface IWhen : ITestRoot
     {
-        IWhen Hero(Action<IHeroActionContext> action);
-        IPlayerActionContext Player();
+        IHeroActionContext Hero { get; }
+        IPlayerActionContext Player { get; }
         IWhen Game(Action<GameActionContext> action);
     }
 }

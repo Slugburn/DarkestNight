@@ -14,11 +14,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Given.Game.Hero()
-                .When.Hero(h => h.DrawsEvent("Ritual"))
+                .When.Hero.DrawsEvent("Ritual")
                 .Then.Player(p => p.Event(e => e.HasBody("Ritual", 6,
-                        "You may spend 1 Grace and lose 1 Secrecy to cancel this event.\nCount the blights in your location")
+                    "You may spend 1 Grace and lose 1 Secrecy to cancel this event.\nCount the blights in your location")
                     .HasOptions("Cancel", "Continue")))
-                .When.Player().SelectsEventOption("Cancel")
+                .When.Player.SelectsEventOption("Cancel")
                 .Then.Hero(h => h.LostGrace().LostSecrecy().Event(e => e.HasOutstanding(0)));
         }
 
@@ -28,9 +28,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.Hero(h => h.Location("Village")).NecromancerLocation("Ruins")
                 .Given.Location("Village", x => x.Blight())
-                .When.Hero(h => h.DrawsEvent("Ritual"))
+                .When.Hero.DrawsEvent("Ritual")
                 .Then.Player(p => p.Event(e => e.ActiveRow("Necromancer moves there").HasOptions("Cancel", "Continue")))
-                .When.Player().SelectsEventOption("Continue")
+                .When.Player.SelectsEventOption("Continue")
                 .Then.Game(g => g.NecromancerLocation("Village"))
                 .Then.Hero(h => h.Event(e => e.HasOutstanding(0)));
         }
@@ -44,12 +44,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.Hero(h => h.Location("Village"))
                 .Given.Location("Village", l => l.Blight(blights))
-                .When.Hero(h => h.DrawsEvent("Ritual"))
+                .When.Hero.DrawsEvent("Ritual")
                 .Then.Player(p => p.Event(e => e
                     .ActiveRow("New blight there")
                     .HasOptions("Cancel", "Continue")))
                 .Given.Game.NextBlight("Desecration")
-                .When.Player().SelectsEventOption("Continue")
+                .When.Player.SelectsEventOption("Continue")
                 .Then.Location("Village", x => x.Blights(after))
                 .Then.Hero(h => h.Event(e => e.HasOutstanding(0)));
         }
@@ -62,11 +62,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Given.Game.Hero(h => h.Location("Village")).Darkness(3)
                 .Given.Location("Village", l => l.Blight(blights))
-                .When.Hero(h => h.DrawsEvent("Ritual"))
+                .When.Hero.DrawsEvent("Ritual")
                 .Then.Player(p => p.Event(e => e
                     .ActiveRow("+1 Darkness")
                     .HasOptions("Cancel", "Continue")))
-                .When.Player().SelectsEventOption("Continue")
+                .When.Player.SelectsEventOption("Continue")
                 .Then.Game(g => g.Darkness(4))
                 .Then.Hero(h => h.Event(e => e.HasOutstanding(0)));
         }

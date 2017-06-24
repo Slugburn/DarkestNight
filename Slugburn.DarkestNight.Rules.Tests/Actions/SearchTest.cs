@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
-using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Actions
 {
@@ -16,9 +15,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
         {
             TestScenario
                 .Given.Game.Hero("Acolyte", x => x.Location("Village"))
-                    .NextSearchResult(find)
-                .When.Player().TakesAction("Search")
-                .When.Player().AcceptsRoll()
+                .NextSearchResult(find)
+                .When.Player.TakesAction("Search")
+                .When.Player.AcceptsRoll()
                 .Then.Hero(x => x.HasUsedAction().HasItem(itemName));
         }
     }

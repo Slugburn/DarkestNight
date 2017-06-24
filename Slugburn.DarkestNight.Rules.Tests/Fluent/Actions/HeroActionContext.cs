@@ -7,17 +7,18 @@ using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Powers;
+using Slugburn.DarkestNight.Rules.Tests.Fakes;
 using Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
 {
-    public class HeroActionContext : IHeroActionContext
+    public class HeroActionContext : When, IHeroActionContext
     {
         private readonly Hero _hero;
 
-        public HeroActionContext(Hero hero)
+        public HeroActionContext(Game game, FakePlayer player) :base (game, player)
         {
-            _hero = hero;
+            _hero = game.ActingHero;
         }
 
 

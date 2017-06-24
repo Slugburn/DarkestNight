@@ -9,16 +9,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         {
         }
 
-        public IWhen Hero(Action<IHeroActionContext> action)
-        {
-            var context = new HeroActionContext(_game.ActingHero);
-            action(context);
-            return this;
-        }
+        public IHeroActionContext Hero => new HeroActionContext(_game, _player);
 
-        public IPlayerActionContext Player()
+
+        public IPlayerActionContext Player
         {
-            return new PlayerActionContext(_game,_player);
+            get { return new PlayerActionContext(_game, _player); }
         }
 
         public IWhen Game(Action<GameActionContext> action)

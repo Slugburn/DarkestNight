@@ -3,7 +3,7 @@ using Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
 {
-    public interface IHeroActionContext
+    public interface IHeroActionContext : IWhen
     {
         IHeroActionContext DrawsEvent(string eventName = null);
         IHeroActionContext RefreshesPower(string powerName);
