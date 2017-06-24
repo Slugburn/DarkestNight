@@ -103,7 +103,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void DarkVeil_IgnoreBlightEffects()
         {
             TestScenario
-                .Given.Game.WithHero("Acolyte", x => x.HasPowers("Dark Veil"))
+                .Given.Game.WithHero("Acolyte").HasPowers("Dark Veil")
                 .When.Player.TakesAction("Dark Veil")
                 .Then(Verify.Hero.IsIgnoringBlights())
                 .Then(Verify.Power("Dark Veil").IsExhausted())
@@ -126,7 +126,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario
                 .Given.Game.NecromancerIn("Swamp")
-                .WithHero("Acolyte", x => x.HasPowers("Death Mask").At("Swamp"))
+                .WithHero("Acolyte").HasPowers("Death Mask").At("Swamp")
                 .When.Hero.StartsTurn()
                 .Then(Verify.Hero.LostSecrecy(0));
         }
@@ -147,7 +147,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void FalseLife()
         {
             TestScenario
-                .Given.Game.WithHero("Acolyte", x => x.HasPowers("False Life").At("Swamp").Grace(0))
+                .Given.Game.WithHero("Acolyte").HasPowers("False Life").At("Swamp").Grace(0)
                 .When.Player.TakesAction("False Life")
                 .Then(Verify.Hero.Grace(1))
                 .Then(Verify.Power("False Life").IsExhausted());
@@ -165,7 +165,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void FalseLife_PreventsMovementToMonasteryWhileExhausted()
         {
             TestScenario
-                .Given.Game.WithHero("Acolyte", x => x.HasPowers("False Life").At("Village").Grace(2))
+                .Given.Game.WithHero("Acolyte").HasPowers("False Life").At("Village").Grace(2)
                 .Then(Verify.Hero.Grace(2).CanMoveTo("Monastery"))
                 .When.Player.TakesAction("False Life")
                 .Then(Verify.Hero.CannotMoveTo("Monastery"))

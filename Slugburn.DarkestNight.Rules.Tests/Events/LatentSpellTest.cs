@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void LatentSpell_NoEffect(int roll)
         {
             TestScenario
-                .Given.Game.WithHero(x => x.At("Ruins"))
+                .Given.Game.WithHero().At("Ruins")
                 .When.Hero.DrawsEvent("Latent Spell")
                 .When.Player.SelectsEventOption("Spend Grace", Fake.Rolls(roll))
                 .Then().Player.EventView.ActiveRow("No effect")
@@ -63,7 +63,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void LatentSpell_Move()
         {
             TestScenario
-                .Given.Game.WithHero(x => x.At("Ruins"))
+                .Given.Game.WithHero().At("Ruins")
                 .When.Hero.DrawsEvent("Latent Spell")
                 .When.Player.SelectsEventOption("Spend Grace", Fake.Rolls(4)).Then().Player.EventView.ActiveRow("Move to any other location")
                 .When.Player.SelectsEventOption("Continue")
@@ -76,7 +76,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void LatentSpell_NoGrace()
         {
             TestScenario
-                .Given.Game.WithHero(h => h.Grace(0))
+                .Given.Game.WithHero().Grace(0)
                 .When.Hero.DrawsEvent("Latent Spell").Then().Player.EventView.HasBody("Latent Spell", 2,
                     "Lose 1 Secrecy. Then, spend 1 Grace or discard this event without further effect.\nRoll 1d and take the highest")
                 .HasOptions("Discard Event")

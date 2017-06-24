@@ -80,6 +80,7 @@
     <Compile Include="Fluent\Arrangements\HeroContext.cs" />
     <Compile Include="Fluent\Arrangements\IGameContext.cs" />
     <Compile Include="Fluent\Arrangements\IGiven.cs" />
+    <Compile Include="Fluent\Arrangements\IHeroContext.cs" />
     <Compile Include="Fluent\Arrangements\ILocationContext.cs" />
     <Compile Include="Fluent\Arrangements\IPowerContext.cs" />
     <Compile Include="Fluent\Assertions\HeroEventExpectation.cs" />

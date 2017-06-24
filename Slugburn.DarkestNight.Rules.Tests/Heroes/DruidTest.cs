@@ -36,7 +36,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Celerity()
         {
             TestScenario
-                .Given.Game.WithHero("Druid", x => x.HasPowers("Celerity", "Raven Form", "Wolf Form").At("Monastery"))
+                .Given.Game.WithHero("Druid").HasPowers("Celerity", "Raven Form", "Wolf Form").At("Monastery")
                 .Given.Power("Wolf Form").IsActive()
                 .When.Player.TakesAction("Celerity")
                 .Then(Verify.Power("Wolf Form").IsActive(false))
@@ -51,7 +51,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Celerity_NoNewFormSelected()
         {
             TestScenario
-                .Given.Game.WithHero("Druid", x => x.HasPowers("Celerity").At("Monastery"))
+                .Given.Game.WithHero("Druid").HasPowers("Celerity").At("Monastery")
                 .When.Player.TakesAction("Celerity")
                 .When.Player.SelectsLocation("Village")
                 .Then(Verify.Hero.Location("Village").HasAvailableActions("Continue"))
@@ -218,7 +218,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Visions_IgnoreEvent()
         {
             TestScenario
-                .Given.Game.WithHero("Druid", x => x.HasPowers("Visions"))
+                .Given.Game.WithHero("Druid").HasPowers("Visions")
                 .When.Hero.DrawsEvent("Anathema")
                 .Then().Player.EventView.HasOptions("Continue", "Ignore [Visions]")
                 .When.Player.SelectsEventOption("Ignore [Visions]")

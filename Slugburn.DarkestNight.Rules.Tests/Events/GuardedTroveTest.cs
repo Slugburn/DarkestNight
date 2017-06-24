@@ -53,7 +53,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void FailElude_NoSecrecy()
         {
             TestScenario
-                .Given.Game.WithHero(h => h.Secrecy(0))
+                .Given.Game.WithHero().Secrecy(0)
                 .When.Hero.DrawsEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
                 .Then().Player.Conflict(c => c.Target("Guarded Trove"))

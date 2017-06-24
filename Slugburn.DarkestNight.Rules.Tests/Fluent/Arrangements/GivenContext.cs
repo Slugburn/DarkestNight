@@ -27,7 +27,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
         public IGiven ActingHero(Action<HeroContext> def)
         {
             var hero = base.GetGame().ActingHero;
-            var ctx = new HeroContext(hero);
+            var ctx = new HeroContext(GetGame(), GetPlayer(), hero);
             def(ctx);
             return this;
         }

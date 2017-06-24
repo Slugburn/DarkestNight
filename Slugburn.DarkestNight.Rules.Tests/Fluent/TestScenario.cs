@@ -50,7 +50,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         private void AddHero(Hero hero, Action<HeroContext> def)
         {
             _game.AddHero(hero, _player);
-            var ctx = new HeroContext(hero);
+            var ctx = new HeroContext(_game, _player, hero);
             def?.Invoke(ctx);
             _game.ActingHero = hero;
             _player.ActiveHero = hero.Name;

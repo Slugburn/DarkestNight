@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -15,16 +14,24 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
         {
         }
 
-        public IGameContext WithHero(string name, Action<HeroContext> def = null)
+        public IHeroContext WithHero(string name)
         {
-            AddHero(HeroFactory.Create(name), def);
-            return this;
+            return AddHero(HeroFactory.Create(name));
         }
 
-        public IGameContext WithHero(Action<HeroContext> def = null)
+        public IHeroContext WithHero()
         {
-            AddHero(GenericHeroFactory.Create(), def);
-            return this;
+            return AddHero(GenericHeroFactory.Create());
+        }
+
+        private IHeroContext AddHero(Hero hero)
+        {
+            var game = GetGame();
+            var player = GetPlayer();
+            game.AddHero(hero, player);
+            game.ActingHero = hero;
+            player.ActiveHero = hero.Name;
+            return new HeroContext(game, player, hero);
         }
 
         public IGameContext NecromancerIn(string location)
@@ -60,15 +67,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
                 GetGame().Maps.Insert(0, new Map(Enumerable.Repeat(blight, 7).ToArray(), new Find[6]));
             }
             return this;
-        }
-
-        private void AddHero(Hero hero, Action<HeroContext> def)
-        {
-            GetGame().AddHero(hero, GetPlayer());
-            var ctx = new HeroContext(hero);
-            def?.Invoke(ctx);
-            GetGame().ActingHero = hero;
-            GetPlayer().ActiveHero = hero.Name;
         }
     }
 }

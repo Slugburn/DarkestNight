@@ -22,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void CloseCall_NoGraceAvailable()
         {
             TestScenario
-                .Given.Game.WithHero("Acolyte", x => x.Grace(0))
+                .Given.Game.WithHero("Acolyte").Grace(0)
                 .When.Hero.DrawsEvent("Dark Scrying")
                 .Then().Player.EventView.HasBody("Dark Scrying", 4, "Spend 1 Grace or lose 2 Secrecy.").HasOptions("Lose Secrecy")
                 .When.Player.SelectsEventOption("Lose Secrecy")

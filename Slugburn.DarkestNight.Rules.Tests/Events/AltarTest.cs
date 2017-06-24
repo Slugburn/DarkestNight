@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 : new[] {"Continue"};
             const int roll = 4;
             TestScenario
-                .Given.Game.Darkness(0).WithHero("Acolyte", x => x.Secrecy(startingSecrecy).Grace(0))
+                .Given.Game.Darkness(0).WithHero("Acolyte").Secrecy(startingSecrecy).Grace(0)
                 .When.Hero.DrawsEvent("Altar")
                 .Then().Player.EventView.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
@@ -37,7 +37,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 : new[] {"+1 Darkness"};
             const int roll = 3;
             TestScenario
-                .Given.Game.Darkness(0).WithHero("Acolyte", x => x.Grace(startingGrace))
+                .Given.Game.Darkness(0).WithHero("Acolyte").Grace(startingGrace)
                 .When.Hero.DrawsEvent("Altar")
                 .Then().Player.EventView.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll")
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))

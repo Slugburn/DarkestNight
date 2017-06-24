@@ -49,7 +49,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void SloppySearch_GainSecrecy()
         {
             TestScenario
-                .Given.Game.WithHero(h => h.Secrecy(0))
+                .Given.Game.WithHero().Secrecy(0)
                 .When.Hero.DrawsEvent("Sloppy Search")
                 .Then().Player.EventView.HasBody("Sloppy Search", 2, "Roll 1d and take the highest").HasOptions("Roll")
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(6))
@@ -62,7 +62,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void SloppySearch_NoGraceToSpend()
         {
             TestScenario
-                .Given.Game.WithHero(h => h.Grace(0))
+                .Given.Game.WithHero().Grace(0)
                 .When.Hero.DrawsEvent("Sloppy Search")
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(1)).Then().Player.EventView.ActiveRow("Spend 1 Grace or lose 1 Secrecy").HasOptions("Lose Secrecy");
         }

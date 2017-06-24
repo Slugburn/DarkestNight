@@ -17,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             var blights = Enumerable.Repeat("Confusion", blightCount).ToArray();
             var newBlights = Enumerable.Repeat("Desecration", blightCount).ToArray();
             TestScenario
-                .Given.Game.WithHero(x => x.At("Village"))
+                .Given.Game.WithHero().At("Village")
                 .Given.Location("Village").Blights(blights)
                 .When.Hero.DrawsEvent("Upheaval")
                 .Then().Player.EventView

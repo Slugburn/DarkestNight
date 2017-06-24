@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             var blights = Enumerable.Repeat("Lich", blightCount).ToArray();
             TestScenario
-                .Given.Game.WithHero(x => x.At("Forest"))
+                .Given.Game.WithHero().At("Forest")
                 .Given.Location("Forest").Blights(blights)
                 .When.Hero.DrawsEvent("Raid").Then().Player.EventView
                 .HasBody("Raid", 6, "Count the blights in your location")
