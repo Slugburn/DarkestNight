@@ -6,6 +6,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
     {
         IHeroActionContext Hero { get; }
         IPlayerActionContext Player { get; }
-        IWhen Game(Action<GameActionContext> action);
+        IGameActionContext Game { get; }
     }
 }

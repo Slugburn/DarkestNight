@@ -127,7 +127,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Game.WithHero("Knight").HasPowers("Oath of Defense").Grace(0).At("Village")
                 .Given.Location("Village").Blights("Shades")
                 .Given.ActingHero().Power("Oath of Defense").IsActive()
-                .When.Game(x => x.BlightDestroyed("Village", "Shades"))
+                .When.Game.BlightDestroyed("Village", "Shades")
                 .Then(Verify.Hero.Grace(1))
                 .Then(Verify.Power("Oath of Defense").IsActive(false));
         }

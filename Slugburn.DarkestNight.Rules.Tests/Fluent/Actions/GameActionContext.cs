@@ -1,20 +1,23 @@
 ﻿using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
+using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
 {
-    public class GameActionContext
+    public interface IGameActionContext : IWhen
     {
-        private readonly Game _game;
+        IGameActionContext BlightDestroyed(string location, string blight);
+    }
 
-        public GameActionContext(Game _game)
+    public class GameActionContext : WhenContext, IGameActionContext
+    {
+        public GameActionContext(Game game, FakePlayer player) : base(game, player)
         {
-            this._game = _game;
         }
 
-        public GameActionContext BlightDestroyed(string location, string blight)
+        public IGameActionContext BlightDestroyed(string location, string blight)
         {
-            _game.DestroyBlight(location.ToEnum<Location>(), blight.ToEnum<Blight>());
+            GetGame().DestroyBlight(location.ToEnum<Location>(), blight.ToEnum<Blight>());
             return this;
         }
     }
