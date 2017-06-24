@@ -3,6 +3,5 @@
     public interface IThen : ITestRoot
     {
         IPlayerExpectation Player { get; }
-        IGameExpectation Game { get; }
     }
 }

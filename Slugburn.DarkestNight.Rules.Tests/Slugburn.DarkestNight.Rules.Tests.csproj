@@ -81,13 +81,12 @@
     <Compile Include="Fluent\Arrangements\IGameContext.cs" />
     <Compile Include="Fluent\Arrangements\IGiven.cs" />
     <Compile Include="Fluent\Arrangements\ILocationContext.cs" />
-    <Compile Include="Fluent\Assertions\GameExpectation.cs" />
+    <Compile Include="Fluent\Arrangements\IPowerContext.cs" />
     <Compile Include="Fluent\Assertions\HeroEventExpectation.cs" />
     <Compile Include="Fluent\Assertions\HeroEventVerification.cs" />
     <Compile Include="Fluent\Assertions\HeroExpectation.cs" />
     <Compile Include="Fluent\Actions\PlayerActionContext.cs" />
     <Compile Include="Fluent\Assertions\HeroVerification.cs" />
-    <Compile Include="Fluent\Assertions\IGameExpectation.cs" />
     <Compile Include="Fluent\Assertions\IPlayerEventExpectation.cs" />
     <Compile Include="Fluent\Assertions\IPlayerExpectation.cs" />
     <Compile Include="Fluent\Assertions\IThen.cs" />

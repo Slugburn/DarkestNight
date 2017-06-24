@@ -9,7 +9,5 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         }
 
         public IPlayerExpectation Player => new PlayerExpectation(base.GetGame(), base.GetPlayer());
-
-        public IGameExpectation Game => new GameExpectation(base.GetGame(), base.GetPlayer());
     }
 }
