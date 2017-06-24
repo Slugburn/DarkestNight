@@ -15,7 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             var after = blights.Concat(new[] {"Desecration"}).ToArray();
             TestScenario
                 .Given.Game.WithHero(h => h.At("Village"))
-                .Given.Location("Village").Blight(blights)
+                .Given.Location("Village").Blights(blights)
                 .When.Hero.DrawsEvent("Ritual")
                 .Then().Player.Event.ActiveRow("New blight there").HasOptions("Cancel", "Continue")
                 .Given.Game.NextBlight("Desecration")
@@ -31,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             var blights = Enumerable.Repeat("Skeletons", blightCount).ToArray();
             TestScenario
                 .Given.Game.WithHero(h => h.At("Village")).Darkness(3)
-                .Given.Location("Village").Blight(blights)
+                .Given.Location("Village").Blights(blights)
                 .When.Hero.DrawsEvent("Ritual").Then().Player.Event
                 .ActiveRow("+1 Darkness")
                 .HasOptions("Cancel", "Continue")
@@ -56,7 +56,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Given.Game.WithHero(h => h.At("Village")).NecromancerIn("Ruins")
-                .Given.Location("Village").Blight()
+                .Given.Location("Village").Blights()
                 .When.Hero.DrawsEvent("Ritual")
                 .Then().Player.Event.ActiveRow("Necromancer moves there").HasOptions("Cancel", "Continue")
                 .When.Player.SelectsEventOption("Continue").Then().Game.NecromancerLocation("Village")

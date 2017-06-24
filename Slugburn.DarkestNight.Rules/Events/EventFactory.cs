@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Slugburn.DarkestNight.Rules.Events.Cards;
 using Slugburn.DarkestNight.Rules.Events.Cards.Enemies;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -77,7 +78,7 @@ namespace Slugburn.DarkestNight.Rules.Events
                 case "Unfriendly Eyes":
                     return new UnfriendlyEyes();
                 case "Upheaval":
-                    return new EventCard(eventName,2, "Remove all blights from your current location and create an equal number of new blights", Upheaval);
+                    return new EventCard(eventName,2, "Remove all blights from your current location and create an equal number of new blights.", Upheaval);
                 case "Vengeful Spirit":
                     return new VengefulSpirit();
                 case "Vile Messenger":
@@ -91,7 +92,7 @@ namespace Slugburn.DarkestNight.Rules.Events
         {
             var count = hero.GetBlights().Count;
             var space = (Space) hero.GetSpace();
-            foreach (var blight in hero.GetBlights())
+            foreach (var blight in hero.GetBlights().ToList())
                 space.RemoveBlight(blight);
             hero.Game.CreateBlights(hero.Location, count);
         }

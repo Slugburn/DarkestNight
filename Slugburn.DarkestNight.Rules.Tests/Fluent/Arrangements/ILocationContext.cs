@@ -2,6 +2,6 @@
 {
     public interface ILocationContext
     {
-        LocationContext Blight(params string[] blights);
+        LocationContext Blights(params string[] blights);
     }
 }

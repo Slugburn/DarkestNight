@@ -18,7 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             var blights = Enumerable.Repeat("Desecration", blightCount).ToArray();
             TestEnemyGeneratorEvent("Black Banner", target, "Count the blights in your location", 4,
-                given => given.ActingHero(x => x.At("Village")).Location("Village").Blight(blights));
+                given => given.ActingHero(x => x.At("Village")).Location("Village").Blights(blights));
         }
 
         [TestCase(0, "Ghoul")]

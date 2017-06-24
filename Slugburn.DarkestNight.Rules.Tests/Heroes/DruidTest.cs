@@ -15,7 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             var expectedBlights = attackSucceeds ? new string[0] : new[] {"Corruption"};
             new TestScenario()
                 .GivenHero("Druid", x => x.HasPowers("Animal Companion").At("Village"))
-                .GivenLocation("Village", x => x.Blight("Corruption"))
+                .GivenLocation("Village", x => x.Blights("Corruption"))
                 .WhenPlayerTakesAttackAction(x => x.Tactic("Animal Companion").Rolls(roll))
                 .ThenSpace("Village", x => x.Blights(expectedBlights))
                 .ThenHero(x => x.RolledNumberOfDice(2).HasUsedAction().LostSecrecy())
@@ -27,7 +27,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Druid", x => x.HasPowers("Camouflage").At("Village"))
-                .GivenLocation("Village", x => x.Blight("Skeletons"))
+                .GivenLocation("Village", x => x.Blights("Skeletons"))
                 .WhenHero(h => h.Eludes(x => x.Tactic("Camouflage").Rolls(1, 6)))
                 .ThenHero(x => x.RolledNumberOfDice(2).LostGrace(0));
         }
@@ -190,7 +190,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Druid", x => x.HasPowers("Vines").At("Mountains"))
-                .GivenLocation("Mountains", x => x.Blight("Zombies"))
+                .GivenLocation("Mountains", x => x.Blights("Zombies"))
                 .WhenHero(h => h.Eludes(x => x.Tactic("Vines [Elude]").Rolls(1, 2, 3, 4)))
                 .ThenHero(x => x.RolledNumberOfDice(4))
                 .ThenPower("Vines", x => x.IsExhausted());
@@ -201,7 +201,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             new TestScenario()
                 .GivenHero("Druid", x => x.HasPowers("Vines").At("Mountains"))
-                .GivenLocation("Mountains", x => x.Blight("Zombies"))
+                .GivenLocation("Mountains", x => x.Blights("Zombies"))
                 .WhenHero(h => h.Fights(x => x.Tactic("Vines [Fight]").Rolls(2, 3, 4, 5)))
                 .ThenHero(x => x.RolledNumberOfDice(4))
                 .ThenPower("Vines", x => x.IsExhausted());
