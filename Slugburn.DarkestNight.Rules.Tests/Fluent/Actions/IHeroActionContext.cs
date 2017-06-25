@@ -12,5 +12,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         IHeroActionContext Fights(Action<TacticContext> actions);
         IHeroActionContext Eludes(Action<TacticContext> actions);
         IHeroActionContext SelectsTactic(Action<TacticContext> define = null, string defaultTactic = "Fight");
+        IHeroActionContext FacesEnemy(string enemyName);
     }
 }

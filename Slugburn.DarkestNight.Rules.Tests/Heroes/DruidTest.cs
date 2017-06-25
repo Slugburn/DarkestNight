@@ -208,10 +208,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void Visions_CannotIgnoreRenewal()
         {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Visions"))
-                .WhenHero(x => x.DrawsEvent("Renewal"))
-                .ThenPlayer(x => x.SeesEvent("Renewal", "Reshuffle the Event Deck and draw another card.", 0, "Continue"));
+            TestScenario
+                .Given.Game.WithHero("Druid").HasPowers("Visions")
+                .When.Hero.DrawsEvent("Renewal")
+                .Then(Verify.Hero.CurrentEvent.CanBeIgnored(false))
+                .Then(Verify.Player.EventView.HasOptions("Continue"));
         }
 
         [Test]

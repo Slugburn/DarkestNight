@@ -30,6 +30,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             return this;
         }
 
+        public IHeroContext NotAt(string location)
+        {
+            var excluded = location.ToEnum<Location>();
+            var randomLocation = Rules.Game.GetAllLocations().Except(new[] {excluded}).Shuffle().First();
+            _hero.Location = randomLocation;
+            return this;
+        }
+
         public IHeroContext Secrecy(int value)
         {
             _hero.Secrecy = value;

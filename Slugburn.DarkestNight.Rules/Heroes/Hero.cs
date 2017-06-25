@@ -115,7 +115,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             AvailableActions = GetAvailableActions();
         }
 
-        private IList<string> GetAvailableActions()
+        public IList<string> GetAvailableActions()
         {
             var actions = _actions.Values.Where(x => x.IsAvailable(this)).Select(x => x.Name);
             var filtered = _actionFilters.Where(x => x.State == State).Aggregate(actions, (x, filter) => x.Intersect(filter.Allowed));

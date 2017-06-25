@@ -37,8 +37,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private string[] _availableActions;
         private StaticRollBonus _dieModifer;
         private bool _hasNoDieModifer;
-
-
+        private Dictionary<string, bool> _powerAvailability = new Dictionary<string, bool>();
+        
         public HeroVerification()
         {
             _expectedActionAvailable = true;
@@ -110,12 +110,33 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
             if (_expectedPowerNames != null)
                 hero.Powers.Select(x => x.Name).OrderBy(x => x).ShouldBe(_expectedPowerNames);
-            if (_availableActions != null)
-                Assert.That(hero.AvailableActions, Is.EquivalentTo(_availableActions));
             var unresolvedEvents = hero.EventQueue.Count + (hero.CurrentEvent != null ? 1 : 0);
             unresolvedEvents.ShouldBe(_expectedUnresolvedEvents);
             CurrentEvent.Verify(root);
 
+            VerifyActions(hero);
+
+            VerifyDice(hero);
+        }
+
+        private void VerifyActions(Hero hero)
+        {
+            if (hero.AvailableActions == null)
+                hero.AvailableActions = hero.GetAvailableActions();
+            if (_availableActions != null)
+                Assert.That(hero.AvailableActions, Is.EquivalentTo(_availableActions));
+            foreach (var kvp in _powerAvailability)
+            {
+                var actionName = kvp.Key;
+                var expected = kvp.Value;
+                var actual = hero.AvailableActions.Contains(actionName);
+                var expectedDescription = expected ? "" : "not";
+                actual.ShouldBe(expected, $"Expected {actionName} to {expectedDescription} be available");
+            }
+        }
+
+        private void VerifyDice(Hero hero)
+        {
             if (_hasNoDieModifer)
                 hero.GetRollModifiers().Count().ShouldBe(0);
             if (_dieModifer != null)
@@ -319,6 +340,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         public HeroVerification HasNoDieModifier()
         {
             _hasNoDieModifer = true;
+            return this;
+        }
+
+        public HeroVerification CanTakeAction(string actionName, bool isUsable)
+        {
+            _powerAvailability[actionName] = isUsable;
             return this;
         }
     }

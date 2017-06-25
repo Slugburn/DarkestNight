@@ -84,6 +84,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             return this;
         }
 
+        public IHeroActionContext FacesEnemy(string enemyName)
+        {
+            _hero.FaceEnemy(enemyName);
+            return this;
+        }
+
         private IEnumerable<int> GetTargetIds(ICollection<string> targets)
         {
             var source = _hero.ConflictState.AvailableTargets.ToList();

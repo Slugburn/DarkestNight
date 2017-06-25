@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using Shouldly;
+using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
@@ -18,6 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         public void Verify(ITestRoot root)
         {
             var player = root.Get<FakePlayer>();
+            player.State.ShouldBe(PlayerState.Event);
             var view = player.Event;
             if (_title != null)
             {

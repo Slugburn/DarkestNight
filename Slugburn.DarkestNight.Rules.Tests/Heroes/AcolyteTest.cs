@@ -9,6 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
     [TestFixture]
     public class AcolyteTest
     {
+        // Fade to Black (Bonus): +1 die in fights when Darkness is 10 or more. Another +1 die in fights when Darkness is 20 or more.
         [TestCase(9, 0)]
         [TestCase(10, 1)]
         [TestCase(19, 1)]
@@ -16,25 +17,23 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void FadeToBlack(int darkness, int bonusDice)
         {
             var expectedDice = 1 + bonusDice;
-            var rolls = Enumerable.Repeat(6, expectedDice).ToArray();
-            new TestScenario()
-                .GivenDarkness(darkness)
-                .GivenHero("Acolyte", x => x.HasPowers("Fade to Black").At("Monastery"))
-                .GivenLocation("Monastery", x => x.Blights("Skeletons"))
-                .WhenPlayerTakesAttackAction(x => x.Rolls(rolls))
-                .ThenHero(x => x.FightDice(expectedDice).RolledNumberOfDice(expectedDice).HasUsedAction().LostSecrecy());
+            TestScenario
+                .Given.Game.WithHero("Acolyte").HasPowers("Fade to Black")
+                .Given.Game.Darkness(darkness)
+                .Then(Verify.Hero.FightDice(expectedDice));
         }
 
+        // False Life (Bonus): Exhaust at any time while not at the Monastery to gain 1 Grace (up to default). You may not enter the Monastery while this power is exhausted.
         [TestCase(0, true)]
         [TestCase(1, true)]
         [TestCase(2, true)]
         [TestCase(3, false)]
         [TestCase(4, false)]
-        public void FalseLife_NotUsableWhenAtOrAboveDefaultGrace(int grace, bool usable)
+        public void FalseLife_NotUsableWhenAtOrAboveDefaultGrace(int grace, bool isAvailable)
         {
-            new TestScenario()
-                .GivenHero("Acolyte", x => x.HasPowers("False Life").At("Swamp").Grace(grace))
-                .ThenHero(x => x.Grace(grace).CanUsePower("False Life", usable));
+            TestScenario
+                .Given.Game.WithHero("Acolyte").HasPowers("False Life").NotAt("Monastery").Grace(grace)
+                .Then(Verify.Hero.Grace(grace).CanTakeAction("False Life", isAvailable));
         }
 
         [TestCase(2, new[] {1, 5})]

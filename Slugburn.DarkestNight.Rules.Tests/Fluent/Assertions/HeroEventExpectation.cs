@@ -14,18 +14,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             _hero = hero;
         }
 
-        public HeroEventExpectation HasOutstanding(int count)
-        {
-            _expectedOutstandingEvents = count;
-            return this;
-        }
-
-        public HeroEventExpectation CanBeIgnored(bool expected = true)
-        {
-            _expectIsIgnorable = expected;
-            return this;
-        }
-
         public void Verify()
         {
             var outstandingEvents = (_hero.CurrentEvent != null ? 1 : 0) + _hero.EventQueue.Count;

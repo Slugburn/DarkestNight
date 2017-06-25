@@ -84,6 +84,7 @@
     <Compile Include="Fluent\Arrangements\ILocationContext.cs" />
     <Compile Include="Fluent\Arrangements\IPowerContext.cs" />
     <Compile Include="Fluent\Assertions\BlightSelectionViewVerification.cs" />
+    <Compile Include="Fluent\Assertions\ConflictViewVerification.cs" />
     <Compile Include="Fluent\Assertions\EventViewVerification.cs" />
     <Compile Include="Fluent\Assertions\GameVerification.cs" />
     <Compile Include="Fluent\Assertions\HeroEventExpectation.cs" />

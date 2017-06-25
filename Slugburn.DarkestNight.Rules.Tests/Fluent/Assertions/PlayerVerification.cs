@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Shouldly;
+using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
@@ -11,6 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private List<string> _locations;
         private List<string> _powerNames;
         private BlightSelectionViewVerification _blightSelectionView;
+        private ConflictViewVerification _conflictView;
 
         public void Verify(ITestRoot root)
         {
@@ -20,6 +23,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             if (_powerNames != null)
                 Assert.That(player.Powers.Select(x=>x.Name), Is.EquivalentTo(_powerNames));
 
+            _conflictView?.Verify(root);
             _eventView?.Verify(root);
             _blightSelectionView?.Verify(root);
         }
@@ -39,6 +43,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             {
                 _blightSelectionView = new BlightSelectionViewVerification();
                 return _blightSelectionView;
+            }
+        }
+
+        public ConflictViewVerification ConflictView
+        {
+            get
+            {
+                _conflictView = new ConflictViewVerification();
+                return _conflictView;
             }
         }
 
