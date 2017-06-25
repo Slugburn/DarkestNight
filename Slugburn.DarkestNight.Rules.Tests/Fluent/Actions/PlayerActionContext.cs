@@ -99,5 +99,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
                 GetPlayer().AssignDiceToTargets(_diceAssignment);
             return this;
         }
+
+        public IPlayerActionContext AcceptsConflictResult()
+        {
+            throw new NotImplementedException();
+            return this;
+        }
     }
 }

@@ -1,15 +1,11 @@
 ﻿using System.Collections.Generic;
-using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Enemies
 {
-    public interface IEnemy
+    public interface IEnemy : IConflict
     {
-        string Name { get; }
         int Fight { get; }
         int Elude { get; }
-        void Win(Hero hero);
-        void Failure(Hero hero);
         IEnumerable<ConflictResult> GetResults();
     }
 }

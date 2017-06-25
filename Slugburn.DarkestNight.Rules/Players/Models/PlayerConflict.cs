@@ -11,6 +11,8 @@ namespace Slugburn.DarkestNight.Rules.Players.Models
         public int TargetCount { get; set; }
         public ICollection<int> Roll { get; set; }
 
+        public ConflictEffect Effect { get; set; }
+
         public class Tactic
         {
             public string Name { get; set; }
@@ -20,6 +22,15 @@ namespace Slugburn.DarkestNight.Rules.Players.Models
         {
             public int Id { get; set; }
             public string Name { get; set; }
+        }
+
+        public class ConflictEffect
+        {
+            public int TargetName { get; set; }
+            public int Roll { get; set; }
+            public bool Success { get; set; }
+            public string Outcome { get; set; }
+            public string Effect { get; set; }
         }
 
         public static PlayerConflict FromConflictState(ConflictState state)
@@ -38,9 +49,15 @@ namespace Slugburn.DarkestNight.Rules.Players.Models
             return new Tactic {Name = x.Name};
         }
 
-        private static Target CreateTarget(TargetInfo x)
+        private static Target CreateTarget(TargetInfo targetInfo)
         {
-            return new Target {Id = x.Id, Name = x.Name};
+            return new Target {Id = targetInfo.Id, Name = targetInfo.Name};
+        }
+
+        public static Target CreateTarget(ConflictTarget target)
+        {
+            return new Target() {Id = target.Id, Name = target.Name};
         }
     }
+
 }

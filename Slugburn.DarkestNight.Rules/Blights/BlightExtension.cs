@@ -61,10 +61,9 @@ namespace Slugburn.DarkestNight.Rules.Blights
         private static TargetInfo GetTargetInfo(this Blight blight, int id)
         {
             var detail = blight.GetDetail();
-            var targetInfo = new TargetInfo
+            var targetInfo = new TargetInfo(detail)
             {
                 Id = id,
-                Name = detail.Name,
                 CanFight = true,
                 FightTarget = detail.Might,
                 Results = new List<ConflictResult>

@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Blights.Implementations
             DefenseText = "Exhaust all powers.";
         }
 
-        public override void Defend(Hero hero)
+        public override void Failure(Hero hero)
         {
             hero.ExhaustPowers();
         }

@@ -18,5 +18,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         IPlayerActionContext SelectsBlight(string location, string blight);
         IPlayerActionContext FinishNecromancerTurn();
         IPlayerActionContext AssignsDie(int dieValue, string target);
+        IPlayerActionContext AcceptsConflictResult();
     }
 }

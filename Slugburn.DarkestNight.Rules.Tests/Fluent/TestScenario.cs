@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
@@ -135,14 +134,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public TestScenario ThenPlayer(Action<IPlayerExpectation> expect)
-        {
-            var expectation = new PlayerExpectation(_game, _player);
-            expect(expectation);
-            expectation.Verify();
-            return this;
-        }
-
         public TestScenario GivenDarkness(int darkness)
         {
             _game.Darkness = darkness;
@@ -180,14 +171,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             var blights = context.GetTargets();
             var targetIds = GetTargetIds(blights).ToList();
             _game.ActingHero.SelectTactic(context.GetTactic(), targetIds);
-            return this;
-        }
-
-        public TestScenario WhenPlayerAssignsRolledDiceToBlights(params Tuple<string, int>[] assignments)
-        {
-            var targets = _game.ActingHero.ConflictState.SelectedTargets;
-            var a = assignments.Select(x => new TargetDieAssignment {TargetId = targets.Single(t => t.Name == x.Item1.ToString()).Id, DieValue = x.Item2}).ToList();
-            _game.ActingHero.AssignDiceToTargets(a);
             return this;
         }
 

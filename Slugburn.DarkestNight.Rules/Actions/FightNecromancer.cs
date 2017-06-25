@@ -2,6 +2,7 @@
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tactics;
 
@@ -15,14 +16,16 @@ namespace Slugburn.DarkestNight.Rules.Actions
         public void Act(Hero hero)
         {
             hero.ValidateState(HeroState.ChoosingAction);
-            var necromancerTargetInfo = new [] {hero.Game.Necromancer}.GetTargetInfo();
+            var necromancer = hero.Game.Necromancer;
+            var availableTargets = new [] {necromancer}.GetTargetInfo();
+            var selectedTargets = availableTargets.Select(x=> new ConflictTarget(necromancer, x, TacticType.Fight)).ToList();
             var conflictState = new ConflictState
             {
                 ConflictType = ConflictType.Attack,
-                SelectedTargets = necromancerTargetInfo,
+                SelectedTargets =  selectedTargets,
                 MinTarget = 1,
                 MaxTarget = 1,
-                AvailableTargets = necromancerTargetInfo
+                AvailableTargets = availableTargets
             };
             hero.ConflictState = conflictState;
             hero.SetRoll(RollBuilder.Create<FightNecromancerRoll>());

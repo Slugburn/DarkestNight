@@ -71,6 +71,7 @@
     <Compile Include="Blights\Implementations\EnemyGenerator.cs" />
     <Compile Include="Blights\Implementations\UnholyAura.cs" />
     <Compile Include="Board.cs" />
+    <Compile Include="ConflictTarget.cs" />
     <Compile Include="ConflictState.cs" />
     <Compile Include="ConflictType.cs" />
     <Compile Include="Enemies\Cultist.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="Heroes\Impl\Wizard.cs" />
     <Compile Include="Heroes\PreventMovementEffect.cs" />
     <Compile Include="Heroes\UnexpectedStateException.cs" />
+    <Compile Include="IConflict.cs" />
     <Compile Include="IgnoreBlight.cs" />
     <Compile Include="ILocationSelectedHandler.cs" />
     <Compile Include="Items\Artifacts\BloodRing.cs" />

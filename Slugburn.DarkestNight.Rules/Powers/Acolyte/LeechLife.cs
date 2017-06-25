@@ -51,7 +51,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
             public void AcceptRoll(Hero hero, RollState rollState)
             {
-                hero.CurrentRoll.TargetNumber = hero.ConflictState.SelectedTargets.Select(x => x.FightTarget).Min();
+                hero.CurrentRoll.TargetNumber = hero.ConflictState.SelectedTargets.Select(x => x.TargetNumber).Min();
                 if (hero.CurrentRoll.Successes > 1)
                     hero.GainGrace(1, hero.DefaultGrace);
             }

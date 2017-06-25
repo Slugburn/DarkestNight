@@ -7,10 +7,9 @@ namespace Slugburn.DarkestNight.Rules.Enemies
     {
         private static TargetInfo GetTargetInfo(this IEnemy enemy, int id)
         {
-            return new TargetInfo
+            return new TargetInfo(enemy)
             {
                 Id = id,
-                Name= enemy.Name,
                 CanFight = enemy.Fight > 0,
                 CanElude = enemy.Elude > 0,
                 FightTarget = enemy.Fight,

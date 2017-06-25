@@ -43,7 +43,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
 
             public void AcceptRoll(Hero hero, RollState rollState)
             {
-                rollState.TargetNumber = hero.ConflictState.SelectedTargets.Single().FightTarget;
+                rollState.TargetNumber = hero.ConflictState.SelectedTargets.Single().TargetNumber;
                 var successes = rollState.Successes;
                 if (successes < 2)
                     hero.LoseGrace();

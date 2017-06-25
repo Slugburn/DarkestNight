@@ -66,6 +66,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Then(Verify.Game.NecromancerAt("Village").Darkness(1));
         }
 
+        // Call to Death (Action): Attack two blights in your location at once. Make a single fight roll with +1 die, 
+        // then divide the dice between blights and resolve as two separate attacks (losing Secrecy for each).
         [Test]
         public void CallToDeath()
         {
@@ -98,15 +100,19 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                     .HasUsedAction());
         }
 
+        // Dark Veil (Bonus): Exhaust at any time to ignore blights' effects until your next turn. 
+        // *OR* Exhaust after you fail an attack on a blight to ignore its Defense.
         [Test]
         public void DarkVeil_IgnoreBlightDefense()
         {
-            new TestScenario()
-                .GivenLocation("Swamp", x => x.Blights("Spies"))
-                .GivenHero("Acolyte", x => x.HasPowers("Dark Veil").At("Swamp"))
-                .WhenPlayerTakesAttackAction(player => player.UsePower("Dark Veil").Rolls(1))
-                .ThenHero(x => x.HasUsedAction().LostSecrecy()) // loses Secrecy for making attack, but not for Spies defense
-                .ThenPower("Dark Veil", x => x.IsExhausted());
+            TestScenario.Given.Game
+                .WithHero("Acolyte").HasPowers("Dark Veil").At("Swamp")
+                .Location("Swamp").Blights("Spies")
+                .When.Player.TakesAction("Attack").ResolvesConflict(x => x.Tactic("Fight").Target("Spies").Rolls(1)).AcceptsRoll()
+                .When.Player.TakesAction("Dark Veil")
+                .Then(Verify.Power("Dark Veil").IsExhausted())
+                .When.Player.AcceptsConflictResult()
+                .Then(Verify.Hero.HasUsedAction().LostSecrecy()); // loses Secrecy for making attack, but not for Spies defense
         }
 
         [Test]

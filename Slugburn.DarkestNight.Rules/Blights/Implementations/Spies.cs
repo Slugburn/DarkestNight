@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Blights.Implementations
             DefenseText = "Lose 1 Secrecy.";
         }
 
-        public override void Defend(Hero hero)
+        public override void Failure(Hero hero)
         {
             hero.LoseSecrecy(Name);
         }

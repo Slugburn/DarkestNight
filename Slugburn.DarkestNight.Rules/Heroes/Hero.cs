@@ -259,31 +259,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             Player = player;
         }
 
-        internal void ResolveAttack(int targetId, int result)
+        internal void ResolveAttack(ConflictTarget target)
         {
-            var targetInfo = ConflictState.SelectedTargets.Single(x => x.Id == targetId);
-            var isWin = result >= targetInfo.FightTarget;
-            if (isWin)
+            if (target.IsWin)
                 Triggers.Send(HeroTrigger.FightWon);
-            var isNecromancer = targetInfo.Name == "Necromancer";
-            if (isNecromancer)
-            {
-                Game.Necromancer.ResolveAttack(result, this);
-                return;
-            }
-            LoseSecrecy("Attack");
-            var blight = targetInfo.Name.ToEnum<Blight>();
-            var blightInfo = blight.GetDetail();
-            if (isWin)
-            {
-                Game.DestroyBlight(Location, blight);
-                Triggers.Send(HeroTrigger.DestroyedBlight);
-            }
-            else
-            {
-                if (Triggers.Send(HeroTrigger.BeforeBlightDefends))
-                    blightInfo.Defend(this);
-            }
+            if (!(target.Conflict is Necromancer))
+                LoseSecrecy("Attack");
+            DisplayConflictState();
+            target.Resolve(this);
         }
 
         public List<ITactic> GetAvailableFightTactics()
@@ -333,14 +316,17 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (!tacticIsValid)
                 throw new Exception($"Invalid tactic: {tacticName}");
 
-            var selectedTargets = from id in targetIds join target in ConflictState.AvailableTargets on id equals target.Id select target;
+            var tactic = _tactics[tacticName];
+            var selectedTargets = from id in targetIds
+                join target in ConflictState.AvailableTargets on id equals target.Id
+                select new ConflictTarget(target.Conflict, target, tactic.Type);
             ConflictState.SelectedTargets = selectedTargets.ToList();
             ConflictState.SelectedTactic = tacticInfo;
-            var tactic = _tactics[tacticName];
+
             tactic.Use(this);
 
             CurrentRoll.RollType = tactic.GetRollType();
-            CurrentRoll.TargetNumber = ConflictState.SelectedTargets.Min(x => tactic.Type == TacticType.Fight ? x.FightTarget : x.EludeTarget);
+            CurrentRoll.TargetNumber = ConflictState.SelectedTargets.Min(x => x.TargetNumber);
             CurrentRoll.BaseDiceCount = tactic.GetDiceCount();
             CurrentRoll.BaseName = tactic.Name;
 
@@ -384,7 +370,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 throw new Exception("Invalid targets specified.");
             foreach (var assignment in assignments)
             {
-                ResolveAttack(assignment.TargetId, assignment.DieValue);
+                var target = ConflictState.SelectedTargets.Single(x => x.Id == assignment.TargetId);
+                target.ResultNumber = assignment.DieValue;
+                ResolveAttack(target);
             }
         }
 

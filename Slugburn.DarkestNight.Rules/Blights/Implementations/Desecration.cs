@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Blights.Implementations
             DefenseText = "No effect.";
         }
 
-        public override void Defend(Hero hero)
+        public override void Failure(Hero hero)
         {
             // no effect
         }

@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Blights.Implementations
             DefenseText = "Lose 1 Grace.";
         }
 
-        public override void Defend(Hero hero)
+        public override void Failure(Hero hero)
         {
             hero.LoseGrace();
         }

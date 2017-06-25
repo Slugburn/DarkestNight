@@ -25,6 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             // hero.ConflictState.ConflictType needs to be set before calling hero.GetAvailableFightTactics()
             conflictState.AvailableTactics = hero.GetAvailableFightTactics().GetInfo(hero);
             hero.State = HeroState.SelectingTarget;
+            hero.DisplayConflictState();
         }
 
         public bool IsAvailable(Hero hero)
@@ -37,7 +38,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
                 hero.IsActionAvailable = false;
-                rollState.TargetNumber = hero.ConflictState.SelectedTargets.Single().FightTarget;
+                rollState.TargetNumber = hero.ConflictState.SelectedTargets.Single().TargetNumber;
                 return rollState;
             }
 
