@@ -187,5 +187,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         {
             _game.Necromancer.CompleteTurn();
         }
+
+        public void AssignDiceToTargets(List<TargetDieAssignment> diceAssignment)
+        {
+            var hero = _game.ActingHero;
+            hero.AssignDiceToTargets(diceAssignment);
+        }
     }
 }

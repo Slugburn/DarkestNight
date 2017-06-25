@@ -52,6 +52,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                 };
                 hero.State = HeroState.SelectingTarget;
                 hero.IsActionAvailable = false;
+                hero.DisplayConflictState();
             }
         }
 
@@ -59,6 +60,8 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
+                hero.ConflictState.Roll = rollState.AdjustedRoll;
+                hero.DisplayConflictState();
                 return rollState;
             }
 

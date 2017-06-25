@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
@@ -50,7 +49,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Then(Verify.Hero.Grace(2));
         }
 
-        // Blinding Black (Bonus): 
+        // Blinding Black (Bonus): Exhaust after a Necromancer movement roll to prevent him from detecting any heroes, regardless of Secrecy.
         [Test]
         public void BlindingBlack()
         {
@@ -70,28 +69,33 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void CallToDeath()
         {
-            new TestScenario()
-                .GivenLocation("Swamp", x => x.Blights("Skeletons", "Shades", "Lich"))
-                .GivenHero("Acolyte", x => x.HasPowers("Call to Death").At("Swamp"))
-                .WhenPlayerTakesAttackAction(x => x.Action("Call to Death").Target("Skeletons", "Lich").Rolls(5, 6))
-                .WhenPlayerAssignsRolledDiceToBlights(Tuple.Create("Lich", 6), Tuple.Create("Skeletons", 5))
-                .ThenSpace("Swamp", x => x.Blights("Shades"))
-                .ThenHero(x => x.LostSecrecy(2).HasUsedAction());
+            TestScenario.Given.Game
+                .WithHero("Acolyte").HasPowers("Call to Death").At("Swamp")
+                .Given.Location("Swamp").Blights("Skeletons", "Shades", "Lich")
+                .When.Player.TakesAction("Call to Death")
+                .Then(Verify.Player.ConflictView.HasTargets("Skeletons", "Shades", "Lich").HasTactics("Fight").MustSelectTargets(2))
+                .When.Player.ResolvesConflict(x => x.Tactic("Fight").Target("Skeletons", "Lich").Rolls(5, 6)).AcceptsRoll()
+                .Then(Verify.Player.ConflictView.Rolled(5, 6))
+                .When.Player.AssignsDie(6, "Lich").AssignsDie(5, "Skeletons")
+                .Then(Verify.Location("Swamp").Blights("Shades"))
+                .Then(Verify.Hero.LostSecrecy(2).HasUsedAction());
         }
 
         [Test]
         public void CallToDeath_CombinedWith_FinalRest()
         {
-            new TestScenario()
-                .GivenLocation("Swamp", x => x.Blights("Skeletons", "Shades"))
-                .GivenHero("Acolyte", x => x.HasPowers("Call to Death", "Final Rest").At("Swamp"))
-                .WhenPlayerTakesAttackAction(x => x.Action("Call to Death").Tactic("Final Rest [3d]").Target("Skeletons", "Shades").Rolls(5, 2, 3, 1))
-                .WhenPlayerAssignsRolledDiceToBlights(Tuple.Create("Shades", 5), Tuple.Create("Skeletons", 3))
-                .ThenSpace("Swamp", x => x.Blights("Skeletons"))
-                .ThenHero(x => x.HasUsedAction()
+            TestScenario.Given.Game
+                .WithHero("Acolyte").HasPowers("Call to Death", "Final Rest").At("Swamp")
+                .Given.Location("Swamp").Blights("Skeletons", "Shades")
+                .When.Player.TakesAction("Call to Death")
+                .When.Player.ResolvesConflict(x => x.Tactic("Final Rest [3d]").Target("Skeletons", "Shades").Rolls(5, 2, 3, 1)).AcceptsRoll()
+                .When.Player.AssignsDie(5, "Shades").AssignsDie(3, "Skeletons")
+                .Then(Verify.Location("Swamp").Blights("Skeletons"))
+                .Then(Verify.Hero
                     .WasWounded()
                     .LostGrace(2) // loses Grace from failing to kill Skeletons and rolling a 1 with Final Rest
-                    .LostSecrecy(2)); // loses 2 Secrecy from making 2 attacks
+                    .LostSecrecy(2) // loses 2 Secrecy from making 2 attacks
+                    .HasUsedAction());
         }
 
         [Test]

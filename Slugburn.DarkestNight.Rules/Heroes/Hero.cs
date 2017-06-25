@@ -554,5 +554,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             AvailableActions = GetAvailableActions();
         }
+
+        public void DisplayConflictState()
+        {
+            ConflictState.Display(Player);
+        }
     }
 }

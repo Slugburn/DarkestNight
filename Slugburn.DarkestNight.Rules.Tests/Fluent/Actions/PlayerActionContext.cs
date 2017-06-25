@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
@@ -9,6 +11,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
 {
     public class PlayerActionContext : WhenContext, IPlayerActionContext
     {
+        private List<TargetDieAssignment> _diceAssignment;
+
         public PlayerActionContext(Game game, FakePlayer player) : base(game, player)
         {
         }
@@ -79,6 +83,20 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         public IPlayerActionContext FinishNecromancerTurn()
         {
             GetPlayer().FinishNecromancerTurn();
+            return this;
+        }
+
+        public IPlayerActionContext AssignsDie(int dieValue, string targetName)
+        {
+            var conflict = GetPlayer().Conflict;
+            var target = conflict.Targets.SingleOrDefault(x => x.Name == targetName);
+            if (target==null)
+                Assert.Fail($"{targetName} is not a valid target.");
+            if (_diceAssignment == null)
+                _diceAssignment = new List<TargetDieAssignment>();
+            _diceAssignment.Add(new TargetDieAssignment {TargetId = target.Id, DieValue = dieValue});
+            if (_diceAssignment.Count == conflict.TargetCount)
+                GetPlayer().AssignDiceToTargets(_diceAssignment);
             return this;
         }
     }

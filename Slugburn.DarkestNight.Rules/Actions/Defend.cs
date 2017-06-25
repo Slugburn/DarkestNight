@@ -26,8 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 AvailableTactics = hero.GetAvailableTactics().GetInfo(hero)
             };
             hero.State = HeroState.SelectingTarget;
-            hero.Player.DisplayConflict(PlayerConflict.FromConflictState(hero.ConflictState));
-            hero.Player.State = PlayerState.Conflict;
+            hero.DisplayConflictState();
         }
 
         public bool IsAvailable(Hero hero)
@@ -44,6 +43,8 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 if (tacticType == TacticType.Elude)
                     hero.Triggers.Send(HeroTrigger.Eluding);
                 UpdateTargetNumber(rollState, tacticType, enemy);
+                hero.ConflictState.Roll = rollState.AdjustedRoll;
+                hero.DisplayConflictState();
                 return rollState;
             }
 

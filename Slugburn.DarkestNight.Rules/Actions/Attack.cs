@@ -43,11 +43,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
             public void AcceptRoll(Hero hero, RollState rollState)
             {
-                var result = rollState.Result;
-                var target = hero.ConflictState.SelectedTargets.Single();
-                var assignment = TargetDieAssignment.Create(target.Id, result);
-                hero.State = HeroState.AssigningDice;
-                hero.AssignDiceToTargets(new[] { assignment });
+                hero.ConflictState.Resolve(hero);
             }
         }
     }
