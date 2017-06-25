@@ -343,7 +343,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public HeroVerification CanTakeAction(string actionName, bool isUsable)
+        public HeroVerification CanTakeAction(string actionName, bool isUsable = true)
         {
             _powerAvailability[actionName] = isUsable;
             return this;

@@ -36,28 +36,35 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Then(Verify.Hero.Grace(grace).CanTakeAction("False Life", isAvailable));
         }
 
+        // Final Rest (Tactic): Fight with 2d or 3d. If any die comes up a 1, lose 1 Grace.
         [TestCase(2, new[] {1, 5})]
         [TestCase(3, new[] {1, 1, 6})]
         public void FinalRest(int count, int[] rolls)
         {
-            var tacticName = $"Final Rest ({count} dice)";
-            new TestScenario()
-                .GivenHero("Acolyte", x => x.HasPowers("Final Rest").At("Village").Grace(3).Secrecy(7))
-                .GivenLocation("Village", x => x.Blights("Corruption"))
-                .WhenPlayerTakesAttackAction(x => x.Tactic(tacticName).Rolls(rolls))
-                .ThenSpace("Village", x => x.NoBlights())
-                .ThenHero(x => x.HasUsedAction().Grace(2).Secrecy(6));
+            var tacticName = $"Final Rest [{count}d]";
+            TestScenario
+                .Given.Game.WithHero("Acolyte").HasPowers("Final Rest").Grace(3)
+                .When.Hero.FacesEnemy("Skeleton")
+                .Then(Verify.Player.ConflictView.HasTactics("Fight", "Elude", "Final Rest [2d]", "Final Rest [3d]"))
+                .When.Player.ResolvesConflict(x => x.Target("Skeleton").Tactic(tacticName).Rolls(rolls)).AcceptsRoll()
+                .Then(Verify.Hero.Grace(2));
         }
 
+        // Blinding Black (Bonus): 
         [Test]
         public void BlindingBlack()
         {
-            new TestScenario()
-                .GivenHero("Acolyte", x => x.HasPowers("Blinding Black").At("Swamp").Secrecy(0))
-                .GivenNecromancerLocation("Castle")
-                .WhenNecromancerTakesTurn(x => x.Rolls(5), player => player.UsePower("Blinding Black"))
-                .ThenNecromancerLocation("Village")
-                .ThenPower("Blinding Black", x => x.IsExhausted());
+            TestScenario.Given.Game
+                .WithHero("Acolyte").HasPowers("Blinding Black").At("Swamp").Secrecy(0)
+                .NecromancerAt("Castle")
+                .When.Game.NecromancerActs(Fake.Rolls(5))
+                .Then(Verify.Hero.CanTakeAction("Blinding Black"))
+                .Then(Verify.Player.NecromancerView.Roll(5).Detected("Acolyte").MovingTo("Swamp"))
+                .When.Player.TakesAction("Blinding Black")
+                .Then(Verify.Power("Blinding Black").IsExhausted())
+                .Then(Verify.Player.NecromancerView.Roll(5).Detected().MovingTo("Village"))
+                .When.Player.FinishNecromancerTurn()
+                .Then(Verify.Game.NecromancerAt("Village").Darkness(1));
         }
 
         [Test]
@@ -78,7 +85,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             new TestScenario()
                 .GivenLocation("Swamp", x => x.Blights("Skeletons", "Shades"))
                 .GivenHero("Acolyte", x => x.HasPowers("Call to Death", "Final Rest").At("Swamp"))
-                .WhenPlayerTakesAttackAction(x => x.Action("Call to Death").Tactic("Final Rest (3 dice)").Target("Skeletons", "Shades").Rolls(5, 2, 3, 1))
+                .WhenPlayerTakesAttackAction(x => x.Action("Call to Death").Tactic("Final Rest [3d]").Target("Skeletons", "Shades").Rolls(5, 2, 3, 1))
                 .WhenPlayerAssignsRolledDiceToBlights(Tuple.Create("Shades", 5), Tuple.Create("Skeletons", 3))
                 .ThenSpace("Swamp", x => x.Blights("Skeletons"))
                 .ThenHero(x => x.HasUsedAction()
@@ -124,7 +131,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void DeathMask_IgnoreSecrecyLossForBeingInNecromancersLocation()
         {
             TestScenario
-                .Given.Game.NecromancerIn("Swamp")
+                .Given.Game.NecromancerAt("Swamp")
                 .WithHero("Acolyte").HasPowers("Death Mask").At("Swamp")
                 .When.Hero.StartsTurn()
                 .Then(Verify.Hero.LostSecrecy(0));
@@ -138,7 +145,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .GivenDarkness(20)
                 .GivenHero("Acolyte", x => x.HasPowers("Fade to Black", "Final Rest").At("Monastery"))
                 .GivenLocation("Monastery", x => x.Blights("Skeletons"))
-                .WhenPlayerTakesAttackAction(x => x.Tactic("Final Rest (3 dice)").Rolls(rolls))
+                .WhenPlayerTakesAttackAction(x => x.Tactic("Final Rest [3d]").Rolls(rolls))
                 .ThenHero(x => x.FightDice(3).RolledNumberOfDice(5).HasUsedAction().LostSecrecy());
         }
 

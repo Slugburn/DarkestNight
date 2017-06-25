@@ -34,7 +34,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             return new HeroContext(game, player, hero);
         }
 
-        public IGameContext NecromancerIn(string location)
+        public IGameContext NecromancerAt(string location)
         {
             GetGame().Necromancer.Location = location.ToEnum<Location>();
             return this;

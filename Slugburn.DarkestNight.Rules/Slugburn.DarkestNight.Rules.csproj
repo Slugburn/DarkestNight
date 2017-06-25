@@ -139,6 +139,7 @@
     <Compile Include="Players\Models\PlayerBlight.cs" />
     <Compile Include="Players\Models\PlayerConflict.cs" />
     <Compile Include="Players\Models\PlayerEvent.cs" />
+    <Compile Include="Players\Models\PlayerNecromancer.cs" />
     <Compile Include="Players\Models\PlayerPower.cs" />
     <Compile Include="Players\PlayerModelExtension.cs" />
     <Compile Include="Players\PlayerState.cs" />

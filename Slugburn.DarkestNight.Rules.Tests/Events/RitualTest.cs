@@ -58,7 +58,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void Ritual_NecromancerMoves()
         {
             TestScenario
-                .Given.Game.WithHero().At("Village").NecromancerIn("Ruins")
+                .Given.Game.WithHero().At("Village").NecromancerAt("Ruins")
                 .Given.Location("Village").Blights()
                 .When.Hero.DrawsEvent("Ritual")
                 .Then(Verify.Player.EventView.ActiveRow("Necromancer moves there").HasOptions("Cancel", "Continue"))

@@ -66,7 +66,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         {
             roll(this);
             action?.Invoke(new PlayerActionContext(_game, _player));
-            _game.Necromancer.TakeTurn();
+            _game.Necromancer.StartTurn();
             return this;
         }
 

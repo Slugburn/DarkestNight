@@ -34,6 +34,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         public ICollection<PlayerPower> Powers { get; set; }
         public ICollection<PlayerBlight> Blights { get; set; }
         public ICollection<string> ValidLocations { get; set; }
+        public PlayerNecromancer Necromancer { get; set; }
 
         public bool AskUsePower(string name, string description)
         {
@@ -86,6 +87,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         public void DisplayValidLocations(ICollection<string> locations)
         {
             ValidLocations = locations;
+        }
+
+        public void DisplayNecromancer(PlayerNecromancer necromancer)
+        {
+            Necromancer = necromancer;
         }
 
         public void SetUsePowerResponse(string name, bool value)
@@ -175,6 +181,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         public void SelectBlight(Location location, Blight blight)
         {
             _game.SelectBlight(location, blight);
+        }
+
+        public void FinishNecromancerTurn()
+        {
+            _game.Necromancer.CompleteTurn();
         }
     }
 }

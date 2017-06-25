@@ -549,5 +549,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        public void UpdateAvailableActions()
+        {
+            AvailableActions = GetAvailableActions();
+        }
     }
 }

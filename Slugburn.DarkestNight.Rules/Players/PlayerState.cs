@@ -7,6 +7,7 @@
         Conflict,
         SelectPower,
         SelectBlight,
-        SelectLocation
+        SelectLocation,
+        Necromancer
     }
 }

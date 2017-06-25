@@ -97,6 +97,7 @@
     <Compile Include="Fluent\Assertions\IThen.cs" />
     <Compile Include="Fluent\Assertions\IVerifiable.cs" />
     <Compile Include="Fluent\Assertions\LocationVerification.cs" />
+    <Compile Include="Fluent\Assertions\NecromancerViewVerification.cs" />
     <Compile Include="Fluent\Assertions\PlayerBlightExpectation.cs" />
     <Compile Include="Fluent\Assertions\PlayerConflictExpectation.cs" />
     <Compile Include="Fluent\Assertions\PlayerEventExpectation.cs" />

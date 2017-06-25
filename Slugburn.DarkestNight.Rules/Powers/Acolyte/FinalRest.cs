@@ -31,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                 Type = TacticType.Fight;
             }
 
-            public override string Name => $"{PowerName} ({DiceCount} dice)";
+            public override string Name => $"{PowerName} [{DiceCount}d]";
 
             public override void Use(Hero hero)
             {

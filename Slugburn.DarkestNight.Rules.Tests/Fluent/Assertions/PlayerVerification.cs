@@ -14,6 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private List<string> _powerNames;
         private BlightSelectionViewVerification _blightSelectionView;
         private ConflictViewVerification _conflictView;
+        private NecromancerViewVerification _necromancerView;
 
         public void Verify(ITestRoot root)
         {
@@ -26,6 +27,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             _conflictView?.Verify(root);
             _eventView?.Verify(root);
             _blightSelectionView?.Verify(root);
+            _necromancerView?.Verify(root);
         }
 
         public EventViewVerification EventView
@@ -52,6 +54,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             {
                 _conflictView = new ConflictViewVerification();
                 return _conflictView;
+            }
+        }
+
+        public NecromancerViewVerification NecromancerView
+        {
+            get
+            {
+                _necromancerView = new NecromancerViewVerification();
+                return _necromancerView;
             }
         }
 

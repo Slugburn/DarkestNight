@@ -15,5 +15,6 @@ namespace Slugburn.DarkestNight.Rules.Players
         void DisplayPowers(ICollection<PlayerPower> powers);
         void DisplayBlights(ICollection<PlayerBlight> blights);
         void DisplayValidLocations(ICollection<string> locations);
+        void DisplayNecromancer(PlayerNecromancer necromancer);
     }
 }

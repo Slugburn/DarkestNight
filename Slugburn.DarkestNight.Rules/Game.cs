@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules
 {
     public class Game
     {
-        private readonly List<IPlayer> _players = new List<IPlayer>();
+        public List<IPlayer> Players { get; } = new List<IPlayer>();
         private readonly Dictionary<string, IIgnoreBlight> _ignoreBlights = new Dictionary<string, IIgnoreBlight>();
 
         public TriggerRegistry<GameTrigger, Game> Triggers { get; }
@@ -91,7 +91,7 @@ namespace Slugburn.DarkestNight.Rules
 
         public void AddPlayer(IPlayer player)
         {
-            _players.Add(player);
+            Players.Add(player);
         }
 
         public void AddHero(Hero hero, IPlayer player)

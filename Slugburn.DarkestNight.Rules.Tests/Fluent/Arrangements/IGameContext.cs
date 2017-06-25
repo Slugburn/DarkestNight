@@ -6,7 +6,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
     {
         IHeroContext WithHero(string name);
         IHeroContext WithHero();
-        IGameContext NecromancerIn(string location);
+        IGameContext NecromancerAt(string location);
         IGameContext NextBlight(params string[] blightNames);
         IGameContext Darkness(int value);
         IGameContext DrawEvents(int count);

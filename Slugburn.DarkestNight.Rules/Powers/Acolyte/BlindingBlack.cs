@@ -1,5 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
+using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 {
@@ -12,25 +14,31 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             Text = "Exhaust after a Necromancer movement roll to prevent him from detecting any heroes, regardless of Secrecy.";
         }
 
+        public override bool IsUsable(Hero hero)
+        {
+            return base.IsUsable(hero) && hero.Game.Necromancer.IsActing && hero.Game.Necromancer.DetectedHeroes.Any();
+        }
+
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            var handler = new BlindingBlackTriggerHandler {HeroName = hero.Name};
-            hero.Game.Triggers.Add(GameTrigger.NecromancerDetectsHeroes, Name, handler);
+            var action = new BlindingBlackAction() { Name = Name };
+            hero.AddAction(action);
         }
 
-        public class BlindingBlackTriggerHandler : ITriggerHandler<Game>
+        public class BlindingBlackAction : PowerAction
         {
-            public string HeroName { get; set; }
-
-            public void HandleTrigger(Game registrar, string source, TriggerContext context)
+            public override void Act(Hero hero)
             {
-                var hero = registrar.GetHero(HeroName);
-                var power = hero.GetPower(source);
-                if (!power.IsUsable(hero)) return;
-                if (!hero.Player.AskUsePower(source, power.Text)) return;
+                var power = hero.GetPower(Name);
+                if (!IsAvailable(hero))
+                    throw new PowerNotUsableException(power);
+
+                var necromancer = hero.Game.Necromancer;
+                necromancer.DetectedHeroes.Clear();
+                necromancer.DetermineDestination();
+
                 power.Exhaust(hero);
-                context.Cancel = true;
             }
         }
     }
