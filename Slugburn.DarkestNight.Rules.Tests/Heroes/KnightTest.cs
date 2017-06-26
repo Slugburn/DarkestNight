@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
+using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Heroes
 {
@@ -151,9 +152,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WithHero("Knight").HasPowers("Oath of Purging").At("Village").Grace(0)
                 .Power("Oath of Purging").IsActive()
                 .Location("Village").Blights("Skeletons")
-                .When.Player.TakesAction("Attack")
-                .ResolvesConflict(x => x.Tactic("Fight").Target("Skeletons").Rolls(4, 5, 6))
-                .AcceptsRoll().AcceptsConflictResults()
+                .When.Player.TakesAction("Attack").Fights(Fake.Rolls(4, 5, 6))
                 .Then(Verify.Hero.RolledNumberOfDice(3).Grace(1).LostSecrecy().HasUsedAction())
                 .Then(Verify.Power("Oath of Purging").IsActive(false));
         }
@@ -228,7 +227,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Power("Oath of Valor").IsActive()
                 .Given.Location("Village").Blights("Skeletons")
                 .When.Hero.FacesEnemy("Skeleton")
-                .When.Player.ResolvesConflict(x=>x.Tactic("Fight").Target("Skeleton").Rolls(6,6)).AcceptsRoll().AcceptsConflictResults()
+                .When.Player.Fights(Fake.Rolls(6, 6))
                 .Then(Verify.Hero.HasAvailableActions("Oath of Valor", "Oath of Vengeance"))
                 .Then(Verify.Power("Oath of Valor").IsActive(false));
         }

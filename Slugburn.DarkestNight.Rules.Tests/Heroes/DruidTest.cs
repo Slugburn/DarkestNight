@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
+using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Heroes
 {
@@ -16,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario.Given.Game
                 .WithHero("Druid").HasPowers("Animal Companion")
                 .When.Hero.FacesEnemy("Zombie")
-                .When.Player.ResolvesConflict(x => x.Tactic("Animal Companion").Target("Zombie").Rolls(roll)).AcceptsRoll().AcceptsConflictResults()
+                .When.Player.CompletesConflict("Zombie", "Animal Companion", Fake.Rolls(roll))
                 .Then(Verify.Hero.RolledNumberOfDice(2).WasWounded(!attackSucceeds))
                 .Then(Verify.Power("Animal Companion").IsExhausted(!attackSucceeds));
         }

@@ -46,7 +46,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Game.WithHero("Acolyte").HasPowers("Final Rest").Grace(3)
                 .When.Hero.FacesEnemy("Skeleton")
                 .Then(Verify.Player.ConflictView.HasTactics("Fight", "Elude", "Final Rest [2d]", "Final Rest [3d]"))
-                .When.Player.CompletesConflict(tacticName, "Skeleton", Fake.Rolls(rolls))
+                .When.Player.CompletesConflict("Skeleton", tacticName, Fake.Rolls(rolls))
                 .Then(Verify.Hero.LostGrace());
         }
 
@@ -77,7 +77,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Location("Swamp").Blights("Skeletons", "Shades", "Lich")
                 .When.Player.TakesAction("Call to Death")
                 .Then(Verify.Player.ConflictView.HasTargets("Skeletons", "Shades", "Lich").HasTactics("Fight").MustSelectTargets(2))
-                .When.Player.ResolvesConflict(x => x.Tactic("Fight").Target("Skeletons", "Lich").Rolls(5, 6)).AcceptsRoll()
+                .When.Player.Targets("Skeletons", "Lich").UsesTactic("Fight").ResolvesConflict(Fake.Rolls(5,6)).AcceptsRoll()
                 .Then(Verify.Player.ConflictView.Rolled(5, 6))
                 .When.Player.AssignsDie(6, "Lich").AssignsDie(5, "Skeletons").AcceptsConflictResults()
                 .Then(Verify.Location("Swamp").Blights("Shades"))
@@ -91,7 +91,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WithHero("Acolyte").HasPowers("Call to Death", "Final Rest").At("Swamp")
                 .Given.Location("Swamp").Blights("Skeletons", "Shades")
                 .When.Player.TakesAction("Call to Death")
-                .When.Player.ResolvesConflict(x => x.Tactic("Final Rest [3d]").Target("Skeletons", "Shades").Rolls(5, 2, 3, 1)).AcceptsRoll()
+                .When.Player.Targets("Skeletons", "Shades").UsesTactic("Final Rest [3d]").ResolvesConflict(Fake.Rolls(5, 2, 3, 1)).AcceptsRoll()
                 .When.Player.AssignsDie(5, "Shades").AssignsDie(3, "Skeletons").AcceptsConflictResults()
                 .Then(Verify.Location("Swamp").Blights("Skeletons"))
                 .Then(Verify.Hero
@@ -109,7 +109,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario.Given.Game
                 .WithHero("Acolyte").HasPowers("Dark Veil").At("Swamp")
                 .Location("Swamp").Blights("Spies")
-                .When.Player.TakesAction("Attack").ResolvesConflict(x => x.Tactic("Fight").Target("Spies").Rolls(1)).AcceptsRoll()
+                .When.Player.TakesAction("Attack").Targets("Spies").ResolvesConflict(Fake.Rolls(1)).AcceptsRoll()
                 .When.Player.TakesAction("Dark Veil [ignore defense]")
                 .Then(Verify.Power("Dark Veil").IsExhausted())
                 .When.Player.AcceptsConflictResults()
@@ -136,7 +136,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario.Given.Game
                 .WithHero("Acolyte").HasPowers("Death Mask").At("Swamp")
                 .Location("Swamp").Blights("Spies")
-                .When.Player.TakesAction("Attack").ResolvesConflict(x => x.Tactic("Fight").Target("Spies").Rolls(1)).AcceptsRoll().AcceptsConflictResults()
+                .When.Player.TakesAction("Attack").Fights(Fake.Rolls(1))
                 .Then(Verify.Hero.HasUsedAction().LostSecrecy()); // loses Secrecy for Spies defense, but not for making attack
         }
 
@@ -254,7 +254,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario.Given.Game
                 .WithHero("Acolyte").HasPowers("Leech Life").Grace(1).NotAt("Monastery")
                 .When.Hero.FacesEnemy("Skeleton")
-                .When.Player.ResolvesConflict(x=>x.Tactic("Leech Life").Target("Skeleton").Rolls(1,5,6)).AcceptsRoll().AcceptsConflictResults()
+                .When.Player.CompletesConflict("Skeleton", "Leech Life", Fake.Rolls(1, 5, 6))
                 .Then(Verify.Hero.Grace(2))
                 .Then(Verify.Power("Leech Life").IsExhausted());
         }

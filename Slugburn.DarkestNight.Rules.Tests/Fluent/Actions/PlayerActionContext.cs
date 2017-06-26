@@ -74,7 +74,16 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         {
             // verify targets
             var availableTargets = GetPlayer().Conflict.Targets.ToList();
-            var availableTargetsNames = availableTargets.Select(x => x.Name).ToList();
+            var availableTargetsNames = availableTargets.Select(x => x.Name).ToArray();
+
+            if (!_selectedTargets.Any() || _selectedTargets.First() == null)
+            {
+                if (availableTargets.Count == 1)
+                    _selectedTargets = availableTargetsNames;
+                else
+                    Assert.Fail($"Please select a target. Available targets are '{availableTargetsNames.ToCsv()}'.");
+            }
+
             var verified = _selectedTargets.Intersect(availableTargetsNames).ToList();
             if (verified.Count != _selectedTargets.Length)
                 Assert.Fail($"Selected targets '{_selectedTargets.ToCsv()}' are not valid. Available targets are '{availableTargetsNames.ToCsv()}'.");
@@ -85,9 +94,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
                 return target.Id;
             }).ToList();
 
+            _selectedTactic = _selectedTactic ?? "Fight";
             var availableTactics = GetPlayer().Conflict.Tactics.Select(x => x.Name).ToList();
             if (!availableTactics.Contains(_selectedTactic))
                 Assert.Fail($"Selected tactic '{_selectedTactic}' is not valid. Available tactics are '{availableTactics.ToCsv()}'.");
+
+
             GetPlayer().ResolveConflict(_selectedTactic, targetIds);
             return this;
         }
