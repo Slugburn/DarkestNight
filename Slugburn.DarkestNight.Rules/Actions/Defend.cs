@@ -52,6 +52,8 @@ namespace Slugburn.DarkestNight.Rules.Actions
             {
                 var target = hero.ConflictState.SelectedTargets.Single();
                 target.ResultNumber = rollState.Result;
+                if (rollState.Successes > 0 && target.TacticType == TacticType.Fight)
+                    hero.Triggers.Send(HeroTrigger.FightWon);
             }
 
             private static TacticType GetTacticType(Hero hero)

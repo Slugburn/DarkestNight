@@ -5,14 +5,16 @@ namespace Slugburn.DarkestNight.Rules
 {
     public class ConflictTarget
     {
+        public TacticType TacticType { get; }
         private bool _ignoreFailure;
 
-        public ConflictTarget(IConflict conflict, TargetInfo targetInfo, TacticType type)
+        public ConflictTarget(IConflict conflict, TargetInfo targetInfo, TacticType tacticType)
         {
+            TacticType = tacticType;
             Conflict = conflict;
             Id = targetInfo.Id;
             Name = conflict.Name;
-            TargetNumber = type == TacticType.Fight ? targetInfo.FightTarget : targetInfo.EludeTarget;
+            TargetNumber = tacticType == TacticType.Fight ? targetInfo.FightTarget : targetInfo.EludeTarget;
         }
 
         public IConflict Conflict { get; }

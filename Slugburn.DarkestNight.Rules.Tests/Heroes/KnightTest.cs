@@ -147,13 +147,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             // +2 dice in fights when attacking blights.
             // Destroy a blight; you gain 1 Grace.
-            new TestScenario()
-                .GivenHero("Knight", x => x.HasPowers("Oath of Purging").At("Village").Grace(0))
-                .GivenLocation("Village", x => x.Blights("Skeletons"))
-                .GivenPower("Oath of Purging", x => x.IsActive())
-                .WhenPlayerTakesAttackAction()
-                .ThenHero(x => x.Grace(1).HasUsedAction().LostSecrecy().RolledNumberOfDice(3))
-                .ThenPower("Oath of Purging", x => x.IsActive(false));
+            TestScenario.Given.Game
+                .WithHero("Knight").HasPowers("Oath of Purging").At("Village").Grace(0)
+                .Power("Oath of Purging").IsActive()
+                .Location("Village").Blights("Skeletons")
+                .When.Player.TakesAction("Attack")
+                .ResolvesConflict(x => x.Tactic("Fight").Target("Skeletons").Rolls(4, 5, 6))
+                .AcceptsRoll().AcceptsConflictResults()
+                .Then(Verify.Hero.RolledNumberOfDice(3).Grace(1).LostSecrecy().HasUsedAction())
+                .Then(Verify.Power("Oath of Purging").IsActive(false));
         }
 
         [Test]
@@ -225,7 +227,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Game.WithHero("Knight").HasPowers("Oath of Valor", "Oath of Vengeance").At("Village")
                 .Power("Oath of Valor").IsActive()
                 .Given.Location("Village").Blights("Skeletons")
-                .When.Hero.Fights(x => x.Rolls(6, 6))
+                .When.Hero.FacesEnemy("Skeleton")
+                .When.Player.ResolvesConflict(x=>x.Tactic("Fight").Target("Skeleton").Rolls(6,6)).AcceptsRoll().AcceptsConflictResults()
                 .Then(Verify.Hero.HasAvailableActions("Oath of Valor", "Oath of Vengeance"))
                 .Then(Verify.Power("Oath of Valor").IsActive(false));
         }
