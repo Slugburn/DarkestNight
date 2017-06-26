@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
+using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Heroes
 {
@@ -45,8 +46,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Game.WithHero("Acolyte").HasPowers("Final Rest").Grace(3)
                 .When.Hero.FacesEnemy("Skeleton")
                 .Then(Verify.Player.ConflictView.HasTactics("Fight", "Elude", "Final Rest [2d]", "Final Rest [3d]"))
-                .When.Player.ResolvesConflict(x => x.Target("Skeleton").Tactic(tacticName).Rolls(rolls)).AcceptsRoll()
-                .Then(Verify.Hero.Grace(2));
+                .When.Player.CompletesConflict(tacticName, "Skeleton", Fake.Rolls(rolls))
+                .Then(Verify.Hero.LostGrace());
         }
 
         // Blinding Black (Bonus): Exhaust after a Necromancer movement roll to prevent him from detecting any heroes, regardless of Secrecy.
@@ -62,7 +63,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .When.Player.TakesAction("Blinding Black")
                 .Then(Verify.Power("Blinding Black").IsExhausted())
                 .Then(Verify.Player.NecromancerView.Roll(5).Detected().MovingTo("Village"))
-                .When.Player.FinishNecromancerTurn()
+                .When.Player.AcceptsNecromancerTurn()
                 .Then(Verify.Game.NecromancerAt("Village").Darkness(1));
         }
 

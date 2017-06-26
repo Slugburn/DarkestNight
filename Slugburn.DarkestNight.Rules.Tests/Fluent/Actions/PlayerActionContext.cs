@@ -12,9 +12,17 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
     public class PlayerActionContext : WhenContext, IPlayerActionContext
     {
         private List<TargetDieAssignment> _diceAssignment;
+        private string[] _selectedTargets;
+        private string _selectedTactic;
 
         public PlayerActionContext(Game game, FakePlayer player) : base(game, player)
         {
+        }
+
+        public IPlayerActionContext UsesTactic(string tacticName)
+        {
+            _selectedTactic = tacticName;
+            return this;
         }
 
         public IPlayerActionContext TakesAction(string actionName)
@@ -23,12 +31,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             return this;
         }
 
-
-        public IPlayerActionContext UsePower(string name, bool response = true)
-        {
-            GetPlayer().SetUsePowerResponse(name, response);
-            return this;
-        }
 
         public IPlayerActionContext ChoosesBlight(params string[] blights)
         {
@@ -42,7 +44,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             return this;
         }
 
-        public IPlayerActionContext SelectsEventOption(string option, IFakeRollContext set = null)
+        public IPlayerActionContext SelectsEventOption(string option, IFakeContext set = null)
         {
             GetPlayer().SelectEventOption(option);
             return this;
@@ -68,9 +70,37 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             return this;
         }
 
+        public IPlayerActionContext ResolvesConflict(IFakeContext fake = null)
+        {
+            // verify targets
+            var availableTargets = GetPlayer().Conflict.Targets.ToList();
+            var availableTargetsNames = availableTargets.Select(x => x.Name).ToList();
+            var verified = _selectedTargets.Intersect(availableTargetsNames).ToList();
+            if (verified.Count != _selectedTargets.Length)
+                Assert.Fail($"Selected targets '{_selectedTargets.ToCsv()}' are not valid. Available targets are '{availableTargetsNames.ToCsv()}'.");
+            var targetIds = _selectedTargets.Select(tn =>
+            {
+                var target = availableTargets.First(t => t.Name == tn);
+                availableTargets.Remove(target);
+                return target.Id;
+            }).ToList();
+
+            var availableTactics = GetPlayer().Conflict.Tactics.Select(x => x.Name).ToList();
+            if (!availableTactics.Contains(_selectedTactic))
+                Assert.Fail($"Selected tactic '{_selectedTactic}' is not valid. Available tactics are '{availableTactics.ToCsv()}'.");
+            GetPlayer().ResolveConflict(_selectedTactic, targetIds);
+            return this;
+        }
+
         public IPlayerActionContext SelectsPower(string powerName)
         {
             GetPlayer().SelectPower(powerName);
+            return this;
+        }
+
+        public IPlayerActionContext Targets(params string[] targetNames)
+        {
+            _selectedTargets = targetNames;
             return this;
         }
 
@@ -80,7 +110,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             return this;
         }
 
-        public IPlayerActionContext FinishNecromancerTurn()
+        public IPlayerActionContext AcceptsNecromancerTurn()
         {
             GetPlayer().FinishNecromancerTurn();
             return this;

@@ -5,7 +5,7 @@ using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 {
-    public class FightContext : IFakeRollContext
+    public class FightContext : IFakeContext
     {
         private readonly FakePlayer _player;
         private string _action;

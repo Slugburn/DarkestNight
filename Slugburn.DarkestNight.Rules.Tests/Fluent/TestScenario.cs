@@ -12,7 +12,7 @@ using Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 {
-    public class TestScenario : IFakeRollContext
+    public class TestScenario : IFakeContext
     {
         private readonly Game _game;
         private readonly FakePlayer _player;

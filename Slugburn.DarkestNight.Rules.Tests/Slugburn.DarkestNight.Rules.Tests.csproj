@@ -67,7 +67,8 @@
     <Compile Include="Fakes\FakeDie.cs" />
     <Compile Include="Fakes\FakePlayer.cs" />
     <Compile Include="Fakes\FakeRollExtension.cs" />
-    <Compile Include="Fakes\IFakeRollContext.cs" />
+    <Compile Include="Fakes\IFakeContext.cs" />
+    <Compile Include="Fluent\Actions\ActionExtension.cs" />
     <Compile Include="Fluent\Actions\GameActionContext.cs" />
     <Compile Include="Fluent\Actions\IHeroActionContext.cs" />
     <Compile Include="Fluent\Actions\IPlayerActionContext.cs" />

@@ -6,7 +6,7 @@ using Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 {
-    public interface ITestRoot : IFakeRollContext
+    public interface ITestRoot : IFakeContext
     {
         IGiven Given { get; }
         IWhen When { get; }

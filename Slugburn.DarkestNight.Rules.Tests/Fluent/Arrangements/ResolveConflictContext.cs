@@ -5,7 +5,7 @@ using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 {
-    public class ResolveConflictContext : IFakeRollContext
+    public class ResolveConflictContext : IFakeContext
     {
         private readonly PlayerConflict _conflict;
         private string _tactic;

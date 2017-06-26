@@ -7,7 +7,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
     public interface IGameActionContext : IWhen
     {
         IGameActionContext BlightDestroyed(string location, string blight);
-        IGameActionContext NecromancerActs(IFakeRollContext rolls);
+        IGameActionContext NecromancerActs(IFakeContext rolls);
     }
 
     public class GameActionContext : WhenContext, IGameActionContext
@@ -22,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             return this;
         }
 
-        public IGameActionContext NecromancerActs(IFakeRollContext rolls = null)
+        public IGameActionContext NecromancerActs(IFakeContext rolls = null)
         {
             GetGame().Necromancer.StartTurn();
             return this;

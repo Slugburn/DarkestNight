@@ -5,14 +5,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 {
     public static class Fake
     {
-        public static IFakeRollContext Rolls(params int[] upcomingRolls)
+        public static IFakeContext Rolls(params int[] upcomingRolls)
         {
             var die = (FakeDie) Die.Implementation;
             die.AddUpcomingRolls(upcomingRolls);
-            return new FakeRollContext();
+            return new FakeContext();
         }
 
-        private class FakeRollContext : IFakeRollContext
+        private class FakeContext : IFakeContext
         {
         }
     }
