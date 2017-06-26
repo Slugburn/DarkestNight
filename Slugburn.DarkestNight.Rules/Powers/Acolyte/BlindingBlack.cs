@@ -22,12 +22,16 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            var action = new BlindingBlackAction() { Name = Name };
+            var action = new BlindingBlackAction(Name);
             hero.AddAction(action);
         }
 
         public class BlindingBlackAction : PowerAction
         {
+            public BlindingBlackAction(string name) : base(name)
+            {
+            }
+
             public override void Act(Hero hero)
             {
                 var power = hero.GetPower(Name);

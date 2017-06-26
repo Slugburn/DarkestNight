@@ -17,11 +17,15 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            hero.AddAction(new CelerityAction {Name = Name});
+            hero.AddAction(new CelerityAction());
         }
 
         private class CelerityAction : PowerAction
         {
+            public CelerityAction() : base(PowerName)
+            {
+            }
+
             public override void Act(Hero hero)
             {
                 hero.ValidateState(HeroState.ChoosingAction);

@@ -5,6 +5,8 @@ namespace Slugburn.DarkestNight.Rules
 {
     public class ConflictTarget
     {
+        private bool _ignoreFailure;
+
         public ConflictTarget(IConflict conflict, TargetInfo targetInfo, TacticType type)
         {
             Conflict = conflict;
@@ -18,7 +20,7 @@ namespace Slugburn.DarkestNight.Rules
         public int Id { get; }
         public string Name { get; }
         public int TargetNumber { get; }
-        public int ResultNumber { get; set; }
+        public int? ResultNumber { get; set; }
 
         public bool IsWin => ResultNumber >= TargetNumber;
 
@@ -28,10 +30,15 @@ namespace Slugburn.DarkestNight.Rules
             {
                 Conflict.Win(hero);
             }
-            else
+            else if (!_ignoreFailure)
             {
                 Conflict.Failure(hero);
             }
+        }
+
+        public void IgnoreFailure()
+        {
+            _ignoreFailure = true;
         }
     }
 }

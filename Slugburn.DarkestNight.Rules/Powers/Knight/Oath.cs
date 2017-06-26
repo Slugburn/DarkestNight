@@ -14,11 +14,15 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            hero.AddAction(new ActivateOathAction { Name = Name });
+            hero.AddAction(new ActivateOathAction(Name));
         }
 
         private class ActivateOathAction : PowerAction
         {
+            public ActivateOathAction(string name) : base(name)
+            {
+            }
+            
             public override void Act(Hero hero)
             {
                 var power = (Oath)hero.GetPower(Name);

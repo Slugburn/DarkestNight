@@ -33,7 +33,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         private class CallToDeathAction : PowerAction
         {
 
-            public CallToDeathAction() : base(PowerName)
+            public CallToDeathAction() : base(CallToDeath.PowerName)
             {
             }
 

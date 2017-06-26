@@ -266,7 +266,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (!(target.Conflict is Necromancer))
                 LoseSecrecy("Attack");
             DisplayConflictState();
-            target.Resolve(this);
         }
 
         public List<ITactic> GetAvailableFightTactics()
@@ -546,6 +545,16 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void DisplayConflictState()
         {
             ConflictState.Display(Player);
+        }
+
+        public void AcceptConflictResult()
+        {
+            var targets = ConflictState.SelectedTargets;
+            var target = targets.First();
+            target.Resolve(this);
+            targets.Remove(target);
+            if (targets.Any())
+                DisplayConflictState();
         }
     }
 }

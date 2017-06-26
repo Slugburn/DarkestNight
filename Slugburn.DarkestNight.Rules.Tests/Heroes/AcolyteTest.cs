@@ -78,7 +78,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Then(Verify.Player.ConflictView.HasTargets("Skeletons", "Shades", "Lich").HasTactics("Fight").MustSelectTargets(2))
                 .When.Player.ResolvesConflict(x => x.Tactic("Fight").Target("Skeletons", "Lich").Rolls(5, 6)).AcceptsRoll()
                 .Then(Verify.Player.ConflictView.Rolled(5, 6))
-                .When.Player.AssignsDie(6, "Lich").AssignsDie(5, "Skeletons")
+                .When.Player.AssignsDie(6, "Lich").AssignsDie(5, "Skeletons").AcceptsConflictResults()
                 .Then(Verify.Location("Swamp").Blights("Shades"))
                 .Then(Verify.Hero.LostSecrecy(2).HasUsedAction());
         }
@@ -91,7 +91,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Location("Swamp").Blights("Skeletons", "Shades")
                 .When.Player.TakesAction("Call to Death")
                 .When.Player.ResolvesConflict(x => x.Tactic("Final Rest [3d]").Target("Skeletons", "Shades").Rolls(5, 2, 3, 1)).AcceptsRoll()
-                .When.Player.AssignsDie(5, "Shades").AssignsDie(3, "Skeletons")
+                .When.Player.AssignsDie(5, "Shades").AssignsDie(3, "Skeletons").AcceptsConflictResults()
                 .Then(Verify.Location("Swamp").Blights("Skeletons"))
                 .Then(Verify.Hero
                     .WasWounded()
@@ -109,9 +109,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WithHero("Acolyte").HasPowers("Dark Veil").At("Swamp")
                 .Location("Swamp").Blights("Spies")
                 .When.Player.TakesAction("Attack").ResolvesConflict(x => x.Tactic("Fight").Target("Spies").Rolls(1)).AcceptsRoll()
-                .When.Player.TakesAction("Dark Veil")
+                .When.Player.TakesAction("Dark Veil [ignore defense]")
                 .Then(Verify.Power("Dark Veil").IsExhausted())
-                .When.Player.AcceptsConflictResult()
+                .When.Player.AcceptsConflictResults()
                 .Then(Verify.Hero.HasUsedAction().LostSecrecy()); // loses Secrecy for making attack, but not for Spies defense
         }
 
@@ -120,21 +120,23 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario
                 .Given.Game.WithHero("Acolyte").HasPowers("Dark Veil")
-                .When.Player.TakesAction("Dark Veil")
+                .When.Player.TakesAction("Dark Veil [ignore effects]")
                 .Then(Verify.Hero.IsIgnoringBlights())
                 .Then(Verify.Power("Dark Veil").IsExhausted())
                 .When.Hero.StartsTurn()
                 .Then(Verify.Hero.IsNotIgnoringBlights());
         }
 
+        // Death Mask (Bonus): You may choose not to lose Secrecy for attacking a blight (including use of the Call to Death power) 
+        // or for starting your turn at the Necromancer's location.
         [Test]
         public void DeathMask_IgnoreSecrecyLossForAttacking()
         {
-            new TestScenario()
-                .GivenLocation("Swamp", x => x.Blights("Spies"))
-                .GivenHero("Acolyte", x => x.HasPowers("Death Mask").At("Swamp"))
-                .WhenPlayerTakesAttackAction(player => player.Rolls(1))
-                .ThenHero(x => x.HasUsedAction().LostSecrecy()); // loses Secrecy for Spies defense, but not for making attack
+            TestScenario.Given.Game
+                .WithHero("Acolyte").HasPowers("Death Mask").At("Swamp")
+                .Location("Swamp").Blights("Spies")
+                .When.Player.TakesAction("Attack").ResolvesConflict(x => x.Tactic("Fight").Target("Spies").Rolls(1)).AcceptsRoll().AcceptsConflictResults()
+                .Then(Verify.Hero.HasUsedAction().LostSecrecy()); // loses Secrecy for Spies defense, but not for making attack
         }
 
         [Test]

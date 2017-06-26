@@ -193,5 +193,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             var hero = _game.ActingHero;
             hero.AssignDiceToTargets(diceAssignment);
         }
+
+        public void AcceptConflictResult()
+        {
+            var hero = _game.ActingHero;
+            hero.AcceptConflictResult();
+        }
     }
 }

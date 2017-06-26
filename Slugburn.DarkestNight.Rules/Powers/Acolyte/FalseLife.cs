@@ -5,9 +5,11 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 {
     class FalseLife : Bonus
     {
+        private const string PowerName = "False Life";
+
         public FalseLife()
         {
-            Name = "False Life";
+            Name = PowerName;
             StartingPower = true;
             Text = "Exhaust at any time while not at the Monastery to gain 1 Grace (up to default). You may not enter the Monastery while this power is exhausted.";
         }
@@ -15,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            hero.AddAction(new FalseLifeAction {Name = Name});
+            hero.AddAction(new FalseLifeAction());
             hero.Add(new PreventMovementEffect(location => Exhausted && location == Location.Monastery));
         }
 
@@ -26,6 +28,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
         internal class FalseLifeAction : PowerAction
         {
+            public FalseLifeAction() : base(PowerName)
+            {
+            }
+
             public override void Act(Hero hero)
             {
                 var power = hero.GetPower(Name);

@@ -30,7 +30,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
         {
             if (!hero.HasAction(DeactivateForm.ActionName))
                 hero.AddAction(new DeactivateForm());
-            hero.AddAction(new ActivateForm {Name = powerName});
+            hero.AddAction(new ActivateForm(powerName));
         }
 
         internal static void DeactivateAllForms(Hero hero)
@@ -40,6 +40,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 
         private class ActivateForm : PowerAction
         {
+            public ActivateForm(string name) : base(name)
+            {
+            }
+
             public override void Act(Hero hero)
             {
                 hero.ValidateState(HeroState.ChoosingAction);

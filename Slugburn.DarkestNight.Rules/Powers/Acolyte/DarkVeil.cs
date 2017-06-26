@@ -1,4 +1,6 @@
+using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
+using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Triggers;
 
@@ -19,26 +21,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            hero.AddAction(new DarkVeilAction());
-            hero.Triggers.Add(HeroTrigger.BeforeBlightDefends, Name, new FailedAttackHandler());
+            hero.AddAction(new DarkVeilIgnoreEffects());
+            hero.AddAction(new DarkVeilIgnoreDefense());
         }
 
-        private class FailedAttackHandler : ITriggerHandler<Hero>
+        private class DarkVeilIgnoreEffects : PowerAction
         {
-            public void HandleTrigger(Hero registrar, string source, TriggerContext context)
-            {
-                var hero = registrar;
-                var power = hero.GetPower(source);
-                if (!power.IsUsable(hero)) return;
-                if (!hero.Player.AskUsePower(source, power.Text)) return;
-                power.Exhaust(hero);
-                context.Cancel = true;
-            }
-        }
-
-        private class DarkVeilAction : PowerAction
-        {
-            public DarkVeilAction() : base(PowerName)
+            public DarkVeilIgnoreEffects() : base("Dark Veil [ignore effects]", PowerName)
             {
             }
 
@@ -46,7 +35,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             {
                 hero.Game.AddIgnoreBlight(IgnoreBlight.Create(Name, hero));
                 hero.Triggers.Add(HeroTrigger.StartTurn, Name, new DarkVeilEnds());
-                hero.GetPower(Name).Exhaust(hero);
+                hero.GetPower(_powerName).Exhaust(hero);
             }
 
             private class DarkVeilEnds : ITriggerHandler<Hero>
@@ -57,6 +46,31 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                     hero.Game.RemoveIgnoreBlight(source);
                     hero.Triggers.Remove(HeroTrigger.StartTurn, source);
                 }
+            }
+        }
+
+        private class DarkVeilIgnoreDefense : PowerAction
+        {
+            public DarkVeilIgnoreDefense() : base("Dark Veil [ignore defense]", PowerName)
+            {
+            }
+
+            public override void Act(Hero hero)
+            {
+                var power = hero.GetPower(PowerName);
+                if (!IsAvailable(hero))
+                    throw new PowerNotUsableException(power);
+                hero.ConflictState.SelectedTargets.First().IgnoreFailure();
+                power.Exhaust(hero);
+            }
+
+            public override bool IsAvailable(Hero hero)
+            {
+                if (!base.IsAvailable(hero)) return false;
+                if (hero.ConflictState == null) return false;
+                if (!hero.ConflictState.SelectedTargets.Any()) return false;
+                var target = hero.ConflictState.SelectedTargets.First();
+                return target.ResultNumber != null && (target.Conflict is IBlightDetail) && !target.IsWin;
             }
         }
     }

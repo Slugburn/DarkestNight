@@ -100,9 +100,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             return this;
         }
 
-        public IPlayerActionContext AcceptsConflictResult()
+        public IPlayerActionContext AcceptsConflictResults()
         {
-            throw new NotImplementedException();
+            while (GetGame().ActingHero.ConflictState.SelectedTargets.Any())
+                GetPlayer().AcceptConflictResult();
             return this;
         }
     }
