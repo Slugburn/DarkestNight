@@ -109,13 +109,5 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             }
             return destination;
         }
-
-        public void ResolveAttack(int result, Hero hero)
-        {
-            if (result >= Fight)
-                Win(hero);
-            else
-                Failure(hero);
-        }
     }
 }

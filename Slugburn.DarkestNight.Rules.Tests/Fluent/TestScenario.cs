@@ -61,20 +61,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public TestScenario WhenNecromancerTakesTurn(Action<IFakeRollContext> roll, Action<IPlayerActionContext> action = null)
-        {
-            roll(this);
-            action?.Invoke(new PlayerActionContext(_game, _player));
-            _game.Necromancer.StartTurn();
-            return this;
-        }
-
-        public TestScenario ThenNecromancerLocation(string location)
-        {
-            Assert.That(_game.Necromancer.Location, Is.EqualTo(location.ToEnum<Location>()));
-            return this;
-        }
-
         public TestScenario ThenPower(string name, Action<PowerExpectation> expect)
         {
             var power = _game.GetPower(name);

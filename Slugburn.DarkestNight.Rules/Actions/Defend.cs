@@ -50,19 +50,8 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
             public void AcceptRoll(Hero hero, RollState rollState)
             {
-                var enemy = GetEnemy(hero);
-                var tacticType = GetTacticType(hero);
-                UpdateTargetNumber(rollState, tacticType, enemy);
-                if (rollState.Win)
-                {
-                    enemy.Win(hero);
-                    if (tacticType == TacticType.Fight)
-                        hero.Triggers.Send(HeroTrigger.FightWon);
-                }
-                else
-                {
-                    enemy.Failure(hero);
-                }
+                var target = hero.ConflictState.SelectedTargets.Single();
+                target.ResultNumber = rollState.Result;
             }
 
             private static TacticType GetTacticType(Hero hero)

@@ -245,16 +245,17 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .ThenHero(x => x.HasUsedAction().Secrecy(6));
         }
 
+        // Leech Life (Tactic): Exhaust while not at the Monastery to fight with 3 dice. Gain 1 Grace (up to default) if you roll 2 successes. 
+        // You may not enter the Monastery while this power is exhausted.
         [Test]
         public void LeechLife()
         {
-            new TestScenario()
-                .GivenHero("Acolyte", x => x.HasPowers("Leech Life").At("Village").Grace(1))
-                .GivenLocation("Village", x => x.Blights("Corruption"))
-                .WhenPlayerTakesAttackAction(x => x.Tactic("Leech Life").Rolls(1, 5, 6))
-                .ThenSpace("Village", x => x.NoBlights())
-                .ThenHero(x => x.HasUsedAction().Grace(2).LostSecrecy()) // two successes gains a Grace
-                .ThenPower("Leech Life", x => x.IsExhausted());
+            TestScenario.Given.Game
+                .WithHero("Acolyte").HasPowers("Leech Life").Grace(1).NotAt("Monastery")
+                .When.Hero.FacesEnemy("Skeleton")
+                .When.Player.ResolvesConflict(x=>x.Tactic("Leech Life").Target("Skeleton").Rolls(1,5,6)).AcceptsRoll().AcceptsConflictResults()
+                .Then(Verify.Hero.Grace(2))
+                .Then(Verify.Power("Leech Life").IsExhausted());
         }
 
         [Test]
