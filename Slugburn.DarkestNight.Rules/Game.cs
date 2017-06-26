@@ -165,7 +165,7 @@ namespace Slugburn.DarkestNight.Rules
 
         public void SelectBlight(Location location, Blight blight)
         {
-            Triggers.Send(GameTrigger.PlayerSelectedBlight, new BlightSelection(location, blight));
+            Triggers.Send(GameTrigger.PlayerSelectedBlight, new BlightLocation(blight, location));
         }
 
         public static ICollection<Location> GetAllLocations()

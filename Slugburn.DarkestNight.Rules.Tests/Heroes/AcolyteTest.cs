@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using Slugburn.DarkestNight.Rules.Tests.Fakes;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
 using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 
@@ -195,39 +194,18 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void FalseOrders()
         {
-            new TestScenario()
-                .GivenHero("Acolyte", x => x.HasPowers("False Orders").At("Village"))
-                .GivenLocation("Village", x => x.Blights("Confusion", "Corruption", "Shroud", "Skeletons"))
-                .GivenLocation("Monastery", x => x.Blights("Lich"))
-                .WhenPlayerTakesAction("False Orders",
-                    x => x.ChooseLocation(Location.Monastery)
-                        .ChoosesBlight("Confusion", "Corruption", "Shroud"))
-                .ThenHero(x => x.HasUsedAction())
-                .ThenSpace("Village", x => x.Blights("Skeletons"))
-                .ThenSpace("Monastery", x => x.Blights("Lich", "Confusion", "Corruption", "Shroud"));
-        }
-
-        [Test]
-        public void FalseOrders_CancelChooseBlights()
-        {
-            new TestScenario()
-                .GivenHero("Acolyte", x => x.HasPowers("False Orders").At("Village"))
-                .GivenLocation("Village", x => x.Blights("Confusion", "Corruption", "Shroud", "Skeletons"))
-                .GivenLocation("Monastery", x => x.Blights("Lich"))
-                .WhenPlayerTakesAction("False Orders",
-                    x => x.ChooseLocation(Location.Monastery).ChoosesBlight("None"))
-                .ThenHero(x => x.HasNotUsedAction());
-        }
-
-        [Test]
-        public void FalseOrders_CancelChooseLocation()
-        {
-            new TestScenario()
-                .GivenHero("Acolyte", x => x.HasPowers("False Orders").At("Village"))
-                .GivenLocation("Village", x => x.Blights("Confusion", "Corruption", "Shroud", "Skeletons"))
-                .GivenLocation("Monastery", x => x.Blights("Lich"))
-                .WhenPlayerTakesAction("False Orders", x => x.ChooseLocation(Location.None))
-                .ThenHero(x => x.HasNotUsedAction());
+            TestScenario.Given.Game
+                .WithHero("Acolyte").HasPowers("False Orders").At("Village")
+                .Location("Village").Blights("Confusion", "Corruption", "Shroud", "Skeletons")
+                .Location("Monastery").Blights("Lich")
+                .When.Player.TakesAction("False Orders")
+                .Then(Verify.Player.LocationSelectionView("Monastery", "Mountains", "Swamp", "Castle", "Ruins", "Forest"))
+                .When.Player.SelectsLocation("Monastery")
+                .Then(Verify.Player.BlightSelectionView.Max(3).Location("Village").WithBlights("Confusion", "Corruption", "Shroud", "Skeletons"))
+                .When.Player.SelectsBlights("Confusion", "Corruption", "Shroud")
+                .Then(Verify.Hero.HasUsedAction())
+                .Then(Verify.Location("Village").Blights("Skeletons"))
+                .Then(Verify.Location("Monastery").Blights("Lich", "Confusion", "Corruption", "Shroud"));
         }
 
         // Forbidden Arts (Bonus): After a fight roll, add any number of dice, one at a time. For each added die that comes up a 1, +1 Darkness.

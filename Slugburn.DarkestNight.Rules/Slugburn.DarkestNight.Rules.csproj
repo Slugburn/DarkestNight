@@ -52,8 +52,8 @@
     <Compile Include="Actions\Search.cs" />
     <Compile Include="Actions\Travel.cs" />
     <Compile Include="ActionType.cs" />
-    <Compile Include="BlightSelection.cs" />
     <Compile Include="Blights\BlightDetail.cs" />
+    <Compile Include="Blights\BlightLocation.cs" />
     <Compile Include="Blights\TargetDieAssignment.cs" />
     <Compile Include="Blights\BlightExtension.cs" />
     <Compile Include="Blights\Blight.cs" />
@@ -128,6 +128,7 @@
     <Compile Include="Heroes\Impl\Wizard.cs" />
     <Compile Include="Heroes\PreventMovementEffect.cs" />
     <Compile Include="Heroes\UnexpectedStateException.cs" />
+    <Compile Include="IBlightSelectedHandler.cs" />
     <Compile Include="IConflict.cs" />
     <Compile Include="IgnoreBlight.cs" />
     <Compile Include="ILocationSelectedHandler.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Items\Artifacts\VanishingCowl.cs" />
     <Compile Include="Players\IPlayer.cs" />
     <Compile Include="Players\Models\PlayerBlight.cs" />
+    <Compile Include="Players\Models\PlayerBlightSelection.cs" />
     <Compile Include="Players\Models\PlayerConflict.cs" />
     <Compile Include="Players\Models\PlayerEvent.cs" />
     <Compile Include="Players\Models\PlayerNecromancer.cs" />

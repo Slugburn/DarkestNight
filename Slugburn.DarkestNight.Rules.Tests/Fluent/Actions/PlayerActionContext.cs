@@ -138,5 +138,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
                 GetPlayer().AcceptConflictResult();
             return this;
         }
+
+        public IPlayerActionContext SelectsBlights(params string[] blights)
+        {
+            GetPlayer().SelectBlights(blights);
+            return this;
+        }
     }
 }

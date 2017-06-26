@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
@@ -33,7 +34,8 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 case "destroy-blight":
                     hero.Game.Triggers.Add(GameTrigger.PlayerSelectedBlight, Detail.Name, new LatentSpellBlightSelected() );
                     var blights = hero.Game.Board.Spaces.SelectMany(s => s.Blights.Select(b => new PlayerBlight {Location = s.Location, Blight = b})).ToList();
-                    hero.Player.DisplayBlights(blights);
+                    var selection = new PlayerBlightSelection(blights);
+                    hero.Player.DisplayBlightSelection(selection);
                     break;
                 case "draw-power":
                     var power = hero.PowerDeck.First();
@@ -44,7 +46,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 case "move":
                     var locations = Game.GetAllLocations().Except(new[] {hero.Location}).Select(x=>x.ToString()).ToList();
                     hero.SetLocationSelectedHandler(new LatentSpellSelectLocation());
-                    hero.Player.DisplayValidLocations(locations);
+                    hero.Player.DisplayLocationSelection(locations);
                     hero.Player.State = PlayerState.SelectLocation;
                     break;
                 case "no-effect":
@@ -59,7 +61,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
         {
             public void HandleTrigger(Game game, string source, TriggerContext context)
             {
-                var blightSelection = context.GetState<BlightSelection>();
+                var blightSelection = context.GetState<BlightLocation>();
                 game.DestroyBlight(blightSelection.Location, blightSelection.Blight);
                 game.Triggers.RemoveBySource(source);
             }

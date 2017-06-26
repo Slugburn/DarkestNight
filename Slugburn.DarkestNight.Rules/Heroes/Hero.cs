@@ -9,6 +9,7 @@ using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Powers;
+using Slugburn.DarkestNight.Rules.Powers.Acolyte;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tactics;
 using Slugburn.DarkestNight.Rules.Triggers;
@@ -24,6 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         private readonly Dictionary<string, ITactic> _tactics;
         private readonly List<ActionFilter> _actionFilters;
         private ILocationSelectedHandler _locationSelectedHandler;
+        private IBlightSelectedHandler _blightSelectedHandler;
 
         public Hero()
         {
@@ -412,6 +414,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void SelectLocation(Location location)
         {
             _locationSelectedHandler.Handle(this, location);
+            _locationSelectedHandler = null;
         }
 
         public bool HasAction(string actionName)
@@ -555,6 +558,17 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             targets.Remove(target);
             if (targets.Any())
                 DisplayConflictState();
+        }
+
+        public void SetBlightSelectedHandler(IBlightSelectedHandler handler)
+        {
+            _blightSelectedHandler = handler;
+        }
+
+        public void SelectBlights(IEnumerable<BlightLocation> blightLocations)
+        {
+            _blightSelectedHandler.Handle(this, blightLocations);
+            _blightSelectedHandler = null;
         }
     }
 }

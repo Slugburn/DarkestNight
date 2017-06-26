@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Shouldly;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
 
@@ -27,12 +28,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             _rollAnotherDie = new Queue<bool>();
         }
 
+        public PlayerBlightSelection BlightSelection { get; set; }
         public PlayerConflict Conflict { get; set; }
-
         public PlayerEvent Event { get; set; }
         public string ActiveHero { get; set; }
         public ICollection<PlayerPower> Powers { get; set; }
-        public ICollection<PlayerBlight> Blights { get; set; }
         public ICollection<string> ValidLocations { get; set; }
         public PlayerNecromancer Necromancer { get; set; }
 
@@ -79,12 +79,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             Powers = powers;
         }
 
-        public void DisplayBlights(ICollection<PlayerBlight> blights)
+        public void DisplayBlightSelection(PlayerBlightSelection blightSelection)
         {
-            Blights = blights;
+            BlightSelection = blightSelection;
         }
 
-        public void DisplayValidLocations(ICollection<string> locations)
+        public void DisplayLocationSelection(ICollection<string> locations)
         {
             ValidLocations = locations;
         }
@@ -198,6 +198,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         {
             var hero = _game.ActingHero;
             hero.AcceptConflictResult();
+        }
+
+        public void SelectBlights(string[] blights)
+        {
+            var hero = _game.ActingHero;
+            var blightLocations = blights.Select(b => new BlightLocation(b.ToEnum<Blight>(), hero.Location));
+            hero.SelectBlights(blightLocations);
         }
     }
 }

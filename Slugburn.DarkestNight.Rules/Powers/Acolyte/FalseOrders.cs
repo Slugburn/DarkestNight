@@ -1,6 +1,9 @@
+using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
+using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Spaces;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
@@ -27,24 +30,50 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             {
             }
 
+            private Location Destination { get; set; }  // This gets set by the location selected handler
+
             public override void Act(Hero hero)
             {
-                var space = (Space)hero.GetSpace();
-                var potentialDestinations = space.AdjacentLocations;
-                var destination = hero.Player.ChooseLocation(potentialDestinations);
-                if (destination == Location.None)
-                    return;
-                var destinationSpace = hero.Game.Board[destination];
-                var maxMoveCount = 4 - hero.Game.Board[destination].Blights.Count();
-                var blights = hero.Player.ChooseBlights(space.Blights, 1, maxMoveCount);
-                if (!blights.Any())
-                    return;
-                foreach (var blight in blights)
-                {
-                    space.RemoveBlight(blight);
-                    destinationSpace.AddBlight(blight);
-                }
                 hero.IsActionAvailable = false;
+                var space = (Space)hero.GetSpace();
+                var potentialDestinations = space.AdjacentLocations.Select(x => x.ToString()).ToList();
+                hero.SetLocationSelectedHandler(new FalseOrdersLocationSelected());
+                hero.Player.DisplayLocationSelection(potentialDestinations);
+            }
+
+
+            private class FalseOrdersLocationSelected : ILocationSelectedHandler
+            {
+                public void Handle(Hero hero, Location location)
+                {
+                    var action = (FalseOrdersAction) hero.GetAction(PowerName);
+                    var destination = location;
+                    action.Destination = destination;
+
+                    var destinationSpace = hero.Game.Board[destination];
+                    var maxMoveCount = 4 - destinationSpace.Blights.Count;
+                    var space = (Space)hero.GetSpace();
+                    var playerBlights = space.Blights.Select(b => new PlayerBlight {Blight = b, Location = hero.Location}).ToList();
+
+                    hero.SetBlightSelectedHandler(new FalseOrdersBlightsSelected());
+                    hero.Player.DisplayBlightSelection(new PlayerBlightSelection(playerBlights, maxMoveCount));
+                }
+            }
+
+            private class FalseOrdersBlightsSelected : IBlightSelectedHandler
+            {
+                public void Handle(Hero hero, IEnumerable<BlightLocation> selection)
+                {
+                    var action = (FalseOrdersAction)hero.GetAction(PowerName);
+                    var destination = action.Destination;
+                    foreach (var blight in selection)
+                    {
+                        var sourceSpace = (Space)hero.Game.Board[blight.Location];
+                        sourceSpace.RemoveBlight(blight.Blight);
+                        var destinationSpace = (Space) hero.Game.Board[destination];
+                        destinationSpace.AddBlight(blight.Blight);
+                    }
+                }
             }
 
         }
