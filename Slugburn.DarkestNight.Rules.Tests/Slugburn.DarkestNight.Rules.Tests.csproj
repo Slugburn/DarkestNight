@@ -92,15 +92,11 @@
     <Compile Include="Fluent\Assertions\HeroExpectation.cs" />
     <Compile Include="Fluent\Actions\PlayerActionContext.cs" />
     <Compile Include="Fluent\Assertions\HeroVerification.cs" />
-    <Compile Include="Fluent\Assertions\IPlayerEventExpectation.cs" />
     <Compile Include="Fluent\Assertions\IPlayerExpectation.cs" />
     <Compile Include="Fluent\Assertions\IThen.cs" />
     <Compile Include="Fluent\Assertions\IVerifiable.cs" />
     <Compile Include="Fluent\Assertions\LocationVerification.cs" />
     <Compile Include="Fluent\Assertions\NecromancerViewVerification.cs" />
-    <Compile Include="Fluent\Assertions\PlayerBlightExpectation.cs" />
-    <Compile Include="Fluent\Assertions\PlayerConflictExpectation.cs" />
-    <Compile Include="Fluent\Assertions\PlayerEventExpectation.cs" />
     <Compile Include="Fluent\Assertions\PlayerExpectation.cs" />
     <Compile Include="Fluent\Arrangements\PowerContext.cs" />
     <Compile Include="Fluent\Assertions\PlayerVerification.cs" />

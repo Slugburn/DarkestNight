@@ -21,12 +21,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             Assert.That(_space.Blights, Is.EquivalentTo(_expectedBlights), "Unexpected Blights");
         }
 
-        public LocationExpectation NoBlights()
-        {
-            _expectedBlights.Clear();
-            return this;
-        }
-
         public LocationExpectation Blights(params string[] blights)
         {
             _expectedBlights.AddRange(blights.Select(x => x.ToEnum<Blight>()));

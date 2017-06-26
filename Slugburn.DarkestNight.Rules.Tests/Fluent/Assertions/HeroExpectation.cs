@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -118,12 +117,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public HeroExpectation CanMoveTo(params string[] location)
-        {
-            _specifiedLocations.AddRange(location.Select(l => l.ToEnum<Location>()));
-            return this;
-        }
-
         public HeroExpectation HasNotUsedAction()
         {
             _expectedActionAvailable = true;
@@ -182,12 +175,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
                 Blight.Vampire,
                 Blight.Zombies
             };
-        }
-
-        public HeroExpectation Location(string location)
-        {
-            _expectedLocation = location.ToEnum<Location>();
-            return this;
         }
 
         public HeroExpectation CanGainGrace(bool expected = true)
@@ -262,42 +249,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             var hero = _hero;
             Assert.That(hero.AvailableActions, Is.Not.Null, "Hero.AvailableActions has not been specified.");
             Assert.That(hero.AvailableActions, Is.EquivalentTo(actionNames));
-            return this;
-        }
-
-        public HeroExpectation HasItem(params string[] items)
-        {
-            _expectedInventory = items;
-            return this;
-        }
-
-        public HeroExpectation WasWounded(bool expected = true)
-        {
-            _expectedWounded = true;
-            _expectedGrace = _hero.DefaultGrace - 1;
-            return this;
-        }
-
-        public HeroExpectation Powers(params string[] powerNames)
-        {
-            var actual = _hero.Powers.Select(x => x.Name).OrderBy(x => x);
-            var expected = powerNames.OrderBy(x => x);
-            actual.ShouldBe(expected);
-            return this;
-        }
-
-        public HeroExpectation Event(Action<HeroEventExpectation> expect)
-        {
-            expect(_eventExpectation);
-            return this;
-        }
-
-        public HeroExpectation Power(string powerName, Action<PowerExpectation> expect)
-        {
-            var power = _hero.GetPower(powerName);
-            var expectation = new PowerExpectation(power);
-            expect(expectation);
-            expectation.Verify();
             return this;
         }
     }
