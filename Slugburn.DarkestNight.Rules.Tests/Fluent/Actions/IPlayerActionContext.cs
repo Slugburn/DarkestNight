@@ -17,6 +17,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         IPlayerActionContext SelectsPower(string powerName);
         IPlayerActionContext Targets(params string[] targetNames);
         IPlayerActionContext UsesTactic(string tacticName);
-        IPlayerActionContext TakesAction(string actionName);
+        IPlayerActionContext TakesAction(string actionName, IFakeContext fake = null);
     }
 }

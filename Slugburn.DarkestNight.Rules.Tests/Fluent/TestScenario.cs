@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
@@ -55,12 +52,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             _player.ActiveHero = hero.Name;
         }
 
-        public TestScenario GivenNecromancerLocation(string location)
-        {
-            _game.Necromancer.Location = location.ToEnum<Location>();
-            return this;
-        }
-
         public TestScenario ThenPower(string name, Action<PowerExpectation> expect)
         {
             var power = _game.GetPower(name);
@@ -107,45 +98,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             var hero = _game.ActingHero;
             var action = hero.GetAction(actionName);
             hero.TakeAction(action);
-            return this;
-        }
-
-        public TestScenario GivenDarkness(int darkness)
-        {
-            _game.Darkness = darkness;
-            return this;
-        }
-
-        public TestScenario ThenDarkness(int expected)
-        {
-            Assert.That(_game.Darkness, Is.EqualTo(expected), "Unexpected Darkness.");
-            return this;
-        }
-
-        private IEnumerable<int> GetTargetIds(ICollection<string> targets)
-        {
-            var source = _game.ActingHero.ConflictState.AvailableTargets.ToList();
-            Assert.That(source.Select(x => x.Name).Intersect(targets), Is.EquivalentTo(targets), "Requested target is not valid.");
-            foreach (var match in targets.Select(target => source.First(x => x.Name == target)))
-            {
-                source.Remove(match);
-                yield return match.Id;
-            }
-        }
-
-        public TestScenario WhenPlayerSelectsTactic(Action<TacticContext> define = null, string defaultTactic = "Fight")
-        {
-            var context = new TacticContext(_game.ActingHero, defaultTactic);
-            define?.Invoke(context);
-            var blights = context.GetTargets();
-            var targetIds = GetTargetIds(blights).ToList();
-            _game.ActingHero.SelectTactic(context.GetTactic(), targetIds);
-            return this;
-        }
-
-        public TestScenario WhenPlayerAcceptsRoll()
-        {
-            _game.ActingHero.AcceptRoll();
             return this;
         }
 

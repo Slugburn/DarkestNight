@@ -66,15 +66,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .ThenHero(x => x.HasUsedAction().AvailableMovement(2).Secrecy(0)); // No Secrecy gain
         }
 
+        // Holy Mantle (Bonus): +1 to default Grace. Add 1 to each die when praying.
         [Test]
         public void HolyMantle()
         {
-            new TestScenario()
-                .GivenHero("Knight", x => x.HasPowers("Holy Mantle").Grace(0))
-                .ThenHero(x => x.DefaultGrace(6).Grace(0))
-                .WhenPlayerTakesAction("Pray", x => x.Rolls(2, 3))
-                .WhenPlayerAcceptsRoll()
-                .ThenHero(x => x.Rolled(3, 4).DefaultGrace(6).Grace(2));
+            TestScenario.Given.Game
+                .WithHero("Knight").HasPowers("Holy Mantle").Grace(0)
+                .Then(Verify.Hero.DefaultGrace(6).Grace(0))
+                .When.Player.TakesAction("Pray", Fake.Rolls(2, 3)).AcceptsRoll()
+                .Then(Verify.Hero.Rolled(3, 4).DefaultGrace(6).Grace(2));
         }
 
         [Test]

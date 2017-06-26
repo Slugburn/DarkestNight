@@ -23,7 +23,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             return this;
         }
 
-        public IPlayerActionContext TakesAction(string actionName)
+        public IPlayerActionContext TakesAction(string actionName, IFakeContext fake = null)
         {
             GetPlayer().TakeAction(GetPlayer().ActiveHero, actionName);
             return this;

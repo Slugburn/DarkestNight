@@ -74,7 +74,6 @@
     <Compile Include="Fluent\Actions\IPlayerActionContext.cs" />
     <Compile Include="Fluent\Actions\IWhen.cs" />
     <Compile Include="Fluent\Actions\WhenContext.cs" />
-    <Compile Include="Fluent\Arrangements\FightContext.cs" />
     <Compile Include="Fluent\Actions\HeroActionContext.cs" />
     <Compile Include="Fluent\Arrangements\GameContext.cs" />
     <Compile Include="Fluent\Arrangements\GivenContext.cs" />

@@ -94,11 +94,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void SpriteForm_DoesNotIgnoreBlightsWhenNecromancerIsPresent()
         {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Sprite Form").At("Ruins"))
-                .GivenNecromancerLocation("Ruins")
-                .GivenPower("Sprite Form", x => x.IsActive())
-                .ThenHero(x => x.CanGainGrace(false).IsNotIgnoringBlights());
+            TestScenario.Given.Game
+                .NecromancerAt("Ruins")
+                .WithHero("Druid").HasPowers("Sprite Form").At("Ruins")
+                .Given.ActingHero().Power("Sprite Form").IsActive()
+                .Then(Verify.Hero.CanGainGrace(false).IsNotIgnoringBlights());
         }
 
         [Test]

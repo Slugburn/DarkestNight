@@ -230,20 +230,22 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .ThenHero(x => x.HasNotUsedAction());
         }
 
+        // Forbidden Arts (Bonus): After a fight roll, add any number of dice, one at a time. For each added die that comes up a 1, +1 Darkness.
         [Test]
         public void ForbiddenArts()
         {
-            new TestScenario()
-                .GivenDarkness(0)
-                .GivenHero("Acolyte", x => x.HasPowers("Forbidden Arts").At("Village"))
-                .GivenLocation("Village", x => x.Blights("Confusion"))
-                .WhenPlayerTakesAction("Attack")
-                .WhenPlayerSelectsTactic(x => x.Rolls(1))
-                .WhenPlayerTakesAction("Forbidden Arts", x => x.Rolls(1))
-                .ThenDarkness(1)
-                .WhenPlayerTakesAction("Forbidden Arts", x => x.Rolls(4))
-                .WhenPlayerAcceptsRoll()
-                .ThenHero(x => x.HasUsedAction().Secrecy(6));
+            TestScenario.Given.Game
+                .Darkness(0)
+                .WithHero("Acolyte").HasPowers("Forbidden Arts")
+                .When.Hero.FacesEnemy("Skeleton")
+                .When.Player.Targets("Skeleton").UsesTactic("Fight").ResolvesConflict(Fake.Rolls(1))
+                .When.Player.TakesAction("Forbidden Arts", Fake.Rolls(1))
+                .Then(Verify.Game.Darkness(1)) // rolling a 1 increases the Darkness
+                .Then(Verify.Player.ConflictView.Rolled(1, 1))
+                .When.Player.TakesAction("Forbidden Arts", Fake.Rolls(4))
+                .Then(Verify.Player.ConflictView.Rolled(1, 1, 4))
+                .When.Player.AcceptsRoll().AcceptsConflictResults()
+                .Then(Verify.Hero.WasWounded(false));
         }
 
         // Leech Life (Tactic): Exhaust while not at the Monastery to fight with 3 dice. Gain 1 Grace (up to default) if you roll 2 successes. 
