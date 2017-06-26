@@ -61,7 +61,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
                 case "Zombie":
                     return Enemy.Create(name, 5, 3);
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(name));
+                    throw new ArgumentOutOfRangeException(nameof(name), name);
             }
         }
     }

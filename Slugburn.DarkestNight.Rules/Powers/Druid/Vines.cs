@@ -21,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 
         private class VinesTactic : PowerTactic
         {
-            public override string Name => $"{PowerName} [{Type}]";
+            public override string Name => $"{PowerName} [{Type.ToString().ToLower()}]";
 
             public override void Use(Hero hero)
             {

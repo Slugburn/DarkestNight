@@ -22,14 +22,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Then(Verify.Power("Animal Companion").IsExhausted(!attackSucceeds));
         }
 
+        // Camouflage (Tactic): Elude with 2 dice.
         [Test]
         public void Camouflage()
         {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Camouflage").At("Village"))
-                .GivenLocation("Village", x => x.Blights("Skeletons"))
-                .WhenHero(h => h.Eludes(x => x.Tactic("Camouflage").Rolls(1, 6)))
-                .ThenHero(x => x.RolledNumberOfDice(2).LostGrace(0));
+            TestScenario.Given.Game
+                .WithHero("Druid").HasPowers("Camouflage")
+                .When.Hero.FacesEnemy("Zombie")
+                .When.Player.CompletesConflict("Zombie", "Camouflage", Fake.Rolls(1, 6))
+                .Then(Verify.Hero.RolledNumberOfDice(2).WasWounded(false));
         }
 
         [Test]
@@ -183,26 +184,27 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .ThenHero(x => x.HasAvailableActions("Hide", "Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form"));
         }
 
-        [Test]
-        public void Vines_Elude()
-        {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Vines").At("Mountains"))
-                .GivenLocation("Mountains", x => x.Blights("Zombies"))
-                .WhenHero(h => h.Eludes(x => x.Tactic("Vines [Elude]").Rolls(1, 2, 3, 4)))
-                .ThenHero(x => x.RolledNumberOfDice(4))
-                .ThenPower("Vines", x => x.IsExhausted());
-        }
-
+        // Vines (Tactic): Exhaust to fight or elude with 4 dice.
         [Test]
         public void Vines_Fight()
         {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Vines").At("Mountains"))
-                .GivenLocation("Mountains", x => x.Blights("Zombies"))
-                .WhenHero(h => h.Fights(x => x.Tactic("Vines [Fight]").Rolls(2, 3, 4, 5)))
-                .ThenHero(x => x.RolledNumberOfDice(4))
-                .ThenPower("Vines", x => x.IsExhausted());
+            TestScenario.Given.Game
+                .WithHero("Druid").HasPowers("Vines")
+                .When.Hero.FacesEnemy("Zombie")
+                .When.Player.CompletesConflict("Zombie", "Vines [fight]", Fake.Rolls(1, 2, 3, 4))
+                .Then(Verify.Hero.RolledNumberOfDice(4).WasWounded())
+                .Then(Verify.Power("Vines").IsExhausted());
+        }
+
+        [Test]
+        public void Vines_Elude()
+        {
+            TestScenario.Given.Game
+                .WithHero("Druid").HasPowers("Vines")
+                .When.Hero.FacesEnemy("Zombie")
+                .When.Player.CompletesConflict("Zombie", "Vines [elude]", Fake.Rolls(1, 2, 3, 4))
+                .Then(Verify.Hero.RolledNumberOfDice(4))
+                .Then(Verify.Power("Vines").IsExhausted());
         }
 
         [Test]

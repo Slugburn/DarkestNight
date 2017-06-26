@@ -51,10 +51,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void ConsecratedBlade_Suppressed()
         {
-            new TestScenario()
-                .GivenHero("Knight", x => x.HasPowers("Consecrated Blade").At("Village"))
-                .GivenLocation("Village", x => x.Blights("Corruption"))
-                .ThenHero(x => x.FightDice(1));
+            TestScenario.Given.Game
+                .WithHero("Knight").HasPowers("Consecrated Blade").At("Village")
+                .Location("Village").Blights("Corruption")
+                .Then(Verify.Hero.FightDice(1));
         }
 
         [Test]
@@ -80,12 +80,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void OathOfDefense_ActivateAtLocationWithBlight()
         {
-            new TestScenario()
-                .GivenHero("Knight", x => x.HasPowers("Oath of Defense").Grace(0).At("Village"))
-                .GivenLocation("Village", x => x.Blights("Shades"))
-                .WhenPlayerTakesAction("Oath of Defense")
-                .ThenHero(x => x.Grace(0).HasUsedAction())
-                .ThenPower("Oath of Defense", x => x.IsActive());
+            TestScenario.Given.Game
+                .WithHero("Knight").HasPowers("Oath of Defense").At("Village").Grace(0)
+                .Location("Village").Blights("Shades")
+                .When.Player.TakesAction("Oath of Defense")
+                .Then(Verify.Hero.Grace(0).HasUsedAction())
+                .Then(Verify.Power("Oath of Defense").IsActive());
         }
 
         [Test]
@@ -134,21 +134,22 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Then(Verify.Power("Oath of Defense").IsActive(false));
         }
 
+        // Oath of Purging (Action): 
+        // Active: +2 dice in fights when attacking blights.
+        // Fulfill: Destroy a blight; you gain 1 Grace.
+        // Break: Enter the Monastery; you lose 1 Grace.
         [Test]
         public void OathOfPurging_Activate()
         {
-            new TestScenario()
-                .GivenHero("Knight", x => x.HasPowers("Oath of Purging").At("Village"))
-                .GivenLocation("Village", x => x.Blights("Skeletons"))
-                .WhenPlayerTakesAction("Oath of Purging")
-                .ThenPower("Oath of Purging", x => x.IsActive());
+            TestScenario
+                .Given.Game.WithHero("Knight").HasPowers("Oath of Purging").NotAt("Monastery")
+                .When.Player.TakesAction("Oath of Purging")
+                .Then(Verify.Power("Oath of Purging").IsActive());
         }
 
         [Test]
         public void OathOfPurging_ActiveAndFulfill()
         {
-            // +2 dice in fights when attacking blights.
-            // Destroy a blight; you gain 1 Grace.
             TestScenario.Given.Game
                 .WithHero("Knight").HasPowers("Oath of Purging").At("Village").Grace(0)
                 .Power("Oath of Purging").IsActive()
@@ -170,15 +171,17 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Then(Verify.Power("Oath of Purging").IsActive(false));
         }
 
-        // Oath of Valor
+        // Oath of Valor (Action):
+        // Active: +1 die in fights.
+        // Fulfill: Win a fight; You may activate any Oath immediately.
+        // Break: Attempt to elude; you lose 1 Grace.
         [Test]
         public void OathOfValor_Activate()
         {
-            new TestScenario()
-                .GivenHero("Knight", x => x.HasPowers("Oath of Valor").At("Village"))
-                .GivenLocation("Village", x => x.Blights("Skeletons"))
-                .WhenPlayerTakesAction("Oath of Valor")
-                .ThenPower("Oath of Valor", x => x.IsActive());
+            TestScenario.Given.Game
+                .WithHero("Knight").HasPowers("Oath of Valor")
+                .When.Player.TakesAction("Oath of Valor")
+                .Then(Verify.Power("Oath of Valor").IsActive());
         }
 
         [Test]

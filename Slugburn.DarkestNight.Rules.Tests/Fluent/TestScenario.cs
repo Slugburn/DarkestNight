@@ -1,5 +1,4 @@
 ﻿using System;
-using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
@@ -61,14 +60,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public TestScenario GivenLocation(string location, Action<LocationContext> def)
-        {
-            var space = _game.Board[location.ToEnum<Location>()];
-            var context = new LocationContext(_game, _player, space);
-            def(context);
-            return this;
-        }
-
         public TestScenario ThenHero(Action<HeroExpectation> expect)
         {
             var hero = _game.ActingHero;
@@ -79,15 +70,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         {
             var expectation = new HeroExpectation(hero);
             expect(expectation);
-            expectation.Verify();
-            return this;
-        }
-
-        public TestScenario ThenSpace(string location, Action<LocationExpectation> define)
-        {
-            var space = _game.Board[location.ToEnum<Location>()];
-            var expectation = new LocationExpectation(space);
-            define(expectation);
             expectation.Verify();
             return this;
         }
