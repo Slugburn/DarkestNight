@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
-using Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
 {
@@ -59,14 +57,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         public IPlayerActionContext SelectsLocation(string location)
         {
             GetPlayer().SelectLocation(location.ToEnum<Location>());
-            return this;
-        }
-
-        public IPlayerActionContext ResolvesConflict(Action<ResolveConflictContext> action)
-        {
-            var context = new ResolveConflictContext(GetPlayer().Conflict);
-            action(context);
-            GetPlayer().ResolveConflict(context.GetTactic(), context.GetTargetIds());
             return this;
         }
 

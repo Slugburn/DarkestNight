@@ -110,16 +110,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             return this;
         }
 
-        public TestScenario WhenPlayerTakesAttackAction(Action<FightContext> actions = null)
-        {
-            var context = new FightContext(_player, _game.ActingHero);
-            actions?.Invoke(context);
-            WhenPlayerTakesAction(context.GetAction());
-            WhenPlayerSelectsTactic(context.GetTactic(), context.GetTargets());
-            WhenPlayerAcceptsRoll();
-            return this;
-        }
-
         public TestScenario GivenDarkness(int darkness)
         {
             _game.Darkness = darkness;
@@ -129,13 +119,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         public TestScenario ThenDarkness(int expected)
         {
             Assert.That(_game.Darkness, Is.EqualTo(expected), "Unexpected Darkness.");
-            return this;
-        }
-
-        public TestScenario WhenPlayerSelectsTactic(string tactic, params string[] targets)
-        {
-            var targetIds = GetTargetIds(targets).ToList();
-            _game.ActingHero.SelectTactic(tactic, targetIds);
             return this;
         }
 

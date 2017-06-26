@@ -102,7 +102,6 @@
     <Compile Include="Fluent\Arrangements\PowerContext.cs" />
     <Compile Include="Fluent\Assertions\PlayerVerification.cs" />
     <Compile Include="Fluent\Assertions\PowerExpectation.cs" />
-    <Compile Include="Fluent\Arrangements\ResolveConflictContext.cs" />
     <Compile Include="Fluent\Arrangements\LocationContext.cs" />
     <Compile Include="Fluent\Assertions\LocationExpectation.cs" />
     <Compile Include="Fluent\Arrangements\TacticContext.cs" />

@@ -20,31 +20,32 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .ThenHero(x => x.HasUsedAction().LostGrace());
         }
 
+        // Charge (Tactic): Fight with 2 dice.
         [Test]
         public void Charge()
         {
-            new TestScenario()
-                .GivenHero("Knight", x => x.HasPowers("Charge").At("Village"))
-                .GivenLocation("Village", x => x.Blights("Skeletons"))
-                .WhenPlayerTakesAttackAction(x => x.Tactic("Charge").Rolls(1, 6))
-                .ThenHero(x => x.RolledNumberOfDice(2).HasUsedAction().LostSecrecy());
+            TestScenario.Given.Game
+                .WithHero("Knight").HasPowers("Charge")
+                .When.Hero.FacesEnemy("Skeleton")
+                .Player.CompletesConflict("Skeleton", "Charge", Fake.Rolls(1, 6))
+                .Then(Verify.Hero.RolledNumberOfDice(2));
         }
 
         [Test]
         public void ConsecratedBlade()
         {
-            new TestScenario()
-                .GivenHero("Knight", x => x.HasPowers("Consecrated Blade"))
-                .ThenHero(x => x.FightDice(2));
+            TestScenario.Given.Game
+                .WithHero("Knight").HasPowers("Consecrated Blade")
+                .Then(Verify.Hero.FightDice(2));
         }
 
         [Test]
         public void ConsecratedBlade_Exhausted()
         {
-            new TestScenario()
-                .GivenHero("Knight", x => x.HasPowers("Consecrated Blade"))
-                .GivenPower("Consecrated Blade", x => x.IsExhausted())
-                .ThenHero(x => x.FightDice(1));
+            TestScenario.Given.Game
+                .WithHero("Knight").HasPowers("Consecrated Blade")
+                .Power("Consecrated Blade").IsExhausted()
+                .Then(Verify.Hero.FightDice(1));
         }
 
         [Test]
@@ -209,13 +210,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             // Win a fight; You may activate any Oath immediately.
             const string powerName = "Oath of Valor";
-            new TestScenario()
-                .GivenHero("Knight", x => x.HasPowers(powerName).At("Village"))
-                .GivenLocation("Village", x => x.Blights("Skeletons"))
-                .GivenPower(powerName, x => x.IsActive())
-                .WhenPlayerTakesAttackAction(x => x.Rolls(6, 6))
-                .ThenHero(x => x.HasUsedAction().LostSecrecy().HasAvailableActions(powerName))
-                .ThenPower(powerName, x => x.IsActive(false));
+            TestScenario.Given.Game.WithHero("Knight").HasPowers(powerName)
+                .Given.ActingHero().Power(powerName).IsActive()
+                .When.Hero.FacesEnemy("Skeleton")
+                .When.Player.Fights(Fake.Rolls(6, 6))
+                .Then(Verify.Hero.HasAvailableActions(powerName))
+                .Then(Verify.Power(powerName).IsActive(false));
         }
 
         [Test]
@@ -248,13 +248,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             // Add 1 to highest die when fighting the Necromancer.
             // Win fight versus the Necromancer; you get a free action.
-            new TestScenario()
-                .GivenHero("Knight", x => x.HasPowers("Oath of Vengeance", "Charge", "Consecrated Blade").At("Ruins"))
-                .GivenNecromancerLocation("Ruins")
-                .GivenPower("Oath of Vengeance", x => x.IsActive())
-                .WhenPlayerTakesAttackAction(x => x.Action("Fight Necromancer").Tactic("Charge").Rolls(2, 3, 6))
-                .ThenHero(x => x.Rolled(2, 3, 7).FightDice(2).HasUsedAction().HasFreeAction())
-                .ThenPower("Oath of Vengeance", x => x.IsActive(false));
+            TestScenario.Given.Game
+                .NecromancerAt("Ruins")
+                .WithHero("Knight").HasPowers("Oath of Vengeance", "Charge", "Consecrated Blade").At("Ruins")
+                .Given.ActingHero().Power("Oath of Vengeance").IsActive()
+                .When.Player.TakesAction("Fight Necromancer").CompletesConflict("Necromancer", "Charge", Fake.Rolls(2, 3, 6))
+                .Then(Verify.Hero.Rolled(2, 3, 7).FightDice(2).HasUsedAction().HasFreeAction())
+                .Then(Verify.Power("Oath of Vengeance").IsActive(false));
         }
 
         // Reckless Abandon

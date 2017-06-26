@@ -39,17 +39,5 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             _tactic = tactic;
             return this;
         }
-
-        public FightContext Target(params string[] targets)
-        {
-            _targets = targets;
-            return this;
-        }
-
-        public FightContext UsePower(string powerName)
-        {
-            _player.SetUsePowerResponse(powerName, true);
-            return this;
-        }
     }
 }

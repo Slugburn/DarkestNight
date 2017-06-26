@@ -154,12 +154,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void FadeToBlack_CombinedWith_FinalRest()
         {
             var rolls = Enumerable.Repeat(6, 5).ToArray();
-            new TestScenario()
-                .GivenDarkness(20)
-                .GivenHero("Acolyte", x => x.HasPowers("Fade to Black", "Final Rest").At("Monastery"))
-                .GivenLocation("Monastery", x => x.Blights("Skeletons"))
-                .WhenPlayerTakesAttackAction(x => x.Tactic("Final Rest [3d]").Rolls(rolls))
-                .ThenHero(x => x.FightDice(3).RolledNumberOfDice(5).HasUsedAction().LostSecrecy());
+            TestScenario.Given.Game
+                .Darkness(20)
+                .WithHero("Acolyte").HasPowers("Fade to Black", "Final Rest")
+                .When.Hero.FacesEnemy("Skeleton")
+                .Player.CompletesConflict("Skeleton", "Final Rest [3d]", Fake.Rolls(rolls))
+                .Then(Verify.Hero.FightDice(3).RolledNumberOfDice(5));
         }
 
         [Test]

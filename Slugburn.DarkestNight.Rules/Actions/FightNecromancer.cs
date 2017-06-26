@@ -31,6 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             hero.SetRoll(RollBuilder.Create<FightNecromancerRoll>());
             // hero.ConflictState.ConflictType needs to be set before calling hero.GetAvailableFightTactics()
             conflictState.AvailableTactics = hero.GetAvailableFightTactics().GetInfo(hero);
+            hero.DisplayConflictState();
             hero.State = HeroState.SelectingTarget;
         }
 

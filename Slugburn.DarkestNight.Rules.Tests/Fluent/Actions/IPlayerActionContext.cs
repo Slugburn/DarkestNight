@@ -1,6 +1,4 @@
-﻿using System;
-using Slugburn.DarkestNight.Rules.Tests.Fakes;
-using Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements;
+﻿using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
 {
@@ -12,7 +10,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         IPlayerActionContext AcceptsRoll();
         IPlayerActionContext ChoosesBlight(params string[] blights);
         IPlayerActionContext ChooseLocation(Location location);
-        IPlayerActionContext ResolvesConflict(Action<ResolveConflictContext> action);
         IPlayerActionContext ResolvesConflict(IFakeContext fake);
         IPlayerActionContext SelectsBlight(string location, string blight);
         IPlayerActionContext SelectsEventOption(string option, IFakeContext set = null);
