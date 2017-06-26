@@ -308,8 +308,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         public HeroVerification WasWounded(bool expected = true)
         {
-            _expectedWounded = true;
-            _expectedGraceLoss = 1;
+            _expectedWounded = expected;
+            _expectedGraceLoss = expected ? 1 : 0;
             return this;
         }
 

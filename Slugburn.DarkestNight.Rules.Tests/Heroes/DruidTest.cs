@@ -7,19 +7,18 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
     [TestFixture]
     public class DruidTest
     {
+        // Animal Companion (Tactic): Fight with 2 dice. Exhaust if you fail.
         [TestCase(false)]
         [TestCase(true)]
         public void AnimalCompanion(bool attackSucceeds)
         {
             var roll = attackSucceeds ? new[] {1, 6} : new[] {3, 4};
-            var expectedBlights = attackSucceeds ? new string[0] : new[] {"Corruption"};
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Animal Companion").At("Village"))
-                .GivenLocation("Village", x => x.Blights("Corruption"))
-                .WhenPlayerTakesAttackAction(x => x.Tactic("Animal Companion").Rolls(roll))
-                .ThenSpace("Village", x => x.Blights(expectedBlights))
-                .ThenHero(x => x.RolledNumberOfDice(2).HasUsedAction().LostSecrecy())
-                .ThenPower("Animal Companion", x => x.IsExhausted(!attackSucceeds));
+            TestScenario.Given.Game
+                .WithHero("Druid").HasPowers("Animal Companion")
+                .When.Hero.FacesEnemy("Zombie")
+                .When.Player.ResolvesConflict(x => x.Tactic("Animal Companion").Target("Zombie").Rolls(roll)).AcceptsRoll().AcceptsConflictResults()
+                .Then(Verify.Hero.RolledNumberOfDice(2).WasWounded(!attackSucceeds))
+                .Then(Verify.Power("Animal Companion").IsExhausted(!attackSucceeds));
         }
 
         [Test]
