@@ -70,11 +70,9 @@
     <Compile Include="Fakes\IFakeContext.cs" />
     <Compile Include="Fluent\Actions\ActionExtension.cs" />
     <Compile Include="Fluent\Actions\GameActionContext.cs" />
-    <Compile Include="Fluent\Actions\IHeroActionContext.cs" />
     <Compile Include="Fluent\Actions\IPlayerActionContext.cs" />
     <Compile Include="Fluent\Actions\IWhen.cs" />
     <Compile Include="Fluent\Actions\WhenContext.cs" />
-    <Compile Include="Fluent\Actions\HeroActionContext.cs" />
     <Compile Include="Fluent\Arrangements\GameContext.cs" />
     <Compile Include="Fluent\Arrangements\GivenContext.cs" />
     <Compile Include="Fluent\Arrangements\HeroContext.cs" />
@@ -87,7 +85,6 @@
     <Compile Include="Fluent\Assertions\ConflictViewVerification.cs" />
     <Compile Include="Fluent\Assertions\EventViewVerification.cs" />
     <Compile Include="Fluent\Assertions\GameVerification.cs" />
-    <Compile Include="Fluent\Assertions\HeroEventExpectation.cs" />
     <Compile Include="Fluent\Assertions\HeroEventVerification.cs" />
     <Compile Include="Fluent\Actions\PlayerActionContext.cs" />
     <Compile Include="Fluent\Assertions\HeroVerification.cs" />

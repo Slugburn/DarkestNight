@@ -63,7 +63,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             return new PowerContext(GetGame(), GetPlayer(), _hero, power );
         }
 
-        public IHeroContext DrawsEvent(string eventName = null)
+        public IHeroContext HasDrawnEvent(string eventName = null)
         {
             if (eventName != null)
             {
@@ -80,6 +80,19 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
         public IHeroContext FacesEnemy(string enemyName)
         {
             _hero.FaceEnemy(enemyName);
+            return this;
+        }
+
+        public IHeroContext RefreshesPower(string powerName)
+        {
+            var power = _hero.GetPower(powerName);
+            power.Refresh();
+            return this;
+        }
+
+        public IHeroContext MovesTo(string location)
+        {
+            _hero.MoveTo(location.ToEnum<Location>());
             return this;
         }
 

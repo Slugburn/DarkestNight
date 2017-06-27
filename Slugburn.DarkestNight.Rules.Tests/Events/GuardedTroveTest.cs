@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Game.WithHero()
-                .Given.ActingHero().DrawsEvent("Guarded Trove")
+                .Given.Hero().HasDrawnEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Player.ConflictView.HasTargets("Guarded Trove"))
                 .Given.Game.NextSearchResult(Find.Waystone)
@@ -27,7 +27,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Game.WithHero()
-                .Given.ActingHero().DrawsEvent("Guarded Trove")
+                .Given.Hero().HasDrawnEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Player.ConflictView.HasTargets("Guarded Trove"))
                 .When.Player.Eludes(Fake.Rolls(5)) 
@@ -41,7 +41,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Game.WithHero()
-                .Given.ActingHero().DrawsEvent("Guarded Trove")
+                .Given.Hero().HasDrawnEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Player.ConflictView.HasTargets("Guarded Trove"))
                 .When.Player.Eludes(Fake.Rolls(5))
@@ -55,7 +55,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Game.WithHero().Secrecy(0)
-                .Given.ActingHero().DrawsEvent("Guarded Trove")
+                .Given.Hero().HasDrawnEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Player.ConflictView.HasTargets("Guarded Trove"))
                 .When.Player.Eludes(Fake.Rolls(5))
@@ -67,7 +67,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Game.WithHero()
-                .Given.ActingHero().DrawsEvent("Guarded Trove")
+                .Given.Hero().HasDrawnEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Player.ConflictView.HasTargets("Guarded Trove"))
                 .When.Player.Fights(Fake.Rolls(5))

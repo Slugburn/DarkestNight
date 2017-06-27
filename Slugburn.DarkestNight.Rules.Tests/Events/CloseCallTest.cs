@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Game.WithHero()
-                .Given.ActingHero().DrawsEvent("Close Call")
+                .Given.Hero().HasDrawnEvent("Close Call")
                 .Then(Verify.Player.EventView.HasBody("Close Call", 4, "Roll 1d and take the highest").HasOptions("Roll"))
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
                 .Then(Verify.Player.EventView.ActiveRow(effect))

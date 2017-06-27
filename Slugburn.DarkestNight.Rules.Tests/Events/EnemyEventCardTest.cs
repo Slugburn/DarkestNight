@@ -18,7 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             var blights = Enumerable.Repeat("Desecration", blightCount).ToArray();
             TestEnemyGeneratorEvent("Black Banner", target, "Count the blights in your location", 4,
-                given => given.ActingHero().At("Village").Location("Village").Blights(blights));
+                given => given.Hero().At("Village").Location("Village").Blights(blights));
         }
 
         [TestCase(0, "Ghoul")]
@@ -40,7 +40,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void DeadServant(int secrecy, string enemy)
         {
             TestEnemyGeneratorEvent("Dead Servant", enemy, "Compare to Secrecy", 3,
-                given => given.ActingHero().Secrecy(secrecy));
+                given => given.Hero().Secrecy(secrecy));
         }
 
         [TestCase(6, "Flying Demon")]
@@ -51,7 +51,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void Demon(int secrecy, string enemy)
         {
             TestEnemyGeneratorEvent("Demon", enemy, "Compare to Secrecy", 3,
-                given => given.ActingHero().Secrecy(secrecy));
+                given => given.Hero().Secrecy(secrecy));
         }
 
         //
@@ -66,7 +66,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void Horde(int secrecy, string enemy)
         {
             TestEnemyGeneratorEvent("Horde", enemy, "Compare to Secrecy", 3,
-                given => given.ActingHero().Secrecy(secrecy));
+                given => given.Hero().Secrecy(secrecy));
         }
 
         [TestCase(0, "Archer")]
@@ -88,7 +88,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void ShamblingHorror(int secrecy, string enemy)
         {
             TestEnemyGeneratorEvent("Shambling Horror", enemy, "Compare to Secrecy", 4,
-                given => given.ActingHero().Secrecy(secrecy));
+                given => given.Hero().Secrecy(secrecy));
         }
 
         [TestCase(5, "Shade")]
@@ -99,7 +99,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void VengefulSpirit(int secrecy, string enemy)
         {
             TestEnemyGeneratorEvent("Vengeful Spirit", enemy, "Compare to Secrecy", 4,
-                given => given.ActingHero().Secrecy(secrecy));
+                given => given.Hero().Secrecy(secrecy));
         }
 
         private static void TestEnemyGeneratorEvent(string eventName, string enemy, int expectedFate)
@@ -113,7 +113,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Game.WithHero()
                 .Given.Configure(designator)
-                .Given.ActingHero().DrawsEvent(eventName)
+                .Given.Hero().HasDrawnEvent(eventName)
                 .Then(Verify.Player.EventView.HasBody(eventName, expectedFate, text).HasOptions("Continue"))
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Hero.HasUnresolvedEvents(0).Secrecy(null))

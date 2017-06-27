@@ -9,8 +9,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         {
         }
 
-        public IHeroActionContext Hero => new HeroActionContext(GetGame(), GetPlayer());
-
 
         public IPlayerActionContext Player => new PlayerActionContext(GetGame(), GetPlayer());
 

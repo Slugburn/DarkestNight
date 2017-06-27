@@ -13,7 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Game.WithHero()
-                .Given.ActingHero().DrawsEvent("Twist of Fate")
+                .Given.Hero().HasDrawnEvent("Twist of Fate")
                 .Then(Verify.Player.EventView.HasBody("Twist of Fate", 1, "Roll 1d and take the highest").HasOptions("Roll"))
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
                 .Then(Verify.Player.EventView.ActiveRow("+1d on all rolls for the rest of this turn"))
@@ -31,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Game.WithHero()
-                .Given.ActingHero().DrawsEvent("Twist of Fate")
+                .Given.Hero().HasDrawnEvent("Twist of Fate")
                 .Then(Verify.Player.EventView.HasBody("Twist of Fate", 1, "Roll 1d and take the highest").HasOptions("Roll"))
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
                 .Then(Verify.Player.EventView.ActiveRow("-1d (to a minimum of 1d) on all rolls for the rest of this turn"))
