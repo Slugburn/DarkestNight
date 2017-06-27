@@ -58,31 +58,71 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .When.Player.TakesAction("Pray", Fake.Rolls(1, 1)).AcceptsRoll()
                 .Then(Verify.Hero("Acolyte").Grace(1).HasUsedAction());
         }
+
         [Test]
         public void BlessingOfFaith_Exhausted()
         {
             TestScenario.Game
                 .WithHero("Acolyte").Grace(0).At("Monastery")
                 .WithHero("Priest").HasPowers("Blessing of Faith").At("Monastery")
-                .When.Player.TakesAction("Blessing of Faith").SelectsHero("Acolyte")
+                .When.Player.TakesAction("Priest", "Blessing of Faith").SelectsHero("Acolyte")
                 .Given.Hero("Priest").Power("Blessing of Faith").IsExhausted()
                 .Given.Hero("Acolyte").IsActing()
                 .When.Player.TakesAction("Pray", Fake.Rolls(1, 1)).AcceptsRoll()
                 .Then(Verify.Hero("Acolyte").Grace(0).HasUsedAction());
         }
 
-
         // Blessing of Piety
         // Activate on a hero in your location.
         // Active: Gain 1 Grace (up to default) when hiding.
+        [Test]
+        public void BlessingOfPiety()
+        {
+            TestScenario.Game
+                .WithHero("Druid").Grace(0).At("Village")
+                .WithHero("Priest").HasPowers("Blessing of Piety").At("Village")
+                .When.Player.TakesAction("Priest", "Blessing of Piety").SelectsHero("Druid")
+                .Given.Hero("Druid").IsActing()
+                .When.Player.TakesAction("Hide")
+                .Then(Verify.Hero("Druid").Grace(1).HasUsedAction());
+        }
 
         // Blessing of Strength
         // Activate on a hero in your location.
         // Active: +1d in fights.
+        [Test]
+        public void BlessingOfStrength()
+        {
+            TestScenario.Game
+                .WithHero("Knight").At("Village")
+                .WithHero("Priest").HasPowers("Blessing of Strength").At("Village")
+                .When.Player.TakesAction("Priest", "Blessing of Strength").SelectsHero("Knight")
+                .Then(Verify.Hero("Knight").FightDice(2));
+        }
+
+        [Test]
+        public void BlessingOfStrength_Exhausted()
+        {
+            TestScenario.Game
+                .WithHero("Knight").At("Village")
+                .WithHero("Priest").HasPowers("Blessing of Strength").At("Village")
+                .When.Player.TakesAction("Priest", "Blessing of Strength").SelectsHero("Knight")
+                .Given.Hero("Priest").Power("Blessing of Strength").IsExhausted()
+                .Then(Verify.Hero("Knight").FightDice(1));
+        }
 
         // Blessing of Wisdom
         // Activate on a hero in your location.
         // Active: +1d when eluding.
+        [Test]
+        public void BlessingOfWisdom()
+        {
+            TestScenario.Game
+                .WithHero("Acolyte").At("Village")
+                .WithHero("Priest").HasPowers("Blessing of Wisdom").At("Village")
+                .When.Player.TakesAction("Priest", "Blessing of Wisdom").SelectsHero("Acolyte")
+                .Then(Verify.Hero("Acolyte").EludeDice(2));
+        }
 
         // Calm (Bonus)
         // Heroes at your location may pray.

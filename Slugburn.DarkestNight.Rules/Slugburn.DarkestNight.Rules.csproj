@@ -191,6 +191,7 @@
     <Compile Include="Powers\Knight\Sprint.cs" />
     <Compile Include="Powers\PowerFactory.cs" />
     <Compile Include="Powers\Priest\Benediction.cs" />
+    <Compile Include="Powers\Priest\Blessing.cs" />
     <Compile Include="Powers\Priest\BlessingOfFaith.cs" />
     <Compile Include="Powers\Priest\BlessingOfPiety.cs" />
     <Compile Include="Powers\Priest\BlessingOfStrength.cs" />
@@ -207,6 +208,7 @@
     <Compile Include="Rolls\IRollHandler.cs" />
     <Compile Include="Rolls\IRollModifier.cs" />
     <Compile Include="Rolls\IRollStateCreation.cs" />
+    <Compile Include="Rolls\PowerRollBonus.cs" />
     <Compile Include="Rolls\RollBuilder.cs" />
     <Compile Include="Rolls\RollState.cs" />
     <Compile Include="Rolls\RollType.cs" />

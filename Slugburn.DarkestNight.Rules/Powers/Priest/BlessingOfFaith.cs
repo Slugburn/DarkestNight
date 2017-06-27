@@ -6,7 +6,7 @@ using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Priest
 {
-    class BlessingOfFaith : ActivateablePower, ICallbackHandler
+    class BlessingOfFaith : Blessing
     {
         private const string PowerName = "Blessing of Faith";
 
@@ -18,15 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             ActiveText = "Gain an extra Grace (up to default) when praying.";
         }
 
-        public override void Activate(Hero hero)
-        {
-            base.Activate(hero);
-            var validHeroes = hero.Game.Heroes.Where(h => h.Location == hero.Location);
-            var view = new PlayerHeroSelection(validHeroes);
-            hero.Player.DisplayHeroSelection(view, Callback.ForPower(hero, this));
-        }
-
-        public void HandleCallback(Hero hero, string path, object data)
+        public override void HandleCallback(Hero hero, string path, object data)
         {
             var selectedHero = (Hero) data;
             selectedHero.Triggers.Add(HeroTrigger.Praying, Name, new BlessingOfFaithWhenPraying(hero.Name) );
