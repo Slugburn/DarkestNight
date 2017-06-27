@@ -8,7 +8,7 @@ using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class LatentSpell : IEventCard
+    public class LatentSpell : IEventCard, ICallbackHandler
     {
         public EventDetail Detail { get; } = EventDetail.Create("Latent Spell", 2, x => x
             .Text("Lose 1 Secrecy. Then, spend 1 Grace or discard this event without further effect.\nRoll 1d and take the highest")
@@ -45,8 +45,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                     break;
                 case "move":
                     var locations = Game.GetAllLocations().Except(new[] {hero.Location}).Select(x=>x.ToString()).ToList();
-                    hero.SetLocationSelectedHandler(new LatentSpellSelectLocation());
-                    hero.Player.DisplayLocationSelection(locations);
+                    hero.Player.DisplayLocationSelection(locations, Callback.ForEvent(hero, this));
                     hero.Player.State = PlayerState.SelectLocation;
                     break;
                 case "no-effect":
@@ -57,6 +56,12 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             hero.EndEvent();
         }
 
+        public void HandleCallback(Hero hero, string path, object data)
+        {
+            var location = (Location) data;
+            hero.MoveTo(location);
+        }
+
         private class LatentSpellBlightSelected : ITriggerHandler<Game>
         {
             public void HandleTrigger(Game game, string source, TriggerContext context)
@@ -64,14 +69,6 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 var blightSelection = context.GetState<BlightLocation>();
                 game.DestroyBlight(blightSelection.Location, blightSelection.Blight);
                 game.Triggers.RemoveBySource(source);
-            }
-        }
-
-        private class LatentSpellSelectLocation : ILocationSelectedHandler
-        {
-            public void Handle(Hero hero, Location location)
-            {
-                hero.MoveTo(location);
             }
         }
     }

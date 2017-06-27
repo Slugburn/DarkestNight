@@ -9,8 +9,6 @@ using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Powers;
-using Slugburn.DarkestNight.Rules.Powers.Acolyte;
-using Slugburn.DarkestNight.Rules.Powers.Priest;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tactics;
 using Slugburn.DarkestNight.Rules.Triggers;
@@ -25,7 +23,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         private readonly Stash _stash;
         private readonly Dictionary<string, ITactic> _tactics;
         private readonly List<ActionFilter> _actionFilters;
-        private ILocationSelectedHandler _locationSelectedHandler;
         private IBlightSelectedHandler _blightSelectedHandler;
         private IHeroSelectionHandler _heroSelectionHandler;
 
@@ -390,17 +387,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public bool IsBlightIgnored(Blight blight)
         {
             return Game.IsBlightIgnored(this, blight);
-        }
-
-        public void SetLocationSelectedHandler(ILocationSelectedHandler handler)
-        {
-            _locationSelectedHandler = handler;
-        }
-
-        public void SelectLocation(Location location)
-        {
-            _locationSelectedHandler.Handle(this, location);
-            _locationSelectedHandler = null;
         }
 
         public bool HasAction(string actionName)

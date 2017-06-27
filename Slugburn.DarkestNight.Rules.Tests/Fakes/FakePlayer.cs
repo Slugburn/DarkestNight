@@ -18,6 +18,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         private Blight[] _blightChoice;
         private Location? _locationChoice;
 
+        private Callback _callback;
+
         private string _tacticChoice;
 
         public FakePlayer(Game game)
@@ -67,9 +69,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             BlightSelection = blightSelection;
         }
 
-        public void DisplayLocationSelection(ICollection<string> locations)
+        public void DisplayLocationSelection(ICollection<string> locations, Callback callback)
         {
             ValidLocations = locations;
+            _callback = callback;
         }
 
         public void DisplayNecromancer(PlayerNecromancer necromancer)
@@ -170,8 +173,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public void SelectLocation(Location location)
         {
-            var hero = _game.GetHero(ActiveHero);
-            hero.SelectLocation(location);
+            CallbackRouter.Route(_game, _callback, location);
         }
 
         public void ResolveConflict(string tacticName, ICollection<int> targetIds)

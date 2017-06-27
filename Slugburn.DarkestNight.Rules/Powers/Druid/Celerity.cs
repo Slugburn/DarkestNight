@@ -1,6 +1,7 @@
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Players;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Druid
 {
@@ -20,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             hero.AddAction(new CelerityAction());
         }
 
-        private class CelerityAction : PowerAction
+        private class CelerityAction : PowerAction, ICallbackHandler
         {
             public CelerityAction() : base(PowerName)
             {
@@ -31,26 +32,25 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
                 hero.ValidateState(HeroState.ChoosingAction);
                 DruidFormPower.DeactivateAllForms(hero);
                 hero.State = HeroState.SelectingLocation;
-                hero.SetLocationSelectedHandler(new CelerityLocationSelectedHandler());
+                var validDestionations = hero.GetSpace().AdjacentLocations.Select(x=>x.ToString()).ToList();
+                hero.Player.DisplayLocationSelection(validDestionations, Callback.ForAction(hero, this));
             }
 
-            private class CelerityLocationSelectedHandler : ILocationSelectedHandler
+            public void HandleCallback(Hero hero, string path, object data)
             {
-                public void Handle(Hero hero, Location location)
-                {
-                    // Move to selected location
-                    hero.MoveTo(location);
+                // Move to selected location
+                var destination = (Location)data;
+                hero.MoveTo(destination);
 
-                    // Allow player to pick a new form
-                    hero.State = HeroState.ChoosingAction;
-                    var formActions = hero.GetPowers<IDruidForm>().Where(x => x.IsUsable(hero)).Select(x => x.Name);
-                    var continueAction = new CelerityContinueAction();
-                    var availableActions = formActions.Concat(new[] { continueAction.Name }).ToList();
-                    hero.AddAction(continueAction);
-                    hero.AvailableActions = availableActions;
-                }
-
+                // Allow player to pick a new form
+                hero.State = HeroState.ChoosingAction;
+                var formActions = hero.GetPowers<IDruidForm>().Where(x => x.IsUsable(hero)).Select(x => x.Name);
+                var continueAction = new CelerityContinueAction();
+                var availableActions = formActions.Concat(new[] { continueAction.Name }).ToList();
+                hero.AddAction(continueAction);
+                hero.AvailableActions = availableActions;
             }
+
             private class CelerityContinueAction : IAction
             {
                 public string Name => "Continue";

@@ -133,13 +133,15 @@
     <Compile Include="IBlightSelectedHandler.cs" />
     <Compile Include="IConflict.cs" />
     <Compile Include="IgnoreBlight.cs" />
-    <Compile Include="ILocationSelectedHandler.cs" />
     <Compile Include="Items\Artifacts\BloodRing.cs" />
     <Compile Include="Items\Artifacts\CrystalBall.cs" />
     <Compile Include="Items\Artifacts\GhostMail.cs" />
     <Compile Include="Items\Artifacts\MagicMask.cs" />
     <Compile Include="Items\Artifacts\StarryVeil.cs" />
     <Compile Include="Items\Artifacts\VanishingCowl.cs" />
+    <Compile Include="Players\Callback.cs" />
+    <Compile Include="Players\CallbackRouter.cs" />
+    <Compile Include="Players\ICallbackHandler.cs" />
     <Compile Include="Players\IPlayer.cs" />
     <Compile Include="Players\Models\PlayerBlight.cs" />
     <Compile Include="Players\Models\PlayerBlightSelection.cs" />

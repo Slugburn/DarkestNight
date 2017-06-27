@@ -11,7 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Players
         void DisplayConflict(PlayerConflict conflict);
         void DisplayPowers(ICollection<PlayerPower> powers);
         void DisplayBlightSelection(PlayerBlightSelection blightSelection);
-        void DisplayLocationSelection(ICollection<string> locations);
+        void DisplayLocationSelection(ICollection<string> locations, Callback callback);
         void DisplayNecromancer(PlayerNecromancer necromancer);
         void DisplayHeroSelection(PlayerHeroSelection view);
     }
