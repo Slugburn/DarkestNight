@@ -18,9 +18,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             return new LocationContext(base.GetGame(), GetPlayer(), space);
         }
 
-        public IHeroContext Hero()
+        public IHeroContext Hero(string heroName = null)
         {
-            var hero = base.GetGame().ActingHero;
+            var hero = heroName == null ? GetGame().ActingHero : GetGame().GetHero(heroName);
             return new HeroContext(GetGame(), GetPlayer(), hero);
         }
     }

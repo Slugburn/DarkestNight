@@ -96,5 +96,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             return this;
         }
 
+        public IHeroContext IsActing()
+        {
+            _hero.IsActing = true;
+            _hero.IsActionAvailable = true;
+            return this;
+        }
     }
 }

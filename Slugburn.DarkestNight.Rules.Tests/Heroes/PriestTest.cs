@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
+using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Heroes
 {
@@ -43,6 +44,18 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         // Blessing of Faith
         // Activate on a hero in your location.
         // Active: Gain an extra Grace (up to default) when praying.
+        [Test]
+        public void BlessingOfFaith()
+        {
+            TestScenario.Game
+                .WithHero("Acolyte").Grace(0).At("Monastery")
+                .WithHero("Priest").HasPowers("Blessing of Faith").At("Monastery")
+                .When.Player.TakesAction("Blessing of Faith").SelectsHero("Acolyte")
+                .Given.Hero("Acolyte").IsActing()
+                .When.Player.TakesAction("Pray", Fake.Rolls(6, 6))
+                .Then(Verify.Hero("Acolyte").Grace(3).HasUsedAction());
+        }
+
 
         // Blessing of Piety
         // Activate on a hero in your location.

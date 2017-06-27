@@ -162,6 +162,7 @@
     <Compile Include="Powers\Acolyte\ForbiddenArts.cs" />
     <Compile Include="Powers\Acolyte\LeechLife.cs" />
     <Compile Include="Powers\ActivateablePower.cs" />
+    <Compile Include="Powers\ActivatePowerAction.cs" />
     <Compile Include="Powers\Druid\AnimalCompanion.cs" />
     <Compile Include="Powers\Druid\Camouflage.cs" />
     <Compile Include="Powers\Druid\Celerity.cs" />

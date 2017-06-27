@@ -8,7 +8,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
     {
         public override void Learn(Hero hero)
         {
-            base.Learn(hero);
+//            base.Learn(hero);
             AddFormActions(hero, Name);
         }
 

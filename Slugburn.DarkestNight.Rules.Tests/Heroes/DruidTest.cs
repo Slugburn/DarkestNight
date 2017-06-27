@@ -181,7 +181,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WithHero("Druid").HasPowers("Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form")
                 .Power("Tree Form").IsActive()
                 .When.Player.StartsTurn()
-                .Then(Verify.Hero().HasAvailableActions("Hide", "Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form"));
+                .Then(Verify.Hero().HasAvailableActions("Hide", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form"));
         }
 
         // Vines (Tactic): Exhaust to fight or elude with 4 dice.

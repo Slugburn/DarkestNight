@@ -50,7 +50,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
 
                 hero.SetHeroSelectionHandler(new BenedictionHeroSelection());
 
-                var view = new PlayerHeroSelection(validTargets.Select(PlayerHero.FromHero));
+                var view = new PlayerHeroSelection(validTargets);
                 hero.Player.DisplayHeroSelection(view);
             }
         }

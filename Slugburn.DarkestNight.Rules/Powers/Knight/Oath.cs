@@ -11,25 +11,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             Text = "If no Oaths are active, activate until you fulfill or break.";
         }
 
-        public override void Learn(Hero hero)
-        {
-            base.Learn(hero);
-            hero.AddAction(new ActivateOathAction(Name));
-        }
-
-        private class ActivateOathAction : PowerAction
-        {
-            public ActivateOathAction(string name) : base(name)
-            {
-            }
-            
-            public override void Act(Hero hero)
-            {
-                var power = (Oath)hero.GetPower(Name);
-                power.Activate(hero);
-            }
-        }
-
         public override bool Deactivate(Hero hero)
         {
             if (!base.Deactivate(hero)) return false;

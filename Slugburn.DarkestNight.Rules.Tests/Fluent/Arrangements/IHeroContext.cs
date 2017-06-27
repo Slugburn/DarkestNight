@@ -14,5 +14,6 @@
         IHeroContext FacesEnemy(string enemyName);
         IHeroContext RefreshesPower(string powerName);
         IHeroContext MovesTo(string location);
+        IHeroContext IsActing();
     }
 }
