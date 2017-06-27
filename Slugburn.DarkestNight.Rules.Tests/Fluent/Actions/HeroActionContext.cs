@@ -13,21 +13,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             _hero = game.ActingHero;
         }
 
-
-        public IHeroActionContext DrawsEvent(string eventName = null)
-        {
-            if (eventName != null)
-            {
-                // move event to first
-                _hero.Game.Events.Remove(eventName);
-                _hero.Game.Events.Insert(0, eventName);
-            }
-            if (_hero.Location == Location.Monastery)
-                _hero.Location = Location.Village;
-            _hero.DrawEvent();
-            return this;
-        }
-
         public IHeroActionContext RefreshesPower(string powerName)
         {
             var power = _hero.GetPower(powerName);
@@ -38,12 +23,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         public IHeroActionContext MovesTo(string location)
         {
             _hero.MoveTo(location.ToEnum<Location>());
-            return this;
-        }
-
-        public IHeroActionContext FacesEnemy(string enemyName)
-        {
-            _hero.FaceEnemy(enemyName);
             return this;
         }
     }

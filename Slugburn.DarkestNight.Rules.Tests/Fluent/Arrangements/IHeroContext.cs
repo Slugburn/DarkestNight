@@ -10,5 +10,8 @@
         IHeroContext PowerDeck(params string[] powers);
 
         IPowerContext Power(string powerName);
+        IHeroContext DrawsEvent(string eventName = null);
+        IHeroContext FacesEnemy(string enemyName);
+
     }
 }

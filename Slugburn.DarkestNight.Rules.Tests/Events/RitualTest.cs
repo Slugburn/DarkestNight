@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Game.WithHero().At("Village")
                 .Given.Location("Village").Blights(blights)
-                .When.Hero.DrawsEvent("Ritual")
+                .Given.ActingHero().DrawsEvent("Ritual")
                 .Then(Verify.Player.EventView.ActiveRow("New blight there").HasOptions("Cancel", "Continue"))
                 .Given.Game.NextBlight("Desecration")
                 .When.Player.SelectsEventOption("Continue")
@@ -32,7 +32,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Game.WithHero().At("Village").Darkness(3)
                 .Given.Location("Village").Blights(blights)
-                .When.Hero.DrawsEvent("Ritual")
+                .Given.ActingHero().DrawsEvent("Ritual")
                 .Then(Verify.Player.EventView
                     .ActiveRow("+1 Darkness")
                     .HasOptions("Cancel", "Continue"))
@@ -46,7 +46,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Game.WithHero()
-                .When.Hero.DrawsEvent("Ritual")
+                .Given.ActingHero().DrawsEvent("Ritual")
                 .Then(Verify.Player.EventView.HasBody("Ritual", 6,
                     "You may spend 1 Grace and lose 1 Secrecy to cancel this event.\nCount the blights in your location")
                     .HasOptions("Cancel", "Continue"))
@@ -60,7 +60,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Game.WithHero().At("Village").NecromancerAt("Ruins")
                 .Given.Location("Village").Blights()
-                .When.Hero.DrawsEvent("Ritual")
+                .Given.ActingHero().DrawsEvent("Ritual")
                 .Then(Verify.Player.EventView.ActiveRow("Necromancer moves there").HasOptions("Cancel", "Continue"))
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Game.NecromancerAt("Village"))

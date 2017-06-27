@@ -43,7 +43,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             var tacticName = $"Final Rest [{count}d]";
             TestScenario
                 .Game.WithHero("Acolyte").HasPowers("Final Rest").Grace(3)
-                .When.Hero.FacesEnemy("Skeleton")
+                .Given.ActingHero().FacesEnemy("Skeleton")
                 .Then(Verify.Player.ConflictView.HasTactics("Fight", "Elude", "Final Rest [2d]", "Final Rest [3d]"))
                 .When.Player.CompletesConflict("Skeleton", tacticName, Fake.Rolls(rolls))
                 .Then(Verify.Hero.LostGrace());
@@ -156,8 +156,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario.Game
                 .Darkness(20)
                 .WithHero("Acolyte").HasPowers("Fade to Black", "Final Rest")
-                .When.Hero.FacesEnemy("Skeleton")
-                .Player.CompletesConflict("Skeleton", "Final Rest [3d]", Fake.Rolls(rolls))
+                .Given.ActingHero().FacesEnemy("Skeleton")
+                .When.Player.CompletesConflict("Skeleton", "Final Rest [3d]", Fake.Rolls(rolls))
                 .Then(Verify.Hero.FightDice(3).RolledNumberOfDice(5));
         }
 
@@ -215,7 +215,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario.Game
                 .Darkness(0)
                 .WithHero("Acolyte").HasPowers("Forbidden Arts")
-                .When.Hero.FacesEnemy("Skeleton")
+                .Given.ActingHero().FacesEnemy("Skeleton")
                 .When.Player.Targets("Skeleton").UsesTactic("Fight").ResolvesConflict(Fake.Rolls(1))
                 .When.Player.TakesAction("Forbidden Arts", Fake.Rolls(1))
                 .Then(Verify.Game.Darkness(1)) // rolling a 1 increases the Darkness
@@ -233,7 +233,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario.Game
                 .WithHero("Acolyte").HasPowers("Leech Life").Grace(1).NotAt("Monastery")
-                .When.Hero.FacesEnemy("Skeleton")
+                .Given.ActingHero().FacesEnemy("Skeleton")
                 .When.Player.CompletesConflict("Skeleton", "Leech Life", Fake.Rolls(1, 5, 6))
                 .Then(Verify.Hero.Grace(2))
                 .Then(Verify.Power("Leech Life").IsExhausted());

@@ -13,7 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Game.WithHero().At("Ruins")
-                .When.Hero.DrawsEvent("Latent Spell")
+                .Given.ActingHero().DrawsEvent("Latent Spell")
                 .When.Player.SelectsEventOption("Spend Grace", Fake.Rolls(roll))
                 .Then(Verify.Player.EventView.ActiveRow("No effect"))
                 .When.Player.SelectsEventOption("Continue")
@@ -25,7 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Game.WithHero()
-                .When.Hero.DrawsEvent("Latent Spell")
+                .Given.ActingHero().DrawsEvent("Latent Spell")
                 .Then(Verify.Player.EventView.HasOptions("Spend Grace", "Discard Event"))
                 .When.Player.SelectsEventOption("Discard Event")
                 .Then(Verify.Hero.LostSecrecy());
@@ -36,7 +36,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Game.WithHero()
-                .When.Hero.DrawsEvent("Latent Spell")
+                .Given.ActingHero().DrawsEvent("Latent Spell")
                 .When.Player.SelectsEventOption("Spend Grace", Fake.Rolls(6))
                 .Then(Verify.Player.EventView.ActiveRow("Destroy a blight of your choice anywhere on the board"))
                 .Given.Location("Village").Blights("Confusion", "Vampire")
@@ -53,7 +53,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Game.WithHero("Acolyte")
-                .When.Hero.DrawsEvent("Latent Spell")
+                .Given.ActingHero().DrawsEvent("Latent Spell")
                 .When.Player.SelectsEventOption("Spend Grace", Fake.Rolls(5))
                 .Then(Verify.Player.EventView.ActiveRow("Draw a power card"))
                 .Given.ActingHero().PowerDeck("Leech Life")
@@ -67,7 +67,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Game.WithHero().At("Ruins")
-                .When.Hero.DrawsEvent("Latent Spell")
+                .Given.ActingHero().DrawsEvent("Latent Spell")
                 .When.Player.SelectsEventOption("Spend Grace", Fake.Rolls(4))
                 .Then(Verify.Player.EventView.ActiveRow("Move to any other location"))
                 .When.Player.SelectsEventOption("Continue")
@@ -81,7 +81,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Game.WithHero().Grace(0)
-                .When.Hero.DrawsEvent("Latent Spell")
+                .Given.ActingHero().DrawsEvent("Latent Spell")
                 .Then(Verify.Player.EventView
                     .HasBody("Latent Spell", 2,
                         "Lose 1 Secrecy. Then, spend 1 Grace or discard this event without further effect.\nRoll 1d and take the highest")

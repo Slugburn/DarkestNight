@@ -62,5 +62,26 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             var power = _hero.GetPower(powerName);
             return new PowerContext(GetGame(), GetPlayer(), _hero, power );
         }
+
+        public IHeroContext DrawsEvent(string eventName = null)
+        {
+            if (eventName != null)
+            {
+                // move event to first
+                _hero.Game.Events.Remove(eventName);
+                _hero.Game.Events.Insert(0, eventName);
+            }
+            if (_hero.Location == Rules.Location.Monastery)
+                _hero.Location = Rules.Location.Village;
+            _hero.DrawEvent();
+            return this;
+        }
+
+        public IHeroContext FacesEnemy(string enemyName)
+        {
+            _hero.FaceEnemy(enemyName);
+            return this;
+        }
+
     }
 }

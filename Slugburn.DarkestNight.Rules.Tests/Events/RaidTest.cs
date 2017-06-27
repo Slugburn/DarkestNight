@@ -18,7 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Game.WithHero().At("Forest")
                 .Given.Location("Forest").Blights(blights)
-                .When.Hero.DrawsEvent("Raid")
+                .Given.ActingHero().DrawsEvent("Raid")
                 .Then(Verify.Player.EventView
                     .HasBody("Raid", 6, "Count the blights in your location")
                     .HasOptions("Continue")

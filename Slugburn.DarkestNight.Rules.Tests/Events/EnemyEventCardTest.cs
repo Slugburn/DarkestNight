@@ -113,7 +113,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             TestScenario
                 .Game.WithHero()
                 .Given.Configure(designator)
-                .When.Hero.DrawsEvent(eventName)
+                .Given.ActingHero().DrawsEvent(eventName)
                 .Then(Verify.Player.EventView.HasBody(eventName, expectedFate, text).HasOptions("Continue"))
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Hero.HasUnresolvedEvents(0).Secrecy(null))
