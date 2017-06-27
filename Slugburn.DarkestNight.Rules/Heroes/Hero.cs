@@ -10,6 +10,7 @@ using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Powers.Acolyte;
+using Slugburn.DarkestNight.Rules.Powers.Priest;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tactics;
 using Slugburn.DarkestNight.Rules.Triggers;
@@ -26,6 +27,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         private readonly List<ActionFilter> _actionFilters;
         private ILocationSelectedHandler _locationSelectedHandler;
         private IBlightSelectedHandler _blightSelectedHandler;
+        private IHeroSelectionHandler _heroSelectionHandler;
 
         public Hero()
         {
@@ -371,11 +373,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             _actions.Add(action.Name, action);
         }
 
-        public IAction GetAction(string name)
+        public IAction GetAction(string actionName)
         {
-            if (!_actions.ContainsKey(name))
-                throw new Exception($"Unknown action {name} requested.");
-            var action = _actions[name];
+            if (!_actions.ContainsKey(actionName))
+                throw new ArgumentOutOfRangeException(nameof(actionName), actionName);
+            var action = _actions[actionName];
             return action;
         }
 
@@ -553,6 +555,17 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             _blightSelectedHandler.Handle(this, blightLocations);
             _blightSelectedHandler = null;
+        }
+
+        public void SelectHero(Hero selectedHero)
+        {
+            _heroSelectionHandler.Handle(this, selectedHero);
+            _heroSelectionHandler = null;
+        }
+
+        public void SetHeroSelectionHandler(IHeroSelectionHandler handler)
+        {
+            _heroSelectionHandler = handler;
         }
     }
 }

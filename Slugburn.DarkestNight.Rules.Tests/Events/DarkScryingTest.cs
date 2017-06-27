@@ -15,7 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Given.Hero().HasDrawnEvent("Dark Scrying")
                 .Then(Verify.Player.EventView.HasBody("Dark Scrying", 4, "Spend 1 Grace or lose 2 Secrecy.").HasOptions("Spend Grace", "Lose Secrecy"))
                 .When.Player.SelectsEventOption(option)
-                .Then(Verify.Hero.LostSecrecy(lostSecrecy).LostGrace(lostGrace));
+                .Then(Verify.Hero().LostSecrecy(lostSecrecy).LostGrace(lostGrace));
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Given.Hero().HasDrawnEvent("Dark Scrying")
                 .Then(Verify.Player.EventView.HasBody("Dark Scrying", 4, "Spend 1 Grace or lose 2 Secrecy.").HasOptions("Lose Secrecy"))
                 .When.Player.SelectsEventOption("Lose Secrecy")
-                .Then(Verify.Hero.Grace(0).LostSecrecy(2));
+                .Then(Verify.Hero().Grace(0).LostSecrecy(2));
         }
     }
 }

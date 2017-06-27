@@ -21,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Given.Game.NextBlight("Desecration")
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Location("Village").Blights(after))
-                .Then(Verify.Hero.HasUnresolvedEvents(0));
+                .Then(Verify.Hero().HasUnresolvedEvents(0));
         }
 
         [TestCase(3)]
@@ -38,7 +38,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                     .HasOptions("Cancel", "Continue"))
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Game.Darkness(4))
-                .Then(Verify.Hero.HasUnresolvedEvents(0));
+                .Then(Verify.Hero().HasUnresolvedEvents(0));
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                     "You may spend 1 Grace and lose 1 Secrecy to cancel this event.\nCount the blights in your location")
                     .HasOptions("Cancel", "Continue"))
                 .When.Player.SelectsEventOption("Cancel")
-                .Then(Verify.Hero.HasUnresolvedEvents(0).LostGrace().LostSecrecy());
+                .Then(Verify.Hero().HasUnresolvedEvents(0).LostGrace().LostSecrecy());
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Then(Verify.Player.EventView.ActiveRow("Necromancer moves there").HasOptions("Cancel", "Continue"))
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Game.NecromancerAt("Village"))
-                .Then(Verify.Hero.HasUnresolvedEvents(0));
+                .Then(Verify.Hero().HasUnresolvedEvents(0));
         }
     }
 }

@@ -24,10 +24,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Game.WithHero().DrawEvents(10)
                 .Given.Hero().HasDrawnEvent("Renewal")
                 .Then(Verify.Player.EventView.HasBody("Renewal", 0, "Reshuffle the Event Deck and draw another card."))
-                .Then(Verify.Hero.HasUnresolvedEvents(1).CurrentEvent.CanBeIgnored(false))
+                .Then(Verify.Hero().HasUnresolvedEvents(1).CurrentEvent.CanBeIgnored(false))
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Game.EventDeckIsReshuffled())
-                .Then(Verify.Hero.HasUnresolvedEvents(1));
+                .Then(Verify.Hero().HasUnresolvedEvents(1));
         }
     }
 }

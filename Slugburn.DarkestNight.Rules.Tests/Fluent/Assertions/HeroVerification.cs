@@ -11,6 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
     public class HeroVerification : IVerifiable
     {
+        private readonly string _heroName;
         private readonly List<Location> _invalidLocations;
         private readonly List<Location> _specifiedLocations;
         private bool _expectedActionAvailable;
@@ -39,8 +40,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private bool _hasNoDieModifer;
         private Dictionary<string, bool> _powerAvailability = new Dictionary<string, bool>();
         
-        public HeroVerification()
+        public HeroVerification(string heroName)
         {
+            _heroName = heroName;
             _expectedActionAvailable = true;
             _expectedCanGainGrace = true;
             _invalidLocations = new List<Location>();
@@ -65,7 +67,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         public void Verify(ITestRoot root)
         {
-            var hero = root.Get<Game>().ActingHero;
+            var game = root.Get<Game>();
+            var hero = _heroName == null ? game.ActingHero : game.GetHero(_heroName);
             SetExpectations(hero);
             hero.SavedByGrace.ShouldBe(_expectedWounded);
             hero.DefaultGrace.ShouldBe(_expectedDefaultGrace ?? 0);

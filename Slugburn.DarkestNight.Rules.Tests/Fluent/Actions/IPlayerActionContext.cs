@@ -18,5 +18,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         IPlayerActionContext TakesAction(string actionName, IFakeContext fake = null);
         IPlayerActionContext TakesAction(string heroName, string actionName, IFakeContext fake = null);
         IPlayerActionContext SelectsBlights(params string[] blights);
+        IPlayerActionContext SelectsHero(string heroName);
     }
 }

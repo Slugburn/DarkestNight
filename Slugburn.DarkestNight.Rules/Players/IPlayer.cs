@@ -13,5 +13,6 @@ namespace Slugburn.DarkestNight.Rules.Players
         void DisplayBlightSelection(PlayerBlightSelection blightSelection);
         void DisplayLocationSelection(ICollection<string> locations);
         void DisplayNecromancer(PlayerNecromancer necromancer);
+        void DisplayHeroSelection(PlayerHeroSelection view);
     }
 }

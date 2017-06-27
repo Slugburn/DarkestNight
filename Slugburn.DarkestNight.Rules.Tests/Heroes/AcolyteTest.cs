@@ -19,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario
                 .Game.WithHero("Acolyte").HasPowers("Fade to Black")
                 .Game.Darkness(darkness)
-                .Then(Verify.Hero.FightDice(expectedDice));
+                .Then(Verify.Hero().FightDice(expectedDice));
         }
 
         // False Life (Bonus): Exhaust at any time while not at the Monastery to gain 1 Grace (up to default). You may not enter the Monastery while this power is exhausted.
@@ -32,7 +32,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario
                 .Game.WithHero("Acolyte").HasPowers("False Life").NotAt("Monastery").Grace(grace)
-                .Then(Verify.Hero.Grace(grace).CanTakeAction("False Life", isAvailable));
+                .Then(Verify.Hero().Grace(grace).CanTakeAction("False Life", isAvailable));
         }
 
         // Final Rest (Tactic): Fight with 2d or 3d. If any die comes up a 1, lose 1 Grace.
@@ -46,7 +46,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Hero().FacesEnemy("Skeleton")
                 .Then(Verify.Player.ConflictView.HasTactics("Fight", "Elude", "Final Rest [2d]", "Final Rest [3d]"))
                 .When.Player.CompletesConflict("Skeleton", tacticName, Fake.Rolls(rolls))
-                .Then(Verify.Hero.LostGrace());
+                .Then(Verify.Hero().LostGrace());
         }
 
         // Blinding Black (Bonus): Exhaust after a Necromancer movement roll to prevent him from detecting any heroes, regardless of Secrecy.
@@ -57,7 +57,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WithHero("Acolyte").HasPowers("Blinding Black").At("Swamp").Secrecy(0)
                 .NecromancerAt("Castle")
                 .When.Game.NecromancerActs(Fake.Rolls(5))
-                .Then(Verify.Hero.CanTakeAction("Blinding Black"))
+                .Then(Verify.Hero().CanTakeAction("Blinding Black"))
                 .Then(Verify.Player.NecromancerView.Roll(5).Detected("Acolyte").MovingTo("Swamp"))
                 .When.Player.TakesAction("Blinding Black")
                 .Then(Verify.Power("Blinding Black").IsExhausted())
@@ -80,7 +80,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Then(Verify.Player.ConflictView.Rolled(5, 6))
                 .When.Player.AssignsDie(6, "Lich").AssignsDie(5, "Skeletons").AcceptsConflictResults()
                 .Then(Verify.Location("Swamp").Blights("Shades"))
-                .Then(Verify.Hero.LostSecrecy(2).HasUsedAction());
+                .Then(Verify.Hero().LostSecrecy(2).HasUsedAction());
         }
 
         [Test]
@@ -93,7 +93,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .When.Player.Targets("Skeletons", "Shades").UsesTactic("Final Rest [3d]").ResolvesConflict(Fake.Rolls(5, 2, 3, 1)).AcceptsRoll()
                 .When.Player.AssignsDie(5, "Shades").AssignsDie(3, "Skeletons").AcceptsConflictResults()
                 .Then(Verify.Location("Swamp").Blights("Skeletons"))
-                .Then(Verify.Hero
+                .Then(Verify.Hero()
                     .WasWounded()
                     .LostGrace(2) // loses Grace from failing to kill Skeletons and rolling a 1 with Final Rest
                     .LostSecrecy(2) // loses 2 Secrecy from making 2 attacks
@@ -112,7 +112,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .When.Player.TakesAction("Dark Veil [ignore defense]")
                 .Then(Verify.Power("Dark Veil").IsExhausted())
                 .When.Player.AcceptsConflictResults()
-                .Then(Verify.Hero.HasUsedAction().LostSecrecy()); // loses Secrecy for making attack, but not for Spies defense
+                .Then(Verify.Hero().HasUsedAction().LostSecrecy()); // loses Secrecy for making attack, but not for Spies defense
         }
 
         [Test]
@@ -121,10 +121,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario
                 .Game.WithHero("Acolyte").HasPowers("Dark Veil")
                 .When.Player.TakesAction("Dark Veil [ignore effects]")
-                .Then(Verify.Hero.IsIgnoringBlights())
+                .Then(Verify.Hero().IsIgnoringBlights())
                 .Then(Verify.Power("Dark Veil").IsExhausted())
                 .When.Player.StartsTurn()
-                .Then(Verify.Hero.IsNotIgnoringBlights());
+                .Then(Verify.Hero().IsNotIgnoringBlights());
         }
 
         // Death Mask (Bonus): You may choose not to lose Secrecy for attacking a blight (including use of the Call to Death power) 
@@ -136,7 +136,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WithHero("Acolyte").HasPowers("Death Mask").At("Swamp")
                 .Location("Swamp").Blights("Spies")
                 .When.Player.TakesAction("Attack").Fights(Fake.Rolls(1))
-                .Then(Verify.Hero.HasUsedAction().LostSecrecy()); // loses Secrecy for Spies defense, but not for making attack
+                .Then(Verify.Hero().HasUsedAction().LostSecrecy()); // loses Secrecy for Spies defense, but not for making attack
         }
 
         [Test]
@@ -146,7 +146,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .NecromancerAt("Swamp")
                 .WithHero("Acolyte").HasPowers("Death Mask").At("Swamp")
                 .When.Player.StartsTurn()
-                .Then(Verify.Hero.LostSecrecy(0));
+                .Then(Verify.Hero().LostSecrecy(0));
         }
 
         [Test]
@@ -158,7 +158,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WithHero("Acolyte").HasPowers("Fade to Black", "Final Rest")
                 .Given.Hero().FacesEnemy("Skeleton")
                 .When.Player.CompletesConflict("Skeleton", "Final Rest [3d]", Fake.Rolls(rolls))
-                .Then(Verify.Hero.FightDice(3).RolledNumberOfDice(5));
+                .Then(Verify.Hero().FightDice(3).RolledNumberOfDice(5));
         }
 
         [Test]
@@ -167,7 +167,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario
                 .Game.WithHero("Acolyte").HasPowers("False Life").At("Swamp").Grace(0)
                 .When.Player.TakesAction("False Life")
-                .Then(Verify.Hero.Grace(1))
+                .Then(Verify.Hero().Grace(1))
                 .Then(Verify.Power("False Life").IsExhausted());
         }
 
@@ -176,7 +176,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario.Game
                 .WithHero("Acolyte").HasPowers("False Life").At("Monastery").Grace(0)
-                .Then(Verify.Hero.Grace(0).CanTakeAction("False Life", false));
+                .Then(Verify.Hero().Grace(0).CanTakeAction("False Life", false));
         }
 
         [Test]
@@ -184,11 +184,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario
                 .Game.WithHero("Acolyte").HasPowers("False Life").At("Village").Grace(2)
-                .Then(Verify.Hero.Grace(2).CanMoveTo("Monastery"))
+                .Then(Verify.Hero().Grace(2).CanMoveTo("Monastery"))
                 .When.Player.TakesAction("False Life")
-                .Then(Verify.Hero.CannotMoveTo("Monastery"))
+                .Then(Verify.Hero().CannotMoveTo("Monastery"))
                 .Given.Hero().RefreshesPower("False Life")
-                .Then(Verify.Hero.CanMoveTo("Monastery"));
+                .Then(Verify.Hero().CanMoveTo("Monastery"));
         }
 
         [Test]
@@ -203,7 +203,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .When.Player.SelectsLocation("Monastery")
                 .Then(Verify.Player.BlightSelectionView.Max(3).Location("Village").WithBlights("Confusion", "Corruption", "Shroud", "Skeletons"))
                 .When.Player.SelectsBlights("Confusion", "Corruption", "Shroud")
-                .Then(Verify.Hero.HasUsedAction())
+                .Then(Verify.Hero().HasUsedAction())
                 .Then(Verify.Location("Village").Blights("Skeletons"))
                 .Then(Verify.Location("Monastery").Blights("Lich", "Confusion", "Corruption", "Shroud"));
         }
@@ -223,7 +223,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .When.Player.TakesAction("Forbidden Arts", Fake.Rolls(4))
                 .Then(Verify.Player.ConflictView.Rolled(1, 1, 4))
                 .When.Player.AcceptsRoll().AcceptsConflictResults()
-                .Then(Verify.Hero.WasWounded(false));
+                .Then(Verify.Hero().WasWounded(false));
         }
 
         // Leech Life (Tactic): Exhaust while not at the Monastery to fight with 3 dice. Gain 1 Grace (up to default) if you roll 2 successes. 
@@ -235,7 +235,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WithHero("Acolyte").HasPowers("Leech Life").Grace(1).NotAt("Monastery")
                 .Given.Hero().FacesEnemy("Skeleton")
                 .When.Player.CompletesConflict("Skeleton", "Leech Life", Fake.Rolls(1, 5, 6))
-                .Then(Verify.Hero.Grace(2))
+                .Then(Verify.Hero().Grace(2))
                 .Then(Verify.Power("Leech Life").IsExhausted());
         }
 
@@ -244,7 +244,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario.Game
                 .WithHero("Acolyte").HasPowers("Leech Life").At("Monastery")
-                .Then(Verify.Hero.CanTakeAction("Leech Life", false));
+                .Then(Verify.Hero().CanTakeAction("Leech Life", false));
         }
 
         [Test]
@@ -253,7 +253,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario.Game
                 .WithHero("Acolyte").HasPowers("Leech Life").At("Village")
                 .Power("Leech Life").IsExhausted()
-                .Then(Verify.Hero.CannotMoveTo("Monastery"));
+                .Then(Verify.Hero().CannotMoveTo("Monastery"));
         }
     }
 }

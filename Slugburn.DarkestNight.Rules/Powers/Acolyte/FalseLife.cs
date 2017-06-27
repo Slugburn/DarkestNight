@@ -36,7 +36,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             {
                 var power = hero.GetPower(Name);
                 if (!power.IsUsable(hero))
-                    throw new PowerNotUsableException(power);
+                    throw new PowerNotUsableException(_powerName);
                 hero.GainGrace(1, hero.DefaultGrace);
                 power.Exhaust(hero);
             }

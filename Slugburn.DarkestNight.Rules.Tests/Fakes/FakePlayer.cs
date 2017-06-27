@@ -36,30 +36,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         public ICollection<string> ValidLocations { get; set; }
         public PlayerNecromancer Necromancer { get; set; }
 
+        public PlayerHeroSelection HeroSelection { get; set; }
+
         public bool AskUsePower(string name, string description)
         {
             if (_usePowerResponse.ContainsKey(name))
                 return _usePowerResponse[name];
             return false;
-        }
-
-        public List<Blight> ChooseBlights(ICollection<Blight> choices, int min, int max)
-        {
-            if (CancelBlightSelectionSpecified())
-                return new List<Blight>();
-            var choice = ChooseBlights(choices);
-            if (choice.Count < min || choice.Count > max)
-                throw new Exception("Invalid choices have been specified for IPlayer.ChooseBlights().");
-            return choice;
-        }
-
-        public Location ChooseLocation(IEnumerable<Location> choices)
-        {
-            if (_locationChoice == Location.None) return Location.None;
-            var choice = choices.SingleOrDefault(x => x == _locationChoice);
-            if (choice == Location.None)
-                throw new Exception("No valid choice was specified for IPlayer.ChooseLocation().");
-            return choice;
         }
 
         public PlayerState State { get; set; }
@@ -92,6 +75,30 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         public void DisplayNecromancer(PlayerNecromancer necromancer)
         {
             Necromancer = necromancer;
+        }
+
+        public void DisplayHeroSelection(PlayerHeroSelection view)
+        {
+            HeroSelection = view;
+        }
+
+        public List<Blight> ChooseBlights(ICollection<Blight> choices, int min, int max)
+        {
+            if (CancelBlightSelectionSpecified())
+                return new List<Blight>();
+            var choice = ChooseBlights(choices);
+            if (choice.Count < min || choice.Count > max)
+                throw new Exception("Invalid choices have been specified for IPlayer.ChooseBlights().");
+            return choice;
+        }
+
+        public Location ChooseLocation(IEnumerable<Location> choices)
+        {
+            if (_locationChoice == Location.None) return Location.None;
+            var choice = choices.SingleOrDefault(x => x == _locationChoice);
+            if (choice == Location.None)
+                throw new Exception("No valid choice was specified for IPlayer.ChooseLocation().");
+            return choice;
         }
 
         public void SetUsePowerResponse(string name, bool value)
@@ -205,6 +212,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             var hero = _game.ActingHero;
             var blightLocations = blights.Select(b => new BlightLocation(b.ToEnum<Blight>(), hero.Location));
             hero.SelectBlights(blightLocations);
+        }
+
+        public void SelectHero(string heroName)
+        {
+            var selectedHero = _game.GetHero(heroName);
+            var hero = _game.ActingHero;
+            hero.SelectHero(selectedHero);
         }
     }
 }

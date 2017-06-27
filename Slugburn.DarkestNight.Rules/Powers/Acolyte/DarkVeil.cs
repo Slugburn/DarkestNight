@@ -59,7 +59,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             {
                 var power = hero.GetPower(PowerName);
                 if (!IsAvailable(hero))
-                    throw new PowerNotUsableException(power);
+                    throw new PowerNotUsableException(_powerName);
                 hero.ConflictState.SelectedTargets.First().IgnoreFailure();
                 power.Exhaust(hero);
             }

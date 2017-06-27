@@ -1,6 +1,6 @@
 ﻿namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 {
-    public interface IPowerContext : IGiven
+    public interface IPowerContext : IHeroContext
     {
         IPowerContext IsActive();
         IPowerContext IsExhausted();

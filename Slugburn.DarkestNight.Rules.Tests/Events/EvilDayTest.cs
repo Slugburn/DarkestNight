@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                     .HasBody("Evil Day", 5, "Exhaust a power or draw 2 more events.")
                     .HasOptions("Exhaust Power", "Draw Events"))
                 .When.Player.SelectsEventOption("Draw Events")
-                .Then(Verify.Hero.HasUnresolvedEvents(2));
+                .Then(Verify.Hero().HasUnresolvedEvents(2));
         }
 
         [Test]

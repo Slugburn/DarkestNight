@@ -19,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Then(Verify.Player.ConflictView.HasTargets("Guarded Trove"))
                 .Given.Game.NextSearchResult(Find.Waystone)
                 .When.Player.CompletesConflict("Guarded Trove", tactic, Fake.Rolls(6))
-                .Then(Verify.Hero.LostSecrecy().HasItems("Waystone"));
+                .Then(Verify.Hero().LostSecrecy().HasItems("Waystone"));
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .When.Player.Eludes(Fake.Rolls(5)) 
                 .Then(Verify.Player.EventView.HasOptions("Spend Secrecy", "Draw Event"))
                 .When.Player.SelectsEventOption("Draw Event")
-                .Then(Verify.Hero.HasUnresolvedEvents(1));
+                .Then(Verify.Hero().HasUnresolvedEvents(1));
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .When.Player.Eludes(Fake.Rolls(5))
                 .Then(Verify.Player.EventView.HasOptions("Spend Secrecy", "Draw Event"))
                 .When.Player.SelectsEventOption("Spend Secrecy")
-                .Then(Verify.Hero.LostSecrecy());
+                .Then(Verify.Hero().LostSecrecy());
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Player.ConflictView.HasTargets("Guarded Trove"))
                 .When.Player.Fights(Fake.Rolls(5))
-                .Then(Verify.Hero.WasWounded());
+                .Then(Verify.Hero().WasWounded());
         }
     }
 }

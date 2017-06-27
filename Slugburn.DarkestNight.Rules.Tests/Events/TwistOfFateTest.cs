@@ -18,9 +18,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
                 .Then(Verify.Player.EventView.ActiveRow("+1d on all rolls for the rest of this turn"))
                 .When.Player.SelectsEventOption("Continue")
-                .Then(Verify.Hero.HasUnresolvedEvents(0).HasDieModifier("Twist of Fate", RollType.Any, 1).FightDice(2).EludeDice(2).SearchDice(2))
+                .Then(Verify.Hero().HasUnresolvedEvents(0).HasDieModifier("Twist of Fate", RollType.Any, 1).FightDice(2).EludeDice(2).SearchDice(2))
                 .When.Player.TakesAction("End Turn")
-                .Then(Verify.Hero.HasNoDieModifier());
+                .Then(Verify.Hero().HasNoDieModifier());
         }
 
         [TestCase(4)]
@@ -36,9 +36,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
                 .Then(Verify.Player.EventView.ActiveRow("-1d (to a minimum of 1d) on all rolls for the rest of this turn"))
                 .When.Player.SelectsEventOption("Continue")
-                .Then(Verify.Hero.HasUnresolvedEvents(0).HasDieModifier("Twist of Fate", RollType.Any, -1))
+                .Then(Verify.Hero().HasUnresolvedEvents(0).HasDieModifier("Twist of Fate", RollType.Any, -1))
                 .When.Player.TakesAction("End Turn")
-                .Then(Verify.Hero.HasNoDieModifier());
+                .Then(Verify.Hero().HasNoDieModifier());
         }
     }
 }

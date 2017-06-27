@@ -116,7 +116,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Given.Hero().HasDrawnEvent(eventName)
                 .Then(Verify.Player.EventView.HasBody(eventName, expectedFate, text).HasOptions("Continue"))
                 .When.Player.SelectsEventOption("Continue")
-                .Then(Verify.Hero.HasUnresolvedEvents(0).Secrecy(null))
+                .Then(Verify.Hero().HasUnresolvedEvents(0).Secrecy(null))
                 .Then(Verify.Player.ConflictView.HasTargets(enemy));
         }
 

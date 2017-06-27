@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
                 .Then(Verify.Player.EventView.ActiveRow("No effect").HasOptions("No Effect"))
                 .When.Player.SelectsEventOption("No Effect")
-                .Then(Verify.Hero.HasUnresolvedEvents(0));
+                .Then(Verify.Hero().HasUnresolvedEvents(0));
         }
 
         [TestCase(3)]
@@ -30,7 +30,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
                 .Then(Verify.Player.EventView.ActiveRow("Spend 1 Grace or lose 1 Secrecy").HasOptions("Spend Grace", "Lose Secrecy"))
                 .When.Player.SelectsEventOption("Spend Grace")
-                .Then(Verify.Hero.LostGrace().HasUnresolvedEvents(0));
+                .Then(Verify.Hero().LostGrace().HasUnresolvedEvents(0));
         }
 
         [TestCase(3)]
@@ -43,7 +43,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Given.Hero().HasDrawnEvent("Sloppy Search")
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
                 .When.Player.SelectsEventOption("Lose Secrecy")
-                .Then(Verify.Hero.LostSecrecy().HasUnresolvedEvents(0));
+                .Then(Verify.Hero().LostSecrecy().HasUnresolvedEvents(0));
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(6))
                 .Then(Verify.Player.EventView.ActiveRow("Gain 1 Secrecy").HasOptions("Gain Secrecy"))
                 .When.Player.SelectsEventOption("Gain Secrecy")
-                .Then(Verify.Hero.Secrecy(1).HasUnresolvedEvents(0));
+                .Then(Verify.Hero().Secrecy(1).HasUnresolvedEvents(0));
         }
 
         [Test]

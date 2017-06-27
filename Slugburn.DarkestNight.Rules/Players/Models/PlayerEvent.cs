@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Linq;
-using System.Net.Mime;
+﻿using System.Linq;
 using Slugburn.DarkestNight.Rules.Events;
 
 namespace Slugburn.DarkestNight.Rules.Players.Models

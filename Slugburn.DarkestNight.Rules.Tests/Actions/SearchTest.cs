@@ -17,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
                 .Game.WithHero("Acolyte").At("Village")
                 .NextSearchResult(find)
                 .When.Player.TakesAction("Search").AcceptsRoll()
-                .Then(Verify.Hero.HasUsedAction().HasItems(itemName));
+                .Then(Verify.Hero().HasUsedAction().HasItems(itemName));
         }
     }
 }

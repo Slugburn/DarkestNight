@@ -15,6 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private BlightSelectionViewVerification _blightSelectionView;
         private ConflictViewVerification _conflictView;
         private NecromancerViewVerification _necromancerView;
+        private string[] _heroNames;
 
         public void Verify(ITestRoot root)
         {
@@ -23,6 +24,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
                 Assert.That(player.ValidLocations, Is.EquivalentTo(_locations));
             if (_powerNames != null)
                 Assert.That(player.Powers.Select(x=>x.Name), Is.EquivalentTo(_powerNames));
+            if (_heroNames != null)
+                Assert.That(player.HeroSelection.Heroes.Select(x=>x.Name), Is.EquivalentTo(_heroNames));
 
             _conflictView?.Verify(root);
             _eventView?.Verify(root);
@@ -75,6 +78,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         public PlayerVerification PowerSelectionView(params string[] powerNames)
         {
             _powerNames = powerNames.OrderBy(x=>x).ToList();
+            return this;
+        }
+
+        public PlayerVerification HeroSelectionView(params string[] heroNames)
+        {
+            _heroNames = heroNames;
             return this;
         }
     }

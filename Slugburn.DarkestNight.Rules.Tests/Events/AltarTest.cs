@@ -21,10 +21,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Then(Verify.Player.EventView.HasBody("Altar", 3, "Roll 1d and take the highest").HasOptions("Roll"))
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
                 .Then(Verify.Player.EventView.ActiveRow("Pure Altar", "You may spend 1 Secrecy to gain 1 Grace"))
-                .Then(Verify.Hero.HasUnresolvedEvents(1).Grace(0).Secrecy(startingSecrecy))
+                .Then(Verify.Hero().HasUnresolvedEvents(1).Grace(0).Secrecy(startingSecrecy))
                 .Then(Verify.Player.EventView.HasOptions(expectedOptions))
                 .When.Player.SelectsEventOption(option)
-                .Then(Verify.Hero.Grace(expectedGrace).Secrecy(expectedSecrecy));
+                .Then(Verify.Hero().Grace(expectedGrace).Secrecy(expectedSecrecy));
         }
 
         [TestCase(1, "Spend Grace", 0, 0)]
@@ -43,7 +43,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
                 .Then(Verify.Player.EventView.ActiveRow("Defiled Altar", "Spend 1 Grace or +1 Darkness").HasOptions(expectedOptions))
                 .When.Player.SelectsEventOption(option)
-                .Then(Verify.Hero.Grace(expectedGrace))
+                .Then(Verify.Hero().Grace(expectedGrace))
                 .Then(Verify.Game.Darkness(expectedDarkness));
         }
     }

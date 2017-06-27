@@ -24,7 +24,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                     .HasOptions("Continue")
                     .ActiveRow(rowText))
                 .When.Player.SelectsEventOption("Continue")
-                .Then(Verify.Hero.LostSecrecy(lostSecrecy).LostGrace(lostGrace))
+                .Then(Verify.Hero().LostSecrecy(lostSecrecy).LostGrace(lostGrace))
                 .Then(Verify.Game.Darkness(darkness));
         }
     }

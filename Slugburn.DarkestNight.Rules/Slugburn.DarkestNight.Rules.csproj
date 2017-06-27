@@ -122,6 +122,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Heroes\HeroFactory.cs" />
     <Compile Include="Heroes\IHeroFactory.cs" />
+    <Compile Include="Heroes\IHeroSelectionHandler.cs" />
     <Compile Include="Heroes\Impl\Prince.cs" />
     <Compile Include="Heroes\Impl\Rogue.cs" />
     <Compile Include="Heroes\Impl\Scholar.cs" />
@@ -144,6 +145,8 @@
     <Compile Include="Players\Models\PlayerBlightSelection.cs" />
     <Compile Include="Players\Models\PlayerConflict.cs" />
     <Compile Include="Players\Models\PlayerEvent.cs" />
+    <Compile Include="Players\Models\PlayerHero.cs" />
+    <Compile Include="Players\Models\PlayerHeroSelection.cs" />
     <Compile Include="Players\Models\PlayerNecromancer.cs" />
     <Compile Include="Players\Models\PlayerPower.cs" />
     <Compile Include="Players\PlayerModelExtension.cs" />

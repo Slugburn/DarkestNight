@@ -21,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
                 .Then(Verify.Player.EventView.ActiveRow(effect))
                 .When.Player.SelectsEventOption("Continue")
-                .Then(Verify.Hero.LostSecrecy(lostSecrecy).LostGrace(lostGrace));
+                .Then(Verify.Hero().LostSecrecy(lostSecrecy).LostGrace(lostGrace));
         }
     }
 }

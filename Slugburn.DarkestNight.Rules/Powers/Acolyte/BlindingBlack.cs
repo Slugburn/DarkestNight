@@ -36,7 +36,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             {
                 var power = hero.GetPower(Name);
                 if (!IsAvailable(hero))
-                    throw new PowerNotUsableException(power);
+                    throw new PowerNotUsableException(_powerName);
 
                 var necromancer = hero.Game.Necromancer;
                 necromancer.DetectedHeroes.Clear();

@@ -17,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .When.Player.SelectsEventOption("Spend Grace", Fake.Rolls(roll))
                 .Then(Verify.Player.EventView.ActiveRow("No effect"))
                 .When.Player.SelectsEventOption("Continue")
-                .Then(Verify.Hero.LostSecrecy().LostGrace());
+                .Then(Verify.Hero().LostSecrecy().LostGrace());
         }
 
         [Test]
@@ -28,7 +28,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Given.Hero().HasDrawnEvent("Latent Spell")
                 .Then(Verify.Player.EventView.HasOptions("Spend Grace", "Discard Event"))
                 .When.Player.SelectsEventOption("Discard Event")
-                .Then(Verify.Hero.LostSecrecy());
+                .Then(Verify.Hero().LostSecrecy());
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Then(Verify.Player.BlightSelectionView.Location("Village").WithBlights("Confusion", "Vampire").Location("Castle").WithBlights("Desecration"))
                 .When.Player.SelectsBlight("Village", "Vampire")
                 .Then(Verify.Location("Village").Blights("Confusion"))
-                .Then(Verify.Hero.LostSecrecy().LostGrace());
+                .Then(Verify.Hero().LostSecrecy().LostGrace());
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Given.Hero().PowerDeck("Leech Life")
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Player.PowerSelectionView("Leech Life"))
-                .Then(Verify.Hero.LostSecrecy().LostGrace().HasPowers("Leech Life"));
+                .Then(Verify.Hero().LostSecrecy().LostGrace().HasPowers("Leech Life"));
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Player.LocationSelectionView("Monastery", "Mountains", "Castle", "Swamp", "Village", "Forest"))
                 .When.Player.SelectsLocation("Monastery")
-                .Then(Verify.Hero.LostSecrecy().LostGrace().Location("Monastery"));
+                .Then(Verify.Hero().LostSecrecy().LostGrace().Location("Monastery"));
         }
 
         [Test]
@@ -87,7 +87,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                         "Lose 1 Secrecy. Then, spend 1 Grace or discard this event without further effect.\nRoll 1d and take the highest")
                     .HasOptions("Discard Event"))
                 .When.Player.SelectsEventOption("Discard Event")
-                .Then(Verify.Hero.LostSecrecy().Grace(0));
+                .Then(Verify.Hero().LostSecrecy().Grace(0));
         }
     }
 }
