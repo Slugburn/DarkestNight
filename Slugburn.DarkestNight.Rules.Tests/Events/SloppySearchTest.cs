@@ -11,7 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void SloppySearch_NoEffect(int roll)
         {
             TestScenario
-                .Given.Game.WithHero()
+                .Game.WithHero()
                 .When.Hero.DrawsEvent("Sloppy Search")
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
                 .Then(Verify.Player.EventView.ActiveRow("No effect").HasOptions("No Effect"))
@@ -25,7 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void SloppySearch_SpendGrace(int roll)
         {
             TestScenario
-                .Given.Game.WithHero()
+                .Game.WithHero()
                 .When.Hero.DrawsEvent("Sloppy Search")
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
                 .Then(Verify.Player.EventView.ActiveRow("Spend 1 Grace or lose 1 Secrecy").HasOptions("Spend Grace", "Lose Secrecy"))
@@ -39,7 +39,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void SloppySearch_LoseSecrecy(int roll)
         {
             TestScenario
-                .Given.Game.WithHero()
+                .Game.WithHero()
                 .When.Hero.DrawsEvent("Sloppy Search")
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
                 .When.Player.SelectsEventOption("Lose Secrecy")
@@ -50,7 +50,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void SloppySearch_GainSecrecy()
         {
             TestScenario
-                .Given.Game.WithHero().Secrecy(0)
+                .Game.WithHero().Secrecy(0)
                 .When.Hero.DrawsEvent("Sloppy Search")
                 .Then(Verify.Player.EventView.HasBody("Sloppy Search", 2, "Roll 1d and take the highest").HasOptions("Roll"))
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(6))
@@ -63,7 +63,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void SloppySearch_NoGraceToSpend()
         {
             TestScenario
-                .Given.Game.WithHero().Grace(0)
+                .Game.WithHero().Grace(0)
                 .When.Hero.DrawsEvent("Sloppy Search")
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(1))
                 .Then(Verify.Player.EventView.ActiveRow("Spend 1 Grace or lose 1 Secrecy").HasOptions("Lose Secrecy"));

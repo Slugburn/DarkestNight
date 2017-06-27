@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void TwistOfFate_Bonus(int roll)
         {
             TestScenario
-                .Given.Game.WithHero()
+                .Game.WithHero()
                 .When.Hero.DrawsEvent("Twist of Fate")
                 .Then(Verify.Player.EventView.HasBody("Twist of Fate", 1, "Roll 1d and take the highest").HasOptions("Roll"))
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))
@@ -30,7 +30,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void TwistOfFate_Penalty(int roll)
         {
             TestScenario
-                .Given.Game.WithHero()
+                .Game.WithHero()
                 .When.Hero.DrawsEvent("Twist of Fate")
                 .Then(Verify.Player.EventView.HasBody("Twist of Fate", 1, "Roll 1d and take the highest").HasOptions("Roll"))
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))

@@ -15,7 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void CloseCall(int roll, string effect, int lostSecrecy, int lostGrace)
         {
             TestScenario
-                .Given.Game.WithHero()
+                .Game.WithHero()
                 .When.Hero.DrawsEvent("Close Call")
                 .Then(Verify.Player.EventView.HasBody("Close Call", 4, "Roll 1d and take the highest").HasOptions("Roll"))
                 .When.Player.SelectsEventOption("Roll", Fake.Rolls(roll))

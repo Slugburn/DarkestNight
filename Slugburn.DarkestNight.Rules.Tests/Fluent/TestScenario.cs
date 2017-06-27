@@ -11,15 +11,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             Die.Implementation = new FakeDie();
         }
 
-        public static GivenContext Given => CreateRootGiven();
+        public static IGameContext Game => CreateGameContext();
 
-        private static GivenContext CreateRootGiven()
+        private static IGameContext CreateGameContext()
         {
             var game = new Game();
             var player = new FakePlayer(game);
             game.AddPlayer(player);
-            var given = new GivenContext(game, player);
-            return given;
+            var context = new GameContext(game, player);
+            return context;
         }
     }
 }

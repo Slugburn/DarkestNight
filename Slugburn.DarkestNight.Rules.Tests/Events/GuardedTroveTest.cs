@@ -13,7 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void Win(string tactic)
         {
             TestScenario
-                .Given.Game.WithHero()
+                .Game.WithHero()
                 .When.Hero.DrawsEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Player.ConflictView.HasTargets("Guarded Trove"))
@@ -26,7 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void FailElude_DrawEvent()
         {
             TestScenario
-                .Given.Game.WithHero()
+                .Game.WithHero()
                 .When.Hero.DrawsEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Player.ConflictView.HasTargets("Guarded Trove"))
@@ -40,7 +40,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void FailElude_LostSecrecy()
         {
             TestScenario
-                .Given.Game.WithHero()
+                .Game.WithHero()
                 .When.Hero.DrawsEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Player.ConflictView.HasTargets("Guarded Trove"))
@@ -54,7 +54,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void FailElude_NoSecrecy()
         {
             TestScenario
-                .Given.Game.WithHero().Secrecy(0)
+                .Game.WithHero().Secrecy(0)
                 .When.Hero.DrawsEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Player.ConflictView.HasTargets("Guarded Trove"))
@@ -66,7 +66,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void FailFight()
         {
             TestScenario
-                .Given.Game.WithHero()
+                .Game.WithHero()
                 .When.Hero.DrawsEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Player.ConflictView.HasTargets("Guarded Trove"))

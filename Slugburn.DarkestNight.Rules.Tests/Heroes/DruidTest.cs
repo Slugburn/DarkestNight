@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void AnimalCompanion(bool attackSucceeds)
         {
             var roll = attackSucceeds ? new[] {1, 6} : new[] {3, 4};
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Druid").HasPowers("Animal Companion")
                 .When.Hero.FacesEnemy("Zombie")
                 .When.Player.CompletesConflict("Zombie", "Animal Companion", Fake.Rolls(roll))
@@ -26,7 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void Camouflage()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Druid").HasPowers("Camouflage")
                 .When.Hero.FacesEnemy("Zombie")
                 .When.Player.CompletesConflict("Zombie", "Camouflage", Fake.Rolls(1, 6))
@@ -37,7 +37,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Celerity()
         {
             TestScenario
-                .Given.Game.WithHero("Druid").HasPowers("Celerity", "Raven Form", "Wolf Form").At("Monastery")
+                .Game.WithHero("Druid").HasPowers("Celerity", "Raven Form", "Wolf Form").At("Monastery")
                 .Power("Wolf Form").IsActive()
                 .When.Player.TakesAction("Celerity")
                 .Then(Verify.Power("Wolf Form").IsActive(false))
@@ -52,7 +52,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Celerity_NoNewFormSelected()
         {
             TestScenario
-                .Given.Game.WithHero("Druid").HasPowers("Celerity").At("Monastery")
+                .Game.WithHero("Druid").HasPowers("Celerity").At("Monastery")
                 .When.Player.TakesAction("Celerity")
                 .When.Player.SelectsLocation("Village")
                 .Then(Verify.Hero.Location("Village").HasAvailableActions("Continue"))
@@ -65,7 +65,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void RavenForm_Activate()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Druid").HasPowers("Sprite Form", "Raven Form").Power("Sprite Form").IsActive()
                 .When.Player.TakesAction("Raven Form")
                 .Then(Verify.Hero.TravelSpeed(2).SearchDice(2).CanGainGrace(false).HasUsedAction())
@@ -76,7 +76,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void RavenForm_Deactivate()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Druid").HasPowers("Raven Form").Power("Raven Form").IsActive()
                 .When.Player.TakesAction("Deactivate Form")
                 .Then(Verify.Hero.TravelSpeed(1).SearchDice(1).HasUsedAction());
@@ -87,7 +87,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void SpriteForm_Deactivate()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Druid").HasPowers("Sprite Form").Power("Sprite Form").IsActive()
                 .When.Player.TakesAction("Deactivate Form")
                 .Then(Verify.Hero.IsNotIgnoringBlights().HasUsedAction());
@@ -96,7 +96,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void SpriteForm_DoesNotIgnoreBlightsWhenNecromancerIsPresent()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .NecromancerAt("Ruins")
                 .WithHero("Druid").HasPowers("Sprite Form").At("Ruins")
                 .Given.ActingHero().Power("Sprite Form").IsActive()
@@ -106,7 +106,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void SpriteForm_IgnoreBlightsWhileActive()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Druid").HasPowers("Sprite Form").Power("Sprite Form").IsActive()
                 .Then(Verify.Hero.CanGainGrace(false).IsIgnoringBlights());
         }
@@ -114,7 +114,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void SpriteForm_Activate()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Druid").HasPowers("Sprite Form", "Raven Form").Power("Raven Form").IsActive()
                 .When.Player.TakesAction("Sprite Form")
                 .Then(Verify.Hero.CanGainGrace(false).HasUsedAction())
@@ -125,7 +125,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void Tranquility()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Druid").HasPowers("Tranquility")
                 .Then(Verify.Hero.DefaultGrace(8).Grace(5));
         }
@@ -135,7 +135,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void TreeForm_Activate()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Druid").HasPowers("Tree Form", "Wolf Form").Power("Wolf Form").IsActive()
                 .When.Player.TakesAction("Tree Form")
                 .Then(Verify.Hero.HasUsedAction())
@@ -146,7 +146,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void TreeForm_Deactivate()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Druid").HasPowers("Tree Form").Grace(0)
                 .Power("Tree Form").IsActive()
                 .When.Player.TakesAction("Deactivate Form")
@@ -157,7 +157,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void TreeForm_GainTwoGraceAtStartOfTurn()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Druid").HasPowers("Tree Form").Grace(0)
                 .Power("Tree Form").IsActive()
                 .When.Player.StartsTurn()
@@ -167,7 +167,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void TreeForm_MaxAtDefaultGrace()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Druid").HasPowers("Tree Form").Grace(4)
                 .Power("Tree Form").IsActive()
                 .When.Player.StartsTurn()
@@ -177,7 +177,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void TreeForm_RestrictedActions()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Druid").HasPowers("Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form")
                 .Power("Tree Form").IsActive()
                 .When.Player.StartsTurn()
@@ -188,7 +188,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void Vines_Fight()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Druid").HasPowers("Vines")
                 .When.Hero.FacesEnemy("Zombie")
                 .When.Player.CompletesConflict("Zombie", "Vines [fight]", Fake.Rolls(1, 2, 3, 4))
@@ -199,7 +199,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void Vines_Elude()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Druid").HasPowers("Vines")
                 .When.Hero.FacesEnemy("Zombie")
                 .When.Player.CompletesConflict("Zombie", "Vines [elude]", Fake.Rolls(1, 2, 3, 4))
@@ -211,7 +211,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Visions_CannotIgnoreRenewal()
         {
             TestScenario
-                .Given.Game.WithHero("Druid").HasPowers("Visions")
+                .Game.WithHero("Druid").HasPowers("Visions")
                 .When.Hero.DrawsEvent("Renewal")
                 .Then(Verify.Hero.CurrentEvent.CanBeIgnored(false))
                 .Then(Verify.Player.EventView.HasOptions("Continue"));
@@ -221,7 +221,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Visions_IgnoreEvent()
         {
             TestScenario
-                .Given.Game.WithHero("Druid").HasPowers("Visions")
+                .Game.WithHero("Druid").HasPowers("Visions")
                 .When.Hero.DrawsEvent("Anathema")
                 .Then(Verify.Player.EventView.HasOptions("Continue", "Ignore [Visions]"))
                 .When.Player.SelectsEventOption("Ignore [Visions]")
@@ -232,7 +232,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void WolfForm_Activate()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Druid").HasPowers("Wolf Form")
                 .When.Player.TakesAction("Wolf Form")
                 .Then(Verify.Hero.HasUsedAction().CanGainGrace(false).FightDice(2).EludeDice(2))

@@ -11,7 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void CloseCall_GraceAvailable(string option, int lostGrace, int lostSecrecy)
         {
             TestScenario
-                .Given.Game.WithHero("Acolyte")
+                .Game.WithHero("Acolyte")
                 .When.Hero.DrawsEvent("Dark Scrying")
                 .Then(Verify.Player.EventView.HasBody("Dark Scrying", 4, "Spend 1 Grace or lose 2 Secrecy.").HasOptions("Spend Grace", "Lose Secrecy"))
                 .When.Player.SelectsEventOption(option)
@@ -22,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void CloseCall_NoGraceAvailable()
         {
             TestScenario
-                .Given.Game.WithHero("Acolyte").Grace(0)
+                .Game.WithHero("Acolyte").Grace(0)
                 .When.Hero.DrawsEvent("Dark Scrying")
                 .Then(Verify.Player.EventView.HasBody("Dark Scrying", 4, "Spend 1 Grace or lose 2 Secrecy.").HasOptions("Lose Secrecy"))
                 .When.Player.SelectsEventOption("Lose Secrecy")

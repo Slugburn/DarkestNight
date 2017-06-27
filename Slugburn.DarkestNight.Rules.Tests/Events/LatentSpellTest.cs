@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void LatentSpell_NoEffect(int roll)
         {
             TestScenario
-                .Given.Game.WithHero().At("Ruins")
+                .Game.WithHero().At("Ruins")
                 .When.Hero.DrawsEvent("Latent Spell")
                 .When.Player.SelectsEventOption("Spend Grace", Fake.Rolls(roll))
                 .Then(Verify.Player.EventView.ActiveRow("No effect"))
@@ -24,7 +24,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void LatentSpell_ChooseDiscardEvent()
         {
             TestScenario
-                .Given.Game.WithHero()
+                .Game.WithHero()
                 .When.Hero.DrawsEvent("Latent Spell")
                 .Then(Verify.Player.EventView.HasOptions("Spend Grace", "Discard Event"))
                 .When.Player.SelectsEventOption("Discard Event")
@@ -35,7 +35,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void LatentSpell_DestroyBlight()
         {
             TestScenario
-                .Given.Game.WithHero()
+                .Game.WithHero()
                 .When.Hero.DrawsEvent("Latent Spell")
                 .When.Player.SelectsEventOption("Spend Grace", Fake.Rolls(6))
                 .Then(Verify.Player.EventView.ActiveRow("Destroy a blight of your choice anywhere on the board"))
@@ -52,7 +52,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void LatentSpell_DrawPower()
         {
             TestScenario
-                .Given.Game.WithHero("Acolyte")
+                .Game.WithHero("Acolyte")
                 .When.Hero.DrawsEvent("Latent Spell")
                 .When.Player.SelectsEventOption("Spend Grace", Fake.Rolls(5))
                 .Then(Verify.Player.EventView.ActiveRow("Draw a power card"))
@@ -66,7 +66,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void LatentSpell_Move()
         {
             TestScenario
-                .Given.Game.WithHero().At("Ruins")
+                .Game.WithHero().At("Ruins")
                 .When.Hero.DrawsEvent("Latent Spell")
                 .When.Player.SelectsEventOption("Spend Grace", Fake.Rolls(4))
                 .Then(Verify.Player.EventView.ActiveRow("Move to any other location"))
@@ -80,7 +80,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void LatentSpell_NoGrace()
         {
             TestScenario
-                .Given.Game.WithHero().Grace(0)
+                .Game.WithHero().Grace(0)
                 .When.Hero.DrawsEvent("Latent Spell")
                 .Then(Verify.Player.EventView
                     .HasBody("Latent Spell", 2,

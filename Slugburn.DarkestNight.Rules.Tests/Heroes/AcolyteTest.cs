@@ -17,8 +17,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             var expectedDice = 1 + bonusDice;
             TestScenario
-                .Given.Game.WithHero("Acolyte").HasPowers("Fade to Black")
-                .Given.Game.Darkness(darkness)
+                .Game.WithHero("Acolyte").HasPowers("Fade to Black")
+                .Game.Darkness(darkness)
                 .Then(Verify.Hero.FightDice(expectedDice));
         }
 
@@ -31,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void FalseLife_NotUsableWhenAtOrAboveDefaultGrace(int grace, bool isAvailable)
         {
             TestScenario
-                .Given.Game.WithHero("Acolyte").HasPowers("False Life").NotAt("Monastery").Grace(grace)
+                .Game.WithHero("Acolyte").HasPowers("False Life").NotAt("Monastery").Grace(grace)
                 .Then(Verify.Hero.Grace(grace).CanTakeAction("False Life", isAvailable));
         }
 
@@ -42,7 +42,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             var tacticName = $"Final Rest [{count}d]";
             TestScenario
-                .Given.Game.WithHero("Acolyte").HasPowers("Final Rest").Grace(3)
+                .Game.WithHero("Acolyte").HasPowers("Final Rest").Grace(3)
                 .When.Hero.FacesEnemy("Skeleton")
                 .Then(Verify.Player.ConflictView.HasTactics("Fight", "Elude", "Final Rest [2d]", "Final Rest [3d]"))
                 .When.Player.CompletesConflict("Skeleton", tacticName, Fake.Rolls(rolls))
@@ -53,7 +53,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void BlindingBlack()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Acolyte").HasPowers("Blinding Black").At("Swamp").Secrecy(0)
                 .NecromancerAt("Castle")
                 .When.Game.NecromancerActs(Fake.Rolls(5))
@@ -71,7 +71,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void CallToDeath()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Acolyte").HasPowers("Call to Death").At("Swamp")
                 .Given.Location("Swamp").Blights("Skeletons", "Shades", "Lich")
                 .When.Player.TakesAction("Call to Death")
@@ -86,7 +86,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void CallToDeath_CombinedWith_FinalRest()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Acolyte").HasPowers("Call to Death", "Final Rest").At("Swamp")
                 .Given.Location("Swamp").Blights("Skeletons", "Shades")
                 .When.Player.TakesAction("Call to Death")
@@ -105,7 +105,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void DarkVeil_IgnoreBlightDefense()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Acolyte").HasPowers("Dark Veil").At("Swamp")
                 .Location("Swamp").Blights("Spies")
                 .When.Player.TakesAction("Attack").Targets("Spies").ResolvesConflict(Fake.Rolls(1)).AcceptsRoll()
@@ -119,7 +119,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void DarkVeil_IgnoreBlightEffects()
         {
             TestScenario
-                .Given.Game.WithHero("Acolyte").HasPowers("Dark Veil")
+                .Game.WithHero("Acolyte").HasPowers("Dark Veil")
                 .When.Player.TakesAction("Dark Veil [ignore effects]")
                 .Then(Verify.Hero.IsIgnoringBlights())
                 .Then(Verify.Power("Dark Veil").IsExhausted())
@@ -132,7 +132,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void DeathMask_IgnoreSecrecyLossForAttacking()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Acolyte").HasPowers("Death Mask").At("Swamp")
                 .Location("Swamp").Blights("Spies")
                 .When.Player.TakesAction("Attack").Fights(Fake.Rolls(1))
@@ -142,8 +142,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void DeathMask_IgnoreSecrecyLossForBeingInNecromancersLocation()
         {
-            TestScenario
-                .Given.Game.NecromancerAt("Swamp")
+            TestScenario.Game
+                .NecromancerAt("Swamp")
                 .WithHero("Acolyte").HasPowers("Death Mask").At("Swamp")
                 .When.Player.StartsTurn()
                 .Then(Verify.Hero.LostSecrecy(0));
@@ -153,7 +153,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void FadeToBlack_CombinedWith_FinalRest()
         {
             var rolls = Enumerable.Repeat(6, 5).ToArray();
-            TestScenario.Given.Game
+            TestScenario.Game
                 .Darkness(20)
                 .WithHero("Acolyte").HasPowers("Fade to Black", "Final Rest")
                 .When.Hero.FacesEnemy("Skeleton")
@@ -165,7 +165,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void FalseLife()
         {
             TestScenario
-                .Given.Game.WithHero("Acolyte").HasPowers("False Life").At("Swamp").Grace(0)
+                .Game.WithHero("Acolyte").HasPowers("False Life").At("Swamp").Grace(0)
                 .When.Player.TakesAction("False Life")
                 .Then(Verify.Hero.Grace(1))
                 .Then(Verify.Power("False Life").IsExhausted());
@@ -174,7 +174,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void FalseLife_NotUsableInMonastery()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Acolyte").HasPowers("False Life").At("Monastery").Grace(0)
                 .Then(Verify.Hero.Grace(0).CanTakeAction("False Life", false));
         }
@@ -183,7 +183,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void FalseLife_PreventsMovementToMonasteryWhileExhausted()
         {
             TestScenario
-                .Given.Game.WithHero("Acolyte").HasPowers("False Life").At("Village").Grace(2)
+                .Game.WithHero("Acolyte").HasPowers("False Life").At("Village").Grace(2)
                 .Then(Verify.Hero.Grace(2).CanMoveTo("Monastery"))
                 .When.Player.TakesAction("False Life")
                 .Then(Verify.Hero.CannotMoveTo("Monastery"))
@@ -194,7 +194,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void FalseOrders()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Acolyte").HasPowers("False Orders").At("Village")
                 .Location("Village").Blights("Confusion", "Corruption", "Shroud", "Skeletons")
                 .Location("Monastery").Blights("Lich")
@@ -212,7 +212,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void ForbiddenArts()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .Darkness(0)
                 .WithHero("Acolyte").HasPowers("Forbidden Arts")
                 .When.Hero.FacesEnemy("Skeleton")
@@ -231,7 +231,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void LeechLife()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Acolyte").HasPowers("Leech Life").Grace(1).NotAt("Monastery")
                 .When.Hero.FacesEnemy("Skeleton")
                 .When.Player.CompletesConflict("Skeleton", "Leech Life", Fake.Rolls(1, 5, 6))
@@ -242,7 +242,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void LeechLife_NotUsableInMonastery()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Acolyte").HasPowers("Leech Life").At("Monastery")
                 .Then(Verify.Hero.CanTakeAction("Leech Life", false));
         }
@@ -250,7 +250,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void LeechLife_PreventsMovementToMonasteryWhileExhausted()
         {
-            TestScenario.Given.Game
+            TestScenario.Game
                 .WithHero("Acolyte").HasPowers("Leech Life").At("Village")
                 .Power("Leech Life").IsExhausted()
                 .Then(Verify.Hero.CannotMoveTo("Monastery"));

@@ -111,7 +111,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             designator = designator ?? (s => s);
             TestScenario
-                .Given.Game.WithHero()
+                .Game.WithHero()
                 .Given.Configure(designator)
                 .When.Hero.DrawsEvent(eventName)
                 .Then(Verify.Player.EventView.HasBody(eventName, expectedFate, text).HasOptions("Continue"))
