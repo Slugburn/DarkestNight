@@ -194,10 +194,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             // +1 die in fights.
             const string powerName = "Oath of Valor";
-            new TestScenario()
-                .GivenHero("Knight", x => x.HasPowers(powerName))
-                .GivenPower(powerName, x => x.IsActive())
-                .ThenHero(x => x.FightDice(2));
+            TestScenario.Given.Game
+                .WithHero("Knight").HasPowers(powerName).Power(powerName).IsActive()
+                .Then(Verify.Hero.FightDice(2));
         }
 
         [Test]
@@ -205,10 +204,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             // Attempt to elude; you lose 1 Grace.
             TestScenario
-                .Given.Game.WithHero("Knight").HasPowers("Oath of Valor", "Oath of Vengeance").At("Village")
+                .Given.Game.WithHero("Knight").HasPowers("Oath of Valor", "Oath of Vengeance")
                 .Power("Oath of Valor").IsActive()
-                .Given.Location("Village").Blights("Skeletons")
-                .When.Hero.Eludes(x => x.Rolls(6))
+                .When.Hero.FacesEnemy("Skeleton")
+                .When.Player.Eludes()
                 .Then(Verify.Hero.LostGrace())
                 .Then(Verify.Power("Oath of Valor").IsActive(false));
         }
@@ -283,9 +282,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Sprint()
         {
             TestScenario
-                .Given.Game.WithHero("Knight").HasPowers("Sprint").At("Village")
-                .Given.Location("Village").Blights("Skeletons")
-                .When.Hero.Eludes(x => x.Tactic("Sprint"))
+                .Given.Game.WithHero("Knight").HasPowers("Sprint")
+                .When.Hero.FacesEnemy("Skeleton")
+                .When.Player.CompletesConflict("Skeleton", "Sprint", Fake.Rolls(4))
                 .Then(Verify.Hero.RolledNumberOfDice(2));
         }
     }

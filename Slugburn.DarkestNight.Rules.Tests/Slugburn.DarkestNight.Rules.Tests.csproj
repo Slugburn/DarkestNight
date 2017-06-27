@@ -89,7 +89,6 @@
     <Compile Include="Fluent\Assertions\GameVerification.cs" />
     <Compile Include="Fluent\Assertions\HeroEventExpectation.cs" />
     <Compile Include="Fluent\Assertions\HeroEventVerification.cs" />
-    <Compile Include="Fluent\Assertions\HeroExpectation.cs" />
     <Compile Include="Fluent\Actions\PlayerActionContext.cs" />
     <Compile Include="Fluent\Assertions\HeroVerification.cs" />
     <Compile Include="Fluent\Assertions\IVerifiable.cs" />
@@ -99,7 +98,6 @@
     <Compile Include="Fluent\Assertions\PlayerVerification.cs" />
     <Compile Include="Fluent\Assertions\PowerExpectation.cs" />
     <Compile Include="Fluent\Arrangements\LocationContext.cs" />
-    <Compile Include="Fluent\Arrangements\TacticContext.cs" />
     <Compile Include="Fluent\Assertions\PowerVerification.cs" />
     <Compile Include="Fluent\ITestRoot.cs" />
     <Compile Include="Fluent\Fake.cs" />

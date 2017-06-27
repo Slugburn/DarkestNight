@@ -174,9 +174,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void FalseLife_NotUsableInMonastery()
         {
-            new TestScenario()
-                .GivenHero("Acolyte", x => x.HasPowers("False Life").At("Monastery").Grace(0))
-                .ThenHero(x => x.Grace(0).CanUsePower("False Life", false));
+            TestScenario.Given.Game
+                .WithHero("Acolyte").HasPowers("False Life").At("Monastery").Grace(0)
+                .Then(Verify.Hero.Grace(0).CanTakeAction("False Life", false));
         }
 
         [Test]
@@ -242,18 +242,18 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void LeechLife_NotUsableInMonastery()
         {
-            new TestScenario()
-                .GivenHero("Acolyte", x => x.HasPowers("Leech Life").At("Monastery"))
-                .ThenHero(x => x.CanUsePower("Leech Life", false));
+            TestScenario.Given.Game
+                .WithHero("Acolyte").HasPowers("Leech Life").At("Monastery")
+                .Then(Verify.Hero.CanTakeAction("Leech Life", false));
         }
 
         [Test]
         public void LeechLife_PreventsMovementToMonasteryWhileExhausted()
         {
-            new TestScenario()
-                .GivenHero("Acolyte", x => x.HasPowers("Leech Life").At("Village"))
-                .GivenPower("Leech Life", x => x.IsExhausted())
-                .ThenHero(x => x.CannotMoveTo("Monastery"));
+            TestScenario.Given.Game
+                .WithHero("Acolyte").HasPowers("Leech Life").At("Village")
+                .Power("Leech Life").IsExhausted()
+                .Then(Verify.Hero.CannotMoveTo("Monastery"));
         }
     }
 }

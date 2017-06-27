@@ -125,9 +125,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void Tranquility()
         {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Tranquility"))
-                .ThenHero(x => x.DefaultGrace(8).Grace(5));
+            TestScenario.Given.Game
+                .WithHero("Druid").HasPowers("Tranquility")
+                .Then(Verify.Hero.DefaultGrace(8).Grace(5));
         }
 
         // Tree Form (Action): Deactivate all Forms. Optionally activate.
