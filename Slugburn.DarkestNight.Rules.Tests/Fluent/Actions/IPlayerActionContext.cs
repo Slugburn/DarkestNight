@@ -8,8 +8,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         IPlayerActionContext AcceptsConflictResults();
         IPlayerActionContext AcceptsNecromancerTurn();
         IPlayerActionContext AcceptsRoll();
-        IPlayerActionContext ChoosesBlight(params string[] blights);
-        IPlayerActionContext ChooseLocation(Location location);
         IPlayerActionContext ResolvesConflict(IFakeContext fake);
         IPlayerActionContext SelectsBlight(string location, string blight);
         IPlayerActionContext SelectsEventOption(string option, IFakeContext set = null);
@@ -18,6 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         IPlayerActionContext Targets(params string[] targetNames);
         IPlayerActionContext UsesTactic(string tacticName);
         IPlayerActionContext TakesAction(string actionName, IFakeContext fake = null);
+        IPlayerActionContext TakesAction(string heroName, string actionName, IFakeContext fake = null);
         IPlayerActionContext SelectsBlights(params string[] blights);
     }
 }

@@ -86,6 +86,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public Queue<string> EventQueue { get; } = new Queue<string>();
         public List<string> Inventory { get; set; } = new List<string>();
         public bool SavedByGrace { get; private set; }
+        public bool IsActing { get; set; }
 
         public void AddActionFilter(string name, HeroState state, ICollection<string> allowed)
         {
@@ -110,11 +111,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void StartTurn()
         {
-            Triggers.Send(HeroTrigger.StartTurn);
-            if (Location == Game.Necromancer.Location)
-                LoseSecrecy("Necromancer");
-            State = HeroState.ChoosingAction;
-            AvailableActions = GetAvailableActions();
+            throw new NotImplementedException();
         }
 
         public IList<string> GetAvailableActions()
@@ -122,19 +119,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var actions = _actions.Values.Where(x => x.IsAvailable(this)).Select(x => x.Name);
             var filtered = _actionFilters.Where(x => x.State == State).Aggregate(actions, (x, filter) => x.Intersect(filter.Allowed));
             return filtered.ToList();
-        }
-
-        public void EndTurn()
-        {
-            if (IsAffectedByBlight(Blight.Spies))
-            {
-                var space = GetSpace();
-                var spies = space.Blights.Where(x => x == Blight.Spies);
-                foreach (var spy in spies)
-                    LoseSecrecy("Spies");
-            }
-            IsTurnTaken = true;
-            Triggers.Send(HeroTrigger.EndOfTurn);
         }
 
         public void LoseTurn()

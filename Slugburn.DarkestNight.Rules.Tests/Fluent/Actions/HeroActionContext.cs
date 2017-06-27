@@ -49,13 +49,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             return this;
         }
 
-        public IHeroActionContext StartsTurn()
-        {
-            _hero.IsActionAvailable = true;
-            _hero.StartTurn();
-            return this;
-        }
-
         public IHeroActionContext Fights(Action<TacticContext> actions)
         {
             FacesEnemies();

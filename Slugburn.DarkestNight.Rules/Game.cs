@@ -16,8 +16,21 @@ namespace Slugburn.DarkestNight.Rules
 {
     public class Game
     {
-        public List<IPlayer> Players { get; } = new List<IPlayer>();
         private readonly Dictionary<string, IIgnoreBlight> _ignoreBlights = new Dictionary<string, IIgnoreBlight>();
+
+        public Game()
+        {
+            Heroes = new List<Hero>();
+            Triggers = new TriggerRegistry<GameTrigger, Game>(this);
+            Board = new Board();
+            Events = EventFactory.GetEventDeck().Shuffle();
+            Maps = new MapFactory().CreateMaps().Shuffle();
+            MapsDiscard = new List<IMap>();
+            Necromancer = new Necromancer(this);
+            Darkness = 0;
+        }
+
+        public List<IPlayer> Players { get; } = new List<IPlayer>();
 
         public TriggerRegistry<GameTrigger, Game> Triggers { get; }
 
@@ -35,16 +48,13 @@ namespace Slugburn.DarkestNight.Rules
         public IEnumerable<Hero> AvailableHeroes { get; set; }
         public Hero ActingHero { get; set; }
 
-        public Game()
+        public void StartNewDay()
         {
-            Heroes = new List<Hero>();
-            Triggers = new TriggerRegistry<GameTrigger, Game>(this);
-            Board = new Board();
-            Events = EventFactory.GetEventDeck().Shuffle();
-            Maps = new MapFactory().CreateMaps().Shuffle();
-            MapsDiscard = new List<IMap>();
-            Necromancer = new Necromancer(this);
-            Darkness = 0;
+            foreach (var hero in Heroes)
+            {
+                hero.IsTurnTaken = false;
+                hero.IsActionAvailable = true;
+            }
         }
 
         private IMap DrawMapCard()
@@ -66,7 +76,7 @@ namespace Slugburn.DarkestNight.Rules
         public void CreateBlights(Location location, int count)
         {
             for (var i = 0; i < count; i++)
-                CreateBlight(new[] {location});
+                CreateBlight(location);
         }
 
         public void CreateBlight(params Location[] locations)
@@ -106,7 +116,7 @@ namespace Slugburn.DarkestNight.Rules
             Darkness++;
 
             // increase darkness by number of descrations in play
-            Darkness += Board.Spaces.Sum(space => space.Blights.Count(blight => blight==Blight.Desecration));
+            Darkness += Board.Spaces.Sum(space => space.Blights.Count(blight => blight == Blight.Desecration));
 
             if (Darkness <= 30)
                 return;
@@ -118,12 +128,12 @@ namespace Slugburn.DarkestNight.Rules
 
         public IPower GetPower(string name)
         {
-            return Heroes.SelectMany(x=>x.Powers).SingleOrDefault(x=>x.Name==name);
+            return Heroes.SelectMany(x => x.Powers).SingleOrDefault(x => x.Name == name);
         }
 
         public Hero GetHero(string heroName)
         {
-            if (heroName==null)
+            if (heroName == null)
                 throw new ArgumentNullException(nameof(heroName));
             var hero = Heroes.SingleOrDefault(x => x.Name == heroName);
             if (hero == null)
@@ -133,7 +143,7 @@ namespace Slugburn.DarkestNight.Rules
 
         public bool IsBlightIgnored(Hero hero, Blight blight)
         {
-            return _ignoreBlights.Values.Any(x=>x.IsIgnoring(hero, blight));
+            return _ignoreBlights.Values.Any(x => x.IsIgnoring(hero, blight));
         }
 
         public void AddIgnoreBlight(IIgnoreBlight ignoreBlight)

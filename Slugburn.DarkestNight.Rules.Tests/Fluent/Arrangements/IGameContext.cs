@@ -11,5 +11,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
         IGameContext Darkness(int value);
         IGameContext DrawEvents(int count);
         IGameContext NextSearchResult(Find result);
+        IGameContext NewDay();
     }
 }

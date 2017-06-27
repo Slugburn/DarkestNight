@@ -59,6 +59,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             return this;
         }
 
+        public IGameContext NewDay()
+        {
+            GetGame().StartNewDay();
+            return this;
+        }
+
         public IGameContext NextBlight(params string[] blightNames)
         {
             foreach (var blightName in blightNames)

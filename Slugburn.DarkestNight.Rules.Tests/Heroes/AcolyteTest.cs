@@ -123,7 +123,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .When.Player.TakesAction("Dark Veil [ignore effects]")
                 .Then(Verify.Hero.IsIgnoringBlights())
                 .Then(Verify.Power("Dark Veil").IsExhausted())
-                .When.Hero.StartsTurn()
+                .When.Player.StartsTurn()
                 .Then(Verify.Hero.IsNotIgnoringBlights());
         }
 
@@ -145,7 +145,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario
                 .Given.Game.NecromancerAt("Swamp")
                 .WithHero("Acolyte").HasPowers("Death Mask").At("Swamp")
-                .When.Hero.StartsTurn()
+                .When.Player.StartsTurn()
                 .Then(Verify.Hero.LostSecrecy(0));
         }
 

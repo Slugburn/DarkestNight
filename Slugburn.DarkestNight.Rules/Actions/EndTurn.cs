@@ -1,4 +1,7 @@
-﻿using Slugburn.DarkestNight.Rules.Heroes;
+﻿using System.Linq;
+using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
@@ -7,12 +10,21 @@ namespace Slugburn.DarkestNight.Rules.Actions
         public string Name => "End Turn";
         public void Act(Hero hero)
         {
-            hero.EndTurn();
+            if (hero.IsAffectedByBlight(Blight.Spies))
+            {
+                var space = hero.GetSpace();
+                var spies = space.Blights.Where(x => x == Blight.Spies);
+                foreach (var spy in spies)
+                    hero.LoseSecrecy("Spies");
+            }
+            hero.IsActing = false;
+            hero.IsTurnTaken = true;
+            hero.Triggers.Send(HeroTrigger.EndOfTurn);
         }
 
         public bool IsAvailable(Hero hero)
         {
-            return hero.Game.ActingHero == hero;
+            return hero.IsActing;
         }
     }
 }

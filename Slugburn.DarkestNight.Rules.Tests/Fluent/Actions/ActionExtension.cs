@@ -37,5 +37,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
                 .AcceptsRoll()
                 .AcceptsConflictResults();
         }
+
+        public static IPlayerActionContext StartsTurn(this IPlayerActionContext context, string heroName = null)
+        {
+            return context
+                .Given.Game.NewDay()
+                .When.Player.TakesAction(null, "Start Turn");
+        }
     }
 }

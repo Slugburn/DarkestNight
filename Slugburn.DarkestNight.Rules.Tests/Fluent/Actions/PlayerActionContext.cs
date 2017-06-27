@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
+using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
@@ -25,23 +26,27 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
 
         public IPlayerActionContext TakesAction(string actionName, IFakeContext fake = null)
         {
-            GetPlayer().TakeAction(GetPlayer().ActiveHero, actionName);
-            return this;
+            return TakesAction(null, actionName, fake);
         }
 
-
-        public IPlayerActionContext ChoosesBlight(params string[] blights)
+        public IPlayerActionContext TakesAction(string heroName, string actionName, IFakeContext fake = null)
         {
-            GetPlayer().SetBlightChoice(blights.Select(x => x.ToEnum<Blight>()).ToArray());
+            if (heroName == null)
+            {
+                Hero hero;
+                // If there's only one hero, assume it's that one
+                if (GetGame().Heroes.Count == 1)
+                    hero = GetGame().Heroes.Single();
+                hero = GetGame().ActingHero;
+                if (hero == null)
+                    Assert.Fail("There is no acting hero. Specify a hero name.");
+                heroName = hero.Name;
+            }
+
+            GetPlayer().TakeAction(heroName, actionName);
             return this;
         }
-
-        public IPlayerActionContext ChooseLocation(Location location)
-        {
-            GetPlayer().SetLocationChoice(location);
-            return this;
-        }
-
+        
         public IPlayerActionContext SelectsEventOption(string option, IFakeContext set = null)
         {
             GetPlayer().SelectEventOption(option);

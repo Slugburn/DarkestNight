@@ -131,6 +131,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .ThenHero(x => x.DefaultGrace(8).Grace(5));
         }
 
+        // Tree Form (Action): Deactivate all Forms. Optionally activate.
+        // Gain 2 Grace (up to default) at the start of your turn. Your actions can only be to hide or use a Druid power.
         [Test]
         public void TreeForm_Activate()
         {
@@ -146,42 +148,42 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void TreeForm_Deactivate()
         {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Tree Form").Grace(0).At("Monastery"))
-                .GivenPower("Tree Form", x => x.IsActive())
-                .WhenPlayerTakesAction("Deactivate Form")
-                .WhenHero(x => x.StartsTurn())
-                .ThenHero(x => x.Grace(0).HasAvailableActions("Travel", "Hide", "Pray", "Tree Form", "End Turn"));
+            TestScenario.Given.Game
+                .WithHero("Druid").HasPowers("Tree Form").Grace(0)
+                .Power("Tree Form").IsActive()
+                .When.Player.TakesAction("Deactivate Form")
+                .When.Player.StartsTurn()
+                .Then(Verify.Hero.Grace(0).HasAvailableActions("Travel", "Hide", "Pray", "Tree Form", "End Turn"));
         }
 
         [Test]
         public void TreeForm_GainTwoGraceAtStartOfTurn()
         {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Tree Form").Grace(0))
-                .GivenPower("Tree Form", x => x.IsActive())
-                .WhenHero(x => x.StartsTurn())
-                .ThenHero(x => x.Grace(2));
+            TestScenario.Given.Game
+                .WithHero("Druid").HasPowers("Tree Form").Grace(0)
+                .Power("Tree Form").IsActive()
+                .When.Player.StartsTurn()
+                .Then(Verify.Hero.Grace(2));
         }
 
         [Test]
         public void TreeForm_MaxAtDefaultGrace()
         {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Tree Form").Grace(4))
-                .GivenPower("Tree Form", x => x.IsActive())
-                .WhenHero(x => x.StartsTurn())
-                .ThenHero(x => x.DefaultGrace(5).Grace(5));
+            TestScenario.Given.Game
+                .WithHero("Druid").HasPowers("Tree Form").Grace(4)
+                .Power("Tree Form").IsActive()
+                .When.Player.StartsTurn()
+                .Then(Verify.Hero.DefaultGrace(5).Grace(5));
         }
 
         [Test]
         public void TreeForm_RestrictedActions()
         {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form"))
-                .GivenPower("Tree Form", x => x.IsActive())
-                .WhenHero(x => x.StartsTurn())
-                .ThenHero(x => x.HasAvailableActions("Hide", "Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form"));
+            TestScenario.Given.Game
+                .WithHero("Druid").HasPowers("Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form")
+                .Power("Tree Form").IsActive()
+                .When.Player.StartsTurn()
+                .Then(Verify.Hero.HasAvailableActions("Hide", "Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form"));
         }
 
         // Vines (Tactic): Exhaust to fight or elude with 4 dice.

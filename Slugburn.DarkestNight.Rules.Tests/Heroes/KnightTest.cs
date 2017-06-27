@@ -77,6 +77,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Then(Verify.Hero.Rolled(3, 4).DefaultGrace(6).Grace(2));
         }
 
+        // Oath of Defense (Action): 
+        // Active: Gain 1 Grace (up to default) at start of turn.
+        // Fulfill: No blights at location; You gain 1 Grace.
+        // Break: Leave location; you lose all Grace.
         [Test]
         public void OathOfDefense_ActivateAtLocationWithBlight()
         {
@@ -106,7 +110,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Game.WithHero("Knight").HasPowers("Oath of Defense").Grace(0).At("Village")
                 .Given.Location("Village").Blights("Shades")
                 .Given.ActingHero().Power("Oath of Defense").IsActive()
-                .When.Hero.StartsTurn()
+                .When.Player.StartsTurn()
                 .Then(Verify.Hero.Grace(1));
         }
 
@@ -266,9 +270,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void RecklessAbandon()
         {
             TestScenario
-                .Given.Game.WithHero("Knight").HasPowers("Reckless Abandon").At("Village")
-                .Given.Location("Village").Blights("Vampire")
-                .When.Hero.Fights(x => x.Tactic("Reckless Abandon").Rolls(1, 2, 3, 4))
+                .Given.Game.WithHero("Knight").HasPowers("Reckless Abandon")
+                .When.Hero.FacesEnemy("Vampire")
+                .When.Player.CompletesConflict("Vampire", "Reckless Abandon", Fake.Rolls(1, 2, 3, 4))
                 .Then(Verify.Hero.RolledNumberOfDice(4).LostGrace());
         }
 

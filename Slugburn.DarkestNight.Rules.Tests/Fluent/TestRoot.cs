@@ -27,7 +27,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 
         public IGiven Given => new GivenContext(GetGame(), GetPlayer());
         public IWhen When => new WhenContext(GetGame(), GetPlayer());
-        public IThen Then() => new ThenContext(GetGame(), GetPlayer());
 
         public ITestRoot Then(IVerifiable verifiable)
         {

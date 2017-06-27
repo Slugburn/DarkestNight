@@ -10,7 +10,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
     {
         IGiven Given { get; }
         IWhen When { get; }
-        IThen Then();
         IGiven Configure(Func<IGiven, IGiven> setConditions);
         ITestRoot Then(IVerifiable verifiable);
         T Set<T>(T state);
