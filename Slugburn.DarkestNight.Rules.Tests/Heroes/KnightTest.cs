@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using NUnit.Framework.Internal;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
 using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
@@ -13,11 +14,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void OathOfVengeance_Broken(string action)
         {
             // Hide or search; you lose 1 Grace
-            new TestScenario()
-                .GivenHero("Knight", x => x.HasPowers("Oath of Vengeance"))
-                .GivenPower("Oath of Vengeance", x => x.IsActive())
-                .WhenPlayerTakesAction(action)
-                .ThenHero(x => x.HasUsedAction().LostGrace());
+            TestScenario.Given.Game
+                .WithHero("Knight").HasPowers("Oath of Vengeance").Power("Oath of Vengeance").IsActive()
+                .When.Player.TakesAction(action)
+                .Then(Verify.Hero.HasUsedAction().LostGrace());
         }
 
         // Charge (Tactic): Fight with 2 dice.
@@ -57,13 +57,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Then(Verify.Hero.FightDice(1));
         }
 
+        // Hard Ride (Action): Move twice, but gain no Secrecy.
         [Test]
         public void HardRide()
         {
-            new TestScenario()
-                .GivenHero("Knight", x => x.HasPowers("Hard Ride").Secrecy(0))
-                .WhenPlayerTakesAction("Hard Ride")
-                .ThenHero(x => x.HasUsedAction().AvailableMovement(2).Secrecy(0)); // No Secrecy gain
+            TestScenario.Given.Game
+                .WithHero("Knight").HasPowers("Hard Ride").Secrecy(0)
+                .When.Player.TakesAction("Hard Ride")
+                .Then(Verify.Hero.HasUsedAction().AvailableMovement(2).Secrecy(0)); // No Secrecy gain
         }
 
         // Holy Mantle (Bonus): +1 to default Grace. Add 1 to each die when praying.
@@ -95,12 +96,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void OathOfDefense_ActivateAtLocationWithNoBlight()
         {
-            new TestScenario()
-                .GivenHero("Knight", x => x.HasPowers("Oath of Defense").Grace(0))
-                .WhenPlayerTakesAction("Oath of Defense")
+            TestScenario.Given.Game
+                .WithHero("Knight").HasPowers("Oath of Defense").Grace(0)
+                .When.Player.TakesAction("Oath of Defense")
                 // gains grace and deactivates immediately
-                .ThenHero(x => x.Grace(1).HasUsedAction())
-                .ThenPower("Oath of Defense", x => x.IsActive(false));
+                .Then(Verify.Hero.Grace(1).HasUsedAction())
+                .Then(Verify.Power("Oath of Defense").IsActive(false));
         }
 
         [Test]
@@ -244,10 +245,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void OathOfVengeance_Activate()
         {
             const string powerName = "Oath of Vengeance";
-            new TestScenario()
-                .GivenHero("Knight", x => x.HasPowers(powerName))
-                .WhenPlayerTakesAction(powerName)
-                .ThenPower(powerName, x => x.IsActive());
+            TestScenario.Given.Game
+                .WithHero("Knight").HasPowers(powerName)
+                .When.Player.TakesAction(powerName)
+                .Then(Verify.Power(powerName).IsActive());
         }
 
         [Test]

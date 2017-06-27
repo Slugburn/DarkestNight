@@ -60,36 +60,37 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Then(Verify.Hero.HasUsedAction());
         }
 
+        // Raven Form (Action): Deactivate all Forms. Optionally activate.
+        // Active: +1 die in searches. When you travel, you may move two spaces. You cannot gain Grace.
         [Test]
         public void RavenForm_Activate()
         {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Sprite Form", "Raven Form"))
-                .GivenPower("Sprite Form", x => x.IsActive())
-                .WhenPlayerTakesAction("Raven Form")
-                .ThenHero(x => x.TravelSpeed(2).SearchDice(2).CanGainGrace(false).HasUsedAction())
-                .ThenPower("Raven Form", x => x.IsActive())
-                .ThenPower("Sprite Form", x => x.IsActive(false));
+            TestScenario.Given.Game
+                .WithHero("Druid").HasPowers("Sprite Form", "Raven Form").Power("Sprite Form").IsActive()
+                .When.Player.TakesAction("Raven Form")
+                .Then(Verify.Hero.TravelSpeed(2).SearchDice(2).CanGainGrace(false).HasUsedAction())
+                .Then(Verify.Power("Raven Form").IsActive())
+                .Then(Verify.Power("Sprite Form").IsActive(false));
         }
 
         [Test]
         public void RavenForm_Deactivate()
         {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Raven Form"))
-                .GivenPower("Raven Form", x => x.IsActive())
-                .WhenPlayerTakesAction("Deactivate Form")
-                .ThenHero(x => x.TravelSpeed(1).SearchDice(1).HasUsedAction());
+            TestScenario.Given.Game
+                .WithHero("Druid").HasPowers("Raven Form").Power("Raven Form").IsActive()
+                .When.Player.TakesAction("Deactivate Form")
+                .Then(Verify.Hero.TravelSpeed(1).SearchDice(1).HasUsedAction());
         }
 
+        // Sprite Form (Action): Deactivate all Forms. Optionally activate.
+        // Ignore blights' effects unless the Necromancer is present. You cannot gain Grace.
         [Test]
         public void SpriteForm_Deactivate()
         {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Sprite Form"))
-                .GivenPower("Sprite Form", x => x.IsActive())
-                .WhenPlayerTakesAction("Deactivate Form")
-                .ThenHero(x => x.IsNotIgnoringBlights().HasUsedAction());
+            TestScenario.Given.Game
+                .WithHero("Druid").HasPowers("Sprite Form").Power("Sprite Form").IsActive()
+                .When.Player.TakesAction("Deactivate Form")
+                .Then(Verify.Hero.IsNotIgnoringBlights().HasUsedAction());
         }
 
         [Test]
@@ -105,22 +106,20 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void SpriteForm_IgnoreBlightsWhileActive()
         {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Sprite Form"))
-                .GivenPower("Sprite Form", x => x.IsActive())
-                .ThenHero(x => x.CanGainGrace(false).IsIgnoringBlights());
+            TestScenario.Given.Game
+                .WithHero("Druid").HasPowers("Sprite Form").Power("Sprite Form").IsActive()
+                .Then(Verify.Hero.CanGainGrace(false).IsIgnoringBlights());
         }
 
         [Test]
-        public void SpriteFormActivated()
+        public void SpriteForm_Activate()
         {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Sprite Form", "Raven Form"))
-                .GivenPower("Raven Form", x => x.IsActive())
-                .WhenPlayerTakesAction("Sprite Form")
-                .ThenHero(x => x.CanGainGrace(false).HasUsedAction())
-                .ThenPower("Sprite Form", x => x.IsActive())
-                .ThenPower("Raven Form", x => x.IsActive(false));
+            TestScenario.Given.Game
+                .WithHero("Druid").HasPowers("Sprite Form", "Raven Form").Power("Raven Form").IsActive()
+                .When.Player.TakesAction("Sprite Form")
+                .Then(Verify.Hero.CanGainGrace(false).HasUsedAction())
+                .Then(Verify.Power("Sprite Form").IsActive())
+                .Then(Verify.Power("Raven Form").IsActive(false));
         }
 
         [Test]
@@ -136,13 +135,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void TreeForm_Activate()
         {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Tree Form", "Wolf Form"))
-                .GivenPower("Wolf Form", x => x.IsActive())
-                .WhenPlayerTakesAction("Tree Form")
-                .ThenHero(x => x.HasUsedAction())
-                .ThenPower("Tree Form", x => x.IsActive())
-                .ThenPower("Wolf Form", x => x.IsActive(false));
+            TestScenario.Given.Game
+                .WithHero("Druid").HasPowers("Tree Form", "Wolf Form").Power("Wolf Form").IsActive()
+                .When.Player.TakesAction("Tree Form")
+                .Then(Verify.Hero.HasUsedAction())
+                .Then(Verify.Power("Tree Form").IsActive())
+                .Then(Verify.Power("Wolf Form").IsActive(false));
         }
 
         [Test]
@@ -234,11 +232,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         [Test]
         public void WolfForm_Activate()
         {
-            new TestScenario()
-                .GivenHero("Druid", x => x.HasPowers("Wolf Form"))
-                .WhenPlayerTakesAction("Wolf Form")
-                .ThenPower("Wolf Form", x => x.IsActive())
-                .ThenHero(x => x.HasUsedAction().CanGainGrace(false).FightDice(2).EludeDice(2));
+            TestScenario.Given.Game
+                .WithHero("Druid").HasPowers("Wolf Form")
+                .When.Player.TakesAction("Wolf Form")
+                .Then(Verify.Hero.HasUsedAction().CanGainGrace(false).FightDice(2).EludeDice(2))
+                .Then(Verify.Power("Wolf Form").IsActive());
         }
     }
 }
