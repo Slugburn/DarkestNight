@@ -7,8 +7,7 @@ namespace Slugburn.DarkestNight.Rules.Players
 {
     public class CallbackRouter
     {
-        private static readonly Regex _action = new Regex(@"^Action:(?<action>[A-Za-z\W]*)(?:\/(?<path>.*))?$");
-        private static Regex _event = new Regex(@"^Event:(?<event>[A-Za-z\W]*)(?:\/(?<path>.*))?$");
+        private static readonly Regex _regex = new Regex(@"^(?<type>[A-Za-z]*):(?<name>[A-Za-z\W]*)(?:\/(?<path>.*))?$");
 
         public static void Route(Game game, Callback callback, object data)
         {
@@ -22,23 +21,29 @@ namespace Slugburn.DarkestNight.Rules.Players
         private static Tuple<ICallbackHandler, string> GetRoute(Hero hero, Callback callback)
         {
             var route = callback.Route;
-            var actionMatch = _action.Match(route);
-            if (actionMatch.Success)
+            var match = _regex.Match(route);
+            if (!match.Success)
+                throw new ArgumentOutOfRangeException(nameof(callback.Route), callback.Route);
+            var type = match.Groups["type"].Value;
+            var name = match.Groups["name"].Value;
+            var path = match.Groups["path"].Value;
+            var handler = GetHandler(hero, type, name);
+            return Tuple.Create(handler, path);
+        }
+
+        private static ICallbackHandler GetHandler(Hero hero, string type, string name)
+        {
+            switch (type)
             {
-                var actionName = actionMatch.Groups["action"].Value;
-                var path = actionMatch.Groups["path"].Value;
-                var action = hero.GetAction(actionName) as ICallbackHandler;
-                return Tuple.Create(action, path);
+                case "Action":
+                    return (ICallbackHandler) hero.GetAction(name);
+                case "Event":
+                    return (ICallbackHandler) EventFactory.CreateCard(name);
+                case "Power":
+                    return (ICallbackHandler) hero.GetPower(name);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type);
             }
-            var eventMatch = _event.Match(route);
-            if (eventMatch.Success)
-            {
-                var eventName = eventMatch.Groups["event"].Value;
-                var eventCard = EventFactory.CreateCard(eventName);
-                var path = eventMatch.Groups["path"].Value;
-                return Tuple.Create(eventCard as ICallbackHandler, path);
-            }
-            throw new NotImplementedException();
         }
     }
 

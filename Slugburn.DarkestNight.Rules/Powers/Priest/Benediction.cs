@@ -2,6 +2,7 @@
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Priest
@@ -35,7 +36,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             return target.Location == hero.Location && target.Grace < target.DefaultGrace && target.CanGainGrace;
         }
 
-        internal class BenedictionAction : PowerAction
+        internal class BenedictionAction : PowerAction, ICallbackHandler
         {
             public BenedictionAction() : base(PowerName)
             {
@@ -48,17 +49,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
 
                 var validTargets = hero.Game.Heroes.Where(target => IsValidTarget(hero, target)).ToList();
 
-                hero.SetHeroSelectionHandler(new BenedictionHeroSelection());
-
                 var view = new PlayerHeroSelection(validTargets);
-                hero.Player.DisplayHeroSelection(view);
+                hero.Player.DisplayHeroSelection(view, Callback.ForAction(hero, this));
             }
-        }
 
-        internal class BenedictionHeroSelection : IHeroSelectionHandler
-        {
-            public void Handle(Hero hero, Hero selectedHero)
+            public void HandleCallback(Hero hero, string path, object data)
             {
+                var selectedHero = (Hero) data;
                 if (!IsValidTarget(hero, selectedHero))
                     throw new InvalidOperationException($"{selectedHero.Name} is not a valid target for {PowerName}.");
                 selectedHero.GainGrace(1, selectedHero.DefaultGrace);

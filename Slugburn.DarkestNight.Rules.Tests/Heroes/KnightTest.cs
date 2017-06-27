@@ -1,6 +1,4 @@
 ﻿using NUnit.Framework;
-using NUnit.Framework.Internal;
-using Slugburn.DarkestNight.Rules.Tests.Fakes;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
 using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 
@@ -75,7 +73,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WithHero("Knight").HasPowers("Holy Mantle").Grace(0)
                 .Then(Verify.Hero().DefaultGrace(6).Grace(0))
                 .When.Player.TakesAction("Pray", Fake.Rolls(2, 3)).AcceptsRoll()
-                .Then(Verify.Hero().Rolled(3, 4).DefaultGrace(6).Grace(2));
+                .Then(Verify.Hero().Rolled(3, 4).DefaultGrace(6).Grace(2).HasUsedAction());
         }
 
         // Oath of Defense (Action): 

@@ -173,11 +173,6 @@ namespace Slugburn.DarkestNight.Rules
             Triggers.Send(GameTrigger.PlayerSelectedPower, powerName);
         }
 
-        public void SelectBlight(Location location, Blight blight)
-        {
-            Triggers.Send(GameTrigger.PlayerSelectedBlight, new BlightLocation(blight, location));
-        }
-
         public static ICollection<Location> GetAllLocations()
         {
             return new[]
@@ -190,6 +185,13 @@ namespace Slugburn.DarkestNight.Rules
                 Location.Ruins,
                 Location.Swamp
             };
+        }
+
+        public Find DrawSearchResult(Location location)
+        {
+            var map = Maps.Draw();
+            var result = map.GetSearchResult(location);
+            return result;
         }
     }
 }

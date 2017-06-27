@@ -5,14 +5,13 @@ namespace Slugburn.DarkestNight.Rules.Players
 {
     public interface IPlayer
     {
-        bool AskUsePower(string name, string description);
         PlayerState State { get; set; }
         void DisplayEvent(PlayerEvent playerEvent);
         void DisplayConflict(PlayerConflict conflict);
         void DisplayPowers(ICollection<PlayerPower> powers);
-        void DisplayBlightSelection(PlayerBlightSelection blightSelection);
+        void DisplayBlightSelection(PlayerBlightSelection blightSelection, Callback callback);
         void DisplayLocationSelection(ICollection<string> locations, Callback callback);
         void DisplayNecromancer(PlayerNecromancer necromancer);
-        void DisplayHeroSelection(PlayerHeroSelection view);
+        void DisplayHeroSelection(PlayerHeroSelection view, Callback callback);
     }
 }

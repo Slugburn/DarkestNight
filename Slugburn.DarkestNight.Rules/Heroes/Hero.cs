@@ -23,8 +23,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         private readonly Stash _stash;
         private readonly Dictionary<string, ITactic> _tactics;
         private readonly List<ActionFilter> _actionFilters;
-        private IBlightSelectedHandler _blightSelectedHandler;
-        private IHeroSelectionHandler _heroSelectionHandler;
 
         public Hero()
         {
@@ -48,10 +46,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public TriggerRegistry<HeroTrigger, Hero> Triggers { get; }
         public RollState CurrentRoll { get; set; }
 
-        public List<IPower> PowerDeck
-        {
-            get { return _powerDeck; }
-        }
+        public List<IPower> PowerDeck => _powerDeck;
 
         public int DefaultGrace { get; set; }
         public int DefaultSecrecy { get; set; }
@@ -81,7 +76,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public int AvailableMovement { get; set; }
         public int FreeActions { get; set; }
-        public IPower SelectedPower { get; set; }
         public Queue<string> EventQueue { get; } = new Queue<string>();
         public List<string> Inventory { get; set; } = new List<string>();
         public bool SavedByGrace { get; private set; }
@@ -106,11 +100,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public ISpace GetSpace()
         {
             return Game.Board[Location];
-        }
-
-        public void StartTurn()
-        {
-            throw new NotImplementedException();
         }
 
         public IList<string> GetAvailableActions()
@@ -479,9 +468,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void DrawSearchResult()
         {
-            var map = Game.Maps.Draw();
-            var space = GetSpace();
-            var result = map.GetSearchResult(space.Location);
+            var result = Game.DrawSearchResult(Location);
             switch (result)
             {
                 case Find.Key:
@@ -530,28 +517,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             targets.Remove(target);
             if (targets.Any())
                 DisplayConflictState();
-        }
-
-        public void SetBlightSelectedHandler(IBlightSelectedHandler handler)
-        {
-            _blightSelectedHandler = handler;
-        }
-
-        public void SelectBlights(IEnumerable<BlightLocation> blightLocations)
-        {
-            _blightSelectedHandler.Handle(this, blightLocations);
-            _blightSelectedHandler = null;
-        }
-
-        public void SelectHero(Hero selectedHero)
-        {
-            _heroSelectionHandler.Handle(this, selectedHero);
-            _heroSelectionHandler = null;
-        }
-
-        public void SetHeroSelectionHandler(IHeroSelectionHandler handler)
-        {
-            _heroSelectionHandler = handler;
         }
     }
 }

@@ -98,6 +98,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 
         public IHeroContext IsActing()
         {
+            GetGame().ActingHero = _hero;
             _hero.IsActing = true;
             _hero.IsActionAvailable = true;
             return this;

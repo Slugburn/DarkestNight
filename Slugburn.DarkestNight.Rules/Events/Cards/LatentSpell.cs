@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -32,10 +33,9 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                     hero.RollEventDice(new EventRollHandler(Detail));
                     return;
                 case "destroy-blight":
-                    hero.Game.Triggers.Add(GameTrigger.PlayerSelectedBlight, Detail.Name, new LatentSpellBlightSelected() );
                     var blights = hero.Game.Board.Spaces.SelectMany(s => s.Blights.Select(b => new PlayerBlight {Location = s.Location, Blight = b})).ToList();
                     var selection = new PlayerBlightSelection(blights);
-                    hero.Player.DisplayBlightSelection(selection);
+                    hero.Player.DisplayBlightSelection(selection, Callback.ForEvent(hero, this));
                     break;
                 case "draw-power":
                     var power = hero.PowerDeck.First();
@@ -58,17 +58,15 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
 
         public void HandleCallback(Hero hero, string path, object data)
         {
-            var location = (Location) data;
-            hero.MoveTo(location);
-        }
-
-        private class LatentSpellBlightSelected : ITriggerHandler<Game>
-        {
-            public void HandleTrigger(Game game, string source, TriggerContext context)
+            if (data is Location)
             {
-                var blightSelection = context.GetState<BlightLocation>();
-                game.DestroyBlight(blightSelection.Location, blightSelection.Blight);
-                game.Triggers.RemoveBySource(source);
+                var location = (Location)data;
+                hero.MoveTo(location);
+            }
+            else if (data is IEnumerable<BlightLocation>)
+            {
+                var blightLocation = ((IEnumerable<BlightLocation>) data).Single();
+                hero.Game.DestroyBlight(blightLocation.Location, blightLocation.Blight);
             }
         }
     }

@@ -48,12 +48,27 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void BlessingOfFaith()
         {
             TestScenario.Game
+                .WithHero("Druid").At("Village")
+                .WithHero("Acolyte").Grace(0).At("Monastery")
+                .WithHero("Priest").HasPowers("Blessing of Faith").At("Monastery")
+                .When.Player.TakesAction("Blessing of Faith")
+                .Then(Verify.Player.HeroSelectionView("Acolyte","Priest"))
+                .When.Player.SelectsHero("Acolyte")
+                .Given.Hero("Acolyte").IsActing()
+                .When.Player.TakesAction("Pray", Fake.Rolls(1, 1)).AcceptsRoll()
+                .Then(Verify.Hero("Acolyte").Grace(1).HasUsedAction());
+        }
+        [Test]
+        public void BlessingOfFaith_Exhausted()
+        {
+            TestScenario.Game
                 .WithHero("Acolyte").Grace(0).At("Monastery")
                 .WithHero("Priest").HasPowers("Blessing of Faith").At("Monastery")
                 .When.Player.TakesAction("Blessing of Faith").SelectsHero("Acolyte")
+                .Given.Hero("Priest").Power("Blessing of Faith").IsExhausted()
                 .Given.Hero("Acolyte").IsActing()
-                .When.Player.TakesAction("Pray", Fake.Rolls(6, 6))
-                .Then(Verify.Hero("Acolyte").Grace(3).HasUsedAction());
+                .When.Player.TakesAction("Pray", Fake.Rolls(1, 1)).AcceptsRoll()
+                .Then(Verify.Hero("Acolyte").Grace(0).HasUsedAction());
         }
 
 

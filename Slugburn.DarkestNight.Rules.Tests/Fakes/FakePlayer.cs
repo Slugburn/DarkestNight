@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Shouldly;
 using Slugburn.DarkestNight.Rules.Blights;
@@ -11,23 +10,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 {
     public class FakePlayer : IPlayer
     {
-        private readonly List<Tuple<Blight, int>> _blightRollAssignments;
         private readonly Game _game;
-        private readonly Queue<bool> _rollAnotherDie;
-        private readonly Dictionary<string, bool> _usePowerResponse;
-        private Blight[] _blightChoice;
-        private Location? _locationChoice;
 
         private Callback _callback;
-
-        private string _tacticChoice;
 
         public FakePlayer(Game game)
         {
             _game = game;
-            _usePowerResponse = new Dictionary<string, bool>();
-            _blightRollAssignments = new List<Tuple<Blight, int>>();
-            _rollAnotherDie = new Queue<bool>();
         }
 
         public PlayerBlightSelection BlightSelection { get; set; }
@@ -39,13 +28,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         public PlayerNecromancer Necromancer { get; set; }
 
         public PlayerHeroSelection HeroSelection { get; set; }
-
-        public bool AskUsePower(string name, string description)
-        {
-            if (_usePowerResponse.ContainsKey(name))
-                return _usePowerResponse[name];
-            return false;
-        }
 
         public PlayerState State { get; set; }
 
@@ -64,9 +46,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             Powers = powers;
         }
 
-        public void DisplayBlightSelection(PlayerBlightSelection blightSelection)
+        public void DisplayBlightSelection(PlayerBlightSelection blightSelection, Callback callback)
         {
             BlightSelection = blightSelection;
+            _callback = callback;
         }
 
         public void DisplayLocationSelection(ICollection<string> locations, Callback callback)
@@ -80,76 +63,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             Necromancer = necromancer;
         }
 
-        public void DisplayHeroSelection(PlayerHeroSelection view)
+        public void DisplayHeroSelection(PlayerHeroSelection view, Callback callback)
         {
             HeroSelection = view;
+            _callback = callback;
         }
 
-        public List<Blight> ChooseBlights(ICollection<Blight> choices, int min, int max)
-        {
-            if (CancelBlightSelectionSpecified())
-                return new List<Blight>();
-            var choice = ChooseBlights(choices);
-            if (choice.Count < min || choice.Count > max)
-                throw new Exception("Invalid choices have been specified for IPlayer.ChooseBlights().");
-            return choice;
-        }
-
-        public Location ChooseLocation(IEnumerable<Location> choices)
-        {
-            if (_locationChoice == Location.None) return Location.None;
-            var choice = choices.SingleOrDefault(x => x == _locationChoice);
-            if (choice == Location.None)
-                throw new Exception("No valid choice was specified for IPlayer.ChooseLocation().");
-            return choice;
-        }
-
-        public void SetUsePowerResponse(string name, bool value)
-        {
-            _usePowerResponse[name] = value;
-        }
-
-
-        public void SetTacticChoice(string powerName)
-        {
-            _tacticChoice = powerName;
-        }
-
-
-        public void SetBlightChoice(Blight[] blights)
-        {
-            _blightChoice = blights;
-        }
-
-        public void SetBlightRollAssignment(Blight blight, int roll)
-        {
-            _blightRollAssignments.Add(Tuple.Create(blight, roll));
-        }
-
-        private List<Blight> ChooseBlights(ICollection<Blight> choices)
-        {
-            if (_blightChoice == null || _blightChoice.Except(choices).ToList().Any())
-                throw new Exception("Invalid choices have been specified for IPlayer.ChooseBlights().");
-            var choice = choices.Intersect(_blightChoice).ToList();
-            return choice;
-        }
-
-        private bool CancelBlightSelectionSpecified()
-        {
-            return _blightChoice != null && _blightChoice.Length == 1 && _blightChoice[0] == Blight.None;
-        }
-
-
-        public void SetLocationChoice(Location location)
-        {
-            _locationChoice = location;
-        }
-
-        public void SetRollAnotherDieChoice(bool[] choices)
-        {
-            foreach (var choice in choices)
-                _rollAnotherDie.Enqueue(choice);
-        }
 
         public void SelectEventOption(string option)
         {
@@ -189,7 +108,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public void SelectBlight(Location location, Blight blight)
         {
-            _game.SelectBlight(location, blight);
+            var data = new[] {new BlightLocation(blight, location)};
+            CallbackRouter.Route(_game, _callback, data);
         }
 
         public void FinishNecromancerTurn()
@@ -213,14 +133,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         {
             var hero = _game.ActingHero;
             var blightLocations = blights.Select(b => new BlightLocation(b.ToEnum<Blight>(), hero.Location));
-            hero.SelectBlights(blightLocations);
+            CallbackRouter.Route(_game, _callback, blightLocations);
         }
 
         public void SelectHero(string heroName)
         {
             var selectedHero = _game.GetHero(heroName);
-            var hero = _game.ActingHero;
-            hero.SelectHero(selectedHero);
+            CallbackRouter.Route(_game, _callback, selectedHero);
         }
     }
 }

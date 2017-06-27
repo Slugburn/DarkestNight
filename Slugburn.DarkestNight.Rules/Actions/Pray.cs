@@ -1,5 +1,6 @@
 ﻿using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
+using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
@@ -8,6 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
         public string Name => "Pray";
         public void Act(Hero hero)
         {
+            hero.IsActionAvailable = false;
             hero.State = HeroState.Praying;
             var rollState = hero.SetRoll(RollBuilder.Create<PrayerRoll>().Type(RollType.Pray).Base("Pray", 2).Target(3));
             rollState.Roll();
@@ -30,6 +32,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 var successes = rollState.Successes;
                 hero.GainGrace(successes, hero.DefaultGrace);
                 hero.RefreshPowers();
+                hero.Triggers.Send(HeroTrigger.Praying);
             }
         }
     }
