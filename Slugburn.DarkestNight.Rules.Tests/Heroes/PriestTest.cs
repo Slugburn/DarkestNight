@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
 using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 
@@ -207,8 +208,41 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
 
         // Miracle (Bonus)
         // Spend 1 Grace to reroll any die roll you make. You may do this repeatedly.
+        [Test]
+        public void Miracle()
+        {
+            TestScenario
+                .Game.WithHero("Priest").HasPowers("Miracle")
+                .Given.Hero().HasDrawnEvent("Twist of Fate")
+                .Then(Verify.Player.EventView.HasBody("Twist of Fate", 1, "Roll 1d and take the highest").HasOptions("Roll"))
+                .When.Player.SelectsEventOption("Roll", Fake.Rolls(1))
+                .Then(Verify.Player.EventView.ActiveRow("-1d (to a minimum of 1d) on all rolls for the rest of this turn"))
+                .When.Player.TakesAction("Miracle", Fake.Rolls(6))
+                .Then(Verify.Player.EventView.ActiveRow("+1d on all rolls for the rest of this turn"))
+                .When.Player.SelectsEventOption("Continue")
+                .Then(Verify.Hero().LostGrace(1).HasDieModifier("Twist of Fate", RollType.Any, 1).FightDice(2).EludeDice(2).SearchDice(2));
+        }
 
         // Sanctuary (Tactic)
         // Elude with 4d. Lose 1 Secrecy if you succeed.
+        [Test]
+        public void Sanctuary()
+        {
+            TestScenario
+                .Game.WithHero("Priest").HasPowers("Sanctuary")
+                .Given.Hero().FacesEnemy("Zombie")
+                .When.Player.CompletesConflict("Zombie", "Sanctuary", Fake.Rolls(1,2,3,4))
+                .Then(Verify.Hero().RolledNumberOfDice(4).LostSecrecy());
+        }
+
+        [Test]
+        public void Sanctuary_Failure()
+        {
+            TestScenario
+                .Game.WithHero("Priest").HasPowers("Sanctuary")
+                .Given.Hero().FacesEnemy("Zombie")
+                .When.Player.CompletesConflict("Zombie", "Sanctuary", Fake.Rolls(1, 2, 1, 2))
+                .Then(Verify.Hero().RolledNumberOfDice(4).WasWounded());
+        }
     }
 }

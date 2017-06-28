@@ -102,7 +102,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             var searchDice = dice.Total;
             Assert.That(searchDice, Is.EqualTo(_expectedSearchDice), "Unexpected number of Search dice.");
             if (_expectedDiceCount > 0)
-                Assert.That(hero.CurrentRoll.AdjustedRoll.Count, Is.EqualTo(_expectedDiceCount));
+                hero.CurrentRoll.AdjustedRoll.Count.ShouldBe(_expectedDiceCount, "Unexpected number of dice rolled.");
             if (_expectedRoll != null)
             {
                 Assert.That(hero.CurrentRoll, Is.Not.Null, "No roll was made");

@@ -1,20 +1,55 @@
 ﻿using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Rolls;
+using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Priest
 {
     class Sanctuary : TacticPower
     {
+        private const string PowerName = "Sanctuary";
+
         public Sanctuary()
             : base(TacticType.Elude, 4)
         {
-            Name = "Sanctuary";
+            Name = PowerName;
             StartingPower = true;
             Text = "Elude with 4d. Lose 1 Secrecy if you succeed.";
         }
 
-        //            public override void Activate()
-        //            {
-        //                Hero.SetDice(RollType.Elude, 4);
-        //            }
+        public override void Learn(Hero hero)
+        {
+            base.Learn(hero);
+            hero.AddTactic(new SanctuaryTactic());
+        }
+
+        internal class SanctuaryTactic : PowerTactic
+        {
+            public SanctuaryTactic()
+            {
+                PowerName = Sanctuary.PowerName;
+                Type = TacticType.Elude;
+                DiceCount = 4;
+            }
+
+            public override void Use(Hero hero)
+            {
+                base.Use(hero);
+                hero.CurrentRoll.AddRollHandler<SantuaryRoll>();
+            }
+
+            internal class SantuaryRoll : IRollHandler
+            {
+                public RollState HandleRoll(Hero hero, RollState rollState)
+                {
+                    return rollState;
+                }
+
+                public void AcceptRoll(Hero hero, RollState rollState)
+                {
+                    if (rollState.Successes > 0)
+                        hero.LoseSecrecy(1, "Enemy");
+                }
+            }
+        }
     }
 }
