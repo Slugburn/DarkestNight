@@ -163,14 +163,9 @@ namespace Slugburn.DarkestNight.Rules
 
         public void DestroyBlight(Location location, Blight blight)
         {
-            var space = (Space) Board[location];
+            var space = Board[location];
             space.RemoveBlight(blight);
             Triggers.Send(GameTrigger.BlightDestroyed, location);
-        }
-
-        public void SelectPower(string powerName)
-        {
-            Triggers.Send(GameTrigger.PlayerSelectedPower, powerName);
         }
 
         public static ICollection<Location> GetAllLocations()

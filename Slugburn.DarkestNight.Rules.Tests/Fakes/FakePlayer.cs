@@ -40,9 +40,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             Conflict = conflict;
         }
 
-        public void DisplayPowers(ICollection<PlayerPower> powers)
+        public void DisplayPowers(ICollection<PlayerPower> powers, Callback callback)
         {
             Powers = powers;
+            _callback = callback;
         }
 
         public void DisplayBlightSelection(PlayerBlightSelection blightSelection, Callback callback)
@@ -110,7 +111,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public void SelectPower(string powerName)
         {
-            _game.SelectPower(powerName);
+            var power = _game.ActingHero.GetPower(powerName);
+            CallbackRouter.Route(_game, _callback, power);
         }
 
         public void SelectBlight(Location location, Blight blight)

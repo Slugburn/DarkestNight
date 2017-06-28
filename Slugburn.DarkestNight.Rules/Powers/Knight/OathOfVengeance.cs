@@ -17,10 +17,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         public override void Activate(Hero hero)
         {
             base.Activate(hero);
-            hero.Triggers.Add(HeroTrigger.AfterRoll, Name, new AfterRoll());
+            hero.Triggers.Add(HeroTrigger.Rolled, Name, new AfterRoll());
             hero.Triggers.Add(HeroTrigger.FightWon, Name, new OathFulfilled());
-            hero.Triggers.Add(HeroTrigger.Hiding, Name, new OathBroken());
-            hero.Triggers.Add(HeroTrigger.Searching, Name, new OathBroken());
+            hero.Triggers.Add(HeroTrigger.Hidden, Name, new OathBroken());
+            hero.Triggers.Add(HeroTrigger.Searched, Name, new OathBroken());
         }
 
         public override void Fulfill(Hero hero)

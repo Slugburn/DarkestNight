@@ -35,7 +35,7 @@ namespace Slugburn.DarkestNight.Rules.Rolls
             ActualRoll = Die.Roll(total);
             AdjustedRoll = ActualRoll.ToList();
             _rollHandlers.ForEach(x => x.HandleRoll(Hero, this));
-            Hero.Triggers.Send(HeroTrigger.AfterRoll, RollType);
+            Hero.Triggers.Send(HeroTrigger.Rolled, RollType);
         }
 
         public void Accept()

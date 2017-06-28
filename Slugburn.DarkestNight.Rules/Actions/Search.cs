@@ -11,12 +11,12 @@ namespace Slugburn.DarkestNight.Rules.Actions
         public string Name => "Search";
         public void Act(Hero hero)
         {
-            hero.Triggers.Send(HeroTrigger.Searching);
             var space = hero.GetSpace();
             var state = hero.SetRoll(RollBuilder.Create<SearchRollHandler>()
                 .Type(RollType.Search)
                 .Base("Search", 1)
                 .Target(space.SearchTarget));
+            hero.Triggers.Send(HeroTrigger.Searched);
             state.Roll();
             hero.IsActionAvailable = false;
         }

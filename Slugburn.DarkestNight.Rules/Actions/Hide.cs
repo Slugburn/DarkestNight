@@ -10,10 +10,10 @@ namespace Slugburn.DarkestNight.Rules.Actions
         public void Act(Hero hero)
         {
             hero.IsActionAvailable = false;
-            hero.Triggers.Send(HeroTrigger.Hiding);
             hero.RefreshPowers();
             if (hero.Secrecy < 5)
                 hero.GainSecrecy(1, 5);
+            hero.Triggers.Send(HeroTrigger.Hidden);
         }
 
         public bool IsAvailable(Hero hero)

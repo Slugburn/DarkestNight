@@ -34,7 +34,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             public override void Act(Hero hero)
             {
                 hero.Game.AddIgnoreBlight(IgnoreBlight.Create(Name, hero));
-                hero.Triggers.Add(HeroTrigger.StartTurn, Name, new DarkVeilEnds());
+                hero.Triggers.Add(HeroTrigger.StartedTurn, Name, new DarkVeilEnds());
                 hero.GetPower(_powerName).Exhaust(hero);
             }
 
@@ -44,7 +44,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                 {
                     var hero = registrar;
                     hero.Game.RemoveIgnoreBlight(source);
-                    hero.Triggers.Remove(HeroTrigger.StartTurn, source);
+                    hero.Triggers.Remove(HeroTrigger.StartedTurn, source);
                 }
             }
         }

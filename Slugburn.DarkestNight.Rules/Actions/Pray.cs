@@ -31,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 var successes = rollState.Successes;
                 hero.GainGrace(successes, hero.DefaultGrace);
                 hero.RefreshPowers();
-                hero.Triggers.Send(HeroTrigger.Praying);
+                hero.Triggers.Send(HeroTrigger.Prayed);
             }
         }
     }

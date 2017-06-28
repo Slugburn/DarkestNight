@@ -19,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         {
             base.Learn(hero);
             hero.DefaultGrace += 1;
-            hero.Triggers.Add(HeroTrigger.AfterRoll, Name, new HolyMantleAfterRoll());
+            hero.Triggers.Add(HeroTrigger.Rolled, Name, new HolyMantleAfterRoll());
         }
 
         private class HolyMantleAfterRoll : ITriggerHandler<Hero>

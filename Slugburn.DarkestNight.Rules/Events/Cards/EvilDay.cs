@@ -4,11 +4,11 @@ using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
-using Slugburn.DarkestNight.Rules.Triggers;
+using Slugburn.DarkestNight.Rules.Powers;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class EvilDay : IEventCard
+    public class EvilDay : IEventCard, ICallbackHandler
     {
         public EventDetail Detail => EventDetail.Create("Evil Day", 5,
             x => x
@@ -23,9 +23,8 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 case "exhaust":
                     var powers = hero.Powers.Where(x => !x.Exhausted).Select(PlayerPower.FromPower).ToList();
                     var player = hero.Player;
-                    hero.Game.Triggers.Add(GameTrigger.PlayerSelectedPower, Detail.Name, new EvilDayPowerSelected());
                     player.State = PlayerState.SelectPower;
-                    player.DisplayPowers(powers);
+                    player.DisplayPowers(powers, Callback.ForEvent(hero, this));
                     break;
                 case "draw":
                     var newEvents = hero.Game.Events.Draw(2);
@@ -40,16 +39,11 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             }
         }
 
-        public class EvilDayPowerSelected : ITriggerHandler<Game>
+        public void HandleCallback(Hero hero, string path, object data)
         {
-            public void HandleTrigger(Game game, string source, TriggerContext context)
-            {
-                var hero = game.ActingHero;
-                var powerName = context.GetState<string>();
-                var power = hero.GetPower(powerName);
-                power.Exhaust(hero);
-                hero.EndEvent();
-            }
+            var power = (IPower) data;
+            power.Exhaust(hero);
+            hero.EndEvent();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            hero.Triggers.Add(HeroTrigger.LoseSecrecy, Name, new DeathMaskTriggerHandler());
+            hero.Triggers.Add(HeroTrigger.LosingSecrecy, Name, new DeathMaskTriggerHandler());
         }
 
         private class DeathMaskTriggerHandler : ITriggerHandler<Hero>

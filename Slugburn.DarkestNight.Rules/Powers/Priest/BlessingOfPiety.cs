@@ -15,7 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
         public override void HandleCallback(Hero hero, string path, object data)
         {
             var selectedHero = (Hero)data;
-            selectedHero.Triggers.Add(HeroTrigger.Hiding, Name, new BlessingOfPietyWhenHiding(this));
+            selectedHero.Triggers.Add(HeroTrigger.Hidden, Name, new BlessingOfPietyWhenHiding(this));
         }
 
         private class BlessingOfPietyWhenHiding : ITriggerHandler<Hero>

@@ -10,7 +10,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
         public void Act(Hero hero)
         {
             hero.IsActing = true;
-            hero.Triggers.Send(HeroTrigger.StartTurn);
+            hero.Triggers.Send(HeroTrigger.StartedTurn);
             if (hero.Location == hero.Game.Necromancer.Location)
                 hero.LoseSecrecy("Necromancer");
             hero.AvailableActions = hero.GetAvailableActions();

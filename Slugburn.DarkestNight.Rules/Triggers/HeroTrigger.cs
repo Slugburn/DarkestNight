@@ -3,19 +3,18 @@ namespace Slugburn.DarkestNight.Rules.Triggers
     public enum HeroTrigger
     {
         EndOfTurn,
-        Hiding,
-        Praying,
-        AfterRoll,
-        StartTurn,
-        BeforeBlightDefends,
-        LoseSecrecy,
+        Hidden,
+        Prayed,
+        Rolled,
+        StartedTurn,
+        LosingSecrecy,
         EventDrawn,
         EventOptionSelected,
         Moved,
         DestroyedBlight,
         FightWon,
         Eluding,
-        Searching,
+        Searched,
         Moving
     }
 }

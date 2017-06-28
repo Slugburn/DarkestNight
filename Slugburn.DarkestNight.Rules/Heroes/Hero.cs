@@ -176,7 +176,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void LoseSecrecy(int amount, string sourceName = null)
         {
-            if (!Triggers.Send(HeroTrigger.LoseSecrecy, sourceName)) return;
+            if (!Triggers.Send(HeroTrigger.LosingSecrecy, sourceName)) return;
             Secrecy = Math.Max(Secrecy - amount, 0);
         }
 

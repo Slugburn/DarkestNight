@@ -21,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
         public override void HandleCallback(Hero hero, string path, object data)
         {
             var selectedHero = (Hero) data;
-            selectedHero.Triggers.Add(HeroTrigger.Praying, Name, new BlessingOfFaithWhenPraying(hero.Name) );
+            selectedHero.Triggers.Add(HeroTrigger.Prayed, Name, new BlessingOfFaithWhenPraying(hero.Name) );
         }
 
         internal class BlessingOfFaithWhenPraying : ITriggerHandler<Hero>

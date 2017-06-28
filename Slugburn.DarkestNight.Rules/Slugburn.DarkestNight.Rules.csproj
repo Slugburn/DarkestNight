@@ -52,7 +52,6 @@
     <Compile Include="Actions\Search.cs" />
     <Compile Include="Actions\StartTurn.cs" />
     <Compile Include="Actions\Travel.cs" />
-    <Compile Include="ActionType.cs" />
     <Compile Include="Blights\BlightDetail.cs" />
     <Compile Include="Blights\BlightLocation.cs" />
     <Compile Include="Blights\TargetDieAssignment.cs" />

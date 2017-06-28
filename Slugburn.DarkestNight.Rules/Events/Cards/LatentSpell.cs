@@ -39,7 +39,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 case "draw-power":
                     var power = hero.PowerDeck.First();
                     hero.LearnPower(power.Name);
-                    hero.Player.DisplayPowers(new [] {power}.ToPlayerPowers());
+                    hero.Player.DisplayPowers(new [] {power}.ToPlayerPowers(), Callback.ForEvent(hero, this));
                     hero.Player.State = PlayerState.SelectPower;
                     break;
                 case "move":

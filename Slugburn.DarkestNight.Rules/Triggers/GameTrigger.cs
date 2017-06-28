@@ -3,7 +3,6 @@
     public enum GameTrigger
     {
         BlightDestroyed,
-        NecromancerDetectsHeroes,
-        PlayerSelectedPower
+        NecromancerDetectsHeroes
     }
 }

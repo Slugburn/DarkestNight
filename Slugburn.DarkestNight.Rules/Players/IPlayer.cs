@@ -8,7 +8,7 @@ namespace Slugburn.DarkestNight.Rules.Players
         PlayerState State { get; set; }
         void DisplayEvent(PlayerEvent playerEvent);
         void DisplayConflict(PlayerConflict conflict);
-        void DisplayPowers(ICollection<PlayerPower> powers);
+        void DisplayPowers(ICollection<PlayerPower> powers, Callback callback);
         void DisplayBlightSelection(PlayerBlightSelection blightSelection, Callback callback);
         void DisplayLocationSelection(ICollection<string> locations, Callback callback);
         void DisplayNecromancer(PlayerNecromancer necromancer);
