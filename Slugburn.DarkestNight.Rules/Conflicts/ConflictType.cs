@@ -1,4 +1,4 @@
-namespace Slugburn.DarkestNight.Rules
+namespace Slugburn.DarkestNight.Rules.Conflicts
 {
     public enum ConflictType
     {

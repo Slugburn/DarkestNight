@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Events;
 using Slugburn.DarkestNight.Rules.Extensions;
@@ -196,13 +197,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             _stash.Add(item);
         }
-
-        public void Remove<T>(T item)
-        {
-            _stash.Remove(item);
-        }
-
-
+        
         public void MoveTo(Location location)
         {
             if (!Triggers.Send(HeroTrigger.Moving))

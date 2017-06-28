@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Enemies

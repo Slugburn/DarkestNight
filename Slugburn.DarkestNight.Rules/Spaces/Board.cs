@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Slugburn.DarkestNight.Rules.Spaces;
 
-namespace Slugburn.DarkestNight.Rules
+namespace Slugburn.DarkestNight.Rules.Spaces
 {
     public class Board
     {

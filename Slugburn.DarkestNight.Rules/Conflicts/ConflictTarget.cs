@@ -1,7 +1,7 @@
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Powers;
 
-namespace Slugburn.DarkestNight.Rules
+namespace Slugburn.DarkestNight.Rules.Conflicts
 {
     public class ConflictTarget
     {

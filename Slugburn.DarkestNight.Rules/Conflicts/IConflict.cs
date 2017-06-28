@@ -1,6 +1,6 @@
 ﻿using Slugburn.DarkestNight.Rules.Heroes;
 
-namespace Slugburn.DarkestNight.Rules
+namespace Slugburn.DarkestNight.Rules.Conflicts
 {
     public interface IConflict
     {

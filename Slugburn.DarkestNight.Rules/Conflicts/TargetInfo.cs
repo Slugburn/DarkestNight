@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Slugburn.DarkestNight.Rules
+namespace Slugburn.DarkestNight.Rules.Conflicts
 {
     public class TargetInfo
     {

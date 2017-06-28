@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights.Implementations;
+using Slugburn.DarkestNight.Rules.Conflicts;
 
 namespace Slugburn.DarkestNight.Rules.Blights
 {

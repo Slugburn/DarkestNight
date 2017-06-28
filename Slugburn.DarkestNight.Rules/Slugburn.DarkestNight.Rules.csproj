@@ -71,10 +71,11 @@
     <Compile Include="Blights\Implementations\Taint.cs" />
     <Compile Include="Blights\Implementations\EnemyGenerator.cs" />
     <Compile Include="Blights\Implementations\UnholyAura.cs" />
-    <Compile Include="Board.cs" />
-    <Compile Include="ConflictTarget.cs" />
-    <Compile Include="ConflictState.cs" />
-    <Compile Include="ConflictType.cs" />
+    <Compile Include="Conflicts\ConflictState.cs" />
+    <Compile Include="Conflicts\ConflictTarget.cs" />
+    <Compile Include="Conflicts\ConflictType.cs" />
+    <Compile Include="Conflicts\IConflict.cs" />
+    <Compile Include="Conflicts\TargetInfo.cs" />
     <Compile Include="Enemies\Cultist.cs" />
     <Compile Include="Enemies\Enemy.cs" />
     <Compile Include="Enemies\EnemyExtension.cs" />
@@ -129,7 +130,6 @@
     <Compile Include="Heroes\Impl\Seer.cs" />
     <Compile Include="Heroes\Impl\Wizard.cs" />
     <Compile Include="Heroes\PreventMovementEffect.cs" />
-    <Compile Include="IConflict.cs" />
     <Compile Include="IgnoreBlight.cs" />
     <Compile Include="Items\Artifacts\BloodRing.cs" />
     <Compile Include="Items\Artifacts\CrystalBall.cs" />
@@ -214,6 +214,7 @@
     <Compile Include="Rolls\RollState.cs" />
     <Compile Include="Rolls\RollType.cs" />
     <Compile Include="Rolls\StaticRollBonus.cs" />
+    <Compile Include="Spaces\Board.cs" />
     <Compile Include="Spaces\SpaceExtension.cs" />
     <Compile Include="Tactics\BasicEludeTactic.cs" />
     <Compile Include="Tactics\ITactic.cs" />
@@ -227,7 +228,6 @@
     <Compile Include="Tactics\PowerTactic.cs" />
     <Compile Include="Tactics\TacticExtension.cs" />
     <Compile Include="Tactics\TacticInfo.cs" />
-    <Compile Include="TargetInfo.cs" />
     <Compile Include="Triggers\GameTrigger.cs" />
     <Compile Include="Triggers\HeroTrigger.cs" />
     <Compile Include="Triggers\TriggerContext.cs" />
@@ -237,7 +237,6 @@
     <Compile Include="Maps\IMap.cs" />
     <Compile Include="ISource.cs" />
     <Compile Include="Location.cs" />
-    <Compile Include="LocationAction.cs" />
     <Compile Include="Powers\ActionPower.cs" />
     <Compile Include="Powers\Bonus.cs" />
     <Compile Include="Powers\IPower.cs" />
@@ -255,7 +254,6 @@
     <Compile Include="Spaces\Space.cs" />
     <Compile Include="Spaces\Swamp.cs" />
     <Compile Include="Spaces\Village.cs" />
-    <Compile Include="TargetType.cs" />
     <Compile Include="Triggers\TriggerRegistry.cs" />
   </ItemGroup>
   <ItemGroup />
