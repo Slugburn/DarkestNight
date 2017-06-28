@@ -6,7 +6,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
 {
     public class Pray : IAction
     {
-        public string Name => "Pray";
+        public string Name { get; protected set; } = "Pray";
         public void Act(Hero hero)
         {
             hero.IsActionAvailable = false;
@@ -15,7 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             rollState.Roll();
         }
 
-        public bool IsAvailable(Hero hero)
+        public virtual bool IsAvailable(Hero hero)
         {
             return hero.IsActionAvailable && hero.State == HeroState.ChoosingAction && hero.Location == Location.Monastery;
         }

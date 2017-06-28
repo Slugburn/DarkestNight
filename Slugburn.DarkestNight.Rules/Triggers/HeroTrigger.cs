@@ -11,10 +11,12 @@ namespace Slugburn.DarkestNight.Rules.Triggers
         LoseSecrecy,
         EventDrawn,
         EventOptionSelected,
-        LocationChanged,
+        Moved,
         DestroyedBlight,
         FightWon,
         Eluding,
-        Searching
+        Searching,
+        Moving,
+        CreatingEventOptions
     }
 }

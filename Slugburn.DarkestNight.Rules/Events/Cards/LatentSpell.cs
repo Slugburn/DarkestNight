@@ -5,7 +5,6 @@ using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
-using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
@@ -17,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             .Row(5, "Draw a power card", o => o.Option("draw-power", "Continue"))
             .Row(4, "Move to any other location", r => r.Option("move", "Continue"))
             .Row(1, 3, "No effect", r => r.Option("no-effect", "Continue"))
-            .Option("spend-grace", "Spend Grace", hero => hero.Grace > 0)
+            .Option("spend-grace", "Spend Grace", hero => hero.CanSpendGrace)
             .Option("discard-event", "Discard Event"));
 
         public void Resolve(Hero hero, string option)

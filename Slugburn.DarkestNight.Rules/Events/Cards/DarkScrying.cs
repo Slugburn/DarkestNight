@@ -7,7 +7,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
     {
         public EventDetail Detail => EventDetail.Create("Dark Scrying", 4, x =>
             x.Text("Spend 1 Grace or lose 2 Secrecy.")
-                .Option("spend-grace", "Spend Grace", hero => hero.Grace > 0)
+                .Option("spend-grace", "Spend Grace", hero => hero.CanSpendGrace)
                 .Option("lose-secrecy", "Lose Secrecy"));
 
         public void Resolve(Hero hero, string option)

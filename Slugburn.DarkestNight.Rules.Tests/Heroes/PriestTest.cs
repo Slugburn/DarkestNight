@@ -126,12 +126,51 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
 
         // Calm (Bonus)
         // Heroes at your location may pray.
+        [Test]
+        public void Calm()
+        {
+            TestScenario.Game
+                .WithHero("Knight").At("Mountains")
+                .WithHero("Priest").At("Mountains").HasPowers("Calm")
+                .Then(Verify.Location("Mountains").HasAction("Pray [Calm]"))
+                .Given.Hero("Knight").IsActing()
+                .Then(Verify.Hero("Knight").CanTakeAction("Pray [Calm]"));
+        }
+
+        [Test]
+        public void CalmFollowsPriest()
+        {
+            TestScenario.Game
+                .WithHero("Priest").At("Mountains").HasPowers("Calm")
+                .Then(Verify.Location("Mountains").HasAction("Pray [Calm]"))
+                .When.Player.TakesAction("Travel").SelectsLocation("Village")
+                .Then(Verify.Location("Village").HasAction("Pray [Calm]"))
+                .Then(Verify.Location("Mountains").DoesNotHaveAction("Pray [Calm]"));
+        }
 
         // Censure (Tactic)
         // Fight with 2d.
+        [Test]
+        public void Censure()
+        {
+            TestScenario.Game
+                .WithHero("Priest").HasPowers("Censure").FacesEnemy("Skeleton")
+                .When.Player.CompletesConflict("Skeleton", "Censure")
+                .Then(Verify.Hero().RolledNumberOfDice(2));
+        }
 
         // Intercession (Bonus)
         // Whenever a hero at your location loses or spends Grace, they may spend your Grace instead.
+        [Test]
+        public void Intercession()
+        {
+            TestScenario.Game
+                .WithHero("Priest").HasPowers("Intercession")
+                .WithHero("Knight").Grace(0)
+                .Given.Hero("Knight").HasDrawnEvent("Latent Spell")
+                .Then(Verify.Player.EventView.HasOptions("Spend Grace [Intercession]", "Discard Event"));
+        }
+
 
         // Miracle (Bonus)
         // Spend 1 Grace to reroll any die roll you make. You may do this repeatedly.

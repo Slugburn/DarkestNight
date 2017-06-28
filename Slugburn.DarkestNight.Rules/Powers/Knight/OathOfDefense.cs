@@ -28,7 +28,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             {
                 hero.Triggers.Add(HeroTrigger.StartTurn, Name, new OathOfDefenseActive());
                 hero.Game.Triggers.Add(GameTrigger.BlightDestroyed, Name, new OathOfDefenseFulfilled { HeroName = hero.Name });
-                hero.Triggers.Add(HeroTrigger.LocationChanged, Name, new OathOfDefenseBroken());
+                hero.Triggers.Add(HeroTrigger.Moved, Name, new OathOfDefenseBroken());
             }
             hero.IsActionAvailable = false;
         }

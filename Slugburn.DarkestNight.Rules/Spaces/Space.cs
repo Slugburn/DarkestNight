@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
 
 namespace Slugburn.DarkestNight.Rules.Spaces
 {
-    public abstract class Space : ISpace
+    public abstract class Space
     {
-        private readonly List<Blight> _blights;
+        private readonly List<Blight> _blights = new List<Blight>();
+        private readonly List<IAction> _actions = new List<IAction>();
 
-        protected Space()
-        {
-            _blights = new List<Blight>();
-        }
 
         public Location Location { get; protected set; }
         public string Name { get; protected set; }
@@ -34,16 +31,6 @@ namespace Slugburn.DarkestNight.Rules.Spaces
             _blights.Remove(blight);
         }
 
-        public void Add<T>(T item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Remove<T>(T item)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<T> GetBlights<T>() where T: IBlightDetail
         {
             return _blights.Where(x=>x is T).Cast<T>();
@@ -52,6 +39,21 @@ namespace Slugburn.DarkestNight.Rules.Spaces
         public Blight GetBlight(Blight type)
         {
             return _blights.FirstOrDefault(x => x == type);
+        }
+
+        public IEnumerable<IAction> GetActions()
+        {
+            return _actions.ToList();
+        }
+
+        public void AddAction(IAction action)
+        {
+            _actions.Add(action);
+        }
+
+        public void RemoveAction(IAction action)
+        {
+            _actions.Remove(action);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace Slugburn.DarkestNight.Rules.Triggers
             var cancel = false;
             foreach (var item in items.ToList())
             {
-                var context = new TriggerContext(state);
+                var context = new TriggerContext(state, trigger);
                 item.Handler.HandleTrigger(_registrar, item.Source, context);
                 cancel = cancel || context.Cancel;
             }

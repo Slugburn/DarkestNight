@@ -10,7 +10,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             .Row(0, "Necromancer moves there")
             .Row(1, 2, "New blight there")
             .Row(3, 4, "+1 Darkness")
-            .Option("cancel", "Cancel", hero => hero.Grace > 0)
+            .Option("cancel", "Cancel", hero => hero.CanSpendGrace)
             .Option("cont", "Continue"));
 
         public void Resolve(Hero hero, string option)

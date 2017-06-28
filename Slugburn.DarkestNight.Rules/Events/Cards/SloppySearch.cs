@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 .Row(6, "Gain 1 Secrecy", o => o.Option("gain-secrecy", "Gain Secrecy"))
                 .Row(4, 5, "No effect", o => o.Option("no-effect", "No Effect"))
                 .Row(1, 3, "Spend 1 Grace or lose 1 Secrecy", o => o
-                    .Option("spend-grace", "Spend Grace", h => h.Grace > 0)
+                    .Option("spend-grace", "Spend Grace", h => h.CanSpendGrace)
                     .Option("lose-secrecy", "Lose Secrecy"))
                 .Option("roll", "Roll"));
 

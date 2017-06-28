@@ -11,7 +11,7 @@
         //            public override void Activate()
         //            {
         //                var action = new TriggeredAction(Trigger.AfterRoll, Text,
-        //                    hero => hero.OfferReroll().OnReroll(x => hero.LoseGrace())) { Condition = hero => hero.Grace > 0 };
+        //                    hero => hero.OfferReroll().OnReroll(x => hero.LoseGrace())) { Condition = hero => hero.CanSpendGrace };
         //                Hero.Add(action);
         //                Stash.Set(action);
         //            }

@@ -113,6 +113,7 @@
     <Compile Include="Events\EventEnemy.cs" />
     <Compile Include="Events\EventExtension.cs" />
     <Compile Include="Events\EventFactory.cs" />
+    <Compile Include="Events\EventOption.cs" />
     <Compile Include="Events\EventRollHandler.cs" />
     <Compile Include="Events\HeroEventOption.cs" />
     <Compile Include="Events\HeroEventRow.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="Rolls\RollState.cs" />
     <Compile Include="Rolls\RollType.cs" />
     <Compile Include="Rolls\StaticRollBonus.cs" />
+    <Compile Include="Spaces\SpaceExtension.cs" />
     <Compile Include="Tactics\BasicEludeTactic.cs" />
     <Compile Include="Tactics\ITactic.cs" />
     <Compile Include="Maps\Map.cs" />
@@ -235,7 +237,6 @@
     <Compile Include="Heroes\HeroState.cs" />
     <Compile Include="Maps\IMap.cs" />
     <Compile Include="ISource.cs" />
-    <Compile Include="ISpace.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="LocationAction.cs" />
     <Compile Include="Powers\ActionPower.cs" />

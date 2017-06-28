@@ -22,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             base.Activate(hero);
             hero.AddRollModifier(new OathOfPurgingModifier());
             hero.Triggers.Add(HeroTrigger.DestroyedBlight, Name, new OathOfPurgingFulfilled());
-            hero.Triggers.Add(HeroTrigger.LocationChanged, Name, new OathOfPurgingBroken());
+            hero.Triggers.Add(HeroTrigger.Moved, Name, new OathOfPurgingBroken());
         }
 
         public override bool Deactivate(Hero hero)

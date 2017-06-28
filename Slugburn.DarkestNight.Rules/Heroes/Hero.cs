@@ -10,6 +10,7 @@ using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Rolls;
+using Slugburn.DarkestNight.Rules.Spaces;
 using Slugburn.DarkestNight.Rules.Tactics;
 using Slugburn.DarkestNight.Rules.Triggers;
 
@@ -97,14 +98,16 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             return GetSpace().Blights;
         }
 
-        public ISpace GetSpace()
+        public Space GetSpace()
         {
             return Game.Board[Location];
         }
 
         public IList<string> GetAvailableActions()
         {
-            var actions = _actions.Values.Where(x => x.IsAvailable(this)).Select(x => x.Name);
+            var heroActions = _actions.Values;
+            var locationActions = GetSpace().GetActions();
+            var actions = heroActions.Concat(locationActions).Where(x => x.IsAvailable(this)).Select(x => x.Name);
             var filtered = _actionFilters.Where(x => x.State == State).Aggregate(actions, (x, filter) => x.Intersect(filter.Allowed));
             return filtered.ToList();
         }
@@ -134,7 +137,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void TakeWound()
         {
-            if (Grace > 0)
+            if (CanSpendGrace)
             {
                 LoseGrace();
                 SavedByGrace = true;
@@ -156,8 +159,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var card = EventFactory.CreateCard(eventName);
             CurrentEvent = card.Detail.GetHeroEvent(this);
             Triggers.Send(HeroTrigger.EventDrawn);
-            Player.State = PlayerState.Event;
-            Player.DisplayEvent(PlayerEvent.From(CurrentEvent));
+            DisplayCurrentEvent();
         }
 
         public void LoseSecrecy(string sourceName)
@@ -197,8 +199,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void MoveTo(Location location)
         {
+            if (!Triggers.Send(HeroTrigger.Moving))
+                return;
             Location = location;
-            Triggers.Send(HeroTrigger.LocationChanged);
+            Triggers.Send(HeroTrigger.Moved);
         }
 
         public void GainSecrecy(int amount, int max)
@@ -517,6 +521,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             targets.Remove(target);
             if (targets.Any())
                 DisplayConflictState();
+        }
+
+        public bool CanSpendGrace
+        {
+            get { return Grace > 0; }
         }
     }
 }

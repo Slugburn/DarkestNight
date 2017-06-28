@@ -6,16 +6,16 @@ namespace Slugburn.DarkestNight.Rules
 {
     public class Board
     {
-        private readonly Dictionary<Location, ISpace> _spaces;
+        private readonly Dictionary<Location, Space> _spaces;
 
         public Board()
         {
-            _spaces = new ISpace[] {new Monastery(), new Mountains(), new Castle(), new Swamp(), new Ruins(), new Forest(), new Village()}
+            _spaces = new Space[] {new Monastery(), new Mountains(), new Castle(), new Swamp(), new Ruins(), new Forest(), new Village()}
                 .ToDictionary(space => space.Location);
         }
 
-        public ISpace this[Location location] => _spaces[location];
+        public Space this[Location location] => _spaces[location];
 
-        public IEnumerable<ISpace> Spaces => _spaces.Values;
+        public IEnumerable<Space> Spaces => _spaces.Values;
     }
 }

@@ -133,8 +133,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
                 var actionName = kvp.Key;
                 var expected = kvp.Value;
                 var actual = hero.AvailableActions.Contains(actionName);
-                var expectedDescription = expected ? "" : "not";
-                actual.ShouldBe(expected, $"Expected {actionName} to {expectedDescription} be available");
+                var expectedDescription = expected ? "" : "not ";
+                actual.ShouldBe(expected, $"Expected action '{actionName}' to {expectedDescription}be available");
             }
         }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Events
 {
@@ -53,7 +54,9 @@ namespace Slugburn.DarkestNight.Rules.Events
 
         private List<HeroEventOption> CreateHeroEventOptions(Hero hero, IEnumerable<EventOption> eventOptions)
         {
-            var activeOptions = eventOptions.Where(x => x.Condition == null || x.Condition(hero));
+            var options = eventOptions.ToList();
+            hero.Triggers.Send(HeroTrigger.CreatingEventOptions, options);
+            var activeOptions = options.Where(x => x.Condition == null || x.Condition(hero));
             return activeOptions.Select(x => new HeroEventOption {Code = x.Code, Text = x.Text}).ToList();
         }
 
@@ -167,20 +170,6 @@ namespace Slugburn.DarkestNight.Rules.Events
                 };
                 return this;
             }
-        }
-
-        internal class EventOption
-        {
-            public EventOption(string code, string text, Func<Hero, bool> condition)
-            {
-                Code = code;
-                Text = text;
-                Condition = condition;
-            }
-
-            public string Code { get; set; }
-            public string Text { get; }
-            public Func<Hero, bool> Condition { get; }
         }
 
         internal class EventRow
