@@ -161,14 +161,47 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
 
         // Intercession (Bonus)
         // Whenever a hero at your location loses or spends Grace, they may spend your Grace instead.
+        [TestCase(true)]
+        [TestCase(false)]
+        public void Intercession_Spend(bool answer)
+        {
+            var expectedPriestLoss = answer ? 1 : 0;
+            var expectedKnightLoss = answer ? 0 : 1;
+            TestScenario.Game
+                .WithHero("Knight").At("Village")
+                .WithHero("Priest").At("Village").HasPowers("Intercession")
+                .Given.Hero("Knight").HasDrawnEvent("Latent Spell")
+                .When.Player.SelectsEventOption("Spend Grace")
+                .When.Player.AnswersQuestion("Intercession", answer)
+                .Then(Verify.Hero("Priest").LostGrace(expectedPriestLoss))
+                .Then(Verify.Hero("Knight").LostGrace(expectedKnightLoss).HasUnresolvedEvents(1));
+        }
+
         [Test]
-        public void Intercession()
+        public void Intercession_AutomaticSpend()
         {
             TestScenario.Game
-                .WithHero("Priest").HasPowers("Intercession")
-                .WithHero("Knight").Grace(0)
+                .WithHero("Knight").At("Village").Grace(0)
+                .WithHero("Priest").At("Village").HasPowers("Intercession")
                 .Given.Hero("Knight").HasDrawnEvent("Latent Spell")
-                .Then(Verify.Player.EventView.HasOptions("Spend Grace [Intercession]", "Discard Event"));
+                .When.Player.SelectsEventOption("Spend Grace")
+                .Then(Verify.Hero("Priest").LostGrace());
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void Intercession_LostGrace(bool answer)
+        {
+            var expectedPriestLoss = answer ? 1 : 0;
+            var expectedKnightLoss = answer ? 0 : 1;
+            TestScenario.Game
+                .WithHero("Knight").HasPowers("Reckless Abandon")
+                .WithHero("Priest").HasPowers("Intercession")
+                .Given.Hero("Knight").IsActing().FacesEnemy("Vampire")
+                .When.Player.CompletesConflict("Vampire", "Reckless Abandon", Fake.Rolls(1, 2, 3, 4))
+                .When.Player.AnswersQuestion("Intercession", answer)
+                .Then(Verify.Hero("Knight").LostGrace(expectedKnightLoss))
+                .Then(Verify.Hero("Priest").LostGrace(expectedPriestLoss));
         }
 
 

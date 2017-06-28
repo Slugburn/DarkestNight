@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Shouldly;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -153,6 +154,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         public IPlayerActionContext SelectsHero(string heroName)
         {
             GetPlayer().SelectHero(heroName);
+            return this;
+        }
+
+        public IPlayerActionContext AnswersQuestion(string title, bool answer)
+        {
+            var player = GetPlayer();
+            player.AskQuestion.Title.ShouldBe(title);
+            player.AnswerQuestion(answer);
             return this;
         }
     }

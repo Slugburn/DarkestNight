@@ -46,7 +46,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 
             public override void Act(Hero hero)
             {
-                hero.ValidateState(HeroState.ChoosingAction);
                 DeactivateAllForms(hero);
                 var power = (IDruidForm) hero.GetPower(Name);
                 power.Activate(hero);

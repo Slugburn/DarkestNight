@@ -13,7 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Players
             return new Callback(hero.Name, $"Action:{action.Name}{path}");
         }
 
-        public static Callback ForPower<T>(Hero hero, T power, string path = null) where T:IPower, ICallbackHandler
+        public static Callback ForPower<T>(Hero hero, T power, string path = null) where T: IPower, ICallbackHandler
         {
             path = path != null ? "/" + path : null;
             return new Callback(hero.Name, $"Power:{power.Name}{path}");

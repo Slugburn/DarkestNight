@@ -22,7 +22,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         public PlayerBlightSelection BlightSelection { get; set; }
         public PlayerConflict Conflict { get; set; }
         public PlayerEvent Event { get; set; }
-        public string ActiveHero { get; set; }
         public ICollection<PlayerPower> Powers { get; set; }
         public ICollection<string> ValidLocations { get; set; }
         public PlayerNecromancer Necromancer { get; set; }
@@ -69,6 +68,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             _callback = callback;
         }
 
+        public void DisplayAskQuestion(PlayerAskQuestion view, Callback callback)
+        {
+            AskQuestion = view;
+            _callback = callback;
+        }
+
+        public PlayerAskQuestion AskQuestion { get; set; }
+
 
         public void SelectEventOption(string option)
         {
@@ -95,9 +102,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             CallbackRouter.Route(_game, _callback, location);
         }
 
-        public void ResolveConflict(string tacticName, ICollection<int> targetIds)
+        public void ResolveConflict( string tacticName, ICollection<int> targetIds)
         {
-            var hero = _game.GetHero(ActiveHero);
+            var hero = _game.ActingHero;
             hero.SelectTactic(tacticName, targetIds);
         }
 
@@ -140,6 +147,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         {
             var selectedHero = _game.GetHero(heroName);
             CallbackRouter.Route(_game, _callback, selectedHero);
+        }
+
+        public void AnswerQuestion(bool answer)
+        {
+            CallbackRouter.Route(_game, _callback, answer);
         }
     }
 }

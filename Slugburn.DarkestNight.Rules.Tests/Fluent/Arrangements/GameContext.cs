@@ -30,8 +30,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             var player = GetPlayer();
             game.AddHero(hero, player);
             game.ActingHero = hero;
-            player.ActiveHero = hero.Name;
-            return new HeroContext(game, player, hero);
+            var heroContext = new HeroContext(game, player, hero);
+            heroContext.IsActing();
+            return heroContext;
         }
 
         public IGameContext NecromancerAt(string location)

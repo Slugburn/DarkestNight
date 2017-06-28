@@ -15,7 +15,6 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public void Act(Hero hero)
         {
-            hero.ValidateState(HeroState.ChoosingAction);
             var necromancer = hero.Game.Necromancer;
             var availableTargets = new [] {necromancer}.GetTargetInfo();
             var selectedTargets = availableTargets.Select(x=> new ConflictTarget(necromancer, x, TacticType.Fight)).ToList();
@@ -32,7 +31,6 @@ namespace Slugburn.DarkestNight.Rules.Actions
             // hero.ConflictState.ConflictType needs to be set before calling hero.GetAvailableFightTactics()
             conflictState.AvailableTactics = hero.GetAvailableFightTactics().GetInfo(hero);
             hero.DisplayConflictState();
-            hero.State = HeroState.SelectingTarget;
         }
 
         public bool IsAvailable(Hero hero)
@@ -54,7 +52,6 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 rollState.TargetNumber = hero.Game.Necromancer.Fight;
                 var target = hero.ConflictState.SelectedTargets.Single();
                 var assignment = TargetDieAssignment.Create(target.Id, rollState.Result);
-                hero.State = HeroState.AssigningDice;
                 hero.AssignDiceToTargets(new[] { assignment });
             }
         }

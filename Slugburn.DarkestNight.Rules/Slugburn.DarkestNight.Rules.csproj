@@ -129,7 +129,6 @@
     <Compile Include="Heroes\Impl\Seer.cs" />
     <Compile Include="Heroes\Impl\Wizard.cs" />
     <Compile Include="Heroes\PreventMovementEffect.cs" />
-    <Compile Include="Heroes\UnexpectedStateException.cs" />
     <Compile Include="IConflict.cs" />
     <Compile Include="IgnoreBlight.cs" />
     <Compile Include="Items\Artifacts\BloodRing.cs" />
@@ -142,6 +141,7 @@
     <Compile Include="Players\CallbackRouter.cs" />
     <Compile Include="Players\ICallbackHandler.cs" />
     <Compile Include="Players\IPlayer.cs" />
+    <Compile Include="Players\Models\PlayerAskQuestion.cs" />
     <Compile Include="Players\Models\PlayerBlight.cs" />
     <Compile Include="Players\Models\PlayerBlightSelection.cs" />
     <Compile Include="Players\Models\PlayerConflict.cs" />
@@ -234,7 +234,6 @@
     <Compile Include="Triggers\ITriggerHandler.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Heroes\Hero.cs" />
-    <Compile Include="Heroes\HeroState.cs" />
     <Compile Include="Maps\IMap.cs" />
     <Compile Include="ISource.cs" />
     <Compile Include="Location.cs" />

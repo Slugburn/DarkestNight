@@ -106,11 +106,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
                 Text = "Fight with 3d when attacking a blight or the Necromancer";
             }
 
-            public override bool IsUsable(Hero hero)
-            {
-                return base.IsUsable(hero) && (hero.State == HeroState.AttackingBlight || hero.State == HeroState.AttackingNecromancer);
-            }
-
 //            public override void Activate()
 //            {
 //                Hero.SetDice(RollType.Fight, 3);
@@ -210,7 +205,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
             public override bool IsUsable(Hero hero)
             {
-                return base.IsUsable(hero) && (hero.State == HeroState.Fighting || hero.State == HeroState.AttackingBlight || hero.State == HeroState.AttackingNecromancer);
+                return base.IsUsable(hero);
             }
 
 //            public override void Activate()

@@ -25,7 +25,6 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 AvailableTargets = enemies.GetTargetInfo(),
                 AvailableTactics = hero.GetAvailableTactics().GetInfo(hero)
             };
-            hero.State = HeroState.SelectingTarget;
             hero.DisplayConflictState();
         }
 

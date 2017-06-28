@@ -29,9 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 
             public override void Act(Hero hero)
             {
-                hero.ValidateState(HeroState.ChoosingAction);
                 DruidFormPower.DeactivateAllForms(hero);
-                hero.State = HeroState.SelectingLocation;
                 var validDestionations = hero.GetSpace().AdjacentLocations.Select(x=>x.ToString()).ToList();
                 hero.Player.DisplayLocationSelection(validDestionations, Callback.ForAction(hero, this));
             }
@@ -43,7 +41,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
                 hero.MoveTo(destination);
 
                 // Allow player to pick a new form
-                hero.State = HeroState.ChoosingAction;
                 var formActions = hero.GetPowers<IDruidForm>().Where(x => x.IsUsable(hero)).Select(x => x.Name);
                 var continueAction = new CelerityContinueAction();
                 var availableActions = formActions.Concat(new[] { continueAction.Name }).ToList();

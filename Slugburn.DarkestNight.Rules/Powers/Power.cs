@@ -4,6 +4,7 @@ namespace Slugburn.DarkestNight.Rules.Powers
 {
     public abstract class Power : IPower
     {
+        protected Hero _hero;
         public string Name { get; protected set; }
         public PowerType Type { get; protected set; }
         public string Text { get; protected set; }
@@ -36,6 +37,7 @@ namespace Slugburn.DarkestNight.Rules.Powers
 
         public virtual void Learn(Hero hero)
         {
+            _hero = hero;
         }
     }
 }

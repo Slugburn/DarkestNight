@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Events
 {
@@ -55,7 +54,6 @@ namespace Slugburn.DarkestNight.Rules.Events
         private List<HeroEventOption> CreateHeroEventOptions(Hero hero, IEnumerable<EventOption> eventOptions)
         {
             var options = eventOptions.ToList();
-            hero.Triggers.Send(HeroTrigger.CreatingEventOptions, options);
             var activeOptions = options.Where(x => x.Condition == null || x.Condition(hero));
             return activeOptions.Select(x => new HeroEventOption {Code = x.Code, Text = x.Text}).ToList();
         }

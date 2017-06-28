@@ -13,5 +13,6 @@ namespace Slugburn.DarkestNight.Rules.Players
         void DisplayLocationSelection(ICollection<string> locations, Callback callback);
         void DisplayNecromancer(PlayerNecromancer necromancer);
         void DisplayHeroSelection(PlayerHeroSelection view, Callback callback);
+        void DisplayAskQuestion(PlayerAskQuestion view, Callback callback);
     }
 }

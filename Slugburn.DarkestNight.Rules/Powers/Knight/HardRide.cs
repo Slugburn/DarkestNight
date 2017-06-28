@@ -26,7 +26,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
 
             public override void Act(Hero hero)
             {
-                hero.State = HeroState.Moving;
                 hero.AvailableMovement = 2;
                 hero.IsActionAvailable = false;
             }

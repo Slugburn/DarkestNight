@@ -12,7 +12,6 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public void Act(Hero hero)
         {
-            hero.ValidateState(HeroState.ChoosingAction);
             hero.SetRoll(RollBuilder.Create<AttackRoll>());
             var conflictState = new ConflictState
             {
@@ -24,7 +23,6 @@ namespace Slugburn.DarkestNight.Rules.Actions
             hero.ConflictState = conflictState;
             // hero.ConflictState.ConflictType needs to be set before calling hero.GetAvailableFightTactics()
             conflictState.AvailableTactics = hero.GetAvailableFightTactics().GetInfo(hero);
-            hero.State = HeroState.SelectingTarget;
             hero.DisplayConflictState();
         }
 

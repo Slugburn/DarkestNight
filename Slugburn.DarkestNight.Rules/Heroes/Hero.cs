@@ -9,6 +9,7 @@ using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Powers;
+using Slugburn.DarkestNight.Rules.Powers.Priest;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Spaces;
 using Slugburn.DarkestNight.Rules.Tactics;
@@ -54,7 +55,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public int Grace { get; set; }
         public int Secrecy { get; set; }
         public Location Location { get; set; }
-        public HeroState State { get; set; }
         public ICollection<IPower> Powers { get; protected set; }
         public string Name { get; set; }
 
@@ -82,9 +82,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public bool SavedByGrace { get; private set; }
         public bool IsActing { get; set; }
 
-        public void AddActionFilter(string name, HeroState state, ICollection<string> allowed)
+        public void AddActionFilter(string name, ICollection<string> allowed)
         {
-            var filter = new ActionFilter {Name = name, State = state, Allowed = allowed};
+            var filter = new ActionFilter {Name = name, Allowed = allowed};
             _actionFilters.Add(filter);
         }
 
@@ -108,7 +108,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var heroActions = _actions.Values;
             var locationActions = GetSpace().GetActions();
             var actions = heroActions.Concat(locationActions).Where(x => x.IsAvailable(this)).Select(x => x.Name);
-            var filtered = _actionFilters.Where(x => x.State == State).Aggregate(actions, (x, filter) => x.Intersect(filter.Allowed));
+            var filtered = _actionFilters
+//                .Where(x => x.State == State)
+                .Aggregate(actions, (x, filter) => x.Intersect(filter.Allowed));
             return filtered.ToList();
         }
 
@@ -123,13 +125,17 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 power.Exhaust(this);
         }
 
-        public void LoseGrace(int amount = 1)
+        public void LoseGrace(int amount = 1, bool canIntercede = true)
         {
+            var interceded = canIntercede && (Intercession?.IntercedeForLostGrace(this, amount) ?? false);
+            if (interceded) return;
             Grace = Math.Max(Grace - amount, 0);
         }
 
-        public void SpendGrace(int amount)
+        public void SpendGrace(int amount, bool canIntercede = true)
         {
+            var interceded = canIntercede && (Intercession?.IntercedeForSpentGrace(this, amount) ?? false);
+            if (interceded) return;
             if (Grace - amount < 0)
                 throw new Exception("Insufficient Grace.");
             Grace -= amount;
@@ -281,7 +287,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void SelectTactic(string tacticName, ICollection<int> targetIds)
         {
-            ValidateState(HeroState.SelectingTarget);
             var targetCount = targetIds.Count;
             var targetsAreValid = ConflictState.AvailableTargets.Select(x => x.Id).Intersect(targetIds).Count() == targetCount
                                   && targetCount >= ConflictState.MinTarget && targetCount <= ConflictState.MaxTarget;
@@ -315,12 +320,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             CurrentRoll.Accept();
         }
 
-        public void ValidateState(HeroState expected)
-        {
-            if (State != expected)
-                throw new UnexpectedStateException(State, expected);
-        }
-
         public void AddTactic(ITactic tactic)
         {
             _tactics.Add(tactic.Name, tactic);
@@ -338,7 +337,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void AssignDiceToTargets(ICollection<TargetDieAssignment> assignments)
         {
-            ValidateState(HeroState.AssigningDice);
             var validRolls = assignments.Select(x => x.DieValue).Intersect(CurrentRoll.AdjustedRoll).Count() == assignments.Count;
             if (!validRolls)
                 throw new Exception("Invalid die values specified.");
@@ -442,10 +440,15 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             CurrentEvent.SelectedOption = optionCode;
             if (!Triggers.Send(HeroTrigger.EventOptionSelected))
                 return;
+            ResolveSelectedEventOption();
+        }
+
+        public void ResolveSelectedEventOption()
+        {
             var card = EventFactory.CreateCard(CurrentEvent.Name);
             // An event can't be ignored after it has been resolved
             CurrentEvent.IsIgnorable = false;
-            card.Resolve(this, optionCode);
+            card.Resolve(this, CurrentEvent.SelectedOption);
         }
 
         public void RefreshPowers()
@@ -457,7 +460,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         private class ActionFilter
         {
             public string Name { get; set; }
-            public HeroState State { get; set; }
             public ICollection<string> Allowed { get; set; }
         }
 
@@ -523,9 +525,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 DisplayConflictState();
         }
 
-        public bool CanSpendGrace
-        {
-            get { return Grace > 0; }
-        }
+        public bool CanSpendGrace => Grace > 0 || (Intercession?.CanIntercedeFor(this) ?? false);
+
+        internal Intercession Intercession { get; set; }
     }
 }

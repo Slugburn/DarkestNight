@@ -34,7 +34,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         {
             Deactivate(hero);
             var oaths = hero.Powers.Where(x => x is IOath).Cast<IOath>();
-            hero.State = HeroState.ChoosingAction;
             var availableOaths = oaths.Where(x=>x.IsUsable(hero)).Select(x => x.Name).ToList();
             if (availableOaths.Any())
             {

@@ -12,11 +12,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             Text = "Elude with 4d. Lose 1 Secrecy if you succeed.";
         }
 
-        public override bool IsUsable(Hero hero)
-        {
-            return base.IsUsable(hero) && hero.State == HeroState.Eluding;
-        }
-
         //            public override void Activate()
         //            {
         //                Hero.SetDice(RollType.Elude, 4);

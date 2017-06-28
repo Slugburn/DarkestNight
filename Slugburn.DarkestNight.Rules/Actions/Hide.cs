@@ -18,7 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public bool IsAvailable(Hero hero)
         {
-            return hero.IsActionAvailable && hero.State == HeroState.ChoosingAction;
+            return hero.IsActing && hero.IsActionAvailable;
         }
     }
 }

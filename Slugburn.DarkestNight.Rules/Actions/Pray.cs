@@ -10,14 +10,13 @@ namespace Slugburn.DarkestNight.Rules.Actions
         public void Act(Hero hero)
         {
             hero.IsActionAvailable = false;
-            hero.State = HeroState.Praying;
             var rollState = hero.SetRoll(RollBuilder.Create<PrayerRoll>().Type(RollType.Pray).Base("Pray", 2).Target(3));
             rollState.Roll();
         }
 
         public virtual bool IsAvailable(Hero hero)
         {
-            return hero.IsActionAvailable && hero.State == HeroState.ChoosingAction && hero.Location == Location.Monastery;
+            return hero.IsActing && hero.IsActionAvailable && hero.Location == Location.Monastery;
         }
 
         private class PrayerRoll : IRollHandler

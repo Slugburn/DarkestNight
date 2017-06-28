@@ -27,7 +27,6 @@ namespace Slugburn.DarkestNight.Rules
             var result = rollState.Result;
             var target = SelectedTargets.Single();
             var assignment = TargetDieAssignment.Create(target.Id, result);
-            hero.State = HeroState.AssigningDice;
             hero.AssignDiceToTargets(new[] {assignment});
         }
 

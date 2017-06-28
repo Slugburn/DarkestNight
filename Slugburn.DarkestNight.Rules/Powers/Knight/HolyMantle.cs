@@ -27,7 +27,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             public void HandleTrigger(Hero hero, string source, TriggerContext context)
             {
                 if (context.GetState<RollType>() != RollType.Pray) return;
-                if (hero.State != HeroState.Praying) return;
                 var power = hero.GetPower(PowerName);
                 if (!power.IsUsable(hero)) return;
 

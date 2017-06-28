@@ -65,6 +65,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 
         public IHeroContext HasDrawnEvent(string eventName = null)
         {
+            _hero.Game.ActingHero = _hero;
             if (eventName != null)
             {
                 // move event to first

@@ -72,7 +72,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             SetExpectations(hero);
             hero.SavedByGrace.ShouldBe(_expectedWounded);
             hero.DefaultGrace.ShouldBe(_expectedDefaultGrace ?? 0);
-            Assert.That(hero.Grace, Is.EqualTo(_expectedGrace), "Unexpected Grace.");
+            Assert.That(hero.Grace, Is.EqualTo(_expectedGrace), $"Unexpected Grace for {_heroName}.");
             if (_expectedSecrecy.HasValue)
                 Assert.That(hero.Secrecy, Is.EqualTo(_expectedSecrecy), "Unexpected Secrecy.");
             Assert.That(hero.IsActionAvailable, Is.EqualTo(_expectedActionAvailable),

@@ -16,7 +16,6 @@ namespace Slugburn.DarkestNight.Rules.Triggers
         FightWon,
         Eluding,
         Searching,
-        Moving,
-        CreatingEventOptions
+        Moving
     }
 }

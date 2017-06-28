@@ -19,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             base.Activate(hero);
             hero.CanGainGrace = true;
             hero.Triggers.Add(HeroTrigger.StartTurn, Name, new TreeFormStartTurnHandler());
-            hero.AddActionFilter(PowerName, HeroState.ChoosingAction, new[] { "Hide", "Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form" });
+            hero.AddActionFilter(PowerName, new[] { "Hide", "Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form" });
         }
 
         public override bool Deactivate(Hero hero)
