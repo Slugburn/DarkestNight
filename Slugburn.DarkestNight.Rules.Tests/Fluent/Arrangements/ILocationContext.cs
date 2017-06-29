@@ -1,7 +1,8 @@
 ﻿namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 {
-    public interface ILocationContext
+    public interface ILocationContext : IGameContext
     {
-        LocationContext Blights(params string[] blights);
+        ILocationContext Blights(params string[] blights);
+        ILocationContext HasRelic(bool hasRelic = true);
     }
 }

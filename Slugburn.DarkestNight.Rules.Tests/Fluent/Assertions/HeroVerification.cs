@@ -110,7 +110,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             }
             Assert.That(hero.FreeActions, Is.EqualTo(_expectedFreeActions));
             if (_expectedInventory != null)
-                hero.GetInventory().Select(x=>x.Name).ShouldBe(_expectedInventory);
+                hero.GetInventory().Select(x=>x.Name).ShouldBeEquivalent(_expectedInventory);
 
             if (_expectedPowerNames != null)
                 hero.Powers.Select(x => x.Name).OrderBy(x => x).ShouldBe(_expectedPowerNames);

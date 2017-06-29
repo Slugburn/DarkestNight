@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Shouldly;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
 
@@ -12,6 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private List<Blight> _blights;
         private string[] _actionExists;
         private string[] _actionDoesNotExist;
+        private bool? _hasRelic;
 
         public LocationVerification(string location)
         {
@@ -24,6 +26,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             var space = game.Board[_location.ToEnum<Location>()];
             _blights = _blights ?? new List<Blight>();
             Assert.That(space.Blights, Is.EquivalentTo(_blights));
+
+            if (_hasRelic.HasValue)
+                space.HasRelic.ShouldBe(_hasRelic.Value);
 
             if (_actionExists != null)
             {
@@ -52,6 +57,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         public LocationVerification DoesNotHaveAction(params string[] actionNames)
         {
             _actionDoesNotExist = actionNames;
+            return this;
+        }
+
+        public LocationVerification HasRelic(bool expected)
+        {
+            _hasRelic = expected;
             return this;
         }
     }

@@ -142,6 +142,7 @@
     <Compile Include="Items\Artifacts\StarryVeil.cs" />
     <Compile Include="Items\Artifacts\VanishingCowl.cs" />
     <Compile Include="Items\BottledMagic.cs" />
+    <Compile Include="Items\HolyRelic.cs" />
     <Compile Include="Items\IItem.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="Items\ItemFactory.cs" />

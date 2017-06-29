@@ -378,7 +378,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             if (_actions.ContainsKey(actionName))
                 return _actions[actionName];
-            var locationAction = GetSpace().GetAction(actionName);
+            var space = GetSpace();
+            var locationAction = space.GetAction(actionName);
             if (locationAction != null)
                 return locationAction;
             throw new ArgumentOutOfRangeException(nameof(actionName), actionName);
@@ -527,6 +528,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void ShufflePowerDeck()
         {
             _powerDeck = _powerDeck.Shuffle();
+        }
+
+        public void RemoveFromInventory(IItem item)
+        {
+            Inventory.Remove(item);
         }
     }
 }
