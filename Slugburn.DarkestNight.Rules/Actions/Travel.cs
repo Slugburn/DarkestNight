@@ -17,6 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
         {
             _movesLeft = hero.TravelSpeed;
             UseTravelMovement(hero);
+            hero.GainSecrecy(1, 5);
         }
 
         private void UseTravelMovement(Hero hero)

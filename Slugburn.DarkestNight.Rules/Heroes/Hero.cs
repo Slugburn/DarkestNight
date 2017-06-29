@@ -216,7 +216,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void GainSecrecy(int amount, int max)
         {
-            Secrecy = Math.Min(Secrecy+amount, max);
+            if (Secrecy < max)
+                Secrecy = Math.Min(Secrecy+amount, max);
         }
 
         public void SetDice(RollType rollType, int count)
@@ -226,7 +227,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void GainGrace(int amount, int max)
         {
-            Grace = Math.Min(Grace + amount, max);
+            if (Grace < max)
+                Grace = Math.Min(Grace + amount, max);
         }
 
 

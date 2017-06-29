@@ -19,5 +19,6 @@
         IHeroContext HasTakenAction(bool hasTakenaction = true);
         IHeroContext HasItems(params string[] itemNames);
         IHeroContext NextPowerDraws(params string[] powerNames);
+        IHeroContext LostSecrecy(int amount);
     }
 }
