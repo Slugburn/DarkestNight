@@ -111,8 +111,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public void SelectPower(string powerName)
         {
-            var power = _game.ActingHero.GetPower(powerName);
-            CallbackRouter.Route(_game, _callback, power);
+            CallbackRouter.Route(_game, _callback, powerName);
         }
 
         public void SelectBlight(Location location, Blight blight)

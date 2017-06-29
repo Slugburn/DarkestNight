@@ -1,30 +1,35 @@
 ﻿using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Powers;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
     public abstract class PowerAction : IAction
     {
-        protected readonly string _powerName;
+        protected readonly IPower _power;
 
-        protected PowerAction(string name)
+        protected PowerAction(IPower power)
         {
-            Name = name;
-            _powerName = name;
+            _power = power;
+            Name = power.Name;
+            Text = power.Text;
         }
 
-        protected PowerAction(string name, string powerName)
+        protected PowerAction(string name, IPower power)
         {
+            _power = power;
             Name = name;
-            _powerName = powerName;
+            Text = power.Text;
         }
 
-        public string Name { get; }
+        public string Name { get; protected set; }
+
+        public string Text { get; protected set; }
 
         public abstract void Act(Hero hero);
 
         public virtual bool IsAvailable(Hero hero)
         {
-            return hero.GetPower(_powerName).IsUsable(hero);
+            return _power.IsUsable(hero);
         }
     }
 }

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 using Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements;
@@ -49,5 +51,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
         {
             return (T)_state[typeof (T)];
         }
+
+        public Hero GetHero(string heroName)
+        {
+            if (heroName != null)
+                return _game.GetHero(heroName);
+            return _game.Heroes.Count == 1 ? _game.Heroes.Single() : _game.ActingHero;
+        }
+
     }
 }

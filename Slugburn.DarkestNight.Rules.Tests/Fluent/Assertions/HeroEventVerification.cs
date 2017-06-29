@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         {
             var r = (TestRoot)root;
             var hero = r.GetGame().ActingHero;
-            var e = hero.CurrentEvent;
+            var e = hero?.CurrentEvent;
             if (e == null) return;
             if (_canBeIgnored.HasValue)
                 e.IsIgnorable.ShouldBe(_canBeIgnored.Value);

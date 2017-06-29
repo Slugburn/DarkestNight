@@ -31,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void FalseLife_NotUsableWhenAtOrAboveDefaultGrace(int grace, bool isAvailable)
         {
             TestScenario
-                .Game.WithHero("Acolyte").HasPowers("False Life").NotAt("Monastery").Grace(grace)
+                .Game.WithHero("Acolyte").HasPowers("False Life").Grace(grace).NotAt("Monastery")
                 .Then(Verify.Hero().Grace(grace).CanTakeAction("False Life", isAvailable));
         }
 

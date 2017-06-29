@@ -257,7 +257,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .NecromancerAt("Ruins")
                 .WithHero("Knight").HasPowers("Oath of Vengeance", "Charge", "Consecrated Blade").At("Ruins")
                 .Given.Hero().Power("Oath of Vengeance").IsActive()
-                .When.Player.TakesAction("Fight Necromancer").CompletesConflict("Necromancer", "Charge", Fake.Rolls(2, 3, 6))
+                .When.Player.TakesAction("Attack Necromancer").CompletesConflict("Necromancer", "Charge", Fake.Rolls(2, 3, 6))
                 .Then(Verify.Hero().Rolled(2, 3, 7).FightDice(2).HasUsedAction().HasFreeAction())
                 .Then(Verify.Power("Oath of Vengeance").IsActive(false));
         }

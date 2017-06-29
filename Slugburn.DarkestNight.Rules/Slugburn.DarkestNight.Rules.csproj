@@ -41,14 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\ActionNotAvailableException.cs" />
     <Compile Include="Actions\Attack.cs" />
     <Compile Include="Actions\EndTurn.cs" />
-    <Compile Include="Actions\FightNecromancer.cs" />
+    <Compile Include="Actions\AttackNecromancer.cs" />
     <Compile Include="Actions\Defend.cs" />
     <Compile Include="Actions\Hide.cs" />
     <Compile Include="Actions\IAction.cs" />
     <Compile Include="Actions\PowerAction.cs" />
     <Compile Include="Actions\Pray.cs" />
+    <Compile Include="Actions\RetrieveRelic.cs" />
     <Compile Include="Actions\Search.cs" />
     <Compile Include="Actions\StartTurn.cs" />
     <Compile Include="Actions\Travel.cs" />
@@ -121,6 +123,7 @@
     <Compile Include="Events\IEventCard.cs" />
     <Compile Include="Extensions\CardExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Heroes\DrawSearchCommand.cs" />
     <Compile Include="Heroes\HeroFactory.cs" />
     <Compile Include="Heroes\IHeroFactory.cs" />
     <Compile Include="Heroes\Impl\Prince.cs" />
@@ -136,6 +139,14 @@
     <Compile Include="Items\Artifacts\MagicMask.cs" />
     <Compile Include="Items\Artifacts\StarryVeil.cs" />
     <Compile Include="Items\Artifacts\VanishingCowl.cs" />
+    <Compile Include="Items\BottledMagic.cs" />
+    <Compile Include="Items\IItem.cs" />
+    <Compile Include="Items\Item.cs" />
+    <Compile Include="Items\ItemFactory.cs" />
+    <Compile Include="Items\Key.cs" />
+    <Compile Include="Items\TreasureChest.cs" />
+    <Compile Include="Items\VanishingDust.cs" />
+    <Compile Include="Items\Waystone.cs" />
     <Compile Include="Players\Callback.cs" />
     <Compile Include="Players\CallbackRouter.cs" />
     <Compile Include="Players\ICallbackHandler.cs" />
@@ -221,7 +232,6 @@
     <Compile Include="Maps\MapFactory.cs" />
     <Compile Include="Powers\IBonusAction.cs" />
     <Compile Include="Powers\IPowerEffect.cs" />
-    <Compile Include="Powers\PowerNotUsableException.cs" />
     <Compile Include="Stash.cs" />
     <Compile Include="Tactics\BasicFightTactic.cs" />
     <Compile Include="Tactics\PowerTactic.cs" />

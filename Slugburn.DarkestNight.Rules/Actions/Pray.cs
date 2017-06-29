@@ -7,6 +7,9 @@ namespace Slugburn.DarkestNight.Rules.Actions
     public class Pray : IAction
     {
         public string Name { get; protected set; } = "Pray";
+
+        public string Text => @"Roll 2d, and gain 1 Grace (up to default) for each die that rolls a 3 or higher. Also refresh your powers.";
+
         public void Act(Hero hero)
         {
             hero.IsActionAvailable = false;
@@ -16,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public virtual bool IsAvailable(Hero hero)
         {
-            return hero.IsActing && hero.IsActionAvailable && hero.Location == Location.Monastery;
+            return hero.IsTakingTurn && hero.IsActionAvailable && hero.Location == Location.Monastery;
         }
 
         private class PrayerRoll : IRollHandler

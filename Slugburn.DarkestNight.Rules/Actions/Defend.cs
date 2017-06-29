@@ -2,8 +2,6 @@
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Players;
-using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tactics;
@@ -14,6 +12,8 @@ namespace Slugburn.DarkestNight.Rules.Actions
     public class Defend : IAction
     {
         public string Name => "Defend";
+
+        public string Text => "Temp";
 
         public void Act(Hero hero)
         {

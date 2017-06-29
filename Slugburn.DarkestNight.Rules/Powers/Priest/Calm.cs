@@ -27,7 +27,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
         public void HandleTrigger(Hero hero, string source, TriggerContext context)
         {
             if (context.WasTriggeredBy(HeroTrigger.Moving))
-                hero.GetSpace().RemoveAction(_action);
+                hero.GetSpace().RemoveAction(_action.Name);
             else if (context.WasTriggeredBy(HeroTrigger.Moved))
                 hero.GetSpace().AddAction(_action);
         }
@@ -41,7 +41,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
 
             public override bool IsAvailable(Hero hero)
             {
-                return hero.IsActing && hero.IsActionAvailable;
+                return hero.IsTakingTurn && hero.IsActionAvailable;
             }
         }
 

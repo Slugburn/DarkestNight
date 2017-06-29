@@ -9,10 +9,17 @@ using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
-    public class FightNecromancer : IAction
+    public class AttackNecromancer : IAction
     {
-        public const string ActionName = "Fight Necromancer";
+        public const string ActionName = "Attack Necromancer";
+
         public string Name => ActionName;
+
+        public string Text => "Failing any combat with the Necromancer results in a wound.\n"
+                              + "If there are any blights in the location, successfully fighting the Necromancer will\n"
+                              + "entice him to sacrifice one of them so he can escape; destroy one of your choice.\n"
+                              + "Successfully fighting the Necromancer when there are no blights in the location\n"
+                              + "slays him and wins the game—but only if you are holding a holy relic when you do so.";
 
         public void Act(Hero hero)
         {
@@ -36,7 +43,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public bool IsAvailable(Hero hero)
         {
-            return hero.IsActionAvailable && hero.GetBlights().Any();
+            return hero.IsActionAvailable && hero.Location == hero.Game.Necromancer.Location;
         }
 
         private class FightNecromancerRoll : IRollHandler

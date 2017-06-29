@@ -12,10 +12,17 @@ namespace Slugburn.DarkestNight.Rules.Players
         public static void Route(Game game, Callback callback, object data)
         {
             var hero = game.GetHero(callback.HeroName);
-            var route = GetRoute(hero, callback);
-            var handler = route.Item1;
-            var path = route.Item2;
-            handler.HandleCallback(hero, path, data);
+            if (callback.Handler == null)
+            {
+                var route = GetRoute(hero, callback);
+                var handler = route.Item1;
+                var path = route.Item2;
+                handler.HandleCallback(hero, path, data);
+            }
+            else
+            {
+                callback.Handler.HandleCallback(hero, null, data);
+            }
         }
 
         private static Tuple<ICallbackHandler, string> GetRoute(Hero hero, Callback callback)
@@ -31,9 +38,9 @@ namespace Slugburn.DarkestNight.Rules.Players
             return Tuple.Create(handler, path);
         }
 
-        private static ICallbackHandler GetHandler(Hero hero, string type, string name)
+        private static ICallbackHandler GetHandler(Hero hero, string callbackType, string name)
         {
-            switch (type)
+            switch (callbackType)
             {
                 case "Action":
                     return (ICallbackHandler) hero.GetAction(name);
@@ -41,8 +48,11 @@ namespace Slugburn.DarkestNight.Rules.Players
                     return (ICallbackHandler) EventFactory.CreateCard(name);
                 case "Power":
                     return (ICallbackHandler) hero.GetPower(name);
+                case "Type":
+                    var type = typeof(CallbackRouter).Assembly.GetType(name, true);
+                    return (ICallbackHandler) Activator.CreateInstance(type);
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type);
+                    throw new ArgumentOutOfRangeException(nameof(type), callbackType);
             }
         }
     }

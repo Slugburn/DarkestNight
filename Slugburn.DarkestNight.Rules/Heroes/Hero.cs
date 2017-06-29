@@ -7,6 +7,7 @@ using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Events;
 using Slugburn.DarkestNight.Rules.Extensions;
+using Slugburn.DarkestNight.Rules.Items;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Powers;
@@ -21,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
     public class Hero
     {
         private readonly Dictionary<string, IAction> _actions;
-        private readonly List<IPower> _powerDeck;
+        private readonly List<string> _powerDeck;
         private readonly List<IRollModifier> _rollModifiers;
         private readonly Stash _stash;
         private readonly Dictionary<string, ITactic> _tactics;
@@ -29,7 +30,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public Hero()
         {
-            _powerDeck = new List<IPower>();
+            _powerDeck = new List<string>();
             Powers = new List<IPower>();
             _stash = new Stash();
             Triggers = new TriggerRegistry<HeroTrigger, Hero>(this);
@@ -49,13 +50,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public TriggerRegistry<HeroTrigger, Hero> Triggers { get; }
         public RollState CurrentRoll { get; set; }
 
-        public List<IPower> PowerDeck => _powerDeck;
+        public List<string> PowerDeck => _powerDeck;
 
         public int DefaultGrace { get; set; }
         public int DefaultSecrecy { get; set; }
         public int Grace { get; set; }
         public int Secrecy { get; set; }
-        public Location Location { get; set; }
+        public Location Location { get; internal set; }
         public ICollection<IPower> Powers { get; protected set; }
         public string Name { get; set; }
 
@@ -79,9 +80,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public int AvailableMovement { get; set; }
         public int FreeActions { get; set; }
         public Queue<string> EventQueue { get; } = new Queue<string>();
-        public List<string> Inventory { get; set; } = new List<string>();
+        private List<IItem> Inventory { get; } = new List<IItem>();
         public bool SavedByGrace { get; private set; }
-        public bool IsActing { get; set; }
+        public bool IsTakingTurn { get; set; }
 
         public void AddActionFilter(string name, ICollection<string> allowed)
         {
@@ -130,7 +131,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             var interceded = canIntercede && (Intercession?.IntercedeForLostGrace(this, amount) ?? false);
             if (interceded) return;
+            var before = Grace;
             Grace = Math.Max(Grace - amount, 0);
+            if (Grace != before)
+                UpdateAvailableActions();
         }
 
         public void SpendGrace(int amount, bool canIntercede = true)
@@ -140,6 +144,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (Grace - amount < 0)
                 throw new Exception("Insufficient Grace.");
             Grace -= amount;
+            UpdateAvailableActions();
         }
 
         public void TakeWound()
@@ -185,7 +190,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (Secrecy - amount < 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
             Secrecy -= amount;
+            UpdateAvailableActions();
         }
+
 
 
         public void ChooseAction()
@@ -203,6 +210,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (!Triggers.Send(HeroTrigger.Moving))
                 return;
             Location = location;
+            UpdateAvailableActions();
             Triggers.Send(HeroTrigger.Moved);
         }
 
@@ -222,14 +230,22 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         }
 
 
-        public void LearnPower(string name)
+        public IPower LearnPower(string name)
         {
-            var power = _powerDeck.SingleOrDefault(x => x.Name == name);
-            if (power == null)
+            var powerName = _powerDeck.SingleOrDefault(x => x == name);
+            if (powerName == null)
                 throw new Exception($"The power {name} is not available.");
+            var power = PowerFactory.Create(powerName);
+            LearnPower(power);
+            _powerDeck.Remove(powerName);
+            return power;
+        }
+
+        public void LearnPower(IPower power)
+        {
             power.Learn(this);
-            _powerDeck.Remove(power);
             Powers.Add(power);
+            UpdateAvailableActions();
         }
 
         public void JoinGame(Game game, IPlayer player)
@@ -358,10 +374,12 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public IAction GetAction(string actionName)
         {
-            if (!_actions.ContainsKey(actionName))
-                throw new ArgumentOutOfRangeException(nameof(actionName), actionName);
-            var action = _actions[actionName];
-            return action;
+            if (_actions.ContainsKey(actionName))
+                return _actions[actionName];
+            var locationAction = GetSpace().GetAction(actionName);
+            if (locationAction != null)
+                return locationAction;
+            throw new ArgumentOutOfRangeException(nameof(actionName), actionName);
         }
 
         public bool IsAffectedByBlight(Blight blight)
@@ -422,11 +440,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             new Defend().Act(this);
         }
 
-        public IPower DrawPower()
-        {
-            return _powerDeck.Draw();
-        }
-
         public void SelectEventOption(string optionCode)
         {
             var validCodes = CurrentEvent.Options.Select(x=>x.Code).ToList();
@@ -467,37 +480,17 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             return conflictState.SelectedTargets.First().Name == "Necromancer";
         }
 
-        public void DrawSearchResult()
+        public void AddToInventory(IItem item)
         {
-            var result = Game.DrawSearchResult(Location);
-            switch (result)
-            {
-                case Find.Key:
-                    Inventory.Add("Key");
-                    break;
-                case Find.BottledMagic:
-                    Inventory.Add("Bottled Magic");
-                    break;
-                case Find.SupplyCache:
-                    break;
-                case Find.TreasureChest:
-                    Inventory.Add("Treasure Chest");
-                    break;
-                case Find.Waystone:
-                    Inventory.Add("Waystone");
-                    break;
-                case Find.ForgottenShrine:
-                    break;
-                case Find.VanishingDust:
-                    Inventory.Add("Vanishing Dust");
-                    break;
-                case Find.Epiphany:
-                    break;
-                case Find.Artifact:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            item.Owner = this;
+            Inventory.Add(item);
+            UpdateAvailableActions();
+        }
+
+        public IEnumerable<IItem> GetLocationInventory()
+        {
+            var heroesAtCurrentLocation = Game.Heroes.Where(hero => hero.Location == Location);
+            return heroesAtCurrentLocation.SelectMany(hero => hero.GetInventory());
         }
 
         public void UpdateAvailableActions()
@@ -523,5 +516,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public bool CanSpendGrace => Grace > 0 || (Intercession?.CanIntercedeFor(this) ?? false);
 
         internal Intercession Intercession { get; set; }
+
+        public IEnumerable<IItem> GetInventory()
+        {
+            return Inventory;
+        }
     }
 }

@@ -7,6 +7,8 @@ namespace Slugburn.DarkestNight.Rules.Actions
     {
         public string Name => "Hide";
 
+        public string Text => "Refresh your powers and gain 1 Secrecy (up to 5).";
+
         public void Act(Hero hero)
         {
             hero.IsActionAvailable = false;
@@ -18,7 +20,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public bool IsAvailable(Hero hero)
         {
-            return hero.IsActing && hero.IsActionAvailable;
+            return hero.IsTakingTurn && hero.IsActionAvailable;
         }
     }
 }

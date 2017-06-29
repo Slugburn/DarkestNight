@@ -15,12 +15,12 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            hero.AddAction(new HardRideAction(Name));
+            hero.AddAction(new HardRideAction(this));
         }
 
         private class HardRideAction : PowerAction
         {
-            public HardRideAction(string name) : base(name)
+            public HardRideAction(IPower power) : base(power)
             {
             }
 

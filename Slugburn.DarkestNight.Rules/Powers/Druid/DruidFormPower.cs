@@ -9,7 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
         public override void Learn(Hero hero)
         {
 //            base.Learn(hero);
-            AddFormActions(hero, Name);
+            AddFormActions(hero);
         }
 
         public override void Activate(Hero hero)
@@ -26,11 +26,11 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             return true;
         }
 
-        private static void AddFormActions(Hero hero, string powerName)
+        private void AddFormActions(Hero hero)
         {
             if (!hero.HasAction(DeactivateForm.ActionName))
                 hero.AddAction(new DeactivateForm());
-            hero.AddAction(new ActivateForm(powerName));
+            hero.AddAction(new ActivateForm(this));
         }
 
         internal static void DeactivateAllForms(Hero hero)
@@ -40,7 +40,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 
         private class ActivateForm : PowerAction
         {
-            public ActivateForm(string name) : base(name)
+            public ActivateForm(IPower power) : base(power)
             {
             }
 
@@ -57,10 +57,12 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             public const string ActionName = "Deactivate Form";
             public string Name => ActionName;
 
+            public string Text => "Deactivate all Forms.";
+
             public void Act(Hero hero)
             {
-                DeactivateAllForms(hero);
                 hero.IsActionAvailable = false;
+                DeactivateAllForms(hero);
             }
 
             public bool IsAvailable(Hero hero)

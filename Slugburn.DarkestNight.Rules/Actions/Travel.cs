@@ -8,7 +8,10 @@ namespace Slugburn.DarkestNight.Rules.Actions
     public class Travel : IAction, ICallbackHandler
     {
         private int _movesLeft;
+
         public string Name => "Travel";
+
+        public string Text => @"Move to an adjacent location, and gain 1 Secrecy (up to 5).";
 
         public void Act(Hero hero)
         {
@@ -24,7 +27,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public bool IsAvailable(Hero hero)
         {
-            return hero.IsActing && hero.IsActionAvailable;
+            return hero.IsTakingTurn && hero.IsActionAvailable;
         }
 
         public void HandleCallback(Hero hero, string path, object data)

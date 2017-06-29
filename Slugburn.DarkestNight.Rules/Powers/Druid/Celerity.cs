@@ -18,12 +18,12 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            hero.AddAction(new CelerityAction());
+            hero.AddAction(new CelerityAction(this));
         }
 
         private class CelerityAction : PowerAction, ICallbackHandler
         {
-            public CelerityAction() : base(PowerName)
+            public CelerityAction(IPower power) : base(power)
             {
             }
 
@@ -62,6 +62,8 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
                 {
                     return true;
                 }
+
+                public string Text => "Continue";
             }
         }
     }

@@ -41,7 +41,8 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
 
         public void HandleCallback(Hero hero, string path, object data)
         {
-            var power = (IPower) data;
+            var powerName = (string) data;
+            var power = hero.GetPower(powerName);
             power.Exhaust(hero);
             hero.EndEvent();
         }

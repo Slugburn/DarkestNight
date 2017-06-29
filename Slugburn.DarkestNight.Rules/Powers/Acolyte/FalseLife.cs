@@ -17,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            hero.AddAction(new FalseLifeAction());
+            hero.AddAction(new FalseLifeAction(this));
             hero.Add(new PreventMovementEffect(location => Exhausted && location == Location.Monastery));
         }
 
@@ -28,7 +28,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
         internal class FalseLifeAction : PowerAction
         {
-            public FalseLifeAction() : base(PowerName)
+            public FalseLifeAction(IPower power) : base(power)
             {
             }
 
@@ -36,7 +36,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             {
                 var power = hero.GetPower(Name);
                 if (!power.IsUsable(hero))
-                    throw new PowerNotUsableException(_powerName);
+                    throw new ActionNotAvailableException(hero, this);
                 hero.GainGrace(1, hero.DefaultGrace);
                 power.Exhaust(hero);
             }

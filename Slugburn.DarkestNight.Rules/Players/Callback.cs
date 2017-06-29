@@ -24,13 +24,26 @@ namespace Slugburn.DarkestNight.Rules.Players
             return new Callback(hero.Name, $"Event:{eventCard.Detail.Name}");
         }
 
+        public static Callback For(Hero hero, ICallbackHandler handler)
+        {
+            return new Callback(hero.Name, handler);
+        }
+
         private Callback(string heroName, string route)
         {
             HeroName = heroName;
             Route = route;
         }
 
+        private Callback(string heroName, ICallbackHandler handler)
+        {
+            HeroName = heroName;
+            Handler = handler;
+        }
+
         public string HeroName { get; set; }
         public string Route { get; set; }
+        public ICallbackHandler Handler { get; set; }
+
     }
 }

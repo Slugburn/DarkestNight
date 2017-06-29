@@ -22,12 +22,12 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            hero.AddAction(new FalseOrdersAction());
+            hero.AddAction(new FalseOrdersAction(this));
         }
 
         private class FalseOrdersAction : PowerAction, ICallbackHandler
         {
-            public FalseOrdersAction() : base(PowerName)
+            public FalseOrdersAction(IPower power) : base(power)
             {
             }
 

@@ -22,13 +22,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            var action = new BlindingBlackAction(Name);
+            var action = new BlindingBlackAction(this);
             hero.AddAction(action);
         }
 
         public class BlindingBlackAction : PowerAction
         {
-            public BlindingBlackAction(string name) : base(name)
+            public BlindingBlackAction(IPower power) : base(power)
             {
             }
 
@@ -36,7 +36,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             {
                 var power = hero.GetPower(Name);
                 if (!IsAvailable(hero))
-                    throw new PowerNotUsableException(_powerName);
+                    throw new ActionNotAvailableException(hero, this);
 
                 var necromancer = hero.Game.Necromancer;
                 necromancer.DetectedHeroes.Clear();

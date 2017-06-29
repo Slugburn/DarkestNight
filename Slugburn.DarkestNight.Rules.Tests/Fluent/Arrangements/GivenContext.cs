@@ -20,8 +20,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 
         public IHeroContext Hero(string heroName = null)
         {
-            var hero = heroName == null ? GetGame().ActingHero : GetGame().GetHero(heroName);
-            return new HeroContext(GetGame(), GetPlayer(), hero);
+            return new HeroContext(GetGame(), GetPlayer(), GetHero(heroName));
         }
     }
 }

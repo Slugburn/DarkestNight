@@ -2,6 +2,7 @@ using System.Linq;
 using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Powers;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Heroes
 {
@@ -21,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             var hero = HeroFactory.Create(name);
             Assert.That(hero.Name, Is.EqualTo(name));
-            var powers = hero.PowerDeck.ToList();
+            var powers = hero.PowerDeck.Select(PowerFactory.Create).ToList();
             Assert.That(powers.Count, Is.EqualTo(10));
             Assert.That(powers.Count(x => x.StartingPower), Is.EqualTo(4), powers.Where(x => x.StartingPower).Select(x => x.Name).ToCsv());
             Assert.That(powers.All(x => x.Name != null));

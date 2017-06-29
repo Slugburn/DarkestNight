@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
@@ -8,7 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Spaces
     public abstract class Space
     {
         private readonly List<Blight> _blights = new List<Blight>();
-        private readonly List<IAction> _actions = new List<IAction>();
+        private readonly Dictionary<string, IAction> _actions = new Dictionary<string, IAction>();
 
 
         public Location Location { get; protected set; }
@@ -43,17 +44,23 @@ namespace Slugburn.DarkestNight.Rules.Spaces
 
         public IEnumerable<IAction> GetActions()
         {
-            return _actions.ToList();
+            return _actions.Values.ToList();
+        }
+
+        public IAction GetAction(string actionName)
+        {
+            return _actions.ContainsKey(actionName) ? _actions[actionName] : null;
         }
 
         public void AddAction(IAction action)
         {
-            _actions.Add(action);
+            _actions.Add(action.Name, action);
         }
 
-        public void RemoveAction(IAction action)
+        public void RemoveAction(string actionName)
         {
-            _actions.Remove(action);
+            if (!_actions.Remove(actionName))
+                throw new ArgumentOutOfRangeException(actionName);
         }
     }
 }

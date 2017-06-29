@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Powers
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            hero.AddAction(new ActivatePowerAction(Name));
+            hero.AddAction(new ActivatePowerAction(this));
         }
 
         public virtual void Activate(Hero hero)
@@ -42,13 +42,13 @@ namespace Slugburn.DarkestNight.Rules.Powers
 
         public class ActivatePowerAction : PowerAction
         {
-            public ActivatePowerAction(string name) : base(name)
+            public ActivatePowerAction(IPower power) : base(power)
             {
             }
 
             public override void Act(Hero hero)
             {
-                var power = (IActivateable)hero.GetPower(base._powerName);
+                var power = (IActivateable)_power;
                 power.Activate(hero);
             }
         }

@@ -11,6 +11,10 @@ namespace Slugburn.DarkestNight.Rules.Actions
     {
         public string Name => "Attack";
 
+        public string Text => "Choose a blight in your location and fight it.\n"
+                              + "If you win, the blight is destroyed; otherwise, you suffer the blight’s defense.\n"
+                              + "Succeed or fail, you lose 1 Secrecy for revealing yourself.";
+
         public void Act(Hero hero)
         {
             hero.SetRoll(RollBuilder.Create<AttackRoll>());
@@ -29,7 +33,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public bool IsAvailable(Hero hero)
         {
-            return hero.IsActionAvailable && hero.GetBlights().Any();
+            return hero.IsTakingTurn && hero.IsActionAvailable && hero.GetBlights().Any();
         }
 
         private class AttackRoll : IRollHandler

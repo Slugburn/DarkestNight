@@ -22,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            hero.AddAction(new CallToDeathAction());
+            hero.AddAction(new CallToDeathAction(this));
         }
 
 
@@ -34,7 +34,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         private class CallToDeathAction : PowerAction
         {
 
-            public CallToDeathAction() : base(CallToDeath.PowerName)
+            public CallToDeathAction(IPower power) : base(power)
             {
             }
 

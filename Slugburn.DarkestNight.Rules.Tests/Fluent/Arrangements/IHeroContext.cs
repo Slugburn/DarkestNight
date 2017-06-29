@@ -7,6 +7,7 @@
         IHeroContext NotAt(string location);
         IHeroContext Secrecy(int value);
         IHeroContext Grace(int value);
+        IHeroContext LostGrace(int amount);
         IHeroContext PowerDeck(params string[] powers);
 
         IPowerContext Power(string powerName);
@@ -14,6 +15,9 @@
         IHeroContext FacesEnemy(string enemyName);
         IHeroContext RefreshesPower(string powerName);
         IHeroContext MovesTo(string location);
-        IHeroContext IsActing();
+        IHeroContext IsTakingTurn(bool isTakingTurn = true);
+        IHeroContext HasTakenAction(bool hasTakenaction = true);
+        IHeroContext HasItems(params string[] itemNames);
+        IHeroContext NextPowerDraws(params string[] powerNames);
     }
 }

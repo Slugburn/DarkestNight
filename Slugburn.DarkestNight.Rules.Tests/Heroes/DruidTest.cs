@@ -147,11 +147,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void TreeForm_Deactivate()
         {
             TestScenario.Game
-                .WithHero("Druid").HasPowers("Tree Form").Grace(0)
+                .WithHero("Druid").NotAt("Monastery").HasPowers("Tree Form").Grace(0)
                 .Power("Tree Form").IsActive()
                 .When.Player.TakesAction("Deactivate Form")
                 .When.Player.StartsTurn()
-                .Then(Verify.Hero().Grace(0).HasAvailableActions("Travel", "Hide", "Pray", "Tree Form", "End Turn"));
+                .Then(Verify.Hero().Grace(0).HasAvailableActions("Travel", "Hide", "Search", "Tree Form", "End Turn"));
         }
 
         [Test]

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Slugburn.DarkestNight.Rules.Actions;
 
 namespace Slugburn.DarkestNight.Rules.Spaces
 {
@@ -20,6 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Spaces
                 {5, Location.Village},
                 {6, Location.Swamp},
             };
+            AddAction(new RetrieveRelic());
         }
     }
 }

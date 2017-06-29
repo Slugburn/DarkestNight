@@ -9,7 +9,5 @@ namespace Slugburn.DarkestNight.Rules.Blights
         int Might { get; }
         string EffectText { get; }
         string DefenseText { get;  }
-
-        void Failure(Hero hero);
     }
 }

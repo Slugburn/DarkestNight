@@ -24,7 +24,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private int? _expectedGrace;
         private int? _expectedSecrecy;
         private IEnumerable<Blight> _expectedIgnoredBlights;
-        private string[] _expectedInventory = new string[0];
+        private string[] _expectedInventory;
         private Location? _expectedLocation;
         private int[] _expectedRoll;
         private int _expectedSearchDice;
@@ -39,7 +39,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private StaticRollBonus _dieModifer;
         private bool _hasNoDieModifer;
         private Dictionary<string, bool> _powerAvailability = new Dictionary<string, bool>();
-        
+        private string _powerDeckContains;
+
         public HeroVerification(string heroName)
         {
             _heroName = heroName;
@@ -67,8 +68,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         public void Verify(ITestRoot root)
         {
-            var game = root.Get<Game>();
-            var hero = _heroName == null ? game.ActingHero : game.GetHero(_heroName);
+            var hero = ((TestRoot)root).GetHero(_heroName);
             SetExpectations(hero);
             hero.SavedByGrace.ShouldBe(_expectedWounded);
             hero.DefaultGrace.ShouldBe(_expectedDefaultGrace ?? 0);
@@ -109,7 +109,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
                 Assert.That(hero.CurrentRoll.AdjustedRoll, Is.EquivalentTo(_expectedRoll));
             }
             Assert.That(hero.FreeActions, Is.EqualTo(_expectedFreeActions));
-            hero.Inventory.ShouldBe(_expectedInventory);
+            if (_expectedInventory != null)
+                hero.GetInventory().Select(x=>x.Name).ShouldBe(_expectedInventory);
 
             if (_expectedPowerNames != null)
                 hero.Powers.Select(x => x.Name).OrderBy(x => x).ShouldBe(_expectedPowerNames);
@@ -120,12 +121,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             VerifyActions(hero);
 
             VerifyDice(hero);
+
+            if (_powerDeckContains != null)
+                hero.PowerDeck.ShouldContain(_powerDeckContains);
         }
 
         private void VerifyActions(Hero hero)
         {
             if (hero.AvailableActions == null)
-                hero.AvailableActions = hero.GetAvailableActions();
+                hero.UpdateAvailableActions();
             if (_availableActions != null)
                 Assert.That(hero.AvailableActions, Is.EquivalentTo(_availableActions));
             foreach (var kvp in _powerAvailability)
@@ -346,9 +350,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public HeroVerification CanTakeAction(string actionName, bool isUsable = true)
+        public HeroVerification CanTakeAction(string actionName, bool isAvailable = true)
         {
-            _powerAvailability[actionName] = isUsable;
+            _powerAvailability[actionName] = isAvailable;
+            return this;
+        }
+
+        public HeroVerification PowerDeckContains(string powerName)
+        {
+            _powerDeckContains = powerName;
             return this;
         }
     }

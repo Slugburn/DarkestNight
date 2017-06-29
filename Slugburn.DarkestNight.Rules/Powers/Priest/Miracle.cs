@@ -15,17 +15,17 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            hero.AddAction(new MiracleAction(Name));
+            hero.AddAction(new MiracleAction(this));
         }
 
         public override bool IsUsable(Hero hero)
         {
-            return base.IsUsable(hero) && hero.Grace > 0 && hero.CurrentRoll.ActualRoll != null;
+            return base.IsUsable(hero) && hero.Grace > 0 && hero.CurrentRoll?.ActualRoll != null;
         }
 
         internal class MiracleAction : PowerAction
         {
-            public MiracleAction(string name) : base(name)
+            public MiracleAction(IPower power) : base(power)
             {
             }
 

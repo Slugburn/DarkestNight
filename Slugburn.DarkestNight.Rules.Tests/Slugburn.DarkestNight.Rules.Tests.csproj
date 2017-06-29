@@ -49,6 +49,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\ActionTest.cs" />
+    <Compile Include="Actions\AttackTest.cs" />
+    <Compile Include="Actions\RetrieveRelicTest.cs" />
     <Compile Include="Actions\SearchTest.cs" />
     <Compile Include="Events\AltarTest.cs" />
     <Compile Include="Events\CloseCallTest.cs" />
@@ -118,7 +121,9 @@
       <Name>Slugburn.DarkestNight.Rules</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Blights\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

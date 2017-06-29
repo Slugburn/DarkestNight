@@ -17,12 +17,12 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            hero.AddAction(new ForbiddenArtsAction());
+            hero.AddAction(new ForbiddenArtsAction(this));
         }
 
         private class ForbiddenArtsAction : PowerAction
         {
-            public ForbiddenArtsAction() : base(PowerName)
+            public ForbiddenArtsAction(IPower power) : base(power)
             {
             }
 

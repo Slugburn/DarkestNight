@@ -55,7 +55,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .When.Player.TakesAction("Blessing of Faith")
                 .Then(Verify.Player.HeroSelectionView("Acolyte","Priest"))
                 .When.Player.SelectsHero("Acolyte")
-                .Given.Hero("Acolyte").IsActing()
+                .Given.Hero("Acolyte").IsTakingTurn()
                 .When.Player.TakesAction("Pray", Fake.Rolls(1, 1)).AcceptsRoll()
                 .Then(Verify.Hero("Acolyte").Grace(1).HasUsedAction());
         }
@@ -68,7 +68,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WithHero("Priest").HasPowers("Blessing of Faith").At("Monastery")
                 .When.Player.TakesAction("Priest", "Blessing of Faith").SelectsHero("Acolyte")
                 .Given.Hero("Priest").Power("Blessing of Faith").IsExhausted()
-                .Given.Hero("Acolyte").IsActing()
+                .Given.Hero("Acolyte").IsTakingTurn()
                 .When.Player.TakesAction("Pray", Fake.Rolls(1, 1)).AcceptsRoll()
                 .Then(Verify.Hero("Acolyte").Grace(0).HasUsedAction());
         }
@@ -83,7 +83,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WithHero("Druid").Grace(0).At("Village")
                 .WithHero("Priest").HasPowers("Blessing of Piety").At("Village")
                 .When.Player.TakesAction("Priest", "Blessing of Piety").SelectsHero("Druid")
-                .Given.Hero("Druid").IsActing()
+                .Given.Hero("Druid").IsTakingTurn()
                 .When.Player.TakesAction("Hide")
                 .Then(Verify.Hero("Druid").Grace(1).HasUsedAction());
         }
@@ -134,7 +134,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WithHero("Knight").At("Mountains")
                 .WithHero("Priest").At("Mountains").HasPowers("Calm")
                 .Then(Verify.Location("Mountains").HasAction("Pray [Calm]"))
-                .Given.Hero("Knight").IsActing()
+                .Given.Hero("Knight").IsTakingTurn()
                 .Then(Verify.Hero("Knight").CanTakeAction("Pray [Calm]"));
         }
 
@@ -198,7 +198,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario.Game
                 .WithHero("Knight").HasPowers("Reckless Abandon")
                 .WithHero("Priest").HasPowers("Intercession")
-                .Given.Hero("Knight").IsActing().FacesEnemy("Vampire")
+                .Given.Hero("Knight").IsTakingTurn().FacesEnemy("Vampire")
                 .When.Player.CompletesConflict("Vampire", "Reckless Abandon", Fake.Rolls(1, 2, 3, 4))
                 .When.Player.AnswersQuestion("Intercession", answer)
                 .Then(Verify.Hero("Knight").LostGrace(expectedKnightLoss))

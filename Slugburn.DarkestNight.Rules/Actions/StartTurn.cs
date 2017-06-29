@@ -7,13 +7,16 @@ namespace Slugburn.DarkestNight.Rules.Actions
     public class StartTurn : IAction
     {
         public string Name => "Start Turn";
+
+        public string Text => @"";
+
         public void Act(Hero hero)
         {
-            hero.IsActing = true;
+            hero.IsTakingTurn = true;
             hero.Triggers.Send(HeroTrigger.StartedTurn);
             if (hero.Location == hero.Game.Necromancer.Location)
                 hero.LoseSecrecy("Necromancer");
-            hero.AvailableActions = hero.GetAvailableActions();
+            hero.UpdateAvailableActions();
         }
 
         public bool IsAvailable(Hero hero)
@@ -21,7 +24,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             var game = hero.Game;
             return !hero.IsTurnTaken
                    && !game.Necromancer.IsActing
-                   && !game.Heroes.Any(h => h.IsActing);
+                   && !game.Heroes.Any(h => h.IsTakingTurn);
         }
     }
 }

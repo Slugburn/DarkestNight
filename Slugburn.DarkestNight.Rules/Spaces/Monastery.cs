@@ -1,4 +1,6 @@
-﻿namespace Slugburn.DarkestNight.Rules.Spaces
+﻿using Slugburn.DarkestNight.Rules.Actions;
+
+namespace Slugburn.DarkestNight.Rules.Spaces
 {
     class Monastery : Space
     {
@@ -7,6 +9,7 @@
             Location = Location.Monastery;
             Name = "Monastery";
             AdjacentLocations = new[] {Location.Mountains, Location.Village, Location.Forest};
+            AddAction(new Pray());
         }
     }
 }

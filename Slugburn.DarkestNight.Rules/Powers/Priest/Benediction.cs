@@ -21,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
         public override void Learn(Hero hero)
         {
             base.Learn(hero);
-            hero.AddAction(new BenedictionAction());
+            hero.AddAction(new BenedictionAction(this));
         }
 
         public override bool IsUsable(Hero hero)
@@ -38,14 +38,14 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
 
         internal class BenedictionAction : PowerAction, ICallbackHandler
         {
-            public BenedictionAction() : base(PowerName)
+            public BenedictionAction(IPower power) : base(power)
             {
             }
 
             public override void Act(Hero hero)
             {
                 if (!IsAvailable(hero))
-                    throw new PowerNotUsableException(_powerName);
+                    throw new ActionNotAvailableException(hero, this);
 
                 var validTargets = hero.Game.Heroes.Where(target => IsValidTarget(hero, target)).ToList();
 

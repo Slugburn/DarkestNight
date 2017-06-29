@@ -31,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             game.AddHero(hero, player);
             game.ActingHero = hero;
             var heroContext = new HeroContext(game, player, hero);
-            heroContext.IsActing();
+            heroContext.IsTakingTurn();
             return heroContext;
         }
 

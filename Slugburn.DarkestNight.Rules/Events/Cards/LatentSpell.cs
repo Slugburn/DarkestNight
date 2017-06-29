@@ -37,8 +37,8 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                     hero.Player.DisplayBlightSelection(selection, Callback.ForEvent(hero, this));
                     break;
                 case "draw-power":
-                    var power = hero.PowerDeck.First();
-                    hero.LearnPower(power.Name);
+                    var powerName = hero.PowerDeck.First();
+                    var power = hero.LearnPower(powerName);
                     hero.Player.DisplayPowers(new [] {power}.ToPlayerPowers(), Callback.ForEvent(hero, this));
                     hero.Player.State = PlayerState.SelectPower;
                     break;
