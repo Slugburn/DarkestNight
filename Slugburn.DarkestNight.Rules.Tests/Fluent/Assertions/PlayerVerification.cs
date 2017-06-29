@@ -71,7 +71,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             }
         }
 
-        public SearchResultSelectionVerification SearchResultSelection
+        public SearchResultSelectionVerification Search
         {
             get
             {

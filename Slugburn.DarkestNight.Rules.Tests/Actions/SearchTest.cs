@@ -14,9 +14,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
                 .WithHero("Druid").NotAt("Monastery").HasPowers("Raven Form").Power("Raven Form").IsActive()
                 .NextSearchResult(Find.Key, Find.TreasureChest)
                 .When.Player.TakesAction("Search", Fake.Rolls(5, 6))
-                .Then(Verify.Player.SearchResultSelection.Roll(5, 6))
+                .Then(Verify.Player.Search.Roll(5, 6))
                 .When.Player.AcceptsRoll()
-                .Then(Verify.Player.SearchResultSelection.Results("Key", "Treasure Chest").Roll(5, 6))
+                .Then(Verify.Player.Search.Results("Key", "Treasure Chest").Roll(5, 6))
                 .When.Player.SelectsSearchResult("Treasure Chest")
                 .Then(Verify.Hero().HasItems("Treasure Chest").HasUsedAction().CanGainGrace(false));
         }
@@ -53,7 +53,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
         }
 
         [Test]
-        public void ForgottenShrine()
+        public void FindForgottenShrine()
         {
             // Gain 2 Grace (no max)
             TestScenario.Game
@@ -64,7 +64,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
         }
 
         [Test]
-        public void Epiphany()
+        public void FindEpiphany()
         {
             // Search your power deck and take the card of your choice, then shuffle that deck
             TestScenario.Game
@@ -79,7 +79,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
         }
 
         [Test]
-        public void Artifact()
+        public void FindArtifact()
         {
             // Draw an artifact card
             TestScenario.Game
@@ -88,7 +88,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
                 .NextArtifact("Ghost Mail")
                 .When.Player.CompletesSearch()
                 .Then(Verify.Hero().HasUsedAction().HasItems("Ghost Mail"));
-
         }
     }
 }
