@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Shouldly;
-using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
@@ -71,7 +69,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             }
         }
 
-        public SearchResultSelectionVerification Search
+        public SearchResultSelectionVerification SearchView
         {
             get
             {

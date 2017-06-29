@@ -1,11 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using System.Linq;
-using Slugburn.DarkestNight.Rules.Events;
+﻿using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
-using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Priest
 {
@@ -24,29 +20,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             foreach (var other in hero.Game.Heroes.Where(h=>h!=hero))
             {
                 other.Intercession = this;
-//                other.Triggers.Add(HeroTrigger.CreatingEventOptions, Name, new IntercessionEventOptionCreation(hero, this));
-//                other.Triggers.Add(HeroTrigger.EventOptionSelected, Name, new IntercessionEventOptionSelected(hero, this) );
-            }
-        }
-
-        internal class IntercessionEventOptionCreation : ITriggerHandler<Hero>
-        {
-            private readonly Hero _owner;
-            private readonly Intercession _power;
-
-            public IntercessionEventOptionCreation(Hero owner, Intercession power)
-            {
-                _owner = owner;
-                _power = power;
-            }
-
-            public void HandleTrigger(Hero hero, string source, TriggerContext context)
-            {
-                if (!_owner.CanSpendGrace) return;
-                if (!_power.IsUsable(_owner)) return;
-                var options = context.GetState<List<EventOption>>();
-                if (options.Any(x => x.Code == "spend-grace"))
-                    options.Insert(0, new EventOption("spend-grace-intercession", "Spend Grace [Intercession]", null));
             }
         }
 
@@ -82,23 +55,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             return true;
         }
 
-
-        internal class IntercessionEventOptionSelected : ITriggerHandler<Hero>
-        {
-            private readonly Hero _owner;
-
-            public IntercessionEventOptionSelected(Hero owner, Intercession power)
-            {
-                _owner = owner;
-            }
-
-            public void HandleTrigger(Hero hero, string source, TriggerContext context)
-            {
-                _owner.SpendGrace(1);
-                hero.Grace += 1;
-                hero.CurrentEvent.SelectedOption = "spend-grace";
-            }
-        }
 
         public void HandleCallback(Hero hero, string path, object data)
         {
