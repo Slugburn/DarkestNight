@@ -68,6 +68,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             return this;
         }
 
+        public IHeroContext DefaultGrace(int defaultGrace)
+        {
+            _hero.DefaultGrace = defaultGrace;
+            return this;
+        }
+
         public IHeroContext PowerDeck(params string[] powers)
         {
             _hero.PowerDeck.Clear();

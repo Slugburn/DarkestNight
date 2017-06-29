@@ -20,5 +20,6 @@
         IHeroContext HasItems(params string[] itemNames);
         IHeroContext NextPowerDraws(params string[] powerNames);
         IHeroContext LostSecrecy(int amount);
+        IHeroContext DefaultGrace(int defaultGrace);
     }
 }

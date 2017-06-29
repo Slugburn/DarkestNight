@@ -15,5 +15,6 @@ namespace Slugburn.DarkestNight.Rules.Players
         void DisplayHeroSelection(PlayerHeroSelection view, Callback callback);
         void DisplayAskQuestion(PlayerAskQuestion view, Callback callback);
         void DisplaySearch(PlayerSearch view, Callback callback);
+        void DisplayPrayer(PlayerPrayer view);
     }
 }

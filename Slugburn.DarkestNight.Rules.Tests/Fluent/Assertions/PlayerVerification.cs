@@ -14,7 +14,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private ConflictViewVerification _conflictView;
         private NecromancerViewVerification _necromancerView;
         private string[] _heroNames;
-        private SearchResultSelectionVerification _searchResultSelection;
+        private SearchViewVerification _searchView;
+        private PrayerViewVerification _prayerView;
 
         public void Verify(ITestRoot root)
         {
@@ -30,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             _eventView?.Verify(root);
             _blightSelectionView?.Verify(root);
             _necromancerView?.Verify(root);
-            _searchResultSelection?.Verify(root);
+            _searchView?.Verify(root);
         }
 
         public EventViewVerification EventView
@@ -69,13 +70,22 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             }
         }
 
-        public SearchResultSelectionVerification SearchView
+        public SearchViewVerification SearchView
         {
             get
             {
-                _searchResultSelection = new SearchResultSelectionVerification();
-                return _searchResultSelection;
+                _searchView = new SearchViewVerification();
+                return _searchView;
             }
+        }
+
+        public PrayerViewVerification PrayerView
+        {
+            get
+            {
+                _prayerView = new PrayerViewVerification();
+                return _prayerView;
+            } 
         }
 
         public PlayerVerification LocationSelectionView(params string[] locations)

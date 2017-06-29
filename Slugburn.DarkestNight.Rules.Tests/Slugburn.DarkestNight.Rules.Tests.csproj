@@ -52,6 +52,7 @@
     <Compile Include="Actions\ActionTest.cs" />
     <Compile Include="Actions\AttackTest.cs" />
     <Compile Include="Actions\HideTest.cs" />
+    <Compile Include="Actions\PrayTest.cs" />
     <Compile Include="Actions\RetrieveRelicTest.cs" />
     <Compile Include="Actions\SearchTest.cs" />
     <Compile Include="Actions\TravelTest.cs" />
@@ -101,7 +102,8 @@
     <Compile Include="Fluent\Assertions\PowerExpectation.cs" />
     <Compile Include="Fluent\Arrangements\LocationContext.cs" />
     <Compile Include="Fluent\Assertions\PowerVerification.cs" />
-    <Compile Include="Fluent\Assertions\SearchResultSelectionVerification.cs" />
+    <Compile Include="Fluent\Assertions\PrayerViewVerification.cs" />
+    <Compile Include="Fluent\Assertions\SearchViewVerification.cs" />
     <Compile Include="Fluent\ITestRoot.cs" />
     <Compile Include="Fluent\Fake.cs" />
     <Compile Include="Fluent\TestRoot.cs" />

@@ -1,4 +1,6 @@
-﻿using Slugburn.DarkestNight.Rules.Heroes;
+﻿using System.Linq;
+using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Triggers;
 
@@ -15,11 +17,15 @@ namespace Slugburn.DarkestNight.Rules.Actions
             hero.IsActionAvailable = false;
             var rollState = hero.SetRoll(RollBuilder.Create<PrayerRoll>().Type(RollType.Pray).Base("Pray", 2).Target(3));
             rollState.Roll();
+            hero.Player.DisplayPrayer(PlayerPrayer.From(hero));
         }
 
         public virtual bool IsAvailable(Hero hero)
         {
-            return hero.IsTakingTurn && hero.IsActionAvailable && hero.Location == Location.Monastery;
+            return hero.IsTakingTurn
+                   && hero.IsActionAvailable
+                   && hero.Location == Location.Monastery
+                   && (hero.Grace < hero.DefaultGrace || hero.Powers.Any(p => p.Exhausted));
         }
 
         private class PrayerRoll : IRollHandler

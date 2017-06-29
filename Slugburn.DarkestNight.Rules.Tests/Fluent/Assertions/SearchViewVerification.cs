@@ -4,7 +4,7 @@ using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
-    public class SearchResultSelectionVerification : IVerifiable
+    public class SearchViewVerification : IVerifiable
     {
         private string[] _results;
         private int[] _roll;
@@ -19,13 +19,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
                 Assert.That(view.Roll, Is.EquivalentTo(_roll));
         }
 
-        public SearchResultSelectionVerification Results(params string[] expected)
+        public SearchViewVerification Results(params string[] expected)
         {
             _results = expected;
             return this;
         }
 
-        public SearchResultSelectionVerification Roll(params int[] expected)
+        public SearchViewVerification Roll(params int[] expected)
         {
             _roll = expected;
             return this;

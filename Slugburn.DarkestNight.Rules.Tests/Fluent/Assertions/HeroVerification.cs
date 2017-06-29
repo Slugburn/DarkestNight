@@ -21,18 +21,18 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private int? _eludeDice;
         private int? _fightDice;
         private int _expectedFreeActions;
-        private int? _expectedGrace;
-        private int? _expectedSecrecy;
+        private int? _grace;
+        private int? _secrecy;
         private IEnumerable<Blight> _expectedIgnoredBlights;
         private string[] _expectedInventory;
-        private Location? _expectedLocation;
+        private Location? _location;
         private int[] _expectedRoll;
         private int? _searchDice;
         private int? _travelSpeed;
         private bool _expectedWounded;
-        private int? _expectedGraceLoss;
-        private int? _expectedSecrecyLoss;
-        private int? _expectedDefaultGrace;
+        private int? _graceLoss;
+        private int? _secrecyLoss;
+        private int? _defaultGrace;
         private List<string> _expectedPowerNames;
         private int _expectedUnresolvedEvents;
         private string[] _availableActions;
@@ -54,12 +54,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         private void SetExpectations(Hero hero)
         {
-            _expectedDefaultGrace = _expectedDefaultGrace ?? hero.DefaultGrace;
-            _expectedGrace = _expectedGrace ?? _expectedDefaultGrace - (_expectedGraceLoss ?? 0);
-            var validateSecrecy = _expectedSecrecy != null || _expectedSecrecyLoss != null;
+            _defaultGrace = _defaultGrace ?? hero.DefaultGrace;
+            var validateGrace = _grace != null || _graceLoss != null;
+            if (validateGrace)
+                _grace = _grace ?? _defaultGrace - (_graceLoss ?? 0);
+            var validateSecrecy = _secrecy != null || _secrecyLoss != null;
             if (validateSecrecy)
-                _expectedSecrecy =  _expectedSecrecy ?? hero.DefaultSecrecy - (_expectedSecrecyLoss ?? 0);
-            _expectedLocation = _expectedLocation ?? hero.Location;
+                _secrecy =  _secrecy ?? hero.DefaultSecrecy - (_secrecyLoss ?? 0);
+            _location = _location ?? hero.Location;
         }
 
         public void Verify(ITestRoot root)
@@ -67,14 +69,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             var hero = ((TestRoot)root).GetHero(_heroName);
             SetExpectations(hero);
             hero.SavedByGrace.ShouldBe(_expectedWounded);
-            hero.DefaultGrace.ShouldBe(_expectedDefaultGrace ?? 0);
-            Assert.That(hero.Grace, Is.EqualTo(_expectedGrace), $"Unexpected Grace for {_heroName}.");
-            if (_expectedSecrecy.HasValue)
-                Assert.That(hero.Secrecy, Is.EqualTo(_expectedSecrecy), "Unexpected Secrecy.");
+            hero.DefaultGrace.ShouldBe(_defaultGrace ?? 0);
+            if (_grace.HasValue)
+                Assert.That(hero.Grace, Is.EqualTo(_grace), $"Unexpected Grace for {_heroName}.");
+            if (_secrecy.HasValue)
+                Assert.That(hero.Secrecy, Is.EqualTo(_secrecy), "Unexpected Secrecy.");
             Assert.That(hero.IsActionAvailable, Is.EqualTo(_expectedActionAvailable),
                 _expectedActionAvailable ? "Should not have used action." : "Should have used action.");
             Assert.That(hero.CanGainGrace, Is.EqualTo(_expectedCanGainGrace), "Unexpected CanGainGrace");
-            Assert.That(hero.Location, Is.EqualTo(_expectedLocation));
+            Assert.That(hero.Location, Is.EqualTo(_location));
             var validLocations = hero.GetValidMovementLocations().ToList();
             var disallowedMovement = validLocations.Intersect(_invalidLocations);
             var specifiedMovement = validLocations.Intersect(_specifiedLocations);
@@ -157,15 +160,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         }
 
 
-        public HeroVerification Grace(int expected)
+        public HeroVerification Grace(int? expected)
         {
-            _expectedGrace = expected;
+            _grace = expected;
             return this;
         }
 
         public HeroVerification Secrecy(int? expected)
         {
-            _expectedSecrecy = expected;
+            _secrecy = expected;
             return this;
         }
 
@@ -195,13 +198,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         public HeroVerification LostGrace(int loss = 1)
         {
-            _expectedGraceLoss = loss;
+            _graceLoss = loss;
             return this;
         }
 
         public HeroVerification LostSecrecy(int loss = 1)
         {
-            _expectedSecrecyLoss = loss;
+            _secrecyLoss = loss;
             return this;
         }
 
@@ -243,7 +246,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         public HeroVerification Location(string location)
         {
-            _expectedLocation = location.ToEnum<Location>();
+            _location = location.ToEnum<Location>();
             return this;
         }
 
@@ -267,7 +270,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         public HeroVerification DefaultGrace(int expected)
         {
-            _expectedDefaultGrace = expected;
+            _defaultGrace = expected;
             return this;
         }
 
@@ -316,7 +319,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         public HeroVerification WasWounded(bool expected = true)
         {
             _expectedWounded = expected;
-            _expectedGraceLoss = expected ? 1 : 0;
+            _graceLoss = expected ? 1 : 0;
             return this;
         }
 

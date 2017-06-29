@@ -81,8 +81,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             _callback = callback;
         }
 
+        public void DisplayPrayer(PlayerPrayer view)
+        {
+            Prayer = view;
+        }
+
         public PlayerAskQuestion AskQuestion { get; set; }
         public PlayerSearch Search { get; set; }
+        public PlayerPrayer Prayer { get; set; }
 
 
         public void SelectEventOption(string option)
