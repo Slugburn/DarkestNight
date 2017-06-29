@@ -151,7 +151,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Power("Tree Form").IsActive()
                 .When.Player.TakesAction("Deactivate Form")
                 .When.Player.StartsTurn()
-                .Then(Verify.Hero().Grace(0).HasAvailableActions("Travel", "Hide", "Search", "Tree Form", "End Turn"));
+                .Then(Verify.Hero().Grace(0).HasAvailableActions("Travel", "Search", "Tree Form", "End Turn"));
         }
 
         [Test]
@@ -179,6 +179,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario.Game
                 .WithHero("Druid").HasPowers("Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form")
+                .Secrecy(0) // secrecy needs to be <5 in order to use hide
                 .Power("Tree Form").IsActive()
                 .When.Player.StartsTurn()
                 .Then(Verify.Hero().HasAvailableActions("Hide", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form"));

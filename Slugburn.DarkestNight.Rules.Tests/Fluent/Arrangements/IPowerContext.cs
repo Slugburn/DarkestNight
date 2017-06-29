@@ -3,6 +3,6 @@
     public interface IPowerContext : IHeroContext
     {
         IPowerContext IsActive();
-        IPowerContext IsExhausted();
+        IPowerContext IsExhausted(bool exhausted = true);
     }
 }

@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Actions\ActionTest.cs" />
     <Compile Include="Actions\AttackTest.cs" />
+    <Compile Include="Actions\HideTest.cs" />
     <Compile Include="Actions\RetrieveRelicTest.cs" />
     <Compile Include="Actions\SearchTest.cs" />
     <Compile Include="Actions\TravelTest.cs" />

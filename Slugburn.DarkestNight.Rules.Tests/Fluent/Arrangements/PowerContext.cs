@@ -22,9 +22,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             return this;
         }
 
-        public IPowerContext IsExhausted()
+        public IPowerContext IsExhausted(bool exhausted = true)
         {
-            _power.Exhaust(_hero);
+            if (exhausted)
+                _power.Exhaust(_hero);
+            else
+                _power.Refresh();
             return this;
         }
     }

@@ -1,4 +1,5 @@
-﻿using Slugburn.DarkestNight.Rules.Heroes;
+﻿using System.Linq;
+using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Actions
@@ -20,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public bool IsAvailable(Hero hero)
         {
-            return hero.IsTakingTurn && hero.IsActionAvailable;
+            return hero.IsTakingTurn && hero.IsActionAvailable && (hero.Secrecy < 5 || hero.Powers.Any(power=>power.Exhausted));
         }
     }
 }

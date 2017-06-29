@@ -55,6 +55,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
             {
                 case "Attack":
                     return given.Location("Village").Blights("Desecration").Hero().At("Village");
+                case "Hide":
+                    return given.Hero().Secrecy(4);
                 case "Search":
                     return given.Hero().At("Mountains");
                 case "Retrieve a Holy Relic":
