@@ -20,5 +20,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         IPlayerActionContext SelectsBlights(params string[] blights);
         IPlayerActionContext SelectsHero(string heroName);
         IPlayerActionContext AnswersQuestion(string title, bool answer);
+        IPlayerActionContext SelectsSearchResult(string resultName = null);
     }
 }

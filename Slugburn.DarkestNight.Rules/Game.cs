@@ -6,6 +6,7 @@ using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Events;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Items.Artifacts;
 using Slugburn.DarkestNight.Rules.Maps;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Powers;
@@ -28,7 +29,10 @@ namespace Slugburn.DarkestNight.Rules
             MapsDiscard = new List<IMap>();
             Necromancer = new Necromancer(this);
             Darkness = 0;
+            ArtifactDeck = Artifact.CreateDeck().Shuffle();
         }
+
+        public List<string> ArtifactDeck { get; set; }
 
         public List<IPlayer> Players { get; } = new List<IPlayer>();
 
@@ -182,11 +186,14 @@ namespace Slugburn.DarkestNight.Rules
             };
         }
 
-        public Find DrawSearchResult(Location location)
+        public IEnumerable<Find> DrawSearchResult(Location location, int count)
         {
-            var map = Maps.Draw();
-            var result = map.GetSearchResult(location);
-            return result;
+            for (var i = 0; i < count; i++)
+            {
+                var map = Maps.Draw();
+                var result = map.GetSearchResult(location);
+                yield return result;
+            }
         }
     }
 }

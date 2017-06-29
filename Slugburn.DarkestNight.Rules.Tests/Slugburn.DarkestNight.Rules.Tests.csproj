@@ -99,6 +99,7 @@
     <Compile Include="Fluent\Assertions\PowerExpectation.cs" />
     <Compile Include="Fluent\Arrangements\LocationContext.cs" />
     <Compile Include="Fluent\Assertions\PowerVerification.cs" />
+    <Compile Include="Fluent\Assertions\SearchResultSelectionVerification.cs" />
     <Compile Include="Fluent\ITestRoot.cs" />
     <Compile Include="Fluent\Fake.cs" />
     <Compile Include="Fluent\TestRoot.cs" />

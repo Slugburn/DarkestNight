@@ -10,7 +10,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
         IGameContext NextBlight(params string[] blightNames);
         IGameContext Darkness(int value);
         IGameContext DrawEvents(int count);
-        IGameContext NextSearchResult(Find result);
+        IGameContext NextSearchResult(params Find[] results);
         IGameContext NewDay();
+        IGameContext NextArtifact(string artifactName);
     }
 }

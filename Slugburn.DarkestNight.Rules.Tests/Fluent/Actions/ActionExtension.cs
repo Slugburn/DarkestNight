@@ -44,5 +44,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
                 .Given.Game.NewDay()
                 .When.Player.TakesAction(null, "Start Turn");
         }
+
+        public static IPlayerActionContext CompletesSearch(this IPlayerActionContext context)
+        {
+            return context.Player.TakesAction("Search").AcceptsRoll().SelectsSearchResult();
+        }
     }
 }

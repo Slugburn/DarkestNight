@@ -1,32 +1,52 @@
-﻿namespace Slugburn.DarkestNight.Rules
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Slugburn.DarkestNight.Rules
 {
     public enum Find
     {
-        // Discard after a fight roll to add 3d to that roll.
         BottledMagic,
-
-        // Three of these amy be discarded to retrieve a holy relic (as an action)
         Key,
-
-        // Draw two power cards, keep one, place the other at the bottom of your deck
         SupplyCache,
-
-        // Discard at any time to draw a new power card
         TreasureChest,
-
-        // Discard during your turn to instantly move to any location and gain 1 Secrecy
         Waystone,
-
-        // Gain 2 Grace
         ForgottenShrine,
-
-        // Discard after a failed elusion roll to make it a success
         VanishingDust,
-
-        // Search your power deck and take the card of your choice, then shuffle that deck
         Epiphany,
-
-        // Draw an artifact card
         Artifact
+    }
+
+    public static class FindExtension
+    {
+        private static readonly IDictionary<Find,string> FindToDescription = new Dictionary<Find,string>
+        {
+            { Find.BottledMagic, "Bottled Magic"},
+            {Find.Key, "Key" },
+            {Find.SupplyCache, "Supply Cache" },
+            {Find.TreasureChest, "Treasure Chest" },
+            {Find.Waystone, "Waystone" },
+            {Find.ForgottenShrine, "Forgotten Shrine" },
+            {Find.VanishingDust, "Vanishing Dust"},
+            {Find.Epiphany, "Epiphany" },
+            {Find.Artifact, "Artifact" }
+        };
+
+        private static readonly Dictionary<string, Find> DescriptionToFind;
+
+        static FindExtension()
+        {
+            DescriptionToFind = FindToDescription.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);
+        }
+
+        public static string ToDescription(this Find find)
+        {
+            return FindToDescription[find];
+        }
+
+        public static Find ToFind(this string description)
+        {
+            return DescriptionToFind[description];
+        }
     }
 }

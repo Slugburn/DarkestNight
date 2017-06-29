@@ -1,7 +1,11 @@
 ﻿namespace Slugburn.DarkestNight.Rules.Items.Artifacts
 {
-    class VanishingCowl
+    class VanishingCowl : Artifact
     {
-        // You may ignore the effect of one blight each turn.
+         
+        public VanishingCowl() : base("Vanishing Cowl")
+        {
+            Text = "You may ignore the effect of one blight each turn.";
+        }
     }
 }

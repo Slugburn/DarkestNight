@@ -19,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
         public override void Win(Hero hero)
         {
             hero.LoseSecrecy("Enemy");
-            new DrawSearchCommand().DrawSearchResult(hero);
+            new DrawSearchCommand().DrawSearchResults(hero, 1);
             hero.EndEvent();
         }
 

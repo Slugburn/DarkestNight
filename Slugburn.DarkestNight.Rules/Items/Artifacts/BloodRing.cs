@@ -1,7 +1,10 @@
 ﻿namespace Slugburn.DarkestNight.Rules.Items.Artifacts
 {
-    class BloodRing
+    class BloodRing : Artifact
     {
-        // +1d in fights.
+        public BloodRing() : base("Blood Ring")
+        {
+            Text = "+1d in fights.";
+        }
     }
 }

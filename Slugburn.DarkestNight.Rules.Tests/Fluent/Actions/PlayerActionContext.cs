@@ -164,5 +164,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             player.AnswerQuestion(answer);
             return this;
         }
+
+        public IPlayerActionContext SelectsSearchResult(string resultName = null)
+        {
+            var player = GetPlayer();
+            resultName = resultName ?? player.Search.SearchResults.Single();
+            player.SelectSearchResult(resultName);
+            return this;
+        }
     }
 }

@@ -1,7 +1,10 @@
 ﻿namespace Slugburn.DarkestNight.Rules.Items.Artifacts
 {
-    class CrystalBall
+    class CrystalBall : Artifact
     {
-        // +1d in searches.
+        public CrystalBall() : base("Crystal Ball")
+        {
+            Text = "+1d in searches.";
+        }
     }
 }

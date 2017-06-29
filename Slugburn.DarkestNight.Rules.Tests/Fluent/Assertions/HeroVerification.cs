@@ -18,8 +18,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private int _expectedAvailableMovement;
         private bool _expectedCanGainGrace;
         private int _expectedDiceCount;
-        private int _expectedEludeDice;
-        private int _expectedFightDice;
+        private int? _eludeDice;
+        private int? _fightDice;
         private int _expectedFreeActions;
         private int? _expectedGrace;
         private int? _expectedSecrecy;
@@ -27,8 +27,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private string[] _expectedInventory;
         private Location? _expectedLocation;
         private int[] _expectedRoll;
-        private int _expectedSearchDice;
-        private int _expectedTravelSpeed;
+        private int? _searchDice;
+        private int? _travelSpeed;
         private bool _expectedWounded;
         private int? _expectedGraceLoss;
         private int? _expectedSecrecyLoss;
@@ -39,7 +39,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private StaticRollBonus _dieModifer;
         private bool _hasNoDieModifer;
         private Dictionary<string, bool> _powerAvailability = new Dictionary<string, bool>();
-        private string _powerDeckContains;
+        private string[] _powerDeckContains;
 
         public HeroVerification(string heroName)
         {
@@ -48,10 +48,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             _expectedCanGainGrace = true;
             _invalidLocations = new List<Location>();
             _specifiedLocations = new List<Location>();
-            _expectedTravelSpeed = 1;
-            _expectedFightDice = 1;
-            _expectedEludeDice = 1;
-            _expectedSearchDice = 1;
         }
 
         public HeroEventVerification CurrentEvent { get; } = new HeroEventVerification();
@@ -77,7 +73,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
                 Assert.That(hero.Secrecy, Is.EqualTo(_expectedSecrecy), "Unexpected Secrecy.");
             Assert.That(hero.IsActionAvailable, Is.EqualTo(_expectedActionAvailable),
                 _expectedActionAvailable ? "Should not have used action." : "Should have used action.");
-            Assert.That(hero.CanGainGrace, Is.EqualTo(_expectedCanGainGrace), "Unexpected CanGrainGrace");
+            Assert.That(hero.CanGainGrace, Is.EqualTo(_expectedCanGainGrace), "Unexpected CanGainGrace");
             Assert.That(hero.Location, Is.EqualTo(_expectedLocation));
             var validLocations = hero.GetValidMovementLocations().ToList();
             var disallowedMovement = validLocations.Intersect(_invalidLocations);
@@ -89,18 +85,22 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
                 var ignoredBlights = AllBlights().Where(x => hero.IsBlightIgnored(x)).ToList();
                 Assert.That(ignoredBlights, Is.EquivalentTo(_expectedIgnoredBlights), "Unexpected ignored blights.");
             }
-            Assert.That(hero.TravelSpeed, Is.EqualTo(_expectedTravelSpeed), "Unexpected TravelSpeed.");
+            if (_travelSpeed != null)
+                Assert.That(hero.TravelSpeed, Is.EqualTo(_travelSpeed), "Unexpected TravelSpeed.");
             Assert.That(hero.AvailableMovement, Is.EqualTo(_expectedAvailableMovement), "Unexpected AvailableMovement.");
 
             if (hero.CurrentRoll == null)
                 hero.SetRoll(RollBuilder.Create(null));
             var fightDice = hero.CurrentRoll.GetDice(RollType.Fight, "Fight", 1).Total;
-            Assert.That(fightDice, Is.EqualTo(_expectedFightDice), "Unexpected number of Fight dice.");
+            if (_fightDice != null)
+                Assert.That(fightDice, Is.EqualTo(_fightDice), "Unexpected number of Fight dice.");
             var eludeDice = hero.CurrentRoll.GetDice(RollType.Elude, "Elude", 1).Total;
-            Assert.That(eludeDice, Is.EqualTo(_expectedEludeDice), "Unexpected number of Elude dice.");
+            if (_eludeDice != null)
+                Assert.That(eludeDice, Is.EqualTo(_eludeDice), "Unexpected number of Elude dice.");
             var dice = hero.CurrentRoll.GetDice(RollType.Search, "Search", 1);
             var searchDice = dice.Total;
-            Assert.That(searchDice, Is.EqualTo(_expectedSearchDice), "Unexpected number of Search dice.");
+            if (_searchDice != null)
+                Assert.That(searchDice, Is.EqualTo(_searchDice), "Unexpected number of Search dice.");
             if (_expectedDiceCount > 0)
                 hero.CurrentRoll.AdjustedRoll.Count.ShouldBe(_expectedDiceCount, "Unexpected number of dice rolled.");
             if (_expectedRoll != null)
@@ -123,7 +123,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             VerifyDice(hero);
 
             if (_powerDeckContains != null)
-                hero.PowerDeck.ShouldContain(_powerDeckContains);
+                Assert.That(hero.PowerDeck, Is.EquivalentTo(_powerDeckContains));
         }
 
         private void VerifyActions(Hero hero)
@@ -255,13 +255,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         public HeroVerification TravelSpeed(int expected)
         {
-            _expectedTravelSpeed = expected;
+            _travelSpeed = expected;
             return this;
         }
 
         public HeroVerification SearchDice(int expected)
         {
-            _expectedSearchDice = expected;
+            _searchDice = expected;
             return this;
         }
 
@@ -273,13 +273,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         public HeroVerification FightDice(int expected)
         {
-            _expectedFightDice = expected;
+            _fightDice = expected;
             return this;
         }
 
         public HeroVerification EludeDice(int expected)
         {
-            _expectedEludeDice = expected;
+            _eludeDice = expected;
             return this;
         }
 
@@ -356,7 +356,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public HeroVerification PowerDeckContains(string powerName)
+        public HeroVerification PowerDeckContains(params string[] powerName)
         {
             _powerDeckContains = powerName;
             return this;

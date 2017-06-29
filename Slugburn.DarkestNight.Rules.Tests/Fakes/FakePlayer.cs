@@ -75,7 +75,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             _callback = callback;
         }
 
+        public void DisplaySearch(PlayerSearch view, Callback callback)
+        {
+            Search = view;
+            _callback = callback;
+        }
+
         public PlayerAskQuestion AskQuestion { get; set; }
+        public PlayerSearch Search { get; set; }
 
 
         public void SelectEventOption(string option)
@@ -153,6 +160,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         public void AnswerQuestion(bool answer)
         {
             CallbackRouter.Route(_game, _callback, answer);
+        }
+
+        public void SelectSearchResult(string resultName)
+        {
+            CallbackRouter.Route(_game, _callback, resultName.ToFind());
         }
     }
 }

@@ -1,10 +1,12 @@
 ﻿using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Players;
+using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
-    public class Search : IAction
+    public class Search : IAction, ICallbackHandler
     {
         public string Name => "Search";
 
@@ -27,6 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 .Target(space.SearchTarget));
             hero.Triggers.Send(HeroTrigger.Searched);
             state.Roll();
+            hero.Player.DisplaySearch(PlayerSearch.From(hero, null), Callback.ForAction(hero, this));
             hero.IsActionAvailable = false;
         }
 
@@ -41,7 +44,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             {
                 if (rollState.Win)
                 {
-                    new DrawSearchCommand().DrawSearchResult(hero);
+                    new DrawSearchCommand().DrawSearchResults(hero, rollState.Successes);
                 }
                 else
                 {
@@ -49,5 +52,9 @@ namespace Slugburn.DarkestNight.Rules.Actions
             }
         }
 
+        public void HandleCallback(Hero hero, string path, object data)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

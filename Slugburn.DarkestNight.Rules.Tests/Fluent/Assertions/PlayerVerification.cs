@@ -16,6 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private ConflictViewVerification _conflictView;
         private NecromancerViewVerification _necromancerView;
         private string[] _heroNames;
+        private SearchResultSelectionVerification _searchResultSelection;
 
         public void Verify(ITestRoot root)
         {
@@ -31,6 +32,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             _eventView?.Verify(root);
             _blightSelectionView?.Verify(root);
             _necromancerView?.Verify(root);
+            _searchResultSelection?.Verify(root);
         }
 
         public EventViewVerification EventView
@@ -66,6 +68,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             {
                 _necromancerView = new NecromancerViewVerification();
                 return _necromancerView;
+            }
+        }
+
+        public SearchResultSelectionVerification SearchResultSelection
+        {
+            get
+            {
+                _searchResultSelection = new SearchResultSelectionVerification();
+                return _searchResultSelection;
             }
         }
 

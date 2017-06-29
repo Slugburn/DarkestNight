@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -54,15 +55,27 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             return this;
         }
 
-        public IGameContext NextSearchResult(Find result)
+        public IGameContext NextSearchResult(params Find[] results)
         {
-            GetGame().Maps.Insert(0, new Map(new Blight[7], Enumerable.Repeat(result, 6).ToArray()));
+            var maps = GetGame().Maps;
+            foreach (var find in results)
+                maps.Insert(0, new Map(new Blight[7], Enumerable.Repeat(find, 6).ToArray()));
             return this;
         }
 
         public IGameContext NewDay()
         {
             GetGame().StartNewDay();
+            return this;
+        }
+
+        public IGameContext NextArtifact(string artifactName)
+        {
+            var deck = GetGame().ArtifactDeck;
+            if (!deck.Contains(artifactName))
+                throw new ArgumentOutOfRangeException(nameof(artifactName), artifactName);
+            deck.Remove(artifactName);
+            deck.Insert(0, artifactName);
             return this;
         }
 

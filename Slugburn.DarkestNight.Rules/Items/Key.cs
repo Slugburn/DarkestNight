@@ -4,6 +4,7 @@
     {
         public Key() : base("Key")
         {
+            Text = "Three keys may be discarded to retrieve a holy relic (as an action).";
         }
     }
 }

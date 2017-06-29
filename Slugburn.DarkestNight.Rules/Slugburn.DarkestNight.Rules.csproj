@@ -56,6 +56,7 @@
     <Compile Include="Actions\Travel.cs" />
     <Compile Include="Blights\BlightDetail.cs" />
     <Compile Include="Blights\BlightLocation.cs" />
+    <Compile Include="Blights\IgnoreBlight.cs" />
     <Compile Include="Blights\TargetDieAssignment.cs" />
     <Compile Include="Blights\BlightExtension.cs" />
     <Compile Include="Blights\Blight.cs" />
@@ -132,10 +133,11 @@
     <Compile Include="Heroes\Impl\Seer.cs" />
     <Compile Include="Heroes\Impl\Wizard.cs" />
     <Compile Include="Heroes\PreventMovementEffect.cs" />
-    <Compile Include="IgnoreBlight.cs" />
+    <Compile Include="Items\Artifacts\Artifact.cs" />
     <Compile Include="Items\Artifacts\BloodRing.cs" />
     <Compile Include="Items\Artifacts\CrystalBall.cs" />
     <Compile Include="Items\Artifacts\GhostMail.cs" />
+    <Compile Include="Items\Artifacts\IArtifact.cs" />
     <Compile Include="Items\Artifacts\MagicMask.cs" />
     <Compile Include="Items\Artifacts\StarryVeil.cs" />
     <Compile Include="Items\Artifacts\VanishingCowl.cs" />
@@ -160,6 +162,7 @@
     <Compile Include="Players\Models\PlayerHeroSelection.cs" />
     <Compile Include="Players\Models\PlayerNecromancer.cs" />
     <Compile Include="Players\Models\PlayerPower.cs" />
+    <Compile Include="Players\Models\PlayerSearch.cs" />
     <Compile Include="Players\PlayerModelExtension.cs" />
     <Compile Include="Players\PlayerState.cs" />
     <Compile Include="Powers\Acolyte\BlindingBlack.cs" />

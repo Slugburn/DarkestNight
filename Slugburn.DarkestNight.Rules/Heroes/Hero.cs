@@ -22,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
     public class Hero
     {
         private readonly Dictionary<string, IAction> _actions;
-        private readonly List<string> _powerDeck;
+        private List<string> _powerDeck;
         private readonly List<IRollModifier> _rollModifiers;
         private readonly Stash _stash;
         private readonly Dictionary<string, ITactic> _tactics;
@@ -520,6 +520,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public IEnumerable<IItem> GetInventory()
         {
             return Inventory;
+        }
+
+        public void ShufflePowerDeck()
+        {
+            _powerDeck = _powerDeck.Shuffle();
         }
     }
 }

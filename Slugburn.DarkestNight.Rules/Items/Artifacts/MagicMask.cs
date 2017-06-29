@@ -1,7 +1,10 @@
 ﻿namespace Slugburn.DarkestNight.Rules.Items.Artifacts
 {
-    class MagicMask
+    class MagicMask : Artifact
     {
-        // +1d when eluding.
+        public MagicMask() : base("Magic Mask")
+        {
+            Text = "+1d when eluding.";
+        }
     }
 }
