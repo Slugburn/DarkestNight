@@ -41,6 +41,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private string[] _powerDeckContains;
         private string[] _facingEnemies;
         private bool _hasFreeAction;
+        private bool? _isTakingTurn;
 
         public HeroVerification(string heroName)
         {
@@ -69,6 +70,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         {
             var hero = ((TestRoot)root).GetHero(_heroName);
             SetExpectations(hero);
+            hero.IsTakingTurn.ShouldBeIfNotNull(_isTakingTurn, "IsTakingTurn");
             hero.SavedByGrace.ShouldBe(_expectedWounded);
             hero.DefaultGrace.ShouldBe(_defaultGrace ?? 0);
             if (_grace.HasValue)
@@ -371,6 +373,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         public HeroVerification IsFacingEnemies(params string[] expected)
         {
             _facingEnemies = expected;
+            return this;
+        }
+
+        public HeroVerification IsTakingTurn(bool expected = true)
+        {
+            _isTakingTurn = expected;
             return this;
         }
     }

@@ -1,8 +1,5 @@
-﻿using System;
-
-namespace Slugburn.DarkestNight.Rules.Powers
+namespace Slugburn.DarkestNight.Rules.Tactics
 {
-    [Flags]
     public enum TacticType
     {
         Fight = 1,

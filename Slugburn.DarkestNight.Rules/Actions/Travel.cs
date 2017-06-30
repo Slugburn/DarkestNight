@@ -23,7 +23,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
         private void UseTravelMovement(Hero hero)
         {
             var validLocations = hero.GetValidMovementLocations().Select(x=>x.ToString()).ToList();
-            hero.Player.DisplayLocationSelection(validLocations, Callback.ForAction(hero, this));
+            hero.Player.DisplayLocationSelection(validLocations, Callback.ForCommand(hero, this));
         }
 
 

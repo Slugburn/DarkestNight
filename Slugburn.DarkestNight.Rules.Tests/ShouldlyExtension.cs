@@ -13,5 +13,11 @@ namespace Slugburn.DarkestNight.Rules.Tests
             var two = expected.OrderBy(x => x);
             one.ShouldBe(two);
         }
+
+        public static void ShouldBeIfNotNull<T>(this T actual, T? expected, string message) where T:struct
+        {
+            if (expected.HasValue)
+                actual.ShouldBe(expected.Value, message);
+        }
     }
 }

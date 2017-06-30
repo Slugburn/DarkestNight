@@ -2,11 +2,11 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights.Implementations
 {
-    public class EnemyGenerator : BlightDetail
+    public class EnemyLair : BlightDetail
     {
         public string EnemyName { get; }
 
-        public EnemyGenerator(Blight type,  string name, int might, string enemyName) : base(type)
+        public EnemyLair(Blight type,  string name, int might, string enemyName) : base(type)
         {
             EnemyName = enemyName;
             Name = name;

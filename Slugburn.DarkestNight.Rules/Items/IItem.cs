@@ -1,4 +1,6 @@
-﻿using Slugburn.DarkestNight.Rules.Heroes;
+﻿using System.Collections.Generic;
+using Slugburn.DarkestNight.Rules.Commands;
+using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Items
 {

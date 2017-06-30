@@ -6,14 +6,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
     public class GameVerification : IVerifiable
     {
         private int _darkness;
-        private Location _necromancerAt;
         private bool? _eventDeckIsReshuffled;
+        private NecromancerVerification _necromancer;
 
         public void Verify(ITestRoot root)
         {
             var game = root.Get<Game>();
             game.Darkness.ShouldBe(_darkness);
-            game.Necromancer.Location.ShouldBe(_necromancerAt);
+            _necromancer?.Verify(root);
             if (_eventDeckIsReshuffled ?? false)
                 _eventDeckIsReshuffled.ShouldBe(game.Events.Count == 33);
         }
@@ -24,10 +24,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public GameVerification NecromancerAt(string location)
+        public NecromancerVerification Necromancer
         {
-            _necromancerAt = location.ToEnum<Location>();
-            return this;
+            get
+            {
+                _necromancer = new NecromancerVerification();
+                return _necromancer;
+            }
         }
 
         public GameVerification EventDeckIsReshuffled()

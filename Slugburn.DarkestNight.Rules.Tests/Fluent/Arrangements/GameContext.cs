@@ -36,12 +36,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             return heroContext;
         }
 
-        public IGameContext NecromancerAt(string location)
-        {
-            GetGame().Necromancer.Location = location.ToEnum<Location>();
-            return this;
-        }
-
         public INecromancerContext Necromancer => new NecromancerContext(GetGame(), GetPlayer());
 
         public IGameContext Darkness(int value)

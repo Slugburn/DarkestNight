@@ -8,7 +8,7 @@ namespace Slugburn.DarkestNight.Rules.Players
 {
     public class Callback
     {
-        public static Callback ForAction<T>(Hero hero, T action, string path = null) where T:IAction, ICallbackHandler
+        public static Callback ForCommand<T>(Hero hero, T action, string path = null) where T:ICommand, ICallbackHandler
         {
             path = path != null ? "/" + path : null;
             return new Callback(hero.Name, $"Action:{action.Name}{path}");

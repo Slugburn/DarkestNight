@@ -50,6 +50,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
 
         public IPlayerActionContext AcceptsRoll()
         {
+            var hero = this.GetHero(null);
+            var roll = hero.CurrentRoll;
+            Set(roll);
             GetPlayer().AcceptRoll();
             return this;
         }
@@ -131,9 +134,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             return this;
         }
 
-        public IPlayerActionContext AcceptsConflictResults()
+        public IPlayerActionContext AcceptsConflictResults(int count = 1)
         {
-            while (GetGame().ActingHero.ConflictState != null)
+            for (var i = 0; i < count; i++)
                 GetPlayer().AcceptConflictResult();
             return this;
         }

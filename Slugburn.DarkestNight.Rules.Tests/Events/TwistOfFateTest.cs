@@ -20,7 +20,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Hero().HasUnresolvedEvents(0).HasDieModifier("Twist of Fate", RollType.Any, 1).FightDice(2).EludeDice(2).SearchDice(2))
                 .When.Player.TakesAction("End Turn")
-                .Then(Verify.Hero().HasNoDieModifier());
+                .Then(Verify.Hero().HasUsedAction().HasNoDieModifier());
         }
 
         [TestCase(4)]
@@ -38,7 +38,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Hero().HasUnresolvedEvents(0).HasDieModifier("Twist of Fate", RollType.Any, -1))
                 .When.Player.TakesAction("End Turn")
-                .Then(Verify.Hero().HasNoDieModifier());
+                .Then(Verify.Hero().HasUsedAction().HasNoDieModifier());
         }
     }
 }

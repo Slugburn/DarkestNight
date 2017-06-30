@@ -13,6 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
     public class Necromancer : IEnemy
     {
         private readonly Game _game;
+        public Location Destination { get; private set; }
         public List<Hero> DetectedHeroes { get; private set; }
         public int MovementRoll { get; private set; }
 
@@ -21,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             _game = game;
         }
 
-        public Location Location { get; set; }
+        public Location Location { get; set; } = Location.Ruins;
         public bool IsTakingTurn { get; set; }
 
         public string Name => "Necromancer";
@@ -62,11 +63,11 @@ namespace Slugburn.DarkestNight.Rules.Enemies
 
         public void DetermineDestination()
         {
-            var destination = GetDestination();
+            Destination = GetDestination();
 
             foreach (var player in _game.Players)
             {
-                player.DisplayNecromancer(new PlayerNecromancer(MovementRoll, destination, DetectedHeroes.Select(x => x.Name).ToList()));
+                player.DisplayNecromancer(PlayerNecromancer.From(this));
                 player.State = PlayerState.Necromancer;
             }
 
@@ -76,8 +77,8 @@ namespace Slugburn.DarkestNight.Rules.Enemies
 
         public void CompleteTurn()
         {
-            var destination = GetDestination();
-            Location = destination;
+            Destination = GetDestination();
+            Location = Destination;
 
             var blightsCreated = 1;
             if (_game.Darkness >= 10 && !_game.Board[Location].Blights.Any())

@@ -51,7 +51,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
                 var validTargets = hero.Game.Heroes.Where(target => IsValidTarget(hero, target)).ToList();
 
                 var view = new PlayerHeroSelection(validTargets);
-                hero.Player.DisplayHeroSelection(view, Callback.ForAction(hero, this));
+                hero.Player.DisplayHeroSelection(view, Callback.ForCommand(hero, this));
             }
 
             public void HandleCallback(Hero hero, string path, object data)

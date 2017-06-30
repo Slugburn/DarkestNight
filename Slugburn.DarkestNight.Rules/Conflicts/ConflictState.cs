@@ -35,5 +35,10 @@ namespace Slugburn.DarkestNight.Rules.Conflicts
             player.DisplayConflict(PlayerConflict.FromConflictState(this));
             player.State = PlayerState.Conflict;
         }
+
+        public TacticType GetTacticType()
+        {
+            return SelectedTactic.Type;
+        }
     }
 }

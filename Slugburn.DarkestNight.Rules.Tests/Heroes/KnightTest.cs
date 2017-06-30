@@ -253,7 +253,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             // Add 1 to highest die when fighting the Necromancer.
             // Win fight versus the Necromancer; you get a free action.
             TestScenario.Game
-                .NecromancerAt("Ruins")
+                .Necromancer.At("Ruins")
                 .WithHero("Knight").HasPowers("Oath of Vengeance", "Charge", "Consecrated Blade").At("Ruins")
                 .Given.Hero().Power("Oath of Vengeance").IsActive()
                 .When.Player.TakesAction("Attack Necromancer").CompletesConflict("Necromancer", "Charge", Fake.Rolls(2, 3, 6))

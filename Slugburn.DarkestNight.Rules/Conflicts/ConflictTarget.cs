@@ -1,5 +1,5 @@
 using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Powers;
+using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Conflicts
 {
@@ -29,13 +29,9 @@ namespace Slugburn.DarkestNight.Rules.Conflicts
         public void Resolve(Hero hero)
         {
             if (IsWin)
-            {
                 Conflict.Win(hero);
-            }
             else if (!_ignoreFailure)
-            {
                 Conflict.Failure(hero);
-            }
         }
 
         public void IgnoreFailure()

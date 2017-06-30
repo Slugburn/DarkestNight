@@ -58,6 +58,7 @@
     <Compile Include="Actions\SearchTest.cs" />
     <Compile Include="Actions\StartTurnTest.cs" />
     <Compile Include="Actions\TravelTest.cs" />
+    <Compile Include="Blights\EnemyLairTest.cs" />
     <Compile Include="Events\AltarTest.cs" />
     <Compile Include="Events\CloseCallTest.cs" />
     <Compile Include="Events\DarkScryingTest.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Fluent\Assertions\HeroVerification.cs" />
     <Compile Include="Fluent\Assertions\IVerifiable.cs" />
     <Compile Include="Fluent\Assertions\LocationVerification.cs" />
+    <Compile Include="Fluent\Assertions\NecromancerVerification.cs" />
     <Compile Include="Fluent\Assertions\NecromancerViewVerification.cs" />
     <Compile Include="Fluent\Arrangements\PowerContext.cs" />
     <Compile Include="Fluent\Assertions\PlayerVerification.cs" />
@@ -132,9 +134,7 @@
       <Name>Slugburn.DarkestNight.Rules</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Blights\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

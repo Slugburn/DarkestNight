@@ -2,7 +2,7 @@ namespace Slugburn.DarkestNight.Rules.Triggers
 {
     public enum HeroTrigger
     {
-        EndOfTurn,
+        TurnEnded,
         Hidden,
         Prayed,
         Rolled,

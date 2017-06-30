@@ -29,14 +29,18 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 
         public IHeroContext At(string location)
         {
-            _hero.MoveTo(location.ToEnum<Location>());
+            _hero.SetLocation(location.ToEnum<Location>());
             return this;
         }
 
         public IHeroContext NotAt(string location)
         {
-            var excluded = location.ToEnum<Location>();
-            var randomLocation = Rules.Game.GetAllLocations().Except(new[] {excluded}).Shuffle().First();
+            var excluded = new[]
+            {
+                location.ToEnum<Location>(),
+                GetGame().Necromancer.Location  // avoid the Necromancer's location too
+            };
+            var randomLocation = Rules.Game.GetAllLocations().Except(excluded).Shuffle().First();
             _hero.MoveTo(randomLocation); 
             return this;
         }

@@ -14,20 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Commands
         public void Execute(Hero hero)
         {
             if (!IsAvailable(hero)) return;
-            hero.Game.ActingHero = hero;
-            hero.Triggers.Send(HeroTrigger.StartedTurn);
-            var necromancer = hero.Game.Necromancer;
-            var withNecromancer = hero.Location == necromancer.Location;
-            if (withNecromancer)
-                hero.LoseSecrecy("Necromancer");
-            if (hero.GetInventory().Any(item => item is HolyRelic))
-                hero.LoseSecrecy("Holy Relic");
-            hero.UpdateAvailableActions();
-
-            if (withNecromancer && hero.Secrecy == 0)
-                hero.FaceEnemy(necromancer);
-            else if (hero.Location != Location.Monastery)
-                hero.DrawEvent();
+            hero.StartTurn();
         }
 
         public bool IsAvailable(Hero hero)

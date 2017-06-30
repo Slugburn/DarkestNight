@@ -14,16 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Commands
 
         public void Execute(Hero hero)
         {
-            if (hero.IsAffectedByBlight(Blight.Spies))
-            {
-                var space = hero.GetSpace();
-                var spies = space.Blights.Where(x => x == Blight.Spies);
-                foreach (var spy in spies)
-                    hero.LoseSecrecy("Spies");
-            }
-            hero.Game.ActingHero = null;
-            hero.HasTakenTurn = true;
-            hero.Triggers.Send(HeroTrigger.EndOfTurn);
+            hero.TryToEndTurn();
         }
 
         public bool IsAvailable(Hero hero)

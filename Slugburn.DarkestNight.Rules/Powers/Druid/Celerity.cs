@@ -31,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             {
                 DruidFormPower.DeactivateAllForms(hero);
                 var validDestionations = hero.GetSpace().AdjacentLocations.Select(x=>x.ToString()).ToList();
-                hero.Player.DisplayLocationSelection(validDestionations, Callback.ForAction(hero, this));
+                hero.Player.DisplayLocationSelection(validDestionations, Callback.ForCommand(hero, this));
             }
 
             public void HandleCallback(Hero hero, string path, object data)

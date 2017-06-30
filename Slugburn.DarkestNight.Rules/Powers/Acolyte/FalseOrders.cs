@@ -44,7 +44,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                     var maxMoveCount = 4 - destinationSpace.Blights.Count;
                     var space = hero.GetSpace();
                     var playerBlights = space.Blights.Select(b => new PlayerBlight {Blight = b, Location = hero.Location}).ToList();
-                    hero.Player.DisplayBlightSelection(new PlayerBlightSelection(playerBlights, maxMoveCount), Callback.ForAction(hero, this));
+                    hero.Player.DisplayBlightSelection(new PlayerBlightSelection(playerBlights, maxMoveCount), Callback.ForCommand(hero, this));
                 }
                 else if (data is IEnumerable<BlightLocation>)
                 {
@@ -65,7 +65,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             {
                 var space = hero.GetSpace();
                 var potentialDestinations = space.AdjacentLocations.Select(x => x.ToString()).ToList();
-                hero.Player.DisplayLocationSelection(potentialDestinations, Callback.ForAction(hero, this));
+                hero.Player.DisplayLocationSelection(potentialDestinations, Callback.ForCommand(hero, this));
             }
         }
     }

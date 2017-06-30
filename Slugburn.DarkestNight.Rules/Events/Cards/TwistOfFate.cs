@@ -34,7 +34,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             {
                 throw new ArgumentOutOfRangeException(nameof(option), option);
             }
-            hero.Triggers.Add(HeroTrigger.EndOfTurn, EventName, new TwistOfFateEndOfTurnHandler());
+            hero.Triggers.Add(HeroTrigger.TurnEnded, EventName, new TwistOfFateEndOfTurnHandler());
             hero.EndEvent();
         }
 
@@ -43,7 +43,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             public void HandleTrigger(Hero registrar, string source, TriggerContext context)
             {
                 registrar.RemoveRollModifiers(EventName);
-                registrar.Triggers.Remove(HeroTrigger.EndOfTurn, EventName);
+                registrar.Triggers.Remove(HeroTrigger.TurnEnded, EventName);
             }
 
         }

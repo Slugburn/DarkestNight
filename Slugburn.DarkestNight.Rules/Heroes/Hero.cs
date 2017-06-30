@@ -31,6 +31,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         private bool _hasFreeAction;
         private ActionFilter _freeActionFilter;
         private bool _isActionAvailable;
+        private bool _movedDuringTurn;
+        private bool _endingTurn;
 
         public Hero()
         {
@@ -129,9 +131,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public IList<string> GetAvailableActions()
         {
-            var heroActions = _commands.Values;
-            var locationActions = GetSpace().GetActions();
-            var actions = heroActions.Concat(locationActions).Where(x => x.IsAvailable(this)).Select(x => x.Name);
+            var heroCommands = _commands.Values;
+            var locationCommands = GetSpace().GetActions();
+            var itemCommands = GetLocationInventory().Where(item => item is ICommand).Cast<ICommand>();
+            var actions = heroCommands.Concat(locationCommands).Concat(itemCommands)
+                .Where(x => x.IsAvailable(this)).Select(x => x.Name);
 
             // use a free action if we've got one
             if (HasFreeAction)
@@ -198,6 +202,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void DrawEvent()
         {
             var eventName = Game.Events.Draw();
+            DoEvent(eventName);
+        }
+
+        private void DoEvent(string eventName)
+        {
             var card = EventFactory.CreateCard(eventName);
             CurrentEvent = card.Detail.GetHeroEvent(this);
             Triggers.Send(HeroTrigger.EventDrawn);
@@ -242,6 +251,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 return;
             Location = location;
             UpdateAvailableActions();
+            _movedDuringTurn = true;
             Triggers.Send(HeroTrigger.Moved);
         }
 
@@ -410,6 +420,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (_commands.ContainsKey(commandName))
                 return _commands[commandName];
             var space = GetSpace();
+            var itemAction = (ICommand) Inventory.FirstOrDefault(item => item.Name == commandName);
+            if (itemAction != null)
+                return itemAction;
             var locationAction = space.GetAction(commandName);
             if (locationAction != null)
                 return locationAction;
@@ -451,7 +464,23 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         private void ContinueTurn()
         {
-            // what should go here?
+            UpdateAvailableActions();
+            // Face any undefeated enemies
+            if (Enemies.Any())
+            {
+                DefendAgainst(Enemies);
+                return;
+            }
+            // Handle any unresolved events
+            if (EventQueue.Any())
+            {
+                var eventName = EventQueue.Dequeue();
+                DoEvent(eventName);
+                return;
+            }
+
+            if (_endingTurn)
+                EndTurn();
         }
 
         public void RollEventDice(IRollHandler rollHandler)
@@ -477,7 +506,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void FaceEnemy(IEnemy enemy)
         {
             Enemies.Add(enemy);
-            new Defend().Execute(this);
+            DefendAgainst(Enemies);
         }
 
         public void SelectEventOption(string optionCode)
@@ -544,12 +573,17 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             var targets = ConflictState.SelectedTargets;
             var target = targets.First();
+            var enemy = target.Conflict as IEnemy;
             target.Resolve(this);
             targets.Remove(target);
+
+            if (enemy != null)
+                Enemies.Remove(enemy);
             if (!targets.Any())
                 ConflictState = null;
-            UpdateAvailableActions();
             DisplayConflictState();
+            if (!targets.Any())
+                ContinueTurn();
         }
 
         public bool CanSpendGrace => Grace > 0 || (Intercession?.CanIntercedeFor(this) ?? false);
@@ -601,5 +635,78 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         }
 
         public bool HasFreeAction => _hasFreeAction;
+
+        internal void StartTurn()
+        {
+            Game.ActingHero = this;
+            _movedDuringTurn = false;
+            var necromancer = Game.Necromancer;
+            var withNecromancer = Location == necromancer.Location;
+            if (withNecromancer)
+                LoseSecrecy("Necromancer");
+            if (GetInventory().Any(item => item is HolyRelic))
+                LoseSecrecy("Holy Relic");
+            UpdateAvailableActions();
+            Triggers.Send(HeroTrigger.StartedTurn);
+
+            if (withNecromancer && Secrecy == 0)
+                FaceEnemy(necromancer);
+            else if (Location != Location.Monastery)
+                DrawEvent();
+        }
+
+        internal void TryToEndTurn()
+        {
+            _endingTurn = true;
+            IsActionAvailable = false;
+            if (IsAffectedByBlight(Blight.Spies))
+            {
+                var spies = GetBlights().Where(x => x == Blight.Spies);
+                foreach (var spy in spies)
+                    LoseSecrecy("Spies");
+            }
+
+            // Enemy lair blights generate enemies to fight/elude
+            var enemies = GetBlights().Where(b=>!IsBlightIgnored(b)).GenerateEnemies().ToList();
+            if (enemies.Any())
+            {
+                Enemies.AddRange(enemies);
+                DefendAgainst(Enemies);
+                return;
+            }
+
+            EndTurn();
+        }
+
+        private void EndTurn()
+        {
+            _endingTurn = false;
+            if (Location == Location.Monastery && !_movedDuringTurn)
+                GainSecrecy(1, DefaultSecrecy);
+            Game.ActingHero = null;
+            HasTakenTurn = true;
+            Triggers.Send(HeroTrigger.TurnEnded);
+            if (Game.Heroes.All(x=>x.HasTakenTurn))
+                Game.Necromancer.StartTurn();
+        }
+
+        public void SetLocation(Location location)
+        {
+            Location = location;
+            UpdateAvailableActions();
+        }
+
+        private void DefendAgainst(List<IEnemy> enemies)
+        {
+            SetRoll(RollBuilder.Create<DefenseRollHandler>());
+            ConflictState = new ConflictState
+            {
+                MaxTarget = 1,
+                MinTarget = 1,
+                AvailableTargets = enemies.GetTargetInfo(),
+                AvailableTactics = GetAvailableTactics().GetInfo(this)
+            };
+            DisplayConflictState();
+        }
     }
 }

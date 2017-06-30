@@ -55,7 +55,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario.Game
                 .WithHero("Acolyte").HasPowers("Blinding Black").At("Swamp").Secrecy(0)
-                .NecromancerAt("Castle")
+                .Necromancer.At("Castle")
                 .When.Game.NecromancerActs(Fake.Rolls(5))
                 .Then(Verify.Hero().CanTakeAction("Blinding Black"))
                 .Then(Verify.Player.NecromancerView.Roll(5).Detected("Acolyte").MovingTo("Swamp"))
@@ -63,7 +63,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Then(Verify.Power("Blinding Black").IsExhausted())
                 .Then(Verify.Player.NecromancerView.Roll(5).Detected().MovingTo("Village"))
                 .When.Player.AcceptsNecromancerTurn()
-                .Then(Verify.Game.NecromancerAt("Village").Darkness(1));
+                .Then(Verify.Game.Darkness(1).Necromancer.At("Village"));
         }
 
         // Call to Death (Action): Attack two blights in your location at once. Make a single fight roll with +1 die, 
@@ -78,7 +78,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Then(Verify.Player.ConflictView.HasTargets("Skeletons", "Shades", "Lich").HasTactics("Fight").MustSelectTargets(2))
                 .When.Player.Targets("Skeletons", "Lich").UsesTactic("Fight").ResolvesConflict(Fake.Rolls(5,6)).AcceptsRoll()
                 .Then(Verify.Player.ConflictView.Rolled(5, 6))
-                .When.Player.AssignsDie(6, "Lich").AssignsDie(5, "Skeletons").AcceptsConflictResults()
+                .When.Player.AssignsDie(6, "Lich").AssignsDie(5, "Skeletons").AcceptsConflictResults(2)
                 .Then(Verify.Location("Swamp").Blights("Shades"))
                 .Then(Verify.Hero().LostSecrecy(2).HasUsedAction());
         }
@@ -91,7 +91,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Location("Swamp").Blights("Skeletons", "Shades")
                 .When.Player.TakesAction("Call to Death")
                 .When.Player.Targets("Skeletons", "Shades").UsesTactic("Final Rest [3d]").ResolvesConflict(Fake.Rolls(5, 2, 3, 1)).AcceptsRoll()
-                .When.Player.AssignsDie(5, "Shades").AssignsDie(3, "Skeletons").AcceptsConflictResults()
+                .When.Player.AssignsDie(5, "Shades").AssignsDie(3, "Skeletons").AcceptsConflictResults(2)
                 .Then(Verify.Location("Swamp").Blights("Skeletons"))
                 .Then(Verify.Hero()
                     .WasWounded()
@@ -143,7 +143,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void DeathMask_IgnoreSecrecyLossForBeingInNecromancersLocation()
         {
             TestScenario.Game
-                .NecromancerAt("Swamp")
+                .Necromancer.At("Swamp")
                 .WithHero("Acolyte").HasPowers("Death Mask").At("Swamp")
                 .When.Player.StartsTurn()
                 .Then(Verify.Hero().LostSecrecy(0).HasUnresolvedEvents(1));

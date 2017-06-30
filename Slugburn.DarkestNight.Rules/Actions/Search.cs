@@ -30,7 +30,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 .Target(space.SearchTarget));
             hero.Triggers.Send(HeroTrigger.Searched);
             state.Roll();
-            hero.Player.DisplaySearch(PlayerSearch.From(hero, null), Callback.ForAction(hero, this));
+            hero.Player.DisplaySearch(PlayerSearch.From(hero, null), Callback.ForCommand(hero, this));
         }
 
         public class SearchRollHandler : IRollHandler

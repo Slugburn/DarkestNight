@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
+using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Actions
 {
@@ -11,19 +12,31 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
         {
             TestScenario.Game
                 .WithHero().Secrecy(0).At("Monastery")
-                .When.Player.TakesAction("End Turn")
-                .Then(Verify.Hero().Secrecy(1));
+                .When.Player.TakesAction("Hide").TakesAction("End Turn")
+                .Then(Verify.Hero().HasUsedAction().Secrecy(2));
         }
 
         [Test]
-        public void DoNotGainSecrecyIfEntireTurnNotSpendInMonastery()
+        public void DoNotGainSecrecyIfEntireTurnNotSpentInMonastery()
         {
             TestScenario.Game
-                .WithHero().Secrecy(0).At("Monastery")
+                .WithHero().Secrecy(0).At("Monastery").HasItems("Waystone")
                 .When.Player.TakesAction("Waystone").SelectsLocation("Village")
                 .When.Player.TakesAction("Travel").SelectsLocation("Monastery")
                 .When.Player.TakesAction("End Turn")
-                .Then(Verify.Hero().Secrecy(0).HasUsedAction());
+                .Then(Verify.Hero().HasUsedAction()
+                    .Secrecy(2)); // gained 1 from using Waystone and 1 from Travel
+        }
+
+        [Test]
+        public void AfterAllPlayersHaveFinishedTheirTurn()
+        {
+            TestScenario.Game
+                .WithHero("Acolyte").At("Monastery")
+                .WithHero("Priest").At("Monastery")
+                .When.Player.TakesAction("Acolyte", "Start Turn").TakesAction("Acolyte", "End Turn")
+                .When.Player.TakesAction("Priest", "Start Turn").TakesAction("Priest", "End Turn")
+                .Then(Verify.Game.Darkness(1).Necromancer.IsTakingTurn());
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
     public interface IPlayerActionContext : IWhen
     {
         IPlayerActionContext AssignsDie(int dieValue, string target);
-        IPlayerActionContext AcceptsConflictResults();
+        IPlayerActionContext AcceptsConflictResults(int count = 1);
         IPlayerActionContext AcceptsNecromancerTurn();
         IPlayerActionContext AcceptsRoll();
         IPlayerActionContext ResolvesConflict(IFakeContext fake);

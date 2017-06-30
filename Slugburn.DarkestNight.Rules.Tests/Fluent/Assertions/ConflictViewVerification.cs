@@ -17,6 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         {
             var player = root.Get<FakePlayer>();
             var view = player.Conflict;
+            view.ShouldNotBeNull();
 
             if (_targetCount.HasValue)
                 view.TargetCount.ShouldBe(_targetCount.Value);
