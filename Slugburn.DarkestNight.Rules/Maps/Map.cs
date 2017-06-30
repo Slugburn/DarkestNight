@@ -5,20 +5,20 @@ namespace Slugburn.DarkestNight.Rules.Maps
 {
     public class Map : IMap
     {
-        private readonly Dictionary<Location, Blight> _blights;
+        private readonly Dictionary<Location, BlightType> _blights;
         private readonly Dictionary<Location, Find> _finds;
         
-        public Map(Blight[] blight, Find[] searches)
+        public Map(BlightType[] blightType, Find[] searches)
         {
-            _blights = new Dictionary<Location, Blight>()
+            _blights = new Dictionary<Location, BlightType>()
                        {
-                           {Location.Mountains, blight[0]},
-                           {Location.Castle, blight[1]},
-                           {Location.Village, blight[2]},
-                           {Location.Swamp, blight[3]},
-                           {Location.Forest, blight[4]},
-                           {Location.Ruins, blight[5]},
-                           {Location.Monastery, blight[6]}
+                           {Location.Mountains, blightType[0]},
+                           {Location.Castle, blightType[1]},
+                           {Location.Village, blightType[2]},
+                           {Location.Swamp, blightType[3]},
+                           {Location.Forest, blightType[4]},
+                           {Location.Ruins, blightType[5]},
+                           {Location.Monastery, blightType[6]}
                        };
             _finds = new Dictionary<Location, Find>()
                         {
@@ -31,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Maps
                         };
         }
 
-        public Blight GetBlight(Location location)
+        public BlightType GetBlight(Location location)
         {
             return _blights[location];
         }

@@ -4,7 +4,7 @@ namespace Slugburn.DarkestNight.Rules.Maps
 {
     public interface IMap
     {
-        Blight GetBlight(Location location);
+        BlightType GetBlight(Location location);
         Find GetSearchResult(Location location);
     }
 }

@@ -55,7 +55,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
         {
             var maps = GetGame().Maps;
             foreach (var find in results)
-                maps.Insert(0, new Map(new Blight[7], Enumerable.Repeat(find, 6).ToArray()));
+                maps.Insert(0, new Map(new BlightType[7], Enumerable.Repeat(find, 6).ToArray()));
             return this;
         }
 
@@ -79,7 +79,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
         {
             foreach (var blightName in blightNames)
             {
-                var blight = blightName.ToEnum<Blight>();
+                var blight = blightName.ToEnum<BlightType>();
                 GetGame().Maps.Insert(0, new Map(Enumerable.Repeat(blight, 7).ToArray(), new Find[6]));
             }
             return this;

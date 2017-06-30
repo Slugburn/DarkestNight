@@ -2,9 +2,9 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights.Implementations
 {
-    public class DarkFog : BlightDetail
+    public class DarkFog : Blight
     {
-        public DarkFog() :base(Blight.DarkFog)
+        public DarkFog() :base(BlightType.DarkFog)
         {
             Name = "Dark Fog";
             EffectText = "The search difficulty at the affected location is increased by 2";

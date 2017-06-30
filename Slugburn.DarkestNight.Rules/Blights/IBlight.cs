@@ -1,11 +1,12 @@
 ﻿using Slugburn.DarkestNight.Rules.Conflicts;
-using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Blights
 {
-    public interface IBlightDetail : IConflict
+    public interface IBlight : IConflict
     {
-        Blight Type { get; }
+        int Id { get; }
+        Location Location { get; }
+        BlightType Type { get; }
         int Might { get; }
         string EffectText { get; }
         string DefenseText { get;  }

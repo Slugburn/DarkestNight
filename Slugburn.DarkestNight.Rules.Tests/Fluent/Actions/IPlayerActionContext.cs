@@ -9,7 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         IPlayerActionContext AcceptsNecromancerTurn();
         IPlayerActionContext AcceptsRoll();
         IPlayerActionContext ResolvesConflict(IFakeContext fake);
-        IPlayerActionContext SelectsBlight(string location, string blight);
+        IPlayerActionContext SelectsBlight(string location, string blightType);
         IPlayerActionContext SelectsEventOption(string option, IFakeContext set = null);
         IPlayerActionContext SelectsLocation(string location);
         IPlayerActionContext SelectsPower(string powerName);

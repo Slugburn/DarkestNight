@@ -26,7 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             public string Name => PowerName;
             public string HeroName { get; set; }
 
-            public bool IsIgnoring(Hero hero, Blight blight)
+            public bool IsIgnoring(Hero hero, BlightType blight)
             {
                 return hero.Name == HeroName && hero.Location != hero.Game.Necromancer.Location;
             }

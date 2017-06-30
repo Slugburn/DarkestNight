@@ -18,8 +18,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 
         public ILocationContext Blights(params string[] blights)
         {
-            foreach (var blight in blights.Select(b => b.ToEnum<Blight>()))
-                _space.AddBlight(blight);
+            var game = GetGame();
+            foreach (var blightType in blights.Select(b => b.ToEnum<BlightType>()))
+                game.CreateBlight(_space.Location, blightType);
             return this;
         }
 

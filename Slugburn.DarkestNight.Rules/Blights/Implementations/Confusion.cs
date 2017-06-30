@@ -2,9 +2,9 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights.Implementations
 {
-    public class Confusion : BlightDetail
+    public class Confusion : Blight
     {
-        public Confusion() :base(Blight.Confusion)
+        public Confusion() :base(BlightType.Confusion)
         {
             Name = "Confusion";
             Might = 4;

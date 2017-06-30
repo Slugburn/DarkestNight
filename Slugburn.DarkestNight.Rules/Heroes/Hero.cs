@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Blights.Implementations;
 using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Enemies;
@@ -119,7 +120,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             _actionFilters.RemoveAll(x => x.Name == name);
         }
 
-        public ICollection<Blight> GetBlights()
+        public ICollection<IBlight> GetBlights()
         {
             return GetSpace().Blights;
         }
@@ -429,15 +430,15 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             throw new ArgumentOutOfRangeException(nameof(commandName), commandName);
         }
 
-        public bool IsAffectedByBlight(Blight blight)
+        public bool IsAffectedByBlight(BlightType blightType)
         {
-            var blightExists = GetBlights().Any(x => x == blight);
-            return blightExists && !IsBlightIgnored(blight);
+            var blightExists = GetBlights().Any(x => x.Type == blightType);
+            return blightExists && !IsBlightIgnored(blightType);
         }
 
-        public bool IsBlightIgnored(Blight blight)
+        public bool IsBlightIgnored(BlightType blightType)
         {
-            return Game.IsBlightIgnored(this, blight);
+            return Game.IsBlightIgnored(this, blightType);
         }
 
         public bool HasAction(string actionName)
@@ -659,15 +660,15 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             _endingTurn = true;
             IsActionAvailable = false;
-            if (IsAffectedByBlight(Blight.Spies))
+            if (IsAffectedByBlight(BlightType.Spies))
             {
-                var spies = GetBlights().Where(x => x == Blight.Spies);
+                var spies = GetBlights().Where(x => x is Spies);
                 foreach (var spy in spies)
                     LoseSecrecy("Spies");
             }
 
             // Enemy lair blights generate enemies to fight/elude
-            var enemies = GetBlights().Where(b=>!IsBlightIgnored(b)).GenerateEnemies().ToList();
+            var enemies = GetBlights().Where(b=>!IsBlightIgnored(b.Type)).GenerateEnemies().ToList();
             if (enemies.Any())
             {
                 Enemies.AddRange(enemies);

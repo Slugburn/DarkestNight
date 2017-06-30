@@ -28,7 +28,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         private static string ToDescription(PlayerBlight x)
         {
-            return $"{x.Location}-{x.Blight}";
+            return $"{x.Location}-{x.BlightType}";
         }
 
         public BlightLocationVerification Location(string location)
@@ -61,8 +61,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
             public BlightSelectionViewVerification WithBlights(params string[] blights)
             {
-                var playerBlights = blights.Select(x => x.ToEnum<Blight>())
-                    .Select(blight => new PlayerBlight {Location = _location, Blight = blight});
+                var playerBlights = blights.Select(x => x.ToEnum<BlightType>())
+                    .Select(blight => new PlayerBlight {Location = _location.ToString(), BlightType = blight.ToString()});
                 _parent._playerBlights.AddRange(playerBlights);
                 return _parent;
             }

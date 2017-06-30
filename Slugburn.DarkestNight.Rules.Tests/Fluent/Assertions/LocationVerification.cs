@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Shouldly;
-using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
@@ -10,7 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
     public class LocationVerification : IVerifiable
     {
         private readonly string _location;
-        private List<Blight> _blights;
+        private IEnumerable<string> _blights;
         private string[] _actionExists;
         private string[] _actionDoesNotExist;
         private bool? _hasRelic;
@@ -24,8 +23,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         {
             var game = root.Get<Game>();
             var space = game.Board[_location.ToEnum<Location>()];
-            _blights = _blights ?? new List<Blight>();
-            Assert.That(space.Blights, Is.EquivalentTo(_blights));
+            _blights = _blights ?? new List<string>();
+            space.Blights.Select(x => x.Type.ToString()).ShouldBeEquivalent(_blights);
 
             if (_hasRelic.HasValue)
                 space.HasRelic.ShouldBe(_hasRelic.Value);
@@ -42,9 +41,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             }
         }
 
-        public LocationVerification Blights(params string[] blights)
+        public LocationVerification Blights(params string[] blightTypes)
         {
-            _blights = blights.Select(b=>b.ToEnum<Blight>()).ToList();
+            _blights = blightTypes.ToList();
             return this;
         }
 

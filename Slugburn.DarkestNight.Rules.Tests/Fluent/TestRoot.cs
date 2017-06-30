@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
@@ -57,6 +59,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             if (heroName != null)
                 return _game.GetHero(heroName);
             return _game.Heroes.Count == 1 ? _game.Heroes.Single() : _game.ActingHero;
+        }
+
+        protected int GetBlightId(string location, string blightType)
+        {
+            var space = _game.Board[location.ToEnum<Location>()];
+            var blight = space.Blights.First(x => x.Type == blightType.ToEnum<BlightType>());
+            return blight.Id;
         }
 
     }

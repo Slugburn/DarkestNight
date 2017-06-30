@@ -2,9 +2,9 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights.Implementations
 {
-    public class Curse : BlightDetail
+    public class Curse : Blight
     {
-        public Curse() :base(Blight.Curse)
+        public Curse() :base(BlightType.Curse)
         {
             Name = "Curse";
             EffectText = "A hero that enters the affected location immediately loses 1 Grace.";

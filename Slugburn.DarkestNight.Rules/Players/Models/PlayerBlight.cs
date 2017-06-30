@@ -4,7 +4,19 @@ namespace Slugburn.DarkestNight.Rules.Players.Models
 {
     public class PlayerBlight
     {
-        public Location Location { get; set; }
-        public Blight Blight { get; set; }
+        public int Id { get; set; }
+        public string Location { get; set; }
+        public string BlightType { get; set; }
+
+        public static PlayerBlight FromBlight(IBlight blight)
+        {
+            return new PlayerBlight
+            {
+                Id = blight.Id,
+                Location = blight.Location.ToString(),
+                BlightType = blight.Type.ToString(),
+            };
+        }
+
     }
 }

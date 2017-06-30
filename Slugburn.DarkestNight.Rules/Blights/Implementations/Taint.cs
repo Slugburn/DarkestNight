@@ -2,9 +2,9 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights.Implementations
 {
-    public class Taint : BlightDetail
+    public class Taint : Blight
     {
-        public Taint() : base(Blight.Taint)
+        public Taint() : base(BlightType.Taint)
         {
             Name = "Taint";
             EffectText = "While a hero is in the affected location, he cannot gain Grace. Whenever he would otherwise gain Grace, there is no effect.";

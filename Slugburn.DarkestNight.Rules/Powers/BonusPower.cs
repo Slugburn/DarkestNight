@@ -17,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Powers
         public override bool IsUsable(Hero hero)
         {
             // Corruption blight prevents use of bonus powers
-            return base.IsUsable(hero) && !hero.IsAffectedByBlight(Blight.Corruption);
+            return base.IsUsable(hero) && !hero.IsAffectedByBlight(BlightType.Corruption);
         }
     }
 }

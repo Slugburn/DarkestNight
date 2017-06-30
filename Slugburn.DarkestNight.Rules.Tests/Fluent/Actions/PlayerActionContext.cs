@@ -108,9 +108,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             return this;
         }
 
-        public IPlayerActionContext SelectsBlight(string location, string blight)
+        public IPlayerActionContext SelectsBlight(string location, string blightType)
         {
-            GetPlayer().SelectBlight(location.ToEnum<Location>(), blight.ToEnum<Blight>());
+            var blightId = GetBlightId(location, blightType);
+            GetPlayer().SelectBlight(blightId);
             return this;
         }
 
@@ -143,7 +144,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
 
         public IPlayerActionContext SelectsBlights(params string[] blights)
         {
-            GetPlayer().SelectBlights(blights);
+            var hero = GetGame().ActingHero;
+            var blightIds = blights.Select(b => GetBlightId(hero.Location.ToString(), b));
+            GetPlayer().SelectBlights(blightIds);
             return this;
         }
 

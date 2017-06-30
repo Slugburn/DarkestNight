@@ -34,29 +34,33 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
             public void HandleCallback(Hero hero, string path, object data)
             {
+                var game = hero.Game;
                 if (data is Location)
                 {
                     var action = (FalseOrdersAction) hero.GetCommand(PowerName);
                     var destination = (Location) data;
                     action.Destination = destination;
 
-                    var destinationSpace = hero.Game.Board[destination];
+                    var destinationSpace = game.Board[destination];
                     var maxMoveCount = 4 - destinationSpace.Blights.Count;
                     var space = hero.GetSpace();
-                    var playerBlights = space.Blights.Select(b => new PlayerBlight {Blight = b, Location = hero.Location}).ToList();
+                    var playerBlights = space.Blights.Select(PlayerBlight.FromBlight).ToList();
                     hero.Player.DisplayBlightSelection(new PlayerBlightSelection(playerBlights, maxMoveCount), Callback.ForCommand(hero, this));
                 }
-                else if (data is IEnumerable<BlightLocation>)
+                else if (data is IEnumerable<int>)
                 {
-                    var selection = (IEnumerable<BlightLocation>) data;
+                    var selection = (IEnumerable<int>) data;
                     var action = (FalseOrdersAction) hero.GetCommand(PowerName);
                     var destination = action.Destination;
-                    foreach (var blight in selection)
+                    foreach (var blightId in selection)
                     {
-                        var sourceSpace = hero.Game.Board[blight.Location];
-                        sourceSpace.RemoveBlight(blight.Blight);
-                        var destinationSpace = hero.Game.Board[destination];
-                        destinationSpace.AddBlight(blight.Blight);
+                        var blight = game.GetBlight(blightId);
+                        var sourceSpace = game.Board[blight.Location];
+                        sourceSpace.RemoveBlight(blight);
+
+                        ((Blight) blight).Location = destination;
+                        var destinationSpace = game.Board[destination];
+                        destinationSpace.AddBlight(blight);
                     }
                 }
             }

@@ -1,22 +1,31 @@
-﻿namespace Slugburn.DarkestNight.Rules.Blights
+﻿using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Triggers;
+
+namespace Slugburn.DarkestNight.Rules.Blights
 {
-    public enum Blight
+    public abstract class Blight : IBlight
     {
-        None = 0,
-        Confusion,
-        Corruption,
-        Curse,
-        DarkFog,
-        Desecration,
-        EvilPresence,
-        Lich,
-        Spies,
-        Shades,
-        Shroud,
-        Skeletons,
-        Taint,
-        UnholyAura,
-        Vampire,
-        Zombies
+        public BlightType Type { get; }
+
+        protected Blight(BlightType type)
+        {
+            Type = type;
+        }
+
+        public int Id { get; set; }
+        public string Name { get; protected set; }
+        public int Might { get; protected set; }
+        public string EffectText { get; protected set; }
+        public string DefenseText { get; protected set; }
+        public Location Location { get; set; }
+
+        public void Win(Hero hero)
+        {
+            hero.Game.DestroyBlight(Id);
+            hero.Triggers.Send(HeroTrigger.DestroyedBlight);
+        }
+
+        public abstract void Failure(Hero hero);
+
     }
 }

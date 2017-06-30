@@ -5,6 +5,6 @@ namespace Slugburn.DarkestNight.Rules.Blights
     public interface IIgnoreBlight
     {
         string Name { get; }
-        bool IsIgnoring(Hero hero, Blight blight);
+        bool IsIgnoring(Hero hero, BlightType blightType);
     }
 }

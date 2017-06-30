@@ -5,6 +5,7 @@ using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
+using Slugburn.DarkestNight.Rules.Spaces;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
@@ -32,7 +33,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                     hero.RollEventDice(new EventRollHandler(Detail));
                     return;
                 case "destroy-blight":
-                    var blights = hero.Game.Board.Spaces.SelectMany(s => s.Blights.Select(b => new PlayerBlight {Location = s.Location, Blight = b})).ToList();
+                    var blights = hero.Game.Board.Spaces.SelectMany(s => s.Blights.Select(b => PlayerBlight.FromBlight(b))).ToList();
                     var selection = new PlayerBlightSelection(blights);
                     hero.Player.DisplayBlightSelection(selection, Callback.ForEvent(hero, this));
                     break;
@@ -62,10 +63,10 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 var location = (Location)data;
                 hero.MoveTo(location);
             }
-            else if (data is IEnumerable<BlightLocation>)
+            else if (data is IEnumerable<int>)
             {
-                var blightLocation = ((IEnumerable<BlightLocation>) data).Single();
-                hero.Game.DestroyBlight(blightLocation.Location, blightLocation.Blight);
+                var blightId = ((IEnumerable<int>) data).Single();
+                hero.Game.DestroyBlight(blightId);
             }
         }
     }

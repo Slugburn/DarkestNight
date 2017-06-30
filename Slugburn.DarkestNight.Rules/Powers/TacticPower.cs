@@ -17,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Powers
         public override bool IsUsable(Hero hero)
         {
             // Confusion blight prevents use of tactic powers
-            return base.IsUsable(hero) && !hero.IsAffectedByBlight(Blight.Confusion);
+            return base.IsUsable(hero) && !hero.IsAffectedByBlight(BlightType.Confusion);
         }
     }
 }

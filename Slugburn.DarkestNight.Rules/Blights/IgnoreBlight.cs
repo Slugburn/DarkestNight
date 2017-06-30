@@ -11,7 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Blights
 
         public string HeroName { get; set; }
         public string Name { get; set; }
-        public bool IsIgnoring(Hero hero, Blight blight)
+        public bool IsIgnoring(Hero hero, BlightType blightType)
         {
             return hero.Name == HeroName;
         }

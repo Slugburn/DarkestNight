@@ -128,9 +128,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             CallbackRouter.Route(_game, _callback, powerName);
         }
 
-        public void SelectBlight(Location location, Blight blight)
+        public void SelectBlight(int blightId)
         {
-            var data = new[] {new BlightLocation(blight, location)};
+            var data = new[] {blightId};
             CallbackRouter.Route(_game, _callback, data);
         }
 
@@ -151,11 +151,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             hero.AcceptConflictResult();
         }
 
-        public void SelectBlights(string[] blights)
+        public void SelectBlights(IEnumerable<int> blightIds)
         {
-            var hero = _game.ActingHero;
-            var blightLocations = blights.Select(b => new BlightLocation(b.ToEnum<Blight>(), hero.Location));
-            CallbackRouter.Route(_game, _callback, blightLocations);
+            CallbackRouter.Route(_game, _callback, blightIds);
         }
 
         public void SelectHero(string heroName)

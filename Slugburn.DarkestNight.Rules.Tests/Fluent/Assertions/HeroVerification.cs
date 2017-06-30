@@ -22,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private int? _fightDice;
         private int? _grace;
         private int? _secrecy;
-        private IEnumerable<Blight> _expectedIgnoredBlights;
+        private IEnumerable<BlightType> _expectedIgnoredBlights;
         private string[] _expectedInventory;
         private Location? _location;
         private int[] _expectedRoll;
@@ -213,39 +213,39 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public HeroVerification IsIgnoringBlights(params Blight[] blights)
+        public HeroVerification IsIgnoringBlights(params BlightType[] blightTypes)
         {
-            if (!blights.Any())
-                blights = AllBlights();
-            _expectedIgnoredBlights = blights;
+            if (!blightTypes.Any())
+                blightTypes = AllBlights();
+            _expectedIgnoredBlights = blightTypes;
             return this;
         }
 
-        public HeroVerification IsNotIgnoringBlights(params Blight[] blights)
+        public HeroVerification IsNotIgnoringBlights(params BlightType[] blightTypes)
         {
-            _expectedIgnoredBlights = blights.Any() ? AllBlights().Except(blights) : new Blight[0];
+            _expectedIgnoredBlights = blightTypes.Any() ? AllBlights().Except(blightTypes) : new BlightType[0];
             return this;
         }
 
-        private static Blight[] AllBlights()
+        private static BlightType[] AllBlights()
         {
             return new[]
             {
-                Blight.Confusion,
-                Blight.Corruption,
-                Blight.Curse,
-                Blight.DarkFog,
-                Blight.Desecration,
-                Blight.EvilPresence,
-                Blight.Lich,
-                Blight.Spies,
-                Blight.Shades,
-                Blight.Shroud,
-                Blight.Skeletons,
-                Blight.Taint,
-                Blight.UnholyAura,
-                Blight.Vampire,
-                Blight.Zombies
+                BlightType.Confusion,
+                BlightType.Corruption,
+                BlightType.Curse,
+                BlightType.DarkFog,
+                BlightType.Desecration,
+                BlightType.EvilPresence,
+                BlightType.Lich,
+                BlightType.Spies,
+                BlightType.Shades,
+                BlightType.Shroud,
+                BlightType.Skeletons,
+                BlightType.Taint,
+                BlightType.UnholyAura,
+                BlightType.Vampire,
+                BlightType.Zombies
             };
         }
 

@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\IAction.cs" />
+    <Compile Include="Blights\BlightFactory.cs" />
     <Compile Include="Commands\CommandNotAvailableException.cs" />
     <Compile Include="Actions\Attack.cs" />
     <Compile Include="Commands\EndTurn.cs" />
@@ -55,12 +56,11 @@
     <Compile Include="Commands\SkipFreeAction.cs" />
     <Compile Include="Commands\StartTurn.cs" />
     <Compile Include="Actions\Travel.cs" />
-    <Compile Include="Blights\BlightDetail.cs" />
-    <Compile Include="Blights\BlightLocation.cs" />
+    <Compile Include="Blights\Blight.cs" />
     <Compile Include="Blights\IgnoreBlight.cs" />
     <Compile Include="Blights\TargetDieAssignment.cs" />
     <Compile Include="Blights\BlightExtension.cs" />
-    <Compile Include="Blights\Blight.cs" />
+    <Compile Include="Blights\BlightType.cs" />
     <Compile Include="Blights\IIgnoreBlight.cs" />
     <Compile Include="Blights\Implementations\Confusion.cs" />
     <Compile Include="Blights\Implementations\Corruption.cs" />
@@ -68,7 +68,7 @@
     <Compile Include="Blights\Implementations\DarkFog.cs" />
     <Compile Include="Blights\Implementations\Desecration.cs" />
     <Compile Include="Blights\Implementations\EvilPresence.cs" />
-    <Compile Include="Blights\IBlightDetail.cs" />
+    <Compile Include="Blights\IBlight.cs" />
     <Compile Include="Blights\Implementations\Shroud.cs" />
     <Compile Include="Blights\Implementations\Spies.cs" />
     <Compile Include="Blights\Implementations\Taint.cs" />

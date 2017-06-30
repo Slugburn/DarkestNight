@@ -91,7 +91,7 @@ namespace Slugburn.DarkestNight.Rules.Events
         private static void Upheaval(Hero hero)
         {
             var count = hero.GetBlights().Count;
-            var space = (Space) hero.GetSpace();
+            var space = hero.GetSpace();
             foreach (var blight in hero.GetBlights().ToList())
                 space.RemoveBlight(blight);
             hero.Game.CreateBlights(hero.Location, count);
