@@ -6,7 +6,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 {
     class Vines : TacticPower
     {
-        public Vines() : base(TacticType.Fight | TacticType.Elude)
+        public Vines() : base()
         {
             Name = "Vines";
             Text = "Exhaust to fight or elude with 4 dice.";

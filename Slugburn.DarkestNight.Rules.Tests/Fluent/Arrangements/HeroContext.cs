@@ -3,7 +3,6 @@ using System.Linq;
 using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Items;
-using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
@@ -124,11 +123,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
         public IHeroContext IsTakingTurn(bool isTakingTurn = true)
         {
             var game = GetGame();
-            _hero.IsTakingTurn = isTakingTurn;
             if (isTakingTurn)
             {
-                _hero.IsActionAvailable = true;
                 game.ActingHero = _hero;
+                _hero.IsActionAvailable = true;
             }
             else
             {
@@ -139,7 +137,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             return this;
         }
 
-        public IHeroContext HasTakenAction(bool hasTakenaction = true)
+        public IHeroContext HasTakenTurn(bool hasTakenTurn = true)
+        {
+            _hero.HasTakenTurn = hasTakenTurn;
+            _hero.UpdateAvailableActions();
+            return this;
+        }
+
+        public IHeroContext HasUsedAction(bool hasTakenaction = true)
         {
             _hero.IsActionAvailable = false;
             _hero.UpdateAvailableActions();

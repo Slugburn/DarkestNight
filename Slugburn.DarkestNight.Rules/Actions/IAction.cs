@@ -1,12 +1,8 @@
-using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Commands;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
-    public interface IAction 
+    public interface IAction : ICommand
     {
-        string Name { get; }
-        string Text { get; }
-        void Act(Hero hero);
-        bool IsAvailable(Hero hero);
     }
 }

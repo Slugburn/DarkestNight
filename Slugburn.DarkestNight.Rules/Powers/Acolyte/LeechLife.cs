@@ -7,7 +7,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 {
     class LeechLife : TacticPower
     {
-        public LeechLife() : base(TacticType.Fight, 3)
+        public LeechLife() : base()
         {
             Name = "Leech Life";
             Text = "Exhaust while not at the Monastery to fight with 3 dice. Gain 1 Grace (up to default) if you roll 2 successes. You may not enter the Monastery while this power is exhausted.";

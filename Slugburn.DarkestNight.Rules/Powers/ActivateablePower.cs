@@ -42,11 +42,11 @@ namespace Slugburn.DarkestNight.Rules.Powers
 
         public class ActivatePowerAction : PowerAction
         {
-            public ActivatePowerAction(IPower power) : base(power)
+            public ActivatePowerAction(IActionPower power) : base(power)
             {
             }
 
-            public override void Act(Hero hero)
+            public override void Execute(Hero hero)
             {
                 var power = (IActivateable)_power;
                 power.Activate(hero);

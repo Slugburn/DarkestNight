@@ -36,6 +36,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
                 .Location("Mountains").HasRelic()
                 .WithHero("Druid").At("Mountains").HasItems("Key", "Key")
                 .WithHero("Priest").At("Mountains").HasItems("Key", "Key")
+                .Given.Hero("Druid").IsTakingTurn()
                 .When.Player.TakesAction("Druid", RetrieveRelic.ActionName)
                 .Then(Verify.Hero("Druid").HasUsedAction().HasItems("Holy Relic"))
                 .Then(Verify.Hero("Priest").HasItems("Key"));

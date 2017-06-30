@@ -9,7 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
     {
         private const string PowerName = "Final Rest";
 
-        public FinalRest() : base(TacticType.Fight)
+        public FinalRest() : base()
         {
             Name = PowerName;
             StartingPower = true;

@@ -39,7 +39,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 //                space.Remove(locationAction);
 //            }
         }
-        class DivineRight : Bonus
+        class DivineRight : BonusPower
         {
             public DivineRight()
             {
@@ -74,7 +74,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
 
         }
-        class Loyalty : Bonus
+        class Loyalty : BonusPower
         {
             public Loyalty()
             {
@@ -100,7 +100,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
         class Rebellion : TacticPower
         {
             public Rebellion()
-                : base(TacticType.Fight, 3)
+                : base()
             {
                 Name = "Rebellion";
                 Text = "Fight with 3d when attacking a blight or the Necromancer";
@@ -196,7 +196,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
         class Strategy : TacticPower
         {
             public Strategy()
-                : base(TacticType.Fight, 2)
+                : base()
             {
                 Name = "Strategy";
                 StartingPower = true;

@@ -5,7 +5,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
 {
     class Sprint : TacticPower
     {
-        public Sprint() : base(TacticType.Elude)
+        public Sprint() : base()
         {
             Name = "Sprint";
             StartingPower = true;

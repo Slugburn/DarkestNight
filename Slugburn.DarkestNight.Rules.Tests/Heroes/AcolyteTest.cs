@@ -146,7 +146,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .NecromancerAt("Swamp")
                 .WithHero("Acolyte").HasPowers("Death Mask").At("Swamp")
                 .When.Player.StartsTurn()
-                .Then(Verify.Hero().LostSecrecy(0));
+                .Then(Verify.Hero().LostSecrecy(0).HasUnresolvedEvents(1));
         }
 
         [Test]

@@ -33,12 +33,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         public override void Fulfill(Hero hero)
         {
             Deactivate(hero);
-            var oaths = hero.Powers.Where(x => x is IOath).Cast<IOath>();
-            var availableOaths = oaths.Where(x=>x.IsUsable(hero)).Select(x => x.Name).ToList();
-            if (availableOaths.Any())
-            {
-                hero.AvailableActions = availableOaths;
-            }
+            hero.AddFreeAction(p=>p is IOath);
         }
 
         public override void Break(Hero hero)

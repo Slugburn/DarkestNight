@@ -17,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         class LightningStrike: TacticPower
         {
-            public LightningStrike() : base(TacticType.Fight)
+            public LightningStrike() : base()
             {
                 Name = "Lightning Strike";
                 StartingPower = true;
@@ -38,7 +38,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         class Invisibility : TacticPower
         {
-            public Invisibility() : base(TacticType.Elude)
+            public Invisibility() : base()
             {
                 Name = "Invisibility";
                 StartingPower = true;
@@ -49,14 +49,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         class Fiendfire : TacticPower
         {
-            public Fiendfire() : base(TacticType.Fight)
+            public Fiendfire() : base()
             {
                 Name = "Fiendfire";
                 Text = "Exhaust to fight with 5 dice.";
             }
         }
 
-        class ArcaneEnergy : Bonus
+        class ArcaneEnergy : BonusPower
         {
             public ArcaneEnergy()
             {

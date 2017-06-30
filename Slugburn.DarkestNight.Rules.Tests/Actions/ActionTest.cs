@@ -10,6 +10,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
         [TestCase("Travel")]
         [TestCase("Hide")]
         [TestCase("Attack")]
+        [TestCase("Attack Necromancer")]
         [TestCase("Search")]
         [TestCase("Pray")]
         [TestCase("Retrieve a Holy Relic")]
@@ -24,6 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
         [TestCase("Travel")]
         [TestCase("Hide")]
         [TestCase("Attack")]
+        [TestCase("Attack Necromancer")]
         [TestCase("Search")]
         [TestCase("Pray")]
         [TestCase("Retrieve a Holy Relic")]
@@ -38,15 +40,31 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
         [TestCase("Travel")]
         [TestCase("Hide")]
         [TestCase("Attack")]
+        [TestCase("Attack Necromancer")]
         [TestCase("Search")]
         [TestCase("Pray")]
         [TestCase("Retrieve a Holy Relic")]
         public void ActionAlreadyUsed(string actionName)
         {
             TestScenario.Game
-                .WithHero().HasTakenAction()
+                .WithHero().HasUsedAction()
                 .Configure(given => ConfigureForAction(given, actionName))
                 .Then(Verify.Hero().HasUsedAction().CanTakeAction(actionName, false).Grace(null));
+        }
+
+        [TestCase("Travel")]
+        [TestCase("Hide")]
+        [TestCase("Attack")]
+        [TestCase("Attack Necromancer")]
+        [TestCase("Search")]
+        [TestCase("Pray")]
+        [TestCase("Retrieve a Holy Relic")]
+        public void ResolvingEvent(string actionName)
+        {
+            TestScenario.Game
+                .WithHero().HasDrawnEvent()
+                .Configure(given => ConfigureForAction(given, actionName))
+                .Then(Verify.Hero().HasUnresolvedEvents(1).CanTakeAction(actionName, false).Grace(null));
         }
 
         private static IGiven ConfigureForAction(IGiven given, string actionName)
@@ -55,6 +73,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
             {
                 case "Attack":
                     return given.Location("Village").Blights("Desecration").Hero().At("Village");
+                case "Attack Necromancer":
+                    return given.Game.Necromancer.At("Village").Hero().At("Village");
                 case "Hide":
                     return given.Hero().Secrecy(4);
                 case "Pray":

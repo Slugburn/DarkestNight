@@ -1,9 +1,10 @@
 ﻿using Slugburn.DarkestNight.Rules.Actions;
+using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 {
-    class FalseLife : Bonus
+    class FalseLife : BonusPower
     {
         private const string PowerName = "False Life";
 
@@ -26,17 +27,17 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             return base.IsUsable(hero) && hero.Grace < hero.DefaultGrace && hero.Location != Location.Monastery;
         }
 
-        internal class FalseLifeAction : PowerAction
+        internal class FalseLifeAction : PowerCommand
         {
             public FalseLifeAction(IPower power) : base(power)
             {
             }
 
-            public override void Act(Hero hero)
+            public override void Execute(Hero hero)
             {
                 var power = hero.GetPower(Name);
                 if (!power.IsUsable(hero))
-                    throw new ActionNotAvailableException(hero, this);
+                    throw new CommandNotAvailableException(hero, this);
                 hero.GainGrace(1, hero.DefaultGrace);
                 power.Exhaust(hero);
             }

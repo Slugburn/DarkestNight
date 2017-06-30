@@ -42,6 +42,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             return this;
         }
 
+        public INecromancerContext Necromancer => new NecromancerContext(GetGame(), GetPlayer());
+
         public IGameContext Darkness(int value)
         {
             GetGame().Darkness = value;

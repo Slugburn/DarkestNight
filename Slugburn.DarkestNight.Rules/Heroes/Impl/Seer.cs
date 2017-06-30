@@ -5,7 +5,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
     public class Seer : Hero
     {
 
-        class Destiny : Bonus
+        class Destiny : BonusPower
         {
             public Destiny()
             {
@@ -24,7 +24,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class Foreknowledge : Bonus
+        class Foreknowledge : BonusPower
         {
             public Foreknowledge()
             {
@@ -54,7 +54,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         class Premonition : TacticPower
         {
-            public Premonition() : base(TacticType.Elude)
+            public Premonition() : base()
             {
                 Name = "Premonition";
                 StartingPower = true;
@@ -62,7 +62,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class ProphecyOfDoom : Bonus
+        class ProphecyOfDoom : BonusPower
         {
             public ProphecyOfDoom()
             {
@@ -71,7 +71,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class ProphecyOfFortune : Bonus
+        class ProphecyOfFortune : BonusPower
         {
             public ProphecyOfFortune()
             {
@@ -81,7 +81,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        public class ProphecyOfSafety : Bonus
+        public class ProphecyOfSafety : BonusPower
         {
             public ProphecyOfSafety()
             {
@@ -90,7 +90,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        public class ProphecyOfSanctuary : Bonus
+        public class ProphecyOfSanctuary : BonusPower
         {
             public ProphecyOfSanctuary()
             {

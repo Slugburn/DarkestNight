@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Events;
@@ -21,12 +22,15 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 {
     public class Hero
     {
-        private readonly Dictionary<string, IAction> _actions;
+        private readonly Dictionary<string, ICommand> _commands;
         private List<string> _powerDeck;
         private readonly List<IRollModifier> _rollModifiers;
         private readonly Stash _stash;
         private readonly Dictionary<string, ITactic> _tactics;
         private readonly List<ActionFilter> _actionFilters;
+        private bool _hasFreeAction;
+        private ActionFilter _freeActionFilter;
+        private bool _isActionAvailable;
 
         public Hero()
         {
@@ -37,14 +41,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             IsActionAvailable = true;
             CanGainGrace = true;
 
-            _actions = new Dictionary<string, IAction>(StringComparer.InvariantCultureIgnoreCase);
+            _commands = new Dictionary<string, ICommand>(StringComparer.InvariantCultureIgnoreCase);
             _tactics = new Dictionary<string, ITactic>(StringComparer.InvariantCultureIgnoreCase);
             _rollModifiers = new List<IRollModifier>();
             _actionFilters = new List<ActionFilter>();
 
             Location = Location.Monastery;
             TravelSpeed = 1;
-            Enemies = new List<string>();
+            Enemies = new List<IEnemy>();
         }
 
         public TriggerRegistry<HeroTrigger, Hero> Triggers { get; }
@@ -60,29 +64,47 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public ICollection<IPower> Powers { get; protected set; }
         public string Name { get; set; }
 
-        public bool IsTurnTaken { get; set; }
+        public bool HasTakenTurn { get; set; }
 
         public Game Game { get; private set; }
         public IPlayer Player { get; private set; }
 
-        public bool IsActionAvailable { get; set; }
+        public bool IsActionAvailable
+        {
+            get
+            {
+                return _isActionAvailable || _hasFreeAction;
+            }
+            set
+            {
+                if (!value && _hasFreeAction)
+                {
+                    _hasFreeAction = false;
+                }
+                else
+                {
+                    _isActionAvailable = value;
+                }
+            }
+        }
+
         public ConflictState ConflictState { get; set; }
 
         public IList<string> AvailableActions { get; set; }
 
         public bool CanGainGrace { get; set; }
-        public List<string> Enemies { get; set; }
+        public List<IEnemy> Enemies { get; set; }
 
         public int TravelSpeed { get; set; }
 
         public HeroEvent CurrentEvent { get; set; }
 
         public int AvailableMovement { get; set; }
-        public int FreeActions { get; set; }
         public Queue<string> EventQueue { get; } = new Queue<string>();
         private List<IItem> Inventory { get; } = new List<IItem>();
         public bool SavedByGrace { get; private set; }
-        public bool IsTakingTurn { get; set; }
+
+        public bool IsTakingTurn => this == Game.ActingHero;
 
         public void AddActionFilter(string name, ICollection<string> allowed)
         {
@@ -107,12 +129,20 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public IList<string> GetAvailableActions()
         {
-            var heroActions = _actions.Values;
+            var heroActions = _commands.Values;
             var locationActions = GetSpace().GetActions();
             var actions = heroActions.Concat(locationActions).Where(x => x.IsAvailable(this)).Select(x => x.Name);
-            var filtered = _actionFilters
-//                .Where(x => x.State == State)
-                .Aggregate(actions, (x, filter) => x.Intersect(filter.Allowed));
+
+            // use a free action if we've got one
+            if (HasFreeAction)
+            {
+                if (_freeActionFilter == null) return actions.ToList();
+                return actions
+                    .Intersect(_freeActionFilter.Allowed)
+                    .Concat(new[] {"Skip Free Action"})
+                    .ToList();
+            }
+            var filtered = _actionFilters.Aggregate(actions, (x, filter) => x.Intersect(filter.Allowed));
             return filtered.ToList();
         }
 
@@ -171,6 +201,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var card = EventFactory.CreateCard(eventName);
             CurrentEvent = card.Detail.GetHeroEvent(this);
             Triggers.Send(HeroTrigger.EventDrawn);
+            UpdateAvailableActions();
             DisplayCurrentEvent();
         }
 
@@ -295,7 +326,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void TakeAction(IAction action)
         {
-            action.Act(this);
+            action.Execute(this);
         }
 
         public void SelectTactic(string tacticName, ICollection<int> targetIds)
@@ -369,20 +400,20 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             _rollModifiers.RemoveAll(x => x.Name == name);
         }
 
-        public void AddAction(IAction action)
+        public void AddAction(Commands.ICommand command)
         {
-            _actions.Add(action.Name, action);
+            _commands.Add(command.Name, command);
         }
 
-        public IAction GetAction(string actionName)
+        public ICommand GetCommand(string commandName)
         {
-            if (_actions.ContainsKey(actionName))
-                return _actions[actionName];
+            if (_commands.ContainsKey(commandName))
+                return _commands[commandName];
             var space = GetSpace();
-            var locationAction = space.GetAction(actionName);
+            var locationAction = space.GetAction(commandName);
             if (locationAction != null)
                 return locationAction;
-            throw new ArgumentOutOfRangeException(nameof(actionName), actionName);
+            throw new ArgumentOutOfRangeException(nameof(commandName), commandName);
         }
 
         public bool IsAffectedByBlight(Blight blight)
@@ -398,12 +429,12 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public bool HasAction(string actionName)
         {
-            return _actions.ContainsKey(actionName);
+            return _commands.ContainsKey(actionName);
         }
 
         public void RemoveAction(string name)
         {
-            _actions.Remove(name);
+            _commands.Remove(name);
         }
 
         public void DisplayCurrentEvent()
@@ -439,8 +470,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void FaceEnemy(string enemyName)
         {
-            Enemies.Add(enemyName);
-            new Defend().Act(this);
+            var enemy = EnemyFactory.Create(enemyName);
+            FaceEnemy(enemy);
+        }
+
+        public void FaceEnemy(IEnemy enemy)
+        {
+            Enemies.Add(enemy);
+            new Defend().Execute(this);
         }
 
         public void SelectEventOption(string optionCode)
@@ -466,12 +503,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             foreach (var power in Powers)
                 power.Refresh();
-        }
-
-        private class ActionFilter
-        {
-            public string Name { get; set; }
-            public ICollection<string> Allowed { get; set; }
         }
 
         public bool HasHolyRelic() => false;
@@ -503,7 +534,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void DisplayConflictState()
         {
-            ConflictState.Display(Player);
+            if (ConflictState == null)
+                Player.DisplayConflict(null);
+            else
+                ConflictState.Display(Player);
         }
 
         public void AcceptConflictResult()
@@ -512,8 +546,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var target = targets.First();
             target.Resolve(this);
             targets.Remove(target);
-            if (targets.Any())
-                DisplayConflictState();
+            if (!targets.Any())
+                ConflictState = null;
+            UpdateAvailableActions();
+            DisplayConflictState();
         }
 
         public bool CanSpendGrace => Grace > 0 || (Intercession?.CanIntercedeFor(this) ?? false);
@@ -534,5 +570,36 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             Inventory.Remove(item);
         }
+
+        public void ExecuteCommand(string commandName)
+        {
+            var command = GetCommand(commandName);
+            command.Execute(this);
+            if (command is IAction)
+                IsActionAvailable = false;
+        }
+
+        public void AddFreeAction(Func<IPower, bool> filter = null)
+        {
+            _hasFreeAction = true;
+            _freeActionFilter = null;
+            if (filter == null)
+            {
+                UpdateAvailableActions();
+                return;
+            }
+            var filtered = Powers.Where(p => p is IActionPower && filter(p)).ToList();
+            if (filtered.Any())
+            {
+                _freeActionFilter = new ActionFilter {Name = "Free", Allowed = filtered.Select(p => p.Name).ToList()};
+                UpdateAvailableActions();
+            }
+            else
+            {
+                _hasFreeAction = false;
+            }
+        }
+
+        public bool HasFreeAction => _hasFreeAction;
     }
 }

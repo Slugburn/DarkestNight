@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -15,9 +16,9 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public string Text => "Temp";
 
-        public void Act(Hero hero)
+        public void Execute(Hero hero)
         {
-            var enemies = hero.Enemies.Select(EnemyFactory.Create);
+            var enemies = hero.Enemies.ToList();
             hero.SetRoll(RollBuilder.Create<DefendRoll>());
             hero.ConflictState = new ConflictState
             {

@@ -7,15 +7,17 @@ using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
-    public class Attack : IAction
+    public class Attack : StandardAction
     {
-        public string Name => "Attack";
 
-        public string Text => "Choose a blight in your location and fight it.\n"
-                              + "If you win, the blight is destroyed; otherwise, you suffer the blight’s defense.\n"
-                              + "Succeed or fail, you lose 1 Secrecy for revealing yourself.";
+        public Attack() : base("Attack")
+        {
+            Text = "Choose a blight in your location and fight it.\n"
+                   + "If you win, the blight is destroyed; otherwise, you suffer the blight’s defense.\n"
+                   + "Succeed or fail, you lose 1 Secrecy for revealing yourself.";
+        }
 
-        public void Act(Hero hero)
+        public override void Execute(Hero hero)
         {
             hero.SetRoll(RollBuilder.Create<AttackRoll>());
             var conflictState = new ConflictState
@@ -31,16 +33,15 @@ namespace Slugburn.DarkestNight.Rules.Actions
             hero.DisplayConflictState();
         }
 
-        public bool IsAvailable(Hero hero)
+        public override bool IsAvailable(Hero hero)
         {
-            return hero.IsTakingTurn && hero.IsActionAvailable && hero.GetBlights().Any();
+            return base.IsAvailable(hero) && hero.GetBlights().Any();
         }
 
         private class AttackRoll : IRollHandler
         {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
-                hero.IsActionAvailable = false;
                 rollState.TargetNumber = hero.ConflictState.SelectedTargets.Single().TargetNumber;
                 return rollState;
             }

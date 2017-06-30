@@ -1,13 +1,15 @@
-﻿using System.Linq;
-using Slugburn.DarkestNight.Rules.Blights;
-using Slugburn.DarkestNight.Rules.Blights.Implementations;
+﻿using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Powers
 {
-    public abstract class Bonus : Power
+    public interface IBonusPower : IPower
     {
-        protected Bonus()
+    }
+
+    public abstract class BonusPower : Power, IBonusPower
+    {
+        protected BonusPower()
         {
             Type=PowerType.Bonus;
         }

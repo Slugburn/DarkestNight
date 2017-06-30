@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
                 .When.Player.TakesAction("Travel")
                 .Then(Verify.Player.LocationSelectionView("Mountains", "Village", "Forest"))
                 .When.Player.SelectsLocation("Forest")
-                .Then(Verify.Hero().Location("Forest").Secrecy(5));
+                .Then(Verify.Hero().HasUsedAction().Location("Forest").Secrecy(5));
         }
         [Test]
 
@@ -27,7 +27,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
                 .When.Player.TakesAction("Travel")
                 .Then(Verify.Player.LocationSelectionView("Mountains", "Village", "Forest"))
                 .When.Player.SelectsLocation("Forest")
-                .Then(Verify.Hero().Location("Forest").Secrecy(secrecy));
+                .Then(Verify.Hero().HasUsedAction().Location("Forest").Secrecy(secrecy));
         }
 
         [Test]
@@ -40,7 +40,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
                 .When.Player.SelectsLocation("Mountains")
                 .Then(Verify.Player.LocationSelectionView("Monastery", "Village", "Castle"))
                 .When.Player.SelectsLocation("Castle")
-                .Then(Verify.Hero().Location("Castle").CanGainGrace(false).Secrecy(1));
+                .Then(Verify.Hero().HasUsedAction().Location("Castle").CanGainGrace(false).Secrecy(1));
         }
     }
 }

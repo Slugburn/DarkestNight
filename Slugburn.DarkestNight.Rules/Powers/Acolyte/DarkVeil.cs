@@ -1,12 +1,13 @@
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 {
-    class DarkVeil : Bonus
+    class DarkVeil : BonusPower
     {
         private const string PowerName = "Dark Veil";
 
@@ -25,13 +26,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             hero.AddAction(new DarkVeilIgnoreDefense(this));
         }
 
-        private class DarkVeilIgnoreEffects : PowerAction
+        private class DarkVeilIgnoreEffects : PowerCommand
         {
             public DarkVeilIgnoreEffects(IPower power) : base("Dark Veil [ignore effects]", power)
             {
             }
 
-            public override void Act(Hero hero)
+            public override void Execute(Hero hero)
             {
                 hero.Game.AddIgnoreBlight(IgnoreBlight.Create(Name, hero));
                 hero.Triggers.Add(HeroTrigger.StartedTurn, Name, new DarkVeilEnds());
@@ -49,17 +50,17 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             }
         }
 
-        private class DarkVeilIgnoreDefense : PowerAction
+        private class DarkVeilIgnoreDefense : PowerCommand
         {
             public DarkVeilIgnoreDefense(IPower power) : base("Dark Veil [ignore defense]", power)
             {
             }
 
-            public override void Act(Hero hero)
+            public override void Execute(Hero hero)
             {
                 var power = hero.GetPower(PowerName);
                 if (!IsAvailable(hero))
-                    throw new ActionNotAvailableException(hero, this);
+                    throw new CommandNotAvailableException(hero, this);
                 hero.ConflictState.SelectedTargets.First().IgnoreFailure();
                 power.Exhaust(hero);
             }

@@ -9,7 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
         private const string PowerName = "Sanctuary";
 
         public Sanctuary()
-            : base(TacticType.Elude, 4)
+            : base()
         {
             Name = PowerName;
             StartingPower = true;

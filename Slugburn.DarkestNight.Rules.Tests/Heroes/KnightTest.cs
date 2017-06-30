@@ -110,7 +110,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Location("Village").Blights("Shades")
                 .Given.Hero().Power("Oath of Defense").IsActive()
                 .When.Player.StartsTurn()
-                .Then(Verify.Hero().Grace(1));
+                .Then(Verify.Hero().Grace(1).HasUnresolvedEvents(1));
         }
 
         [Test]
@@ -214,13 +214,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void OathOfValor_FulfillOnAttack()
         {
             // Win a fight; You may activate any Oath immediately.
-            const string powerName = "Oath of Valor";
-            TestScenario.Game.WithHero("Knight").HasPowers(powerName)
-                .Given.Hero().Power(powerName).IsActive()
+            TestScenario.Game.WithHero("Knight").HasPowers("Oath of Valor")
+                .Given.Hero().Power("Oath of Valor").IsActive()
                 .Given.Hero().FacesEnemy("Skeleton")
                 .When.Player.Fights(Fake.Rolls(6, 6))
-                .Then(Verify.Hero().HasAvailableActions(powerName))
-                .Then(Verify.Power(powerName).IsActive(false));
+                .Then(Verify.Hero().HasFreeAction().HasAvailableActions("Oath of Valor", "Skip Free Action"))
+                .Then(Verify.Power("Oath of Valor").IsActive(false));
         }
 
         [Test]
@@ -233,7 +232,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Location("Village").Blights("Skeletons")
                 .Given.Hero().FacesEnemy("Skeleton")
                 .When.Player.Fights(Fake.Rolls(6, 6))
-                .Then(Verify.Hero().HasAvailableActions("Oath of Valor", "Oath of Vengeance"))
+                .Then(Verify.Hero().HasFreeAction().HasAvailableActions("Oath of Valor", "Oath of Vengeance", "Skip Free Action"))
                 .Then(Verify.Power("Oath of Valor").IsActive(false));
         }
 
@@ -258,7 +257,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WithHero("Knight").HasPowers("Oath of Vengeance", "Charge", "Consecrated Blade").At("Ruins")
                 .Given.Hero().Power("Oath of Vengeance").IsActive()
                 .When.Player.TakesAction("Attack Necromancer").CompletesConflict("Necromancer", "Charge", Fake.Rolls(2, 3, 6))
-                .Then(Verify.Hero().Rolled(2, 3, 7).FightDice(2).HasUsedAction().HasFreeAction())
+                .Then(Verify.Hero().Rolled(2, 3, 7).FightDice(2).HasFreeAction())
                 .Then(Verify.Power("Oath of Vengeance").IsActive(false));
         }
 

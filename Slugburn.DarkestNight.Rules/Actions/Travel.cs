@@ -1,19 +1,19 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Players;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
-    public class Travel : IAction, ICallbackHandler
+    public class Travel : StandardAction, ICallbackHandler
     {
         private int _movesLeft;
 
-        public string Name => "Travel";
+        public Travel() : base("Travel")
+        {
+            Text = "Move to an adjacent location, and gain 1 Secrecy (up to 5).";
+        }
 
-        public string Text => @"Move to an adjacent location, and gain 1 Secrecy (up to 5).";
-
-        public void Act(Hero hero)
+        public override void Execute(Hero hero)
         {
             _movesLeft = hero.TravelSpeed;
             UseTravelMovement(hero);
@@ -26,10 +26,6 @@ namespace Slugburn.DarkestNight.Rules.Actions
             hero.Player.DisplayLocationSelection(validLocations, Callback.ForAction(hero, this));
         }
 
-        public bool IsAvailable(Hero hero)
-        {
-            return hero.IsTakingTurn && hero.IsActionAvailable;
-        }
 
         public void HandleCallback(Hero hero, string path, object data)
         {

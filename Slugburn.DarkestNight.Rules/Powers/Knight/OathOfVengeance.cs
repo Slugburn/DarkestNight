@@ -25,7 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
 
         public override void Fulfill(Hero hero)
         {
-            hero.FreeActions++;
+            hero.AddFreeAction();
             Deactivate(hero);
         }
 

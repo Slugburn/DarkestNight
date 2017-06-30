@@ -5,7 +5,7 @@ using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Knight
 {
-    class HolyMantle : Bonus
+    class HolyMantle : BonusPower
     {
         private const string PowerName = "Holy Mantle";
 

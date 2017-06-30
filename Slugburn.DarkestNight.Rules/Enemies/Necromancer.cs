@@ -22,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
         }
 
         public Location Location { get; set; }
-        public bool IsActing { get; set; }
+        public bool IsTakingTurn { get; set; }
 
         public string Name => "Necromancer";
         public int Fight => 7;
@@ -50,7 +50,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
 
         public void StartTurn()
         {
-            IsActing = true;
+            IsTakingTurn = true;
             _game.IncreaseDarkness();
 
             // roll to detect and move
@@ -86,7 +86,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
                 blightsCreated++;
 
             _game.CreateBlights(Location, blightsCreated);
-            IsActing = false;
+            IsTakingTurn = false;
         }
 
         private Location GetDestination()

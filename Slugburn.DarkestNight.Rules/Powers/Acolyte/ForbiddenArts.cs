@@ -4,7 +4,7 @@ using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 {
-    class ForbiddenArts : Bonus
+    class ForbiddenArts : BonusPower
     {
         private const string PowerName = "Forbidden Arts";
 
@@ -20,13 +20,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             hero.AddAction(new ForbiddenArtsAction(this));
         }
 
-        private class ForbiddenArtsAction : PowerAction
+        private class ForbiddenArtsAction : PowerCommand
         {
             public ForbiddenArtsAction(IPower power) : base(power)
             {
             }
 
-            public override void Act(Hero hero)
+            public override void Execute(Hero hero)
             {
                 var roll = Die.Roll();
                 if (roll == 1)

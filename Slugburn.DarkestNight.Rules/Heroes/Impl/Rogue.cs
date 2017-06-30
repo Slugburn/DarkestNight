@@ -7,7 +7,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         class Ambush : TacticPower
         {
-            public Ambush() : base(TacticType.Fight, 3)
+            public Ambush() : base()
             {
                 Name = "Ambush";
                 StartingPower = true;
@@ -15,7 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class Contacts : Bonus
+        class Contacts : BonusPower
         {
             public Contacts()
             {
@@ -53,7 +53,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class Sap : Bonus
+        class Sap : BonusPower
         {
             public Sap()
             {
@@ -62,7 +62,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class ShadowCloak : Bonus
+        class ShadowCloak : BonusPower
         {
             public ShadowCloak()
             {
@@ -73,14 +73,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         class Skulk : TacticPower
         {
-            public Skulk() : base(TacticType.Elude, 2)
+            public Skulk() : base()
             {
                 Name = "Skulk";
                 Text = "Elude with 2 dice and add 1 to the highest die.";
             }
         }
 
-        class Stealth : Bonus
+        class Stealth : BonusPower
         {
             public Stealth()
             {
@@ -91,7 +91,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         class Vanish : TacticPower
         {
-            public Vanish() : base(TacticType.Elude, 2)
+            public Vanish() : base()
             {
                 Name = "Vanish";
                 StartingPower = true;

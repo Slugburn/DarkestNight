@@ -5,7 +5,7 @@ using Slugburn.DarkestNight.Rules.Players.Models;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Priest
 {
-    class Intercession : Bonus, ICallbackHandler
+    class Intercession : BonusPower, ICallbackHandler
     {
         public Intercession()
         {

@@ -8,7 +8,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
     {
         private const string PowerName = "Animal Companion";
 
-        public AnimalCompanion() : base(TacticType.Fight)
+        public AnimalCompanion() : base()
         {
             Name = PowerName;
             StartingPower = true;

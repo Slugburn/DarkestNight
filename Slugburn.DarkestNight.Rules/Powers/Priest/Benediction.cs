@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
+using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
@@ -38,14 +39,14 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
 
         internal class BenedictionAction : PowerAction, ICallbackHandler
         {
-            public BenedictionAction(IPower power) : base(power)
+            public BenedictionAction(IActionPower power) : base(power)
             {
             }
 
-            public override void Act(Hero hero)
+            public override void Execute(Hero hero)
             {
                 if (!IsAvailable(hero))
-                    throw new ActionNotAvailableException(hero, this);
+                    throw new CommandNotAvailableException(hero, this);
 
                 var validTargets = hero.Game.Heroes.Where(target => IsValidTarget(hero, target)).ToList();
 
@@ -61,7 +62,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
                 selectedHero.GainGrace(1, selectedHero.DefaultGrace);
                 if (selectedHero.Grace > hero.Grace)
                     hero.GainGrace(1, int.MaxValue);
-                hero.IsActionAvailable = false;
             }
         }
     }

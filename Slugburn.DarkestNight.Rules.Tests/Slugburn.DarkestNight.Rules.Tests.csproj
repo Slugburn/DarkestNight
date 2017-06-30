@@ -51,10 +51,12 @@
   <ItemGroup>
     <Compile Include="Actions\ActionTest.cs" />
     <Compile Include="Actions\AttackTest.cs" />
+    <Compile Include="Actions\EndTurnTest.cs" />
     <Compile Include="Actions\HideTest.cs" />
     <Compile Include="Actions\PrayTest.cs" />
     <Compile Include="Actions\RetrieveRelicTest.cs" />
     <Compile Include="Actions\SearchTest.cs" />
+    <Compile Include="Actions\StartTurnTest.cs" />
     <Compile Include="Actions\TravelTest.cs" />
     <Compile Include="Events\AltarTest.cs" />
     <Compile Include="Events\CloseCallTest.cs" />
@@ -87,6 +89,7 @@
     <Compile Include="Fluent\Arrangements\IHeroContext.cs" />
     <Compile Include="Fluent\Arrangements\ILocationContext.cs" />
     <Compile Include="Fluent\Arrangements\IPowerContext.cs" />
+    <Compile Include="Fluent\Arrangements\NecromancerContext.cs" />
     <Compile Include="Fluent\Assertions\BlightSelectionViewVerification.cs" />
     <Compile Include="Fluent\Assertions\ConflictViewVerification.cs" />
     <Compile Include="Fluent\Assertions\EventViewVerification.cs" />
@@ -116,6 +119,7 @@
     <Compile Include="Heroes\KnightTest.cs" />
     <Compile Include="Heroes\PriestTest.cs" />
     <Compile Include="Items\HolyRelicTest.cs" />
+    <Compile Include="Items\WaystoneTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShouldlyExtension.cs" />
   </ItemGroup>

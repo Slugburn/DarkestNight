@@ -43,7 +43,7 @@ namespace Slugburn.DarkestNight.Rules.Players
             switch (callbackType)
             {
                 case "Action":
-                    return (ICallbackHandler) hero.GetAction(name);
+                    return (ICallbackHandler) hero.GetCommand(name);
                 case "Event":
                     return (ICallbackHandler) EventFactory.CreateCard(name);
                 case "Power":

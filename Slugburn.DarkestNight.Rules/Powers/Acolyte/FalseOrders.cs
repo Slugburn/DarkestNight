@@ -5,11 +5,10 @@ using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
-using Slugburn.DarkestNight.Rules.Spaces;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 {
-    class FalseOrders : ActionPower
+    internal class FalseOrders : ActionPower
     {
         private const string PowerName = "False Orders";
 
@@ -27,48 +26,46 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
         private class FalseOrdersAction : PowerAction, ICallbackHandler
         {
-            public FalseOrdersAction(IPower power) : base(power)
+            public FalseOrdersAction(IActionPower power) : base(power)
             {
             }
 
-            private Location Destination { get; set; }  // This gets set by the location selected handler
-
-            public override void Act(Hero hero)
-            {
-                hero.IsActionAvailable = false;
-                var space = (Space)hero.GetSpace();
-                var potentialDestinations = space.AdjacentLocations.Select(x => x.ToString()).ToList();
-                hero.Player.DisplayLocationSelection(potentialDestinations, Callback.ForAction(hero, this));
-            }
+            private Location Destination { get; set; } // This gets set by the location selected handler
 
             public void HandleCallback(Hero hero, string path, object data)
             {
                 if (data is Location)
                 {
-                    var action = (FalseOrdersAction) hero.GetAction(PowerName);
+                    var action = (FalseOrdersAction) hero.GetCommand(PowerName);
                     var destination = (Location) data;
                     action.Destination = destination;
 
                     var destinationSpace = hero.Game.Board[destination];
                     var maxMoveCount = 4 - destinationSpace.Blights.Count;
-                    var space = (Space) hero.GetSpace();
+                    var space = hero.GetSpace();
                     var playerBlights = space.Blights.Select(b => new PlayerBlight {Blight = b, Location = hero.Location}).ToList();
                     hero.Player.DisplayBlightSelection(new PlayerBlightSelection(playerBlights, maxMoveCount), Callback.ForAction(hero, this));
                 }
                 else if (data is IEnumerable<BlightLocation>)
                 {
                     var selection = (IEnumerable<BlightLocation>) data;
-                    var action = (FalseOrdersAction) hero.GetAction(PowerName);
+                    var action = (FalseOrdersAction) hero.GetCommand(PowerName);
                     var destination = action.Destination;
                     foreach (var blight in selection)
                     {
-                        var sourceSpace = (Space) hero.Game.Board[blight.Location];
+                        var sourceSpace = hero.Game.Board[blight.Location];
                         sourceSpace.RemoveBlight(blight.Blight);
-                        var destinationSpace = (Space) hero.Game.Board[destination];
+                        var destinationSpace = hero.Game.Board[destination];
                         destinationSpace.AddBlight(blight.Blight);
                     }
                 }
+            }
 
+            public override void Execute(Hero hero)
+            {
+                var space = hero.GetSpace();
+                var potentialDestinations = space.AdjacentLocations.Select(x => x.ToString()).ToList();
+                hero.Player.DisplayLocationSelection(potentialDestinations, Callback.ForAction(hero, this));
             }
         }
     }

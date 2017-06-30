@@ -4,7 +4,7 @@ using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Priest
 {
-    class Calm : Bonus, ITriggerHandler<Hero>
+    class Calm : BonusPower, ITriggerHandler<Hero>
     {
         private CalmPray _action;
 
@@ -32,16 +32,19 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
                 hero.GetSpace().AddAction(_action);
         }
 
-        internal class CalmPray : Pray
+        internal class CalmPray : StandardAction
         {
-            public CalmPray()
+            private readonly Pray _pray;
+
+            public CalmPray() :base ("Pray [Calm]")
             {
-                Name = "Pray [Calm]";
+                _pray = new Pray();
+                Text = _pray.Text;
             }
 
-            public override bool IsAvailable(Hero hero)
+            public override void Execute(Hero hero)
             {
-                return hero.IsTakingTurn && hero.IsActionAvailable;
+                _pray.Execute(hero);
             }
         }
 

@@ -23,11 +23,11 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 
         private class CelerityAction : PowerAction, ICallbackHandler
         {
-            public CelerityAction(IPower power) : base(power)
+            public CelerityAction(IActionPower power) : base(power)
             {
             }
 
-            public override void Act(Hero hero)
+            public override void Execute(Hero hero)
             {
                 DruidFormPower.DeactivateAllForms(hero);
                 var validDestionations = hero.GetSpace().AdjacentLocations.Select(x=>x.ToString()).ToList();
@@ -41,21 +41,16 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
                 hero.MoveTo(destination);
 
                 // Allow player to pick a new form
-                var formActions = hero.GetPowers<IDruidForm>().Where(x => x.IsUsable(hero)).Select(x => x.Name);
-                var continueAction = new CelerityContinueAction();
-                var availableActions = formActions.Concat(new[] { continueAction.Name }).ToList();
-                hero.AddAction(continueAction);
-                hero.AvailableActions = availableActions;
+                hero.AddFreeAction(p=>p is IDruidForm);
             }
 
             private class CelerityContinueAction : IAction
             {
                 public string Name => "Continue";
 
-                public void Act(Hero hero)
+                public void Execute(Hero hero)
                 {
                     hero.RemoveAction(Name);
-                    hero.IsActionAvailable = false;
                 }
 
                 public bool IsAvailable(Hero hero)

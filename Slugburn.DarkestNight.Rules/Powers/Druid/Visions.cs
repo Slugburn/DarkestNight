@@ -3,7 +3,7 @@ using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Druid
 {
-    class Visions : Bonus
+    class Visions : BonusPower
     {
         private const string PowerName = "Visions";
 

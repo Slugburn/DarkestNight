@@ -7,7 +7,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
     {
         private const string PowerName = "Charge";
 
-        public Charge() : base(TacticType.Fight)
+        public Charge() : base()
         {
             Name = PowerName;
             StartingPower = true;

@@ -34,17 +34,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         {
             if (heroName == null)
             {
-                Hero hero;
-                // If there's only one hero, assume it's that one
-                if (GetGame().Heroes.Count == 1)
-                    hero = GetGame().Heroes.Single();
-                hero = GetGame().ActingHero;
-                if (hero == null)
-                    Assert.Fail("There is no acting hero. Specify a hero name.");
+                var hero = GetHero(null);
                 heroName = hero.Name;
             }
 
-            GetPlayer().TakeAction(heroName, actionName);
+            GetPlayer().ExecuteCommand(heroName, actionName);
             return this;
         }
         
@@ -95,7 +89,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             if (!availableTactics.Contains(_selectedTactic))
                 Assert.Fail($"Selected tactic '{_selectedTactic}' is not valid. Available tactics are '{availableTactics.ToCsv()}'.");
 
-
             GetPlayer().ResolveConflict(_selectedTactic, targetIds);
             return this;
         }
@@ -140,7 +133,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
 
         public IPlayerActionContext AcceptsConflictResults()
         {
-            while (GetGame().ActingHero.ConflictState.SelectedTargets.Any())
+            while (GetGame().ActingHero.ConflictState != null)
                 GetPlayer().AcceptConflictResult();
             return this;
         }

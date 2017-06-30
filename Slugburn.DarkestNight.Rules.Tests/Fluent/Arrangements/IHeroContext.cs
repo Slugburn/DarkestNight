@@ -16,7 +16,8 @@
         IHeroContext RefreshesPower(string powerName);
         IHeroContext MovesTo(string location);
         IHeroContext IsTakingTurn(bool isTakingTurn = true);
-        IHeroContext HasTakenAction(bool hasTakenaction = true);
+        IHeroContext HasTakenTurn(bool hasTakenTurn = true);
+        IHeroContext HasUsedAction(bool hasTakenaction = true);
         IHeroContext HasItems(params string[] itemNames);
         IHeroContext NextPowerDraws(params string[] powerNames);
         IHeroContext LostSecrecy(int amount);

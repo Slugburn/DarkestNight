@@ -5,7 +5,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 {
     class Camouflage : TacticPower
     {
-        public Camouflage() : base(TacticType.Elude)
+        public Camouflage() : base()
         {
             Name = "Camouflage";
             StartingPower = true;

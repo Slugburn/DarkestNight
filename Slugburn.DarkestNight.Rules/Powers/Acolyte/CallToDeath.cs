@@ -34,11 +34,11 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         private class CallToDeathAction : PowerAction
         {
 
-            public CallToDeathAction(IPower power) : base(power)
+            public CallToDeathAction(IActionPower power) : base(power)
             {
             }
 
-            public override void Act(Hero hero)
+            public override void Execute(Hero hero)
             {
                 hero.AddRollModifier(StaticRollBonus.Create(Name, RollType.Fight, 1));
                 hero.SetRoll(RollBuilder.Create<CallToDeathRoll>());
@@ -50,7 +50,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                     MinTarget = 2,
                     MaxTarget = 2
                 };
-                hero.IsActionAvailable = false;
                 hero.DisplayConflictState();
             }
         }

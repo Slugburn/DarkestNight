@@ -2,7 +2,11 @@
 
 namespace Slugburn.DarkestNight.Rules.Powers
 {
-    public abstract class ActionPower : Power
+    public interface IActionPower : IPower
+    {
+    }
+
+    public abstract class ActionPower : Power, IActionPower
     {
         protected ActionPower()
         {
@@ -11,7 +15,11 @@ namespace Slugburn.DarkestNight.Rules.Powers
 
         public override bool IsUsable(Hero hero)
         {
-            return base.IsUsable(hero) && hero.IsTakingTurn && hero.IsActionAvailable;
+            return base.IsUsable(hero)
+                   && hero.IsTakingTurn
+                   && hero.IsActionAvailable
+                   && hero.ConflictState == null
+                   && hero.CurrentEvent == null;
         }
     }
 }

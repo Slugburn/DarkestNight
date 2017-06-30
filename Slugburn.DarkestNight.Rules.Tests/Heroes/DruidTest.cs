@@ -42,7 +42,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .When.Player.TakesAction("Celerity")
                 .Then(Verify.Power("Wolf Form").IsActive(false))
                 .When.Player.SelectsLocation("Village")
-                .Then(Verify.Hero().Location("Village").HasAvailableActions("Raven Form", "Wolf Form", "Continue"))
+                .Then(Verify.Hero().Location("Village").HasFreeAction().HasAvailableActions("Raven Form", "Wolf Form", "Skip Free Action"))
                 .When.Player.TakesAction("Raven Form")
                 .Then(Verify.Power("Raven Form").IsActive())
                 .Then(Verify.Hero().TravelSpeed(2).SearchDice(2).HasUsedAction().CanGainGrace(false));
@@ -52,12 +52,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Celerity_NoNewFormSelected()
         {
             TestScenario
-                .Game.WithHero("Druid").HasPowers("Celerity").At("Monastery")
+                .Game.WithHero("Druid").HasPowers("Celerity", "Sprite Form").At("Monastery")
                 .When.Player.TakesAction("Celerity")
                 .When.Player.SelectsLocation("Village")
-                .Then(Verify.Hero().Location("Village").HasAvailableActions("Continue"))
-                .When.Player.TakesAction("Continue")
-                .Then(Verify.Hero().HasUsedAction());
+                .Then(Verify.Hero().Location("Village").HasFreeAction().HasAvailableActions("Sprite Form", "Skip Free Action"))
+                .When.Player.TakesAction("Skip Free Action")
+                .Then(Verify.Hero().HasUsedAction().HasFreeAction(false));
         }
 
         // Raven Form (Action): Deactivate all Forms. Optionally activate.
@@ -150,7 +150,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WithHero("Druid").NotAt("Monastery").HasPowers("Tree Form").Grace(0)
                 .Power("Tree Form").IsActive()
                 .When.Player.TakesAction("Deactivate Form")
-                .When.Player.StartsTurn()
+                .Given.Hero().IsTakingTurn()
                 .Then(Verify.Hero().Grace(0).HasAvailableActions("Travel", "Search", "Tree Form", "End Turn"));
         }
 

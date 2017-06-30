@@ -54,11 +54,9 @@ namespace Slugburn.DarkestNight.Rules
 
         public void StartNewDay()
         {
+            ActingHero = null;
             foreach (var hero in Heroes)
-            {
-                hero.IsTurnTaken = false;
-                hero.IsActionAvailable = true;
-            }
+                hero.HasTakenTurn = false;
         }
 
         private IMap DrawMapCard()

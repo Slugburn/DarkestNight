@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Shouldly;
+using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Extensions;
+using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
 
@@ -104,11 +106,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             _game.ActingHero.AcceptRoll();
         }
 
-        public void TakeAction(string heroName, string actionName)
+        public void ExecuteCommand(string heroName, string commandName)
         {
             var hero = _game.GetHero(heroName);
-            var action = hero.GetAction(actionName);
-            action.Act(hero);
+            hero.ExecuteCommand(commandName);
         }
 
         public void SelectLocation(Location location)

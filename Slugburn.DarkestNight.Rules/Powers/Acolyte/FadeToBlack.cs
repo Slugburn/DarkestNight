@@ -3,7 +3,7 @@ using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 {
-    class FadeToBlack : Bonus
+    class FadeToBlack : BonusPower
     {
         private const string PowerName = "Fade to Black";
 

@@ -1,26 +1,17 @@
-﻿using System;
-using System.Linq;
-using Slugburn.DarkestNight.Rules.Blights;
-using Slugburn.DarkestNight.Rules.Blights.Implementations;
+﻿using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Powers
 {
-    public abstract class TacticPower : Power
+    public interface ITacticPower : IPower
     {
-        public Func<int> GetBaseDieCount { get; protected set; }
+    }
 
-        public TacticType TacticType { get; protected set; }
-
-        protected TacticPower(TacticType tacticType, int dieCount) :this(tacticType)
-        {
-            GetBaseDieCount = ()=>dieCount;
-        }
-
-        protected TacticPower(TacticType tacticType)
+    public abstract class TacticPower : Power, ITacticPower
+    {
+        protected TacticPower()
         {
             Type = PowerType.Tactic;
-            TacticType = tacticType;
         }
 
         public override bool IsUsable(Hero hero)

@@ -4,24 +4,25 @@ using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
-    public class Hide : IAction
+    public class Hide : StandardAction
     {
-        public string Name => "Hide";
-
-        public string Text => "Refresh your powers and gain 1 Secrecy (up to 5).";
-
-        public void Act(Hero hero)
+        public Hide() : base("Hide")
         {
-            hero.IsActionAvailable = false;
+            Text = "Refresh your powers and gain 1 Secrecy (up to 5).";
+        }
+
+        public override void Execute(Hero hero)
+        {
             hero.RefreshPowers();
             if (hero.Secrecy < 5)
                 hero.GainSecrecy(1, 5);
             hero.Triggers.Send(HeroTrigger.Hidden);
         }
 
-        public bool IsAvailable(Hero hero)
+        public override bool IsAvailable(Hero hero)
         {
-            return hero.IsTakingTurn && hero.IsActionAvailable && (hero.Secrecy < 5 || hero.Powers.Any(power=>power.Exhausted));
+            return base.IsAvailable(hero)
+                   && (hero.Secrecy < 5 || hero.Powers.Any(power => power.Exhausted));
         }
     }
 }

@@ -4,7 +4,7 @@ using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Priest
 {
-    class Miracle : Bonus
+    class Miracle : BonusPower
     {
         public Miracle()
         {
@@ -23,13 +23,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             return base.IsUsable(hero) && hero.Grace > 0 && hero.CurrentRoll?.ActualRoll != null;
         }
 
-        internal class MiracleAction : PowerAction
+        internal class MiracleAction : PowerCommand
         {
             public MiracleAction(IPower power) : base(power)
             {
             }
 
-            public override void Act(Hero hero)
+            public override void Execute(Hero hero)
             {
                 hero.SpendGrace(1);
                 var roll = Die.Roll();

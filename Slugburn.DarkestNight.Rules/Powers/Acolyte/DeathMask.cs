@@ -3,7 +3,7 @@ using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 {
-    class DeathMask : Bonus
+    class DeathMask : BonusPower
     {
         private const string PowerName = "Death Mask";
 

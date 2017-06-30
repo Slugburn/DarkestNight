@@ -3,7 +3,7 @@ using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Knight
 {
-    class ConsecratedBlade : Bonus
+    class ConsecratedBlade : BonusPower
     {
         private const string PowerName = "Consecrated Blade";
 

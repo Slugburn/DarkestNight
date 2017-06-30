@@ -15,12 +15,22 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private string _title;
         private int _fate;
         private string _text;
+        private bool _isVisible = true;
+
+        public EventViewVerification IsVisible(bool expected = true)
+        {
+            _isVisible = expected;
+            return this;
+        }
 
         public void Verify(ITestRoot root)
         {
             var player = root.Get<FakePlayer>();
-            player.State.ShouldBe(PlayerState.Event);
             var view = player.Event;
+            if (_isVisible)
+                player.State.ShouldBe(PlayerState.Event);
+            else
+                view.ShouldBeNull();
             if (_title != null)
             {
                 view.Title.ShouldBe(_title);

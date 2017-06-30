@@ -9,19 +9,20 @@ using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
-    public class AttackNecromancer : IAction
+    public class AttackNecromancer : StandardAction
     {
         public const string ActionName = "Attack Necromancer";
 
-        public string Name => ActionName;
+        public AttackNecromancer() : base(ActionName)
+        {
+            Text = "Failing any combat with the Necromancer results in a wound.\n"
+                   + "If there are any blights in the location, successfully fighting the Necromancer will\n"
+                   + "entice him to sacrifice one of them so he can escape; destroy one of your choice.\n"
+                   + "Successfully fighting the Necromancer when there are no blights in the location\n"
+                   + "slays him and wins the game—but only if you are holding a holy relic when you do so.";
+        }
 
-        public string Text => "Failing any combat with the Necromancer results in a wound.\n"
-                              + "If there are any blights in the location, successfully fighting the Necromancer will\n"
-                              + "entice him to sacrifice one of them so he can escape; destroy one of your choice.\n"
-                              + "Successfully fighting the Necromancer when there are no blights in the location\n"
-                              + "slays him and wins the game—but only if you are holding a holy relic when you do so.";
-
-        public void Act(Hero hero)
+        public override void Execute(Hero hero)
         {
             var necromancer = hero.Game.Necromancer;
             var availableTargets = new [] {necromancer}.GetTargetInfo();
@@ -41,16 +42,15 @@ namespace Slugburn.DarkestNight.Rules.Actions
             hero.DisplayConflictState();
         }
 
-        public bool IsAvailable(Hero hero)
+        public override bool IsAvailable(Hero hero)
         {
-            return hero.IsActionAvailable && hero.Location == hero.Game.Necromancer.Location;
+            return base.IsAvailable(hero) && hero.Location == hero.Game.Necromancer.Location;
         }
 
         private class FightNecromancerRoll : IRollHandler
         {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
-                hero.IsActionAvailable = false;
                 rollState.TargetNumber = hero.Game.Necromancer.Fight;
                 return rollState;
             }

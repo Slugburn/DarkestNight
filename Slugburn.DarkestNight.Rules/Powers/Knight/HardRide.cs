@@ -20,14 +20,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
 
         private class HardRideAction : PowerAction
         {
-            public HardRideAction(IPower power) : base(power)
+            public HardRideAction(IActionPower power) : base(power)
             {
             }
 
-            public override void Act(Hero hero)
+            public override void Execute(Hero hero)
             {
                 hero.AvailableMovement = 2;
-                hero.IsActionAvailable = false;
             }
 
         }

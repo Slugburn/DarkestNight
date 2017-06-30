@@ -1,11 +1,11 @@
-using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
+using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 {
-    public class BlindingBlack : Bonus
+    public class BlindingBlack : BonusPower
     {
         public BlindingBlack()
         {
@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
         public override bool IsUsable(Hero hero)
         {
-            return base.IsUsable(hero) && hero.Game.Necromancer.IsActing && hero.Game.Necromancer.DetectedHeroes.Any();
+            return base.IsUsable(hero) && hero.Game.Necromancer.IsTakingTurn && hero.Game.Necromancer.DetectedHeroes.Any();
         }
 
         public override void Learn(Hero hero)
@@ -26,17 +26,17 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             hero.AddAction(action);
         }
 
-        public class BlindingBlackAction : PowerAction
+        public class BlindingBlackAction : PowerCommand
         {
             public BlindingBlackAction(IPower power) : base(power)
             {
             }
 
-            public override void Act(Hero hero)
+            public override void Execute(Hero hero)
             {
                 var power = hero.GetPower(Name);
                 if (!IsAvailable(hero))
-                    throw new ActionNotAvailableException(hero, this);
+                    throw new CommandNotAvailableException(hero, this);
 
                 var necromancer = hero.Game.Necromancer;
                 necromancer.DetectedHeroes.Clear();

@@ -2,7 +2,7 @@
 
 namespace Slugburn.DarkestNight.Rules.Powers.Druid
 {
-    class Tranquility : Bonus
+    class Tranquility : BonusPower
     {
         public Tranquility()
         {

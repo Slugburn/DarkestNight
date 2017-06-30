@@ -7,7 +7,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         class FindWeakness : TacticPower
         {
-            public FindWeakness() : base(TacticType.Fight)
+            public FindWeakness() : base()
             {
                 Name = "Find Weakness";
                 StartingPower = true;
@@ -17,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         class Foresight : TacticPower
         {
-            public Foresight() : base(TacticType.Elude)
+            public Foresight() : base()
             {
                 Name = "Foresight";
                 StartingPower = true;
@@ -25,7 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class Preparation : Bonus
+        class Preparation : BonusPower
         {
             public Preparation()
             {
@@ -35,7 +35,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class Thoroughness: Bonus
+        class Thoroughness: BonusPower
         {
             public Thoroughness()
             {
@@ -67,7 +67,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
 
         }
 
-        class AncientSword : Bonus
+        class AncientSword : BonusPower
         {
             public AncientSword()
             {
@@ -96,7 +96,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes.Impl
             }
         }
 
-        class ResearchMaterials : Bonus
+        class ResearchMaterials : BonusPower
         {
             public ResearchMaterials()
             {

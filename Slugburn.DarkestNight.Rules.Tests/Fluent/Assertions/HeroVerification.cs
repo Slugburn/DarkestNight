@@ -20,7 +20,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private int _expectedDiceCount;
         private int? _eludeDice;
         private int? _fightDice;
-        private int _expectedFreeActions;
         private int? _grace;
         private int? _secrecy;
         private IEnumerable<Blight> _expectedIgnoredBlights;
@@ -40,6 +39,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private bool _hasNoDieModifer;
         private Dictionary<string, bool> _powerAvailability = new Dictionary<string, bool>();
         private string[] _powerDeckContains;
+        private string[] _facingEnemies;
+        private bool _hasFreeAction;
 
         public HeroVerification(string heroName)
         {
@@ -111,7 +112,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
                 Assert.That(hero.CurrentRoll, Is.Not.Null, "No roll was made");
                 Assert.That(hero.CurrentRoll.AdjustedRoll, Is.EquivalentTo(_expectedRoll));
             }
-            Assert.That(hero.FreeActions, Is.EqualTo(_expectedFreeActions));
+            hero.HasFreeAction.ShouldBe(_hasFreeAction);
             if (_expectedInventory != null)
                 hero.GetInventory().Select(x=>x.Name).ShouldBeEquivalent(_expectedInventory);
 
@@ -127,6 +128,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
             if (_powerDeckContains != null)
                 Assert.That(hero.PowerDeck, Is.EquivalentTo(_powerDeckContains));
+            if (_facingEnemies != null)
+                hero.Enemies.Select(x => x.Name).ShouldBeEquivalent(_facingEnemies);;
         }
 
         private void VerifyActions(Hero hero)
@@ -304,9 +307,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public HeroVerification HasFreeAction()
+        public HeroVerification HasFreeAction(bool expected = true)
         {
-            _expectedFreeActions = 1;
+            _hasFreeAction = expected;
             return this;
         }
 
@@ -362,6 +365,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         public HeroVerification PowerDeckContains(params string[] powerName)
         {
             _powerDeckContains = powerName;
+            return this;
+        }
+
+        public HeroVerification IsFacingEnemies(params string[] expected)
+        {
+            _facingEnemies = expected;
             return this;
         }
     }
