@@ -131,6 +131,7 @@
     <Compile Include="Heroes\KnightTest.cs" />
     <Compile Include="Heroes\PriestTest.cs" />
     <Compile Include="Items\HolyRelicTest.cs" />
+    <Compile Include="Items\TreasureChestTest.cs" />
     <Compile Include="Items\WaystoneTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShouldlyExtension.cs" />

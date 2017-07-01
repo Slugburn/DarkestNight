@@ -17,5 +17,16 @@ namespace Slugburn.DarkestNight.Rules.Tests.Items
                 .When.Player.SelectsLocation("Monastery")
                 .Then(Verify.Hero().HasNotUsedAction().Location("Monastery").Secrecy(1).HasItems());
         }
+
+        [Test]
+        public void RespectsMovementExclusions()
+        {
+            TestScenario.Game
+                .WithHero("Acolyte").HasItems("Waystone").At("Castle")
+                .HasPowers("False Life").Power("False Life").IsExhausted()
+                .When.Player.TakesAction("Waystone")
+                .Then(Verify.Player.LocationSelectionView("Mountains", "Village", "Ruins", "Swamp", "Forest"));
+        }
+
     }
 }

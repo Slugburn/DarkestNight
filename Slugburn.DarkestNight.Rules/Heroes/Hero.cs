@@ -300,6 +300,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 Grace = Math.Min(Grace + amount, max);
         }
 
+        public void DrawPower(Callback callback)
+        {
+            var powerName = PowerDeck.First();
+            var power = LearnPower(powerName);
+            Player.DisplayPowers(new[] { power }.ToPlayerPowers(), callback);
+            Player.State = PlayerState.SelectPower;
+        }
 
         public IPower LearnPower(string name)
         {
@@ -344,9 +351,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             return _tactics.Values.Where(x => x.IsAvailable(this)).ToList();
         }
 
-        public IEnumerable<Location> GetValidMovementLocations()
+        public IEnumerable<Location> GetValidMovementLocations(bool onlyAdjacent = true)
         {
-            var locations = GetSpace().AdjacentLocations;
+            var locations = onlyAdjacent ? GetSpace().AdjacentLocations : Game.GetAllLocations();
             var blocks = _stash.GetAll<PreventMovementEffect>();
             var valid = locations.Where(loc => !blocks.Any(block => block.Matches(loc)));
             return valid;
@@ -770,5 +777,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (item is HolyRelic)
                 toHero.LoseSecrecy("Holy Relic");
         }
+
     }
 }

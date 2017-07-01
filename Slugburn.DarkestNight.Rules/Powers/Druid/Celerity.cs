@@ -29,7 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             public override void Execute(Hero hero)
             {
                 DruidFormPower.DeactivateAllForms(hero);
-                var validDestionations = hero.GetSpace().AdjacentLocations.Select(x=>x.ToString()).ToList();
+                var validDestionations = hero.GetValidMovementLocations().Select(x=>x.ToString()).ToList();
                 hero.Player.DisplayLocationSelection(validDestionations, Callback.ForCommand(hero, this));
             }
 

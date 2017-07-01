@@ -33,15 +33,12 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                     hero.RollEventDice(new EventRollHandler(Detail));
                     return;
                 case "destroy-blight":
-                    var blights = hero.Game.Board.Spaces.SelectMany(s => s.Blights.Select(b => PlayerBlight.FromBlight(b))).ToList();
+                    var blights = hero.Game.Board.Spaces.SelectMany(s => s.Blights.Select(PlayerBlight.FromBlight)).ToList();
                     var selection = new PlayerBlightSelection(blights);
                     hero.Player.DisplayBlightSelection(selection, Callback.ForEvent(hero, this));
                     break;
                 case "draw-power":
-                    var powerName = hero.PowerDeck.First();
-                    var power = hero.LearnPower(powerName);
-                    hero.Player.DisplayPowers(new [] {power}.ToPlayerPowers(), Callback.ForEvent(hero, this));
-                    hero.Player.State = PlayerState.SelectPower;
+                    hero.DrawPower(Callback.ForEvent(hero, this));
                     break;
                 case "move":
                     var locations = Game.GetAllLocations().Except(new[] {hero.Location}).Select(x=>x.ToString()).ToList();

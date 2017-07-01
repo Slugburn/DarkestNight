@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Items
 
         public void Execute(Hero hero)
         {
-            var destinations = Game.GetAllLocations()
+            var destinations = hero.GetValidMovementLocations(false)
                 .Except(new[] {hero.Location})
                 .Select(loc => loc.ToString())
                 .ToList();
@@ -32,6 +32,7 @@ namespace Slugburn.DarkestNight.Rules.Items
             hero.MoveTo(location);
             hero.GainSecrecy(1, int.MaxValue);
             Owner.RemoveFromInventory(this);
+            hero.UpdateAvailableActions();
         }
     }
 }
