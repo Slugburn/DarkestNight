@@ -1,6 +1,6 @@
-﻿namespace Slugburn.DarkestNight.Rules.Rolls
+﻿namespace Slugburn.DarkestNight.Rules.Modifiers
 {
-    public class DiceDetail
+    public class ModifierDetail
     {
         public string Name { get; set; }
         public int Modifier { get; set; }

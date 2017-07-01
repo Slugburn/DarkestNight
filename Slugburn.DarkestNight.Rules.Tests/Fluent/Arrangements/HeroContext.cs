@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Items;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
@@ -105,7 +104,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             return this;
         }
 
-        public IHeroContext FacesEnemy(string enemyName)
+        public IHeroContext IsFacingEnemy(string enemyName)
         {
             _hero.FaceEnemy(enemyName);
             return this;

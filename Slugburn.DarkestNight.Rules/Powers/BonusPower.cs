@@ -1,5 +1,7 @@
 ﻿using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
+using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Powers
 {
@@ -18,6 +20,16 @@ namespace Slugburn.DarkestNight.Rules.Powers
         {
             // Corruption blight prevents use of bonus powers
             return base.IsUsable(hero) && !hero.IsAffectedByBlight(BlightType.Corruption);
+        }
+
+        protected void AddModifier(ModifierType modifierType, int amount)
+        {
+            Owner.AddModifier(new StaticBonusPowerModifer(this, modifierType, amount));
+        }
+
+        protected void AddModifier(BonusPowerModifer modifer)
+        {
+            Owner.AddModifier(modifer);
         }
     }
 }

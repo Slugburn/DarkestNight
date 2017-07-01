@@ -12,10 +12,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             Text = "Spend 1 Grace to reroll any die roll you make. You may do this repeatedly.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddAction(new MiracleAction(this));
+            Owner.AddAction(new MiracleAction(this));
         }
 
         public override bool IsUsable(Hero hero)

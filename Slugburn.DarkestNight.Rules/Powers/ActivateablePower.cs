@@ -13,10 +13,9 @@ namespace Slugburn.DarkestNight.Rules.Powers
             return base.IsUsable(hero) && !IsActive;
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddAction(new ActivatePowerAction(this));
+            Owner.AddAction(new ActivatePowerAction(this));
         }
 
         public virtual void Activate(Hero hero)

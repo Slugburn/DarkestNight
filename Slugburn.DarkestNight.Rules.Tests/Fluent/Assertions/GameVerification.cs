@@ -1,5 +1,4 @@
 ﻿using Shouldly;
-using Slugburn.DarkestNight.Rules.Extensions;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {

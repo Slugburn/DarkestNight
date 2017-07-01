@@ -1,5 +1,6 @@
 ﻿using System;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Triggers;
 
@@ -24,11 +25,11 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             }
             else if (option == "plus-die")
             {
-                hero.AddRollModifier(new StaticRollBonus { Name = EventName, RollType = RollType.Any, DieCount = 1 });
+                hero.AddModifier(StaticRollBonus.AnyRoll(EventName, 1));
             }
             else if (option == "minus-die")
             {
-                hero.AddRollModifier(new StaticRollBonus {Name = EventName, RollType = RollType.Any, DieCount = -1});
+                hero.AddModifier(StaticRollBonus.AnyRoll(EventName, -1));
             }
             else
             {

@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         {
             TestScenario
                 .Game.WithHero().At("Village")
-                .Given.Location("Village").Blights()
+                .Given.Location("Village").HasBlights()
                 .Given.Hero().HasDrawnEvent("Unfriendly Eyes")
                 .Then(Verify.Player.EventView
                     .HasBody("Unfriendly Eyes", 5, "Count the blights in your location")
@@ -29,7 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             var blights = Enumerable.Repeat("Lich", blightCount).ToArray();
             TestScenario
                 .Game.WithHero().At("Village")
-                .Given.Location("Village").Blights(blights)
+                .Given.Location("Village").HasBlights(blights)
                 .Given.Hero().HasDrawnEvent("Unfriendly Eyes")
                 .Then(Verify.Player.EventView.ActiveRow("Spend 1 Secrecy or lose 1 Grace").HasOptions("Spend Secrecy", "Lose Grace"))
                 .When.Player.SelectsEventOption("Spend Secrecy")
@@ -43,7 +43,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             var blights = Enumerable.Repeat("Lich", blightCount).ToArray();
             TestScenario
                 .Game.WithHero().At("Village")
-                .Given.Location("Village").Blights(blights)
+                .Given.Location("Village").HasBlights(blights)
                 .Given.Hero().HasDrawnEvent("Unfriendly Eyes")
                 .Then(Verify.Player.EventView.ActiveRow("Spend 1 Secrecy or lose 1 Grace").HasOptions("Spend Secrecy", "Lose Grace"))
                 .When.Player.SelectsEventOption("Lose Grace")
@@ -57,7 +57,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             var blights = Enumerable.Repeat("Lich", blightCount).ToArray();
             TestScenario
                 .Game.WithHero().At("Village")
-                .Given.Location("Village").Blights(blights)
+                .Given.Location("Village").HasBlights(blights)
                 .Given.Hero().HasDrawnEvent("Unfriendly Eyes")
                 .Then(Verify.Player.EventView.ActiveRow("Spend 1 Grace or +1 Darkness").HasOptions("Spend Grace", "+1 Darkness"))
                 .When.Player.SelectsEventOption("Spend Grace")
@@ -71,7 +71,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             var blights = Enumerable.Repeat("Lich", blightCount).ToArray();
             TestScenario
                 .Game.WithHero().At("Village")
-                .Given.Location("Village").Blights(blights)
+                .Given.Location("Village").HasBlights(blights)
                 .Given.Hero().HasDrawnEvent("Unfriendly Eyes")
                 .Then(Verify.Player.EventView.ActiveRow("Spend 1 Grace or +1 Darkness").HasOptions("Spend Grace", "+1 Darkness"))
                 .When.Player.SelectsEventOption("+1 Darkness")
@@ -85,7 +85,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             var blights = Enumerable.Repeat("Lich", blightCount).ToArray();
             TestScenario
                 .Game.WithHero().At("Village").Secrecy(0)
-                .Given.Location("Village").Blights(blights)
+                .Given.Location("Village").HasBlights(blights)
                 .Given.Hero().HasDrawnEvent("Unfriendly Eyes")
                 .Then(Verify.Player.EventView.HasOptions("Lose Grace"));
         }
@@ -97,7 +97,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
             var blights = Enumerable.Repeat("Lich", blightCount).ToArray();
             TestScenario
                 .Game.WithHero().At("Village").Grace(0)
-                .Given.Location("Village").Blights(blights)
+                .Given.Location("Village").HasBlights(blights)
                 .Given.Hero().HasDrawnEvent("Unfriendly Eyes")
                 .Then(Verify.Player.EventView.HasOptions("+1 Darkness"));
         }

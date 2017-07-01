@@ -14,10 +14,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             Text = "Whenever a hero at your location loses or spends Grace, they may spend your Grace instead.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            foreach (var other in hero.Game.Heroes.Where(h=>h!=hero))
+            foreach (var other in Owner.Game.Heroes.Where(h=>h!=Owner))
             {
                 other.Intercession = this;
             }
@@ -25,33 +24,33 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
 
         public bool CanIntercedeFor(Hero other)
         {
-            if (!_hero.CanSpendGrace) return false;
-            if (!IsUsable(_hero)) return false;
-            return _hero.Location == other.Location;
+            if (!Owner.CanSpendGrace) return false;
+            if (!IsUsable(Owner)) return false;
+            return Owner.Location == other.Location;
         }
 
         public bool IntercedeForLostGrace(Hero other, int amount)
         {
-            if (!_hero.CanSpendGrace) return false;
-            if (_hero.Grace < amount) return false;
+            if (!Owner.CanSpendGrace) return false;
+            if (Owner.Grace < amount) return false;
             var question = new PlayerAskQuestion("Intercession",
-                $"Should {_hero.Name} spend {amount} Grace instead of {other.Name} losing {amount} Grace?");
-            other.Player.DisplayAskQuestion(question, Callback.ForPower(_hero, this, $"{other.Name}:loss:{amount}"));
+                $"Should {Owner.Name} spend {amount} Grace instead of {other.Name} losing {amount} Grace?");
+            other.Player.DisplayAskQuestion(question, Callback.ForPower(Owner, this, $"{other.Name}:loss:{amount}"));
             return true;
         }
 
         public bool IntercedeForSpentGrace(Hero other, int amount)
         {
             if (!CanIntercedeFor(other)) return false;
-            if (_hero.Grace < amount) return false;
+            if (Owner.Grace < amount) return false;
             if (other.Grace < amount)
             {
-                _hero.SpendGrace(amount);
+                Owner.SpendGrace(amount);
                 return true;
             }
             var question = new PlayerAskQuestion("Intercession",
-                $"Should {_hero.Name} spend {amount} Grace instead of {other.Name} spending {amount} Grace?");
-            other.Player.DisplayAskQuestion(question, Callback.ForPower(_hero, this, $"{other.Name}:spent:{amount}"));
+                $"Should {Owner.Name} spend {amount} Grace instead of {other.Name} spending {amount} Grace?");
+            other.Player.DisplayAskQuestion(question, Callback.ForPower(Owner, this, $"{other.Name}:spent:{amount}"));
             return true;
         }
 
@@ -67,14 +66,14 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             if (op == "loss")
             {
                 if (answer)
-                    _hero.SpendGrace(amount);
+                    Owner.SpendGrace(amount);
                 else
                     other.LoseGrace(amount, false);
             }
             else if (op == "spent")
             {
                 if (answer)
-                    _hero.SpendGrace(amount);
+                    Owner.SpendGrace(amount);
                 else
                     other.SpendGrace(amount, false);
             }

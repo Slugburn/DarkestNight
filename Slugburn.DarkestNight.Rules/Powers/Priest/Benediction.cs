@@ -19,10 +19,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             Text = "One hero at your location gains 1 Grace (up to default). If they now have more Grace than you, you gain 1 Grace.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddAction(new BenedictionAction(this));
+            Owner.AddAction(new BenedictionAction(this));
         }
 
         public override bool IsUsable(Hero hero)

@@ -12,10 +12,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             Text = "Fight with 2d.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddTactic(new PowerTactic { PowerName = Name, Type = TacticType.Fight, DiceCount = 2 });
+            Owner.AddTactic(new PowerTactic { PowerName = Name, Type = TacticType.Fight, DiceCount = 2 });
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     public interface ILocationContext : IGameContext
     {
-        ILocationContext Blights(params string[] blights);
+        ILocationContext HasBlights(params string[] blights);
         ILocationContext HasRelic(bool hasRelic = true);
     }
 }

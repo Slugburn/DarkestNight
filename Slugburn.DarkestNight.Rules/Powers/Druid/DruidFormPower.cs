@@ -6,10 +6,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 {
     internal abstract class DruidFormPower : ActivateablePower, IDruidForm
     {
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-//            base.Learn(hero);
-            AddFormActions(hero);
+            AddFormActions();
         }
 
         public override void Activate(Hero hero)
@@ -25,11 +24,11 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             return true;
         }
 
-        private void AddFormActions(Hero hero)
+        private void AddFormActions()
         {
-            if (!hero.HasAction(DeactivateForm.ActionName))
-                hero.AddAction(new DeactivateForm());
-            hero.AddAction(new ActivateForm(this));
+            if (!Owner.HasAction(DeactivateForm.ActionName))
+                Owner.AddAction(new DeactivateForm());
+            Owner.AddAction(new ActivateForm(this));
         }
 
         internal static void DeactivateAllForms(Hero hero)

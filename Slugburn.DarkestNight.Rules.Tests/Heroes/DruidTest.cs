@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             var roll = attackSucceeds ? new[] {1, 6} : new[] {3, 4};
             TestScenario.Game
                 .WithHero("Druid").HasPowers("Animal Companion")
-                .Given.Hero().FacesEnemy("Zombie")
+                .Given.Hero().IsFacingEnemy("Zombie")
                 .When.Player.CompletesConflict("Zombie", "Animal Companion", Fake.Rolls(roll))
                 .Then(Verify.Hero().RolledNumberOfDice(2).WasWounded(!attackSucceeds))
                 .Then(Verify.Power("Animal Companion").IsExhausted(!attackSucceeds));
@@ -28,7 +28,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario.Game
                 .WithHero("Druid").HasPowers("Camouflage")
-                .Given.Hero().FacesEnemy("Zombie")
+                .Given.Hero().IsFacingEnemy("Zombie")
                 .When.Player.CompletesConflict("Zombie", "Camouflage", Fake.Rolls(1, 6))
                 .Then(Verify.Hero().RolledNumberOfDice(2).WasWounded(false));
         }
@@ -191,7 +191,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario.Game
                 .WithHero("Druid").HasPowers("Vines")
-                .Given.Hero().FacesEnemy("Zombie")
+                .Given.Hero().IsFacingEnemy("Zombie")
                 .When.Player.CompletesConflict("Zombie", "Vines [fight]", Fake.Rolls(1, 2, 3, 4))
                 .Then(Verify.Hero().RolledNumberOfDice(4).WasWounded())
                 .Then(Verify.Power("Vines").IsExhausted());
@@ -202,7 +202,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario.Game
                 .WithHero("Druid").HasPowers("Vines")
-                .Given.Hero().FacesEnemy("Zombie")
+                .Given.Hero().IsFacingEnemy("Zombie")
                 .When.Player.CompletesConflict("Zombie", "Vines [elude]", Fake.Rolls(1, 2, 3, 4))
                 .Then(Verify.Hero().RolledNumberOfDice(4))
                 .Then(Verify.Power("Vines").IsExhausted());

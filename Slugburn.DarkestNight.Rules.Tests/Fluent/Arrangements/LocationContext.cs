@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
-using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Spaces;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
@@ -16,7 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             _space = space;
         }
 
-        public ILocationContext Blights(params string[] blights)
+        public ILocationContext HasBlights(params string[] blights)
         {
             var game = GetGame();
             foreach (var blightType in blights.Select(b => b.ToEnum<BlightType>()))

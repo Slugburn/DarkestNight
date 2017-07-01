@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Slugburn.DarkestNight.Rules.Extensions
+namespace Slugburn.DarkestNight.Rules
 {
     public static class StringExtensions
     {

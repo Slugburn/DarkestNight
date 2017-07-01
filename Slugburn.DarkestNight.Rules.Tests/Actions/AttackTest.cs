@@ -11,7 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
         {
             TestScenario.Game
                 .WithHero().At("Village")
-                .Location("Village").Blights()
+                .Location("Village").HasBlights()
                 .Then(Verify.Hero().CanTakeAction("Attack", false));
         }
     }

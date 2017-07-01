@@ -1,5 +1,6 @@
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Triggers;
 
@@ -18,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         public override void Activate(Hero hero)
         {
             base.Activate(hero);
-            hero.AddRollModifier(new StaticRollBonus {Name = Name, RollType = RollType.Fight, DieCount = 1});
+            hero.AddModifier(StaticRollBonus.Create(Name, ModifierType.FightDice, 1));
             hero.Triggers.Add(HeroTrigger.FightWon, Name, new OathOfValorFulfilled() );
             hero.Triggers.Add(HeroTrigger.Eluding, Name, new OathOfValorBroken());
         }

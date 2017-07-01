@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Slugburn.DarkestNight.Rules.Extensions
+namespace Slugburn.DarkestNight.Rules
 {
     public static class CardExtensions
     {

@@ -13,10 +13,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             Text = "Fight with 4 dice. Lose 1 Grace if you roll fewer than 2 successes.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddTactic(new RecklessAbandonTactic {PowerName = Name} );
+            Owner.AddTactic(new RecklessAbandonTactic {PowerName = Name} );
         }
 
         internal class RecklessAbandonTactic : PowerTactic

@@ -1,4 +1,5 @@
 ﻿using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Rolls;
@@ -25,7 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
         {
             var space = hero.GetSpace();
             var state = hero.SetRoll(RollBuilder.Create<SearchRollHandler>()
-                .Type(RollType.Search)
+                .Type(ModifierType.SearchDice)
                 .Base("Search", 1)
                 .Target(space.SearchTarget));
             hero.Triggers.Send(HeroTrigger.Searched);

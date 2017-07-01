@@ -72,7 +72,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
             switch (actionName)
             {
                 case "Attack":
-                    return given.Location("Village").Blights("Desecration").Hero().At("Village");
+                    return given.Location("Village").HasBlights("Desecration").Hero().At("Village");
                 case "Attack Necromancer":
                     return given.Game.Necromancer.At("Village").Hero().At("Village");
                 case "Hide":

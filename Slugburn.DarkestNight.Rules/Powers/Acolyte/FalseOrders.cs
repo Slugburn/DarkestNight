@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
-using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
@@ -18,10 +17,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             Text = "Move any number of blights from your location to one adjacent location, if this does not result in over 4 blights at one location.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddAction(new FalseOrdersAction(this));
+            Owner.AddAction(new FalseOrdersAction(this));
         }
 
         private class FalseOrdersAction : PowerAction, ICallbackHandler
@@ -58,7 +56,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                         var sourceSpace = game.Board[blight.Location];
                         sourceSpace.RemoveBlight(blight);
 
-                        ((Blight) blight).Location = destination;
                         var destinationSpace = game.Board[destination];
                         destinationSpace.AddBlight(blight);
                     }

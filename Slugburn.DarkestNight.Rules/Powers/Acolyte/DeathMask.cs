@@ -14,10 +14,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                 "You may choose not to lose Secrecy for attacking a blight (including use of the Call to Death power) or for starting your turn at the Necromancer's location.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.Triggers.Add(HeroTrigger.LosingSecrecy, Name, new DeathMaskTriggerHandler());
+            Owner.Triggers.Add(HeroTrigger.LosingSecrecy, Name, new DeathMaskTriggerHandler());
         }
 
         private class DeathMaskTriggerHandler : ITriggerHandler<Hero>

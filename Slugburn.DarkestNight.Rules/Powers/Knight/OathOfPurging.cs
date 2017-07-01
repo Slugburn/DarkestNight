@@ -1,5 +1,6 @@
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Triggers;
 
@@ -21,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         public override void Activate(Hero hero)
         {
             base.Activate(hero);
-            hero.AddRollModifier(new OathOfPurgingModifier());
+            hero.AddModifier(new OathOfPurgingModifier());
             hero.Triggers.Add(HeroTrigger.DestroyedBlight, Name, new OathOfPurgingFulfilled());
             hero.Triggers.Add(HeroTrigger.Moved, Name, new OathOfPurgingBroken());
         }
@@ -45,13 +46,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             Deactivate(hero);
         }
 
-        internal class OathOfPurgingModifier : IRollModifier
+        internal class OathOfPurgingModifier : IModifier
         {
             public string Name => PowerName;
 
-            public int GetModifier(Hero hero, RollType rollType)
+            public int GetModifier(Hero hero, ModifierType modifierType)
             {
-                if (rollType != RollType.Fight) return 0;
+                if (modifierType != ModifierType.FightDice) return 0;
                 if (hero.ConflictState == null) return 0;
                 if (hero.ConflictState.ConflictType != ConflictType.Attack) return 0;
                 return 2;

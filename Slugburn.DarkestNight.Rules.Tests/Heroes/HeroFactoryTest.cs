@@ -1,6 +1,5 @@
 using System.Linq;
 using NUnit.Framework;
-using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Powers;
 

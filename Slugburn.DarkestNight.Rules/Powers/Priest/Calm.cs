@@ -14,14 +14,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             Text = "Heroes at your location may pray.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
             _action = new CalmPray();
-            var space = hero.GetSpace();
+            var space = Owner.GetSpace();
             space.AddAction(_action);
-            hero.Triggers.Add(HeroTrigger.Moving, Name, this );
-            hero.Triggers.Add(HeroTrigger.Moved, Name, this);
+            Owner.Triggers.Add(HeroTrigger.Moving, Name, this );
+            Owner.Triggers.Add(HeroTrigger.Moved, Name, this);
         }
 
         public void HandleTrigger(Hero hero, string source, TriggerContext context)

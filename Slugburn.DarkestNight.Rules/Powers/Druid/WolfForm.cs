@@ -1,4 +1,5 @@
 ﻿using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Druid
@@ -17,8 +18,8 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
         public override void Activate(Hero hero)
         {
             base.Activate(hero);
-            hero.AddRollModifier(StaticRollBonus.Create(PowerName, RollType.Fight, 1));
-            hero.AddRollModifier(StaticRollBonus.Create(PowerName, RollType.Elude, 1));
+            hero.AddModifier(StaticRollBonus.Create(PowerName, ModifierType.FightDice, 1));
+            hero.AddModifier(StaticRollBonus.Create(PowerName, ModifierType.EludeDice, 1));
         }
 
         public override bool Deactivate(Hero hero)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Blights.Implementations;
 
 namespace Slugburn.DarkestNight.Rules.Spaces
 {
@@ -10,26 +11,42 @@ namespace Slugburn.DarkestNight.Rules.Spaces
     {
         private readonly List<IBlight> _blights = new List<IBlight>();
         private readonly Dictionary<string, IAction> _actions = new Dictionary<string, IAction>();
+        private int _baseSearchTarget;
 
 
         public Location Location { get; protected set; }
         public string Name { get; protected set; }
-        public int SearchTarget { get; set; }
+
+        public int SearchTarget
+        {
+            get
+            {
+                var darkFogs = GetBlights<DarkFog>()
+//                    .Where(b=>b.IsActive())
+                    .Count();
+                return _baseSearchTarget + darkFogs * 2;
+            }
+            set { _baseSearchTarget = value; }
+        }
+
         public IEnumerable<Location> AdjacentLocations { get; protected set; }
 
         public ICollection<IBlight> Blights => _blights;
 
         public IDictionary<int, Location> MoveChart { get; protected set; }
         public bool HasRelic { get; set; }
-        
+        public Game Game { get; set; }
+
         public void AddBlight(IBlight blight)
         {
             _blights.Add(blight);
+            ((Blight)blight).SetSpace(this);
         }
 
         public void RemoveBlight(IBlight blight)
         {
             _blights.Remove(blight);
+            ((Blight)blight).SetSpace(null);
         }
 
         public IEnumerable<T> GetBlights<T>() where T: IBlight

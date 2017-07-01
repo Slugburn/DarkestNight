@@ -3,6 +3,7 @@ using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tactics;
 
@@ -19,10 +20,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                 "Attack two blights in your location at once. Make a single fight roll with +1 die, then divide the dice between blights and resolve as two separate attacks (losing Secrecy for each).";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddAction(new CallToDeathAction(this));
+            Owner.AddAction(new CallToDeathAction(this));
         }
 
 
@@ -40,7 +40,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
             public override void Execute(Hero hero)
             {
-                hero.AddRollModifier(StaticRollBonus.Create(Name, RollType.Fight, 1));
+                hero.AddModifier(StaticRollBonus.Create(Name, ModifierType.FightDice, 1));
                 hero.SetRoll(RollBuilder.Create<CallToDeathRoll>());
                 hero.ConflictState = new ConflictState
                 {

@@ -12,11 +12,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             Text = "Exhaust to fight or elude with 4 dice.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddTactic(new VinesTactic { PowerName = Name, Type = TacticType.Elude, DiceCount = 4 });
-            hero.AddTactic(new VinesTactic { PowerName = Name, Type = TacticType.Fight, DiceCount = 4 });
+            Owner.AddTactic(new VinesTactic { PowerName = Name, Type = TacticType.Elude, DiceCount = 4 });
+            Owner.AddTactic(new VinesTactic { PowerName = Name, Type = TacticType.Fight, DiceCount = 4 });
         }
 
         private class VinesTactic : PowerTactic

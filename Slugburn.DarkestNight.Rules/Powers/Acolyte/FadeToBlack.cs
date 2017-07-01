@@ -1,4 +1,5 @@
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
@@ -13,27 +14,24 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             Text = "+1 die in fights when Darkness is 10 or more. Another +1 die in fights when Darkness is 20 or more.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddRollModifier(new FadeToBlackRollModifer());
+            Owner.AddModifier(new FadeToBlackRollModifer(this));
         }
 
-        private class FadeToBlackRollModifer : IRollModifier
+        private class FadeToBlackRollModifer : BonusPowerModifer
         {
-            public string Name => PowerName;
-
-            public int GetModifier(Hero hero, RollType rollType)
+            public FadeToBlackRollModifer(IBonusPower power) : base(power, ModifierType.FightDice)
             {
-                if (rollType != RollType.Fight) return 0;
-                var power = hero.GetPower(PowerName);
-                if (!power.IsUsable(hero)) return 0;
-                var game = hero.Game;
-                if (game.Darkness < 10) return 0;
-                if (game.Darkness < 20) return 1;
-                return 2;
             }
 
+            protected override int GetAmount()
+            {
+                var game = Power.Owner.Game;
+                if (game.Darkness >= 20)
+                    return 2;
+                return game.Darkness >= 10 ? 1 : 0;
+            }
         }
     }
 }

@@ -16,10 +16,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             Text = "Elude with 4d. Lose 1 Secrecy if you succeed.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddTactic(new SanctuaryTactic());
+            Owner.AddTactic(new SanctuaryTactic());
         }
 
         internal class SanctuaryTactic : PowerTactic

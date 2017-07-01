@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Triggers;
@@ -15,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public override void Execute(Hero hero)
         {
-            var rollState = hero.SetRoll(RollBuilder.Create<PrayerRoll>().Type(RollType.Pray).Base("Pray", 2).Target(3));
+            var rollState = hero.SetRoll(RollBuilder.Create<PrayerRoll>().Type(ModifierType.PrayDice).Base("Pray", 2).Target(3));
             rollState.Roll();
             hero.Player.DisplayPrayer(PlayerPrayer.From(hero));
         }

@@ -16,11 +16,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             Text = "Fight with 2d or 3d. If any die comes up a 1, lose 1 Grace.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddTactic(new FinalRestTactic {DiceCount = 2});
-            hero.AddTactic(new FinalRestTactic {DiceCount = 3});
+            Owner.AddTactic(new FinalRestTactic {DiceCount = 2});
+            Owner.AddTactic(new FinalRestTactic {DiceCount = 3});
         }
 
         private class FinalRestTactic : PowerTactic

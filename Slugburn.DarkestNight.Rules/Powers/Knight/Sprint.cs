@@ -11,10 +11,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             StartingPower = true;
             Text = "Elude with 2 dice.";
         }
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddTactic(new PowerTactic { PowerName = Name, Type = TacticType.Elude, DiceCount = 2 });
+            Owner.AddTactic(new PowerTactic { PowerName = Name, Type = TacticType.Elude, DiceCount = 2 });
         }
     }
 }

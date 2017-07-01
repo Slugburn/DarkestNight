@@ -15,10 +15,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             Text = "Deactivate all Forms. Travel. Optionally activate one of your Forms.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddAction(new CelerityAction(this));
+            Owner.AddAction(new CelerityAction(this));
         }
 
         private class CelerityAction : PowerAction, ICallbackHandler

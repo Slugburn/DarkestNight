@@ -4,19 +4,12 @@ namespace Slugburn.DarkestNight.Rules.Powers
 {
     public abstract class Power : IPower
     {
-        protected Hero _hero;
+        public string ActiveText { get; protected set; }
+        public Hero Owner { get; private set; }
         public string Name { get; protected set; }
         public PowerType Type { get; protected set; }
         public string Text { get; protected set; }
-        public string ActiveText { get; protected set; }
         public bool StartingPower { get; protected set; }
-
-        protected Power()
-        {
-            Stash = new Stash();
-        }
-
-        public Stash Stash { get; set; }
 
         public bool Exhausted { get; set; }
 
@@ -35,9 +28,12 @@ namespace Slugburn.DarkestNight.Rules.Powers
             Exhausted = false;
         }
 
-        public virtual void Learn(Hero hero)
+        public void Learn(Hero hero)
         {
-            _hero = hero;
+            Owner = hero;
+            OnLearn();
         }
+
+        protected virtual void OnLearn() {}
     }
 }

@@ -1,5 +1,6 @@
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Triggers;
 
@@ -15,18 +16,17 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             Text = "+1 to default Grace. Add 1 to each die when praying.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.DefaultGrace += 1;
-            hero.Triggers.Add(HeroTrigger.Rolled, Name, new HolyMantleAfterRoll());
+            AddModifier(ModifierType.DefaultGrace, 1);
+            Owner.Triggers.Add(HeroTrigger.Rolled, Name, new HolyMantleAfterRoll());
         }
 
         private class HolyMantleAfterRoll : ITriggerHandler<Hero>
         {
             public void HandleTrigger(Hero hero, string source, TriggerContext context)
             {
-                if (context.GetState<RollType>() != RollType.Pray) return;
+                if (context.GetState<ModifierType>() != ModifierType.PrayDice) return;
                 var power = hero.GetPower(PowerName);
                 if (!power.IsUsable(hero)) return;
 

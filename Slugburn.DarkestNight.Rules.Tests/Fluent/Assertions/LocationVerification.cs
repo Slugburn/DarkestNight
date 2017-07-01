@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Shouldly;
-using Slugburn.DarkestNight.Rules.Extensions;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
@@ -13,6 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private string[] _actionExists;
         private string[] _actionDoesNotExist;
         private bool? _hasRelic;
+        private int? _searchTarget;
 
         public LocationVerification(string location)
         {
@@ -26,8 +26,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             _blights = _blights ?? new List<string>();
             space.Blights.Select(x => x.Type.ToString()).ShouldBeEquivalent(_blights);
 
-            if (_hasRelic.HasValue)
-                space.HasRelic.ShouldBe(_hasRelic.Value);
+            space.HasRelic.ShouldBeIfNotNull(_hasRelic, "HasRelic");
+            space.SearchTarget.ShouldBeIfNotNull(_searchTarget, "SearchTarget");
 
             if (_actionExists != null)
             {
@@ -62,6 +62,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         public LocationVerification HasRelic(bool expected)
         {
             _hasRelic = expected;
+            return this;
+        }
+
+        public LocationVerification SearchTarget(int expected)
+        {
+            _searchTarget = expected;
             return this;
         }
     }

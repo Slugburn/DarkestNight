@@ -19,11 +19,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             return base.IsUsable(hero) && hero.Game.Necromancer.IsTakingTurn && hero.Game.Necromancer.DetectedHeroes.Any();
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
             var action = new BlindingBlackAction(this);
-            hero.AddAction(action);
+            Owner.AddAction(action);
         }
 
         public class BlindingBlackAction : PowerCommand

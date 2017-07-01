@@ -1,4 +1,5 @@
 ﻿using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Druid
@@ -16,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
         {
             base.Activate(hero);
             hero.TravelSpeed = 2;
-            hero.AddRollModifier(StaticRollBonus.Create(Name, RollType.Search, 1));
+            hero.AddModifier(StaticRollBonus.Create(Name, ModifierType.SearchDice, 1));
         }
 
         public override bool Deactivate(Hero hero)

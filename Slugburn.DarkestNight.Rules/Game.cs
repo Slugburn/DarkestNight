@@ -5,7 +5,6 @@ using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Blights.Implementations;
 using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Events;
-using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Items.Artifacts;
 using Slugburn.DarkestNight.Rules.Maps;
@@ -26,7 +25,7 @@ namespace Slugburn.DarkestNight.Rules
         {
             Heroes = new List<Hero>();
             Triggers = new TriggerRegistry<GameTrigger, Game>(this);
-            Board = new Board();
+            Board = Board.CreateFor(this);
             Events = EventFactory.GetEventDeck().Shuffle();
             Maps = new MapFactory().CreateMaps().Shuffle();
             MapsDiscard = new List<IMap>();
@@ -62,7 +61,7 @@ namespace Slugburn.DarkestNight.Rules
         {
             ActingHero = null;
             foreach (var hero in Heroes)
-                hero.HasTakenTurn = false;
+                hero.StartNewDay();
         }
 
         private IMap DrawMapCard()
@@ -101,7 +100,7 @@ namespace Slugburn.DarkestNight.Rules
         public void CreateBlight(Location location, BlightType blightType)
         {
             var id = NextId();
-            var blight = BlightFactory.Create(id, blightType, location);
+            var blight = BlightFactory.Create(id, blightType);
             _blights[id] = blight;
             var space = Board[location];
             space.AddBlight(blight);

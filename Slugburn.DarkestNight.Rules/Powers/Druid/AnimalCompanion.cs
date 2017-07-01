@@ -15,10 +15,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             Text = "Fight with 2 dice. Exhaust if you fail.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddTactic(new AnimalCompanionTactic());
+            Owner.AddTactic(new AnimalCompanionTactic());
         }
 
         private class AnimalCompanionTactic : PowerTactic

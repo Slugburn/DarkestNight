@@ -14,10 +14,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             Text = "Fight with 2 dice.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddTactic(new PowerTactic { PowerName = PowerName, Type = TacticType.Fight, DiceCount = 2 });
+            Owner.AddTactic(new PowerTactic { PowerName = PowerName, Type = TacticType.Fight, DiceCount = 2 });
         }
     }
 }

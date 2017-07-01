@@ -13,11 +13,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             Text = "Exhaust while not at the Monastery to fight with 3 dice. Gain 1 Grace (up to default) if you roll 2 successes. You may not enter the Monastery while this power is exhausted.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.Add(new PreventMovementEffect(location => location == Location.Monastery && Exhausted));
-            hero.AddTactic(new LeechLifeTactic());
+            Owner.Add(new PreventMovementEffect(location => location == Location.Monastery && Exhausted));
+            Owner.AddTactic(new LeechLifeTactic());
         }
 
         public override bool IsUsable(Hero hero)

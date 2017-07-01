@@ -5,11 +5,10 @@ namespace Slugburn.DarkestNight.Rules.Blights
 {
     public class BlightFactory
     {
-        public IBlight Create(int id, BlightType blightType, Location location)
+        public IBlight Create(int id, BlightType blightType)
         {
             var blight = Create(blightType);
             blight.Id = id;
-            blight.Location = location;
             return blight;
         }
 

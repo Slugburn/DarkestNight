@@ -14,11 +14,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             Text = "Exhaust after you draw an event card to discard it without effect.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.Triggers.Add(HeroTrigger.EventDrawn, Name, new VisionsEventDrawnHandler());
-            hero.Triggers.Add(HeroTrigger.EventOptionSelected, Name, new VisionsEventOptionsSelectedHandler());
+            Owner.Triggers.Add(HeroTrigger.EventDrawn, Name, new VisionsEventDrawnHandler());
+            Owner.Triggers.Add(HeroTrigger.EventOptionSelected, Name, new VisionsEventOptionsSelectedHandler());
         }
 
 

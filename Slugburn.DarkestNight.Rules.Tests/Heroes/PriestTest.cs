@@ -155,7 +155,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Censure()
         {
             TestScenario.Game
-                .WithHero("Priest").HasPowers("Censure").FacesEnemy("Skeleton")
+                .WithHero("Priest").HasPowers("Censure").IsFacingEnemy("Skeleton")
                 .When.Player.CompletesConflict("Skeleton", "Censure")
                 .Then(Verify.Hero().RolledNumberOfDice(2));
         }
@@ -198,7 +198,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario.Game
                 .WithHero("Knight").HasPowers("Reckless Abandon")
                 .WithHero("Priest").HasPowers("Intercession")
-                .Given.Hero("Knight").IsTakingTurn().FacesEnemy("Vampire")
+                .Given.Hero("Knight").IsTakingTurn().IsFacingEnemy("Vampire")
                 .When.Player.CompletesConflict("Vampire", "Reckless Abandon", Fake.Rolls(1, 2, 3, 4))
                 .When.Player.AnswersQuestion("Intercession", answer)
                 .Then(Verify.Hero("Knight").LostGrace(expectedKnightLoss))
@@ -220,7 +220,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .When.Player.TakesAction("Miracle", Fake.Rolls(6))
                 .Then(Verify.Player.EventView.ActiveRow("+1d on all rolls for the rest of this turn"))
                 .When.Player.SelectsEventOption("Continue")
-                .Then(Verify.Hero().LostGrace(1).HasDieModifier("Twist of Fate", RollType.Any, 1).FightDice(2).EludeDice(2).SearchDice(2));
+                .Then(Verify.Hero().LostGrace(1).HasDieModifier("Twist of Fate").FightDice(2).EludeDice(2).SearchDice(2));
         }
 
         // Sanctuary (Tactic)
@@ -230,7 +230,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario
                 .Game.WithHero("Priest").HasPowers("Sanctuary")
-                .Given.Hero().FacesEnemy("Zombie")
+                .Given.Hero().IsFacingEnemy("Zombie")
                 .When.Player.CompletesConflict("Zombie", "Sanctuary", Fake.Rolls(1,2,3,4))
                 .Then(Verify.Hero().RolledNumberOfDice(4).LostSecrecy());
         }
@@ -240,7 +240,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario
                 .Game.WithHero("Priest").HasPowers("Sanctuary")
-                .Given.Hero().FacesEnemy("Zombie")
+                .Given.Hero().IsFacingEnemy("Zombie")
                 .When.Player.CompletesConflict("Zombie", "Sanctuary", Fake.Rolls(1, 2, 1, 2))
                 .Then(Verify.Hero().RolledNumberOfDice(4).WasWounded());
         }

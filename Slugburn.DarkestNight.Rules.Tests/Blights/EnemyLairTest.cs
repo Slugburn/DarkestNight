@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Blights
         {
             TestScenario.Game
                 .WithHero().At("Swamp")
-                .Location("Swamp").Blights("Lich", "Zombies")
+                .Location("Swamp").HasBlights("Lich", "Zombies")
                 .When.Player.TakesAction("End Turn")
                 .Then(Verify.Hero().HasUsedAction().IsTakingTurn().IsFacingEnemies("Lich", "Zombie"))
                 .Then(Verify.Player.ConflictView.HasTargets("Lich", "Zombie"))

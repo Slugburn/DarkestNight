@@ -19,11 +19,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                 "Exhaust at any time to ignore blights' effects until your next turn. *OR* Exhaust after you fail an attack on a blight to ignore its Defense.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddAction(new DarkVeilIgnoreEffects(this));
-            hero.AddAction(new DarkVeilIgnoreDefense(this));
+            Owner.AddAction(new DarkVeilIgnoreEffects(this));
+            Owner.AddAction(new DarkVeilIgnoreDefense(this));
         }
 
         private class DarkVeilIgnoreEffects : PowerCommand

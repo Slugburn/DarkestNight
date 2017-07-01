@@ -9,6 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Powers
         bool StartingPower { get; }
 
         bool Exhausted { get; }
+        Hero Owner { get; }
         bool IsUsable(Hero hero);
 
         void Learn(Hero hero);

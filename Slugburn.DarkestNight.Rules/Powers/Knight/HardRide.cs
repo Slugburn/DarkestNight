@@ -12,10 +12,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             Text = "Move twice, but gain no Secrecy.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddAction(new HardRideAction(this));
+            Owner.AddAction(new HardRideAction(this));
         }
 
         private class HardRideAction : PowerAction

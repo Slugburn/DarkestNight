@@ -12,7 +12,7 @@
 
         IPowerContext Power(string powerName);
         IHeroContext HasDrawnEvent(string eventName = null);
-        IHeroContext FacesEnemy(string enemyName);
+        IHeroContext IsFacingEnemy(string enemyName);
         IHeroContext RefreshesPower(string powerName);
         IHeroContext MovesTo(string location);
         IHeroContext IsTakingTurn(bool isTakingTurn = true);

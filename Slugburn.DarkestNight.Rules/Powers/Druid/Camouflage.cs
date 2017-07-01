@@ -12,10 +12,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             Text = "Elude with 2 dice.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddTactic(new CamouflageTactic());
+            Owner.AddTactic(new CamouflageTactic());
         }
 
         private class CamouflageTactic : PowerTactic

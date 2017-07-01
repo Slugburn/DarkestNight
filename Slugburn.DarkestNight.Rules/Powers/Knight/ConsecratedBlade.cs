@@ -1,5 +1,4 @@
-using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Rolls;
+using Slugburn.DarkestNight.Rules.Modifiers;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Knight
 {
@@ -13,24 +12,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             Text = "+1 dice in fights.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddRollModifier(new ConsecratedBladeRollModifer());
-        }
-
-        private class ConsecratedBladeRollModifer : IRollModifier
-        {
-            public string Name => PowerName;
-
-            public int GetModifier(Hero hero, RollType rollType)
-            {
-                if (rollType != RollType.Fight) return 0;
-                var power = hero.GetPower(PowerName);
-                if (!power.IsUsable(hero)) return 0;
-                return 1;
-            }
-
+            AddModifier(ModifierType.FightDice, 1);
         }
     }
 }

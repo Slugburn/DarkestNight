@@ -8,8 +8,8 @@ using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Events;
-using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Items;
+using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Powers;
@@ -25,7 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
     {
         private readonly Dictionary<string, ICommand> _commands;
         private List<string> _powerDeck;
-        private readonly List<IRollModifier> _rollModifiers;
+        private readonly List<IModifier> _rollModifiers;
         private readonly Stash _stash;
         private readonly Dictionary<string, ITactic> _tactics;
         private readonly List<ActionFilter> _actionFilters;
@@ -34,6 +34,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         private bool _isActionAvailable;
         private bool _movedDuringTurn;
         private bool _endingTurn;
+        private int _baseDefaultGrace;
 
         public Hero()
         {
@@ -46,7 +47,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
             _commands = new Dictionary<string, ICommand>(StringComparer.InvariantCultureIgnoreCase);
             _tactics = new Dictionary<string, ITactic>(StringComparer.InvariantCultureIgnoreCase);
-            _rollModifiers = new List<IRollModifier>();
+            _rollModifiers = new List<IModifier>();
             _actionFilters = new List<ActionFilter>();
 
             Location = Location.Monastery;
@@ -54,12 +55,18 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             Enemies = new List<IEnemy>();
         }
 
+        private bool LoseNextTurn { get; set; }
         public TriggerRegistry<HeroTrigger, Hero> Triggers { get; }
         public RollState CurrentRoll { get; set; }
 
         public List<string> PowerDeck => _powerDeck;
 
-        public int DefaultGrace { get; set; }
+        public int DefaultGrace
+        {
+            get { return this.GetModifiedTotal(_baseDefaultGrace, ModifierType.DefaultGrace); }
+            set { _baseDefaultGrace = value; }
+        }
+
         public int DefaultSecrecy { get; set; }
         public int Grace { get; set; }
         public int Secrecy { get; set; }
@@ -153,7 +160,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void LoseTurn()
         {
-            throw new NotImplementedException();
+            LoseNextTurn = true;
         }
 
         public void ExhaustPowers()
@@ -251,6 +258,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (!Triggers.Send(HeroTrigger.Moving))
                 return;
             Location = location;
+            if (IsAffectedByBlight(BlightType.Curse))
+                LoseGrace(1);
             UpdateAvailableActions();
             _movedDuringTurn = true;
             Triggers.Send(HeroTrigger.Moved);
@@ -262,7 +271,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 Secrecy = Math.Min(Secrecy+amount, max);
         }
 
-        public void SetDice(RollType rollType, int count)
+        public void SetDice(ModifierType modifierType, int count)
         {
             throw new NotImplementedException();
         }
@@ -362,7 +371,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
             tactic.Use(this);
 
-            CurrentRoll.RollType = tactic.GetRollType();
+            CurrentRoll.ModifierType = tactic.GetRollType();
             CurrentRoll.TargetNumber = ConflictState.SelectedTargets.Min(x => x.TargetNumber);
             CurrentRoll.BaseDiceCount = tactic.GetDiceCount();
             CurrentRoll.BaseName = tactic.Name;
@@ -380,12 +389,12 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             _tactics.Add(tactic.Name, tactic);
         }
 
-        public void AddRollModifier(IRollModifier rollModifier)
+        public void AddModifier(IModifier rollModifier)
         {
             _rollModifiers.Add(rollModifier);
         }
 
-        public IEnumerable<IRollModifier> GetRollModifiers()
+        public IEnumerable<IModifier> GetRollModifiers()
         {
             return _rollModifiers;
         }
@@ -486,7 +495,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void RollEventDice(IRollHandler rollHandler)
         {
-            var state = SetRoll(RollBuilder.Create(rollHandler).Type(RollType.Event).Base("Event", 1));
+            var state = SetRoll(RollBuilder.Create(rollHandler).Type(ModifierType.EventDice).Base("Event", 1));
             state.Roll();
             DisplayCurrentEvent();
         }
@@ -708,6 +717,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 AvailableTactics = GetAvailableTactics().GetInfo(this)
             };
             DisplayConflictState();
+        }
+
+        internal void StartNewDay()
+        {
+            IsActionAvailable = true;
+            HasTakenTurn = LoseNextTurn;
+            LoseNextTurn = false;
+            UpdateAvailableActions();
         }
     }
 }

@@ -3,8 +3,8 @@ using System.Linq;
 using NUnit.Framework;
 using Shouldly;
 using Slugburn.DarkestNight.Rules.Blights;
-using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
@@ -35,7 +35,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private List<string> _expectedPowerNames;
         private int _expectedUnresolvedEvents;
         private string[] _availableActions;
-        private StaticRollBonus _dieModifer;
+        private string _dieModifer;
         private bool _hasNoDieModifer;
         private Dictionary<string, bool> _powerAvailability = new Dictionary<string, bool>();
         private string[] _powerDeckContains;
@@ -74,7 +74,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             hero.SavedByGrace.ShouldBe(_expectedWounded);
             hero.DefaultGrace.ShouldBe(_defaultGrace ?? 0);
             if (_grace.HasValue)
-                Assert.That(hero.Grace, Is.EqualTo(_grace), $"Unexpected Grace for {_heroName}.");
+                Assert.That(hero.Grace, Is.EqualTo(_grace), $"Unexpected Grace for {hero.Name}.");
             if (_secrecy.HasValue)
                 Assert.That(hero.Secrecy, Is.EqualTo(_secrecy), "Unexpected Secrecy.");
             Assert.That(hero.IsActionAvailable, Is.EqualTo(_expectedActionAvailable),
@@ -97,13 +97,16 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
             if (hero.CurrentRoll == null)
                 hero.SetRoll(RollBuilder.Create(null));
-            var fightDice = hero.CurrentRoll.GetDice(RollType.Fight, "Fight", 1).Total;
+            RollState rollState = hero.CurrentRoll;
+            var fightDice = rollState.Hero.CreateModifierSummary(ModifierType.FightDice, "Fight", 1).Total;
             if (_fightDice != null)
                 Assert.That(fightDice, Is.EqualTo(_fightDice), "Unexpected number of Fight dice.");
-            var eludeDice = hero.CurrentRoll.GetDice(RollType.Elude, "Elude", 1).Total;
+            RollState rollState1 = hero.CurrentRoll;
+            var eludeDice = rollState1.Hero.CreateModifierSummary(ModifierType.EludeDice, "Elude", 1).Total;
             if (_eludeDice != null)
                 Assert.That(eludeDice, Is.EqualTo(_eludeDice), "Unexpected number of Elude dice.");
-            var dice = hero.CurrentRoll.GetDice(RollType.Search, "Search", 1);
+            RollState rollState2 = hero.CurrentRoll;
+            var dice = rollState2.Hero.CreateModifierSummary(ModifierType.SearchDice, "Search", 1);
             var searchDice = dice.Total;
             if (_searchDice != null)
                 Assert.That(searchDice, Is.EqualTo(_searchDice), "Unexpected number of Search dice.");
@@ -156,11 +159,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
                 hero.GetRollModifiers().Count().ShouldBe(0);
             if (_dieModifer != null)
             {
-                var match = hero.GetRollModifiers().SingleOrDefault(x => x.Name == _dieModifer.Name);
+                var match = hero.GetRollModifiers().SingleOrDefault(x => x.Name == _dieModifer);
                 if (match == null)
                     Assert.Fail("No matching die modifier was found.");
-                var mod = match.GetModifier(hero, _dieModifer.RollType);
-                Assert.That(mod, Is.EqualTo(_dieModifer.DieCount));
             }
         }
 
@@ -346,9 +347,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public HeroVerification HasDieModifier(string name, RollType rollType, int mod)
+        public HeroVerification HasDieModifier(string name)
         {
-            _dieModifer = new StaticRollBonus() {Name = name, RollType = rollType, DieCount = mod};
+            _dieModifer = name;
             return this;
         }
 

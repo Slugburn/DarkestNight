@@ -15,11 +15,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             Text = "Exhaust at any time while not at the Monastery to gain 1 Grace (up to default). You may not enter the Monastery while this power is exhausted.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddAction(new FalseLifeAction(this));
-            hero.Add(new PreventMovementEffect(location => Exhausted && location == Location.Monastery));
+            Owner.AddAction(new FalseLifeAction(this));
+            Owner.Add(new PreventMovementEffect(location => Exhausted && location == Location.Monastery));
         }
 
         public override bool IsUsable(Hero hero)

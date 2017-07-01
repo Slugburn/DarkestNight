@@ -24,7 +24,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario.Game
                 .WithHero("Knight").HasPowers("Charge")
-                .Given.Hero().FacesEnemy("Skeleton")
+                .Given.Hero().IsFacingEnemy("Skeleton")
                 .When.Player.CompletesConflict("Skeleton", "Charge", Fake.Rolls(1, 6))
                 .Then(Verify.Hero().RolledNumberOfDice(2));
         }
@@ -51,7 +51,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario.Game
                 .WithHero("Knight").HasPowers("Consecrated Blade").At("Village")
-                .Location("Village").Blights("Corruption")
+                .Location("Village").HasBlights("Corruption")
                 .Then(Verify.Hero().FightDice(1));
         }
 
@@ -85,7 +85,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario.Game
                 .WithHero("Knight").HasPowers("Oath of Defense").At("Village").Grace(0)
-                .Location("Village").Blights("Shades")
+                .Location("Village").HasBlights("Shades")
                 .When.Player.TakesAction("Oath of Defense")
                 .Then(Verify.Hero().Grace(0).HasUsedAction())
                 .Then(Verify.Power("Oath of Defense").IsActive());
@@ -107,7 +107,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario
                 .Game.WithHero("Knight").HasPowers("Oath of Defense").Grace(0).At("Village")
-                .Given.Location("Village").Blights("Shades")
+                .Given.Location("Village").HasBlights("Shades")
                 .Given.Hero().Power("Oath of Defense").IsActive()
                 .When.Player.StartsTurn()
                 .Then(Verify.Hero().Grace(1).HasUnresolvedEvents(1));
@@ -118,7 +118,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario
                 .Game.WithHero("Knight").HasPowers("Oath of Defense").Grace(4).At("Village")
-                .Given.Location("Village").Blights("Shades")
+                .Given.Location("Village").HasBlights("Shades")
                 .Given.Hero().Power("Oath of Defense").IsActive()
                 .Given.Hero().MovesTo("Mountains")
                 .Then(Verify.Hero().Grace(0))
@@ -130,7 +130,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario
                 .Game.WithHero("Knight").HasPowers("Oath of Defense").Grace(0).At("Village")
-                .Given.Location("Village").Blights("Shades")
+                .Given.Location("Village").HasBlights("Shades")
                 .Given.Hero().Power("Oath of Defense").IsActive()
                 .When.Game.BlightDestroyed("Village", "Shades")
                 .Then(Verify.Hero().Grace(1))
@@ -156,7 +156,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario.Game
                 .WithHero("Knight").HasPowers("Oath of Purging").At("Village").Grace(0)
                 .Power("Oath of Purging").IsActive()
-                .Location("Village").Blights("Skeletons")
+                .Location("Village").HasBlights("Skeletons")
                 .When.Player.TakesAction("Attack").Fights(Fake.Rolls(4, 5, 6))
                 .Then(Verify.Hero().RolledNumberOfDice(3).Grace(1).LostSecrecy().HasUsedAction())
                 .Then(Verify.Power("Oath of Purging").IsActive(false));
@@ -204,7 +204,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario
                 .Game.WithHero("Knight").HasPowers("Oath of Valor", "Oath of Vengeance")
                 .Power("Oath of Valor").IsActive()
-                .Given.Hero().FacesEnemy("Skeleton")
+                .Given.Hero().IsFacingEnemy("Skeleton")
                 .When.Player.Eludes()
                 .Then(Verify.Hero().LostGrace())
                 .Then(Verify.Power("Oath of Valor").IsActive(false));
@@ -216,7 +216,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             // Win a fight; You may activate any Oath immediately.
             TestScenario.Game.WithHero("Knight").HasPowers("Oath of Valor")
                 .Given.Hero().Power("Oath of Valor").IsActive()
-                .Given.Hero().FacesEnemy("Skeleton")
+                .Given.Hero().IsFacingEnemy("Skeleton")
                 .When.Player.Fights(Fake.Rolls(6, 6))
                 .Then(Verify.Hero().HasFreeAction().HasAvailableActions("Oath of Valor", "Skip Free Action"))
                 .Then(Verify.Power("Oath of Valor").IsActive(false));
@@ -229,8 +229,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario
                 .Game.WithHero("Knight").HasPowers("Oath of Valor", "Oath of Vengeance").At("Village")
                 .Power("Oath of Valor").IsActive()
-                .Given.Location("Village").Blights("Skeletons")
-                .Given.Hero().FacesEnemy("Skeleton")
+                .Given.Location("Village").HasBlights("Skeletons")
+                .Given.Hero().IsFacingEnemy("Skeleton")
                 .When.Player.Fights(Fake.Rolls(6, 6))
                 .Then(Verify.Hero().HasFreeAction().HasAvailableActions("Oath of Valor", "Oath of Vengeance", "Skip Free Action"))
                 .Then(Verify.Power("Oath of Valor").IsActive(false));
@@ -268,7 +268,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario
                 .Game.WithHero("Knight").HasPowers("Reckless Abandon")
-                .Given.Hero().FacesEnemy("Vampire")
+                .Given.Hero().IsFacingEnemy("Vampire")
                 .When.Player.CompletesConflict("Vampire", "Reckless Abandon", Fake.Rolls(1, 2, 3, 4))
                 .Then(Verify.Hero().RolledNumberOfDice(4).LostGrace());
         }
@@ -280,7 +280,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario
                 .Game.WithHero("Knight").HasPowers("Sprint")
-                .Given.Hero().FacesEnemy("Skeleton")
+                .Given.Hero().IsFacingEnemy("Skeleton")
                 .When.Player.CompletesConflict("Skeleton", "Sprint", Fake.Rolls(4))
                 .Then(Verify.Hero().RolledNumberOfDice(2));
         }

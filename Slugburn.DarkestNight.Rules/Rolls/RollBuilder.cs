@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
 
 namespace Slugburn.DarkestNight.Rules.Rolls
 {
@@ -18,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Rolls
         internal class RollStateCreation : IRollStateCreation
         {
             private readonly IRollHandler _handler;
-            private RollType _type;
+            private ModifierType _type;
             private string _baseName;
             private int _baseDiceCount;
             private int _targetNumber;
@@ -28,7 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Rolls
                 _handler = handler;
             }
 
-            public IRollStateCreation Type(RollType type)
+            public IRollStateCreation Type(ModifierType type)
             {
                 _type = type;
                 return this;
@@ -51,7 +52,7 @@ namespace Slugburn.DarkestNight.Rules.Rolls
             {
                 var state = new RollState(hero)
                 {
-                    RollType = _type,
+                    ModifierType = _type,
                     BaseName = _baseName,
                     BaseDiceCount = _baseDiceCount,
                     TargetNumber = _targetNumber

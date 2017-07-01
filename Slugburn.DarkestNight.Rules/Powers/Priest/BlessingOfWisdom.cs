@@ -1,4 +1,5 @@
 ﻿using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Priest
@@ -15,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
         public override void HandleCallback(Hero hero, string path, object data)
         {
             var selectedHero = (Hero)data;
-            selectedHero.AddRollModifier(new PowerRollBonus(this, RollType.Elude, 1));
+            selectedHero.AddModifier(new PowerRollBonus(this, ModifierType.EludeDice, 1));
         }
     }
 }

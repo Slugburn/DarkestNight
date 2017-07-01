@@ -14,10 +14,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             Text = "After a fight roll, add any number of dice, one at a time. For each added die that comes up a 1, +1 Darkness.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.AddAction(new ForbiddenArtsAction(this));
+            Owner.AddAction(new ForbiddenArtsAction(this));
         }
 
         private class ForbiddenArtsAction : PowerCommand

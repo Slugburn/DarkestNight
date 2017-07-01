@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Rolls
@@ -19,7 +20,7 @@ namespace Slugburn.DarkestNight.Rules.Rolls
         public List<int> ActualRoll { get; set; }
         public List<int> AdjustedRoll { get; set; }
         public int TargetNumber { get; set; }
-        public RollType RollType { get; set; }
+        public ModifierType ModifierType { get; set; }
 
         public int Result => AdjustedRoll.Max();
         public bool Win => Result >= TargetNumber;
@@ -30,12 +31,11 @@ namespace Slugburn.DarkestNight.Rules.Rolls
 
         public void Roll()
         {
-            var dice = GetDice(RollType, BaseName, BaseDiceCount);
-            var total = dice.Total;
+            var total = Hero.GetModifiedTotal(BaseDiceCount, ModifierType);
             ActualRoll = Die.Roll(total);
             AdjustedRoll = ActualRoll.ToList();
             _rollHandlers.ForEach(x => x.HandleRoll(Hero, this));
-            Hero.Triggers.Send(HeroTrigger.Rolled, RollType);
+            Hero.Triggers.Send(HeroTrigger.Rolled, ModifierType);
         }
 
         public void Accept()
@@ -59,18 +59,6 @@ namespace Slugburn.DarkestNight.Rules.Rolls
             AdjustedRoll = ActualRoll.ToList();
             foreach (var handler in _rollHandlers)
                 handler.HandleRoll(Hero, this);
-        }
-
-        public Dice GetDice(RollType rollType, string baseName, int baseDiceCount)
-        {
-            var baseDetail = new DiceDetail {Name = baseName, Modifier = baseDiceCount};
-            var otherDetails = from rollMod in Hero.GetRollModifiers()
-                let mod = rollMod.GetModifier(Hero, rollType)
-                where mod != 0
-                select new DiceDetail {Name = rollMod.Name, Modifier = mod};
-            var details = new[] {baseDetail}.Concat(otherDetails).ToList();
-            var dice = new Dice(details);
-            return dice;
         }
     }
 }

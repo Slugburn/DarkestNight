@@ -1,4 +1,4 @@
-﻿using Slugburn.DarkestNight.Rules.Heroes;
+﻿using Slugburn.DarkestNight.Rules.Modifiers;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Druid
 {
@@ -10,10 +10,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             Text = "+3 to default Grace.";
         }
 
-        public override void Learn(Hero hero)
+        protected override void OnLearn()
         {
-            base.Learn(hero);
-            hero.DefaultGrace += 3;
+            AddModifier(ModifierType.DefaultGrace, 3);
         }
     }
 }

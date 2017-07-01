@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using Shouldly;
 using Slugburn.DarkestNight.Rules.Blights;
-using Slugburn.DarkestNight.Rules.Extensions;
 using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
