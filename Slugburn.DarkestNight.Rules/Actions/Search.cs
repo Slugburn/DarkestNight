@@ -45,7 +45,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             {
                 if (rollState.Win)
                 {
-                    new DrawSearchCommand().DrawSearchResults(hero, rollState.Successes);
+                    hero.DrawSearchResults(rollState.Successes);
                 }
                 else
                 {

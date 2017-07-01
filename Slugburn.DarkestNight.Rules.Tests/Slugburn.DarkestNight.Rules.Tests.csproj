@@ -130,6 +130,7 @@
     <Compile Include="Heroes\HeroFactoryTest.cs" />
     <Compile Include="Heroes\KnightTest.cs" />
     <Compile Include="Heroes\PriestTest.cs" />
+    <Compile Include="Items\ArtifactTest.cs" />
     <Compile Include="Items\BottledMagicTest.cs" />
     <Compile Include="Items\HolyRelicTest.cs" />
     <Compile Include="Items\TreasureChestTest.cs" />

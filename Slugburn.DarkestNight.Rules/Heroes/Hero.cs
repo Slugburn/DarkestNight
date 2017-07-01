@@ -779,5 +779,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 toHero.LoseSecrecy("Holy Relic");
         }
 
+        internal void DrawSearchResults(int count)
+        {
+            var results = Game.DrawSearchResult(Location, count);
+            Player.DisplaySearch(PlayerSearch.From(this, results), Callback.For(this, new SearchResultSelectedHandler()) );
+        }
     }
 }

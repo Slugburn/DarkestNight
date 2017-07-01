@@ -128,8 +128,7 @@
     <Compile Include="Extensions\SpaceExtension.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Heroes\ActionFilter.cs" />
-    <Compile Include="Heroes\DefenseCommand.cs" />
-    <Compile Include="Heroes\DrawSearchCommand.cs" />
+    <Compile Include="Heroes\DefenseRollHandler.cs" />
     <Compile Include="Heroes\HeroFactory.cs" />
     <Compile Include="Heroes\IHeroFactory.cs" />
     <Compile Include="Heroes\Impl\Prince.cs" />
@@ -138,6 +137,7 @@
     <Compile Include="Heroes\Impl\Seer.cs" />
     <Compile Include="Heroes\Impl\Wizard.cs" />
     <Compile Include="Heroes\PreventMovementEffect.cs" />
+    <Compile Include="Heroes\SearchResultSelectedHandler.cs" />
     <Compile Include="Items\Artifacts\Artifact.cs" />
     <Compile Include="Items\Artifacts\BloodRing.cs" />
     <Compile Include="Items\Artifacts\CrystalBall.cs" />
