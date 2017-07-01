@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using Slugburn.DarkestNight.Rules.Commands;
+﻿using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Modifiers;
-using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Items
 {
@@ -21,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Items
 
         public void Execute(Hero hero)
         {
-            hero.RemoveFromInventory(this);
+            Owner.RemoveFromInventory(this);
             hero.CurrentRoll.ForceWin();
             hero.ConflictState.Resolve(hero);
             hero.AcceptRoll();

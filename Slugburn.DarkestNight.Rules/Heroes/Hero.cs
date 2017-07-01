@@ -422,7 +422,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public IEnumerable<IModifier> GetModifiers()
         {
-            return _modifiers;
+            return _modifiers.Concat(Inventory.Where(item=>item is IModifier).Cast<IModifier>());
         }
 
         public void AssignDiceToTargets(ICollection<TargetDieAssignment> assignments)
