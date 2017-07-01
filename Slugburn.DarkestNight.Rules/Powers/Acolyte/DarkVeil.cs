@@ -25,7 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             Owner.AddAction(new DarkVeilIgnoreDefense(this));
         }
 
-        private class DarkVeilIgnoreEffects : PowerCommand
+        private class DarkVeilIgnoreEffects : PowerCommand, IBlightSupression, ITriggerHandler<Hero>
         {
             public DarkVeilIgnoreEffects(IPower power) : base("Dark Veil [ignore effects]", power)
             {
@@ -33,19 +33,20 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
             public override void Execute(Hero hero)
             {
-                hero.Game.AddIgnoreBlight(IgnoreBlight.Create(Name, hero));
-                hero.Triggers.Add(HeroTrigger.StartedTurn, Name, new DarkVeilEnds());
+                hero.Game.AddBlightSupression(this);
+                hero.Triggers.Add(HeroTrigger.StartedTurn, Name, this);
                 _power.Exhaust(hero);
             }
 
-            private class DarkVeilEnds : ITriggerHandler<Hero>
+            public bool IsSupressed(IBlight blight, Hero hero = null)
             {
-                public void HandleTrigger(Hero registrar, string source, TriggerContext context)
-                {
-                    var hero = registrar;
-                    hero.Game.RemoveIgnoreBlight(source);
-                    hero.Triggers.Remove(HeroTrigger.StartedTurn, source);
-                }
+                return _power.Owner == hero;
+            }
+
+            public void HandleTrigger(Hero hero, string source, TriggerContext context)
+            {
+                hero.Game.RemoveBlightSupression(source);
+                hero.Triggers.Remove(HeroTrigger.StartedTurn, source);
             }
         }
 

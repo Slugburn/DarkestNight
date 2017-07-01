@@ -4,6 +4,7 @@ using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Blights.Implementations;
+using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Spaces
 {
@@ -17,16 +18,20 @@ namespace Slugburn.DarkestNight.Rules.Spaces
         public Location Location { get; protected set; }
         public string Name { get; protected set; }
 
+        public int GetSearchTarget(Hero hero)
+        {
+            var darkFogs = GetActiveBlights<DarkFog>(hero).Count();
+            return _baseSearchTarget + darkFogs*2;
+        }
+
         public int SearchTarget
         {
-            get
-            {
-                var darkFogs = GetBlights<DarkFog>()
-//                    .Where(b=>b.IsActive())
-                    .Count();
-                return _baseSearchTarget + darkFogs * 2;
-            }
             set { _baseSearchTarget = value; }
+        }
+
+        public IEnumerable<T> GetActiveBlights<T>(Hero hero = null) where T:IBlight
+        {
+            return GetBlights<T>().Where(b=>!Game.IsBlightSupressed(b, hero));
         }
 
         public IEnumerable<Location> AdjacentLocations { get; protected set; }

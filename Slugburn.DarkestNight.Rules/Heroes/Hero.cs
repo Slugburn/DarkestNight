@@ -258,8 +258,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (!Triggers.Send(HeroTrigger.Moving))
                 return;
             Location = location;
-            if (IsAffectedByBlight(BlightType.Curse))
-                LoseGrace(1);
+            var curses = GetBlights().Count(b => b is Curse && !Game.IsBlightSupressed(b, this));
+            LoseGrace(curses);
             UpdateAvailableActions();
             _movedDuringTurn = true;
             Triggers.Send(HeroTrigger.Moved);
@@ -439,15 +439,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             throw new ArgumentOutOfRangeException(nameof(commandName), commandName);
         }
 
-        public bool IsAffectedByBlight(BlightType blightType)
+        public bool IsAffectedByBlight<T>() where T : IBlight
         {
-            var blightExists = GetBlights().Any(x => x.Type == blightType);
-            return blightExists && !IsBlightIgnored(blightType);
-        }
-
-        public bool IsBlightIgnored(BlightType blightType)
-        {
-            return Game.IsBlightIgnored(this, blightType);
+            return GetSpace().GetActiveBlights<T>().Any() ;
         }
 
         public bool HasAction(string actionName)
@@ -669,15 +663,12 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             _endingTurn = true;
             IsActionAvailable = false;
-            if (IsAffectedByBlight(BlightType.Spies))
-            {
-                var spies = GetBlights().Where(x => x is Spies);
-                foreach (var spy in spies)
-                    LoseSecrecy("Spies");
-            }
+
+            var spies = GetSpace().GetActiveBlights<Spies>().Count();
+            LoseSecrecy(spies, "Spies");
 
             // Enemy lair blights generate enemies to fight/elude
-            var enemies = GetBlights().Where(b=>!IsBlightIgnored(b.Type)).GenerateEnemies().ToList();
+            var enemies = GetSpace().GetActiveBlights<EnemyLair>().GenerateEnemies().ToList();
             if (enemies.Any())
             {
                 Enemies.AddRange(enemies);

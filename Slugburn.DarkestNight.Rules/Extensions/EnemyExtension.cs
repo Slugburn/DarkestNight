@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Conflicts;
+using Slugburn.DarkestNight.Rules.Enemies;
 
-namespace Slugburn.DarkestNight.Rules.Enemies
+namespace Slugburn.DarkestNight.Rules
 {
     public static class EnemyExtension
     {

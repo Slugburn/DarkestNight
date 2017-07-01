@@ -2,9 +2,9 @@
 
 namespace Slugburn.DarkestNight.Rules.Blights
 {
-    public interface IIgnoreBlight
+    public interface IBlightSupression
     {
         string Name { get; }
-        bool IsIgnoring(Hero hero, BlightType blightType);
+        bool IsSupressed(IBlight blight, Hero hero = null);
     }
 }

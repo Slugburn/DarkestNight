@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
+using Slugburn.DarkestNight.Rules.Events;
 
-namespace Slugburn.DarkestNight.Rules.Events
+namespace Slugburn.DarkestNight.Rules
 {
     public static class EventExtension
     {

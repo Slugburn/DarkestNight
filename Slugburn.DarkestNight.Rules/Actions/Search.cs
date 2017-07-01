@@ -28,7 +28,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             var state = hero.SetRoll(RollBuilder.Create<SearchRollHandler>()
                 .Type(ModifierType.SearchDice)
                 .Base("Search", 1)
-                .Target(space.SearchTarget));
+                .Target(space.GetSearchTarget(hero)));
             hero.Triggers.Send(HeroTrigger.Searched);
             state.Roll();
             hero.Player.DisplaySearch(PlayerSearch.From(hero, null), Callback.ForCommand(hero, this));

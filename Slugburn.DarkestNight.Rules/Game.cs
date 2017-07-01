@@ -19,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules
     {
         private volatile int _id;
         private readonly Dictionary<int, IBlight> _blights = new Dictionary<int, IBlight>();
-        private readonly Dictionary<string, IIgnoreBlight> _ignoreBlights = new Dictionary<string, IIgnoreBlight>();
+        private readonly Dictionary<string, IBlightSupression> _blightSupressions = new Dictionary<string, IBlightSupression>();
 
         public Game()
         {
@@ -156,19 +156,19 @@ namespace Slugburn.DarkestNight.Rules
             return hero;
         }
 
-        public bool IsBlightIgnored(Hero hero, BlightType blightType)
+        public bool IsBlightSupressed(IBlight blight, Hero hero)
         {
-            return _ignoreBlights.Values.Any(x => x.IsIgnoring(hero, blightType));
+            return _blightSupressions.Values.Any(x => x.IsSupressed(blight, hero));
         }
 
-        public void AddIgnoreBlight(IIgnoreBlight ignoreBlight)
+        public void AddBlightSupression(IBlightSupression blightSupression)
         {
-            _ignoreBlights.Add(ignoreBlight.Name, ignoreBlight);
+            _blightSupressions.Add(blightSupression.Name, blightSupression);
         }
 
-        public void RemoveIgnoreBlight(string name)
+        public void RemoveBlightSupression(string name)
         {
-            _ignoreBlights.Remove(name);
+            _blightSupressions.Remove(name);
         }
 
         public void DecreaseDarkness()
@@ -218,6 +218,11 @@ namespace Slugburn.DarkestNight.Rules
         public IBlight GetBlight(int blightId)
         {
             return _blights[blightId];
+        }
+
+        public IEnumerable<IBlight> GetBlights()
+        {
+            return Board.Spaces.SelectMany(s => s.Blights);
         }
     }
 }

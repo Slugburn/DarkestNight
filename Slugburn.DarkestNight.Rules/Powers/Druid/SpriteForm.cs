@@ -3,7 +3,7 @@ using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Druid
 {
-    class SpriteForm : DruidFormPower
+    class SpriteForm : DruidFormPower, IBlightSupression
     {
         private const string PowerName = "Sprite Form";
 
@@ -18,25 +18,20 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
         public override void Activate(Hero hero)
         {
             base.Activate(hero);
-            hero.Game.AddIgnoreBlight(new SpriteFormIgnoreBlight { HeroName = hero.Name });
-        }
-
-        private class SpriteFormIgnoreBlight : IIgnoreBlight
-        {
-            public string Name => PowerName;
-            public string HeroName { get; set; }
-
-            public bool IsIgnoring(Hero hero, BlightType blight)
-            {
-                return hero.Name == HeroName && hero.Location != hero.Game.Necromancer.Location;
-            }
+            hero.Game.AddBlightSupression(this);
         }
 
         public override bool Deactivate(Hero hero)
         {
             if (!base.Deactivate(hero)) return false;
-            hero.Game.RemoveIgnoreBlight(Name);
+            hero.Game.RemoveBlightSupression(Name);
             return true;
+        }
+
+        public bool IsSupressed(IBlight blight, Hero hero = null)
+        {
+            if (hero == null) return false;
+            return Owner == hero && hero.Location != hero.Game.Necromancer.Location;
         }
     }
 }

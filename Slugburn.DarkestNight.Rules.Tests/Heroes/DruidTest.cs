@@ -90,7 +90,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario.Game
                 .WithHero("Druid").HasPowers("Sprite Form").Power("Sprite Form").IsActive()
                 .When.Player.TakesAction("Deactivate Form")
-                .Then(Verify.Hero().IsNotIgnoringBlights().HasUsedAction());
+                .Then(Verify.Hero().IsIgnoringBlights(false).HasUsedAction());
         }
 
         [Test]
@@ -100,7 +100,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Necromancer.At("Ruins")
                 .WithHero("Druid").HasPowers("Sprite Form").At("Ruins")
                 .Given.Hero().Power("Sprite Form").IsActive()
-                .Then(Verify.Hero().CanGainGrace(false).IsNotIgnoringBlights());
+                .Then(Verify.Hero().CanGainGrace(false).IsIgnoringBlights(false));
         }
 
         [Test]

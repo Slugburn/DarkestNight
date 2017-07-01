@@ -124,7 +124,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Then(Verify.Hero().IsIgnoringBlights())
                 .Then(Verify.Power("Dark Veil").IsExhausted())
                 .When.Player.StartsTurn()
-                .Then(Verify.Hero().IsNotIgnoringBlights());
+                .Then(Verify.Hero().IsIgnoringBlights(false));
         }
 
         // Death Mask (Bonus): You may choose not to lose Secrecy for attacking a blight (including use of the Call to Death power) 

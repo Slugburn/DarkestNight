@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
+using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Blights
 {
@@ -18,7 +19,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Blights
         [Test]
         public void Defense()
         {
-            // Lose a turn.
+            // Defense: Lose a turn.
+            TestScenario.Game
+                .WithHero().At("Village")
+                .Location("Village").HasBlights("DarkFog")
+                .When.Player.TakesAction("Attack").Fights(Fake.Rolls(1))
+                .Given.Game.NewDay()
+                .Then(Verify.Hero().CanTakeAction("Start Turn", false));
         }
     }
 }

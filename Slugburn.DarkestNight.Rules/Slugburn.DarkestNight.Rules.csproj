@@ -57,11 +57,9 @@
     <Compile Include="Commands\StartTurn.cs" />
     <Compile Include="Actions\Travel.cs" />
     <Compile Include="Blights\Blight.cs" />
-    <Compile Include="Blights\IgnoreBlight.cs" />
     <Compile Include="Blights\TargetDieAssignment.cs" />
-    <Compile Include="Blights\BlightExtension.cs" />
     <Compile Include="Blights\BlightType.cs" />
-    <Compile Include="Blights\IIgnoreBlight.cs" />
+    <Compile Include="Blights\IBlightSupression.cs" />
     <Compile Include="Blights\Implementations\Confusion.cs" />
     <Compile Include="Blights\Implementations\Corruption.cs" />
     <Compile Include="Blights\Implementations\Curse.cs" />
@@ -82,7 +80,6 @@
     <Compile Include="Conflicts\TargetInfo.cs" />
     <Compile Include="Enemies\Cultist.cs" />
     <Compile Include="Enemies\Enemy.cs" />
-    <Compile Include="Enemies\EnemyExtension.cs" />
     <Compile Include="Enemies\GuardedTrove.cs" />
     <Compile Include="Enemies\IEnemy.cs" />
     <Compile Include="Enemies\EnemyFactory.cs" />
@@ -116,7 +113,6 @@
     <Compile Include="Events\EventCard.cs" />
     <Compile Include="Events\EventDetail.cs" />
     <Compile Include="Events\EventEnemy.cs" />
-    <Compile Include="Events\EventExtension.cs" />
     <Compile Include="Events\EventFactory.cs" />
     <Compile Include="Events\EventOption.cs" />
     <Compile Include="Events\EventRollHandler.cs" />
@@ -124,7 +120,11 @@
     <Compile Include="Events\HeroEventRow.cs" />
     <Compile Include="Events\HeroEvent.cs" />
     <Compile Include="Events\IEventCard.cs" />
+    <Compile Include="Extensions\BlightExtension.cs" />
     <Compile Include="Extensions\CardExtensions.cs" />
+    <Compile Include="Extensions\EnemyExtension.cs" />
+    <Compile Include="Extensions\EventExtension.cs" />
+    <Compile Include="Extensions\SpaceExtension.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Heroes\ActionFilter.cs" />
     <Compile Include="Heroes\DefenseCommand.cs" />
@@ -236,7 +236,6 @@
     <Compile Include="Modifiers\ModifierType.cs" />
     <Compile Include="Rolls\StaticRollBonus.cs" />
     <Compile Include="Spaces\Board.cs" />
-    <Compile Include="Spaces\SpaceExtension.cs" />
     <Compile Include="Tactics\BasicEludeTactic.cs" />
     <Compile Include="Tactics\ITactic.cs" />
     <Compile Include="Maps\Map.cs" />

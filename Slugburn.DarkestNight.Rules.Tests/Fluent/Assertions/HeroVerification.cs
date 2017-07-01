@@ -2,7 +2,6 @@
 using System.Linq;
 using NUnit.Framework;
 using Shouldly;
-using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Rolls;
@@ -22,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private int? _fightDice;
         private int? _grace;
         private int? _secrecy;
-        private IEnumerable<BlightType> _expectedIgnoredBlights;
+        private bool? _isIgnoringBlights;
         private string[] _expectedInventory;
         private Location? _location;
         private int[] _expectedRoll;
@@ -68,6 +67,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         public void Verify(ITestRoot root)
         {
+            var game = root.Get<Game>();
             var hero = ((TestRoot)root).GetHero(_heroName);
             SetExpectations(hero);
             hero.IsTakingTurn.ShouldBeIfNotNull(_isTakingTurn, "IsTakingTurn");
@@ -85,11 +85,20 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             var disallowedMovement = validLocations.Intersect(_invalidLocations);
             var specifiedMovement = validLocations.Intersect(_specifiedLocations);
             Assert.That(disallowedMovement, Is.EquivalentTo(Enumerable.Empty<Location>()), "Movement that should be blocked is allowed.");
-            Assert.That(specifiedMovement, Is.EquivalentTo(_specifiedLocations), "Moement that should be allowed is blocked.");
-            if (_expectedIgnoredBlights != null)
+            Assert.That(specifiedMovement, Is.EquivalentTo(_specifiedLocations), "Movement that should be allowed is blocked.");
+            if (_isIgnoringBlights != null)
             {
-                var ignoredBlights = AllBlights().Where(x => hero.IsBlightIgnored(x)).ToList();
-                Assert.That(ignoredBlights, Is.EquivalentTo(_expectedIgnoredBlights), "Unexpected ignored blights.");
+                var blights = game.GetBlights().ToList();
+                if (_isIgnoringBlights.Value)
+                {
+                    var activeBlights = blights.Where(b => !game.IsBlightSupressed(b, hero)).ToList();
+                    activeBlights.ShouldBeEmpty();
+                }
+                else
+                {
+                    var ignoredBlights = blights.Where(b => game.IsBlightSupressed(b, hero)).ToList();
+                    ignoredBlights.ShouldBeEmpty();
+                }
             }
             if (_travelSpeed != null)
                 Assert.That(hero.TravelSpeed, Is.EqualTo(_travelSpeed), "Unexpected TravelSpeed.");
@@ -214,40 +223,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public HeroVerification IsIgnoringBlights(params BlightType[] blightTypes)
+        public HeroVerification IsIgnoringBlights(bool expected = true)
         {
-            if (!blightTypes.Any())
-                blightTypes = AllBlights();
-            _expectedIgnoredBlights = blightTypes;
+            _isIgnoringBlights = expected;
             return this;
-        }
-
-        public HeroVerification IsNotIgnoringBlights(params BlightType[] blightTypes)
-        {
-            _expectedIgnoredBlights = blightTypes.Any() ? AllBlights().Except(blightTypes) : new BlightType[0];
-            return this;
-        }
-
-        private static BlightType[] AllBlights()
-        {
-            return new[]
-            {
-                BlightType.Confusion,
-                BlightType.Corruption,
-                BlightType.Curse,
-                BlightType.DarkFog,
-                BlightType.Desecration,
-                BlightType.EvilPresence,
-                BlightType.Lich,
-                BlightType.Spies,
-                BlightType.Shades,
-                BlightType.Shroud,
-                BlightType.Skeletons,
-                BlightType.Taint,
-                BlightType.UnholyAura,
-                BlightType.Vampire,
-                BlightType.Zombies
-            };
         }
 
         public HeroVerification Location(string location)
