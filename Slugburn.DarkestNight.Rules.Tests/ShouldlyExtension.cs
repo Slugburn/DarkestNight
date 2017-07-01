@@ -9,8 +9,8 @@ namespace Slugburn.DarkestNight.Rules.Tests
     {
         public static void ShouldBeEquivalent<T>(this IEnumerable<T> actual, IEnumerable<T> expected) where T:IComparable<T>
         {
-            var one = actual.OrderBy(x => x);
-            var two = expected.OrderBy(x => x);
+            var one = actual.OrderBy(x => x).ToArray();
+            var two = expected.OrderBy(x => x).ToArray();
             one.ShouldBe(two);
         }
 

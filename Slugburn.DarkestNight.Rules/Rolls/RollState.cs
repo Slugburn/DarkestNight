@@ -60,5 +60,10 @@ namespace Slugburn.DarkestNight.Rules.Rolls
             AdjustedRoll = adjusted.ToList();
             _rollHandlers.ForEach(x => x.HandleRoll(Hero, this));
         }
+
+        public void ForceWin()
+        {
+            AdjustedRoll = new List<int> {6};
+        }
     }
 }

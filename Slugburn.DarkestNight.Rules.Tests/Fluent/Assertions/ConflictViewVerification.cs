@@ -12,12 +12,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private string[] _tacticNames;
         private int? _targetCount;
         private List<int> _roll = new List<int>();
+        private bool? _win;
 
         public void Verify(ITestRoot root)
         {
             var player = root.Get<FakePlayer>();
             var view = player.Conflict;
             view.ShouldNotBeNull();
+
+            view.Win.ShouldBe(_win);
 
             if (_targetCount.HasValue)
                 view.TargetCount.ShouldBe(_targetCount.Value);
@@ -52,5 +55,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
+        public ConflictViewVerification Win(bool expected = true)
+        {
+            _win = expected;
+            return this;
+        }
     }
 }

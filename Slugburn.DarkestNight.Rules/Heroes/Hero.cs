@@ -402,6 +402,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             CurrentRoll.BaseName = tactic.Name;
 
             CurrentRoll.Roll();
+            UpdateAvailableActions();
         }
 
         public void AcceptRoll()

@@ -13,6 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Players.Models
         public ICollection<int> Roll { get; set; }
 
         public ConflictEffect Effect { get; set; }
+        public bool? Win { get; set; }
 
         public class Tactic
         {
@@ -42,7 +43,11 @@ namespace Slugburn.DarkestNight.Rules.Players.Models
                 : new List<Tactic> {CreateTactic(state.SelectedTactic)};
             var targetCount = state.MaxTarget;
             var roll = state.Roll ?? new List<int>();
-            return new PlayerConflict {Targets = targets, Tactics = tactics, TargetCount = targetCount, Roll = roll};
+            bool? win = null;
+            var resolvedTargets = state.SelectedTargets?.Where(x => x.ResultNumber != null).ToList();
+            if (resolvedTargets != null && resolvedTargets.Any())
+                win = resolvedTargets.Any(x => x.IsWin);
+            return new PlayerConflict {Targets = targets, Tactics = tactics, TargetCount = targetCount, Roll = roll, Win = win};
         }
 
         private static Tactic CreateTactic(TacticInfo x)
