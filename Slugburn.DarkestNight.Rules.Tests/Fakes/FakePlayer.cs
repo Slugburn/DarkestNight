@@ -2,6 +2,7 @@
 using System.Linq;
 using Shouldly;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
 
@@ -167,6 +168,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         public void SelectSearchResult(string resultName)
         {
             CallbackRouter.Route(_game, _callback, resultName.ToFind());
+        }
+
+        public void TradeItem(int itemId, string fromHeroName, string toHeroName)
+        {
+            var fromHero = _game.GetHero(fromHeroName);
+            var toHero = _game.GetHero(toHeroName);
+            fromHero.TradeItemTo(itemId, toHero);
         }
     }
 }

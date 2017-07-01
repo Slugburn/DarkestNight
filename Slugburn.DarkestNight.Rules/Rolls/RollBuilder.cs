@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using Slugburn.DarkestNight.Rules.Heroes;
+﻿using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Modifiers;
 
 namespace Slugburn.DarkestNight.Rules.Rolls

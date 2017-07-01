@@ -163,10 +163,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private void VerifyDice(Hero hero)
         {
             if (_hasNoDieModifer)
-                hero.GetRollModifiers().Count().ShouldBe(0);
+                hero.GetModifiers().Count().ShouldBe(0);
             if (_dieModifer != null)
             {
-                var match = hero.GetRollModifiers().SingleOrDefault(x => x.Name == _dieModifer);
+                var match = hero.GetModifiers().SingleOrDefault(x => x.Name == _dieModifer);
                 if (match == null)
                     Assert.Fail("No matching die modifier was found.");
             }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Shouldly;
@@ -168,6 +169,17 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             var player = GetPlayer();
             resultName = resultName ?? player.Search.SearchResults.Single();
             player.SelectSearchResult(resultName);
+            return this;
+        }
+
+        public IPlayerActionContext TradesItem(string itemName, string fromHeroName, string toHeroName)
+        {
+            var game = GetGame();
+            var item = game.GetHero(fromHeroName).GetInventory().FirstOrDefault(i => i.Name == itemName);
+            if (item == null)
+                throw new ArgumentOutOfRangeException(nameof(itemName), itemName);
+            var itemId = item.Id;
+            GetPlayer().TradeItem(itemId, fromHeroName, toHeroName);
             return this;
         }
     }

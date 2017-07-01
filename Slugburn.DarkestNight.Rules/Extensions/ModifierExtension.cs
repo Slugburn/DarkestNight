@@ -13,7 +13,7 @@ namespace Slugburn.DarkestNight.Rules
         public static ModifierSummary CreateModifierSummary(this Hero hero, ModifierType modifierType, string baseName, int baseAmount)
         {
             var details = new List<ModifierDetail> {ModifierDetail.Create(baseName, baseAmount)};
-            var otherDetails = (from rollMod in hero.GetRollModifiers()
+            var otherDetails = (from rollMod in hero.GetModifiers()
                 let mod = rollMod.GetModifier(hero, modifierType)
                 where mod != 0
                 select new ModifierDetail {Name = rollMod.Name, Modifier = mod});

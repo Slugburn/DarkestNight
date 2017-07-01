@@ -25,7 +25,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
     {
         private readonly Dictionary<string, ICommand> _commands;
         private List<string> _powerDeck;
-        private readonly List<IModifier> _rollModifiers;
+        private readonly List<IModifier> _modifiers = new List<IModifier>();
+        private readonly List<IRollModifier> _rollModifiers = new List<IRollModifier>();
         private readonly Stash _stash;
         private readonly Dictionary<string, ITactic> _tactics;
         private readonly List<ActionFilter> _actionFilters;
@@ -47,7 +48,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
             _commands = new Dictionary<string, ICommand>(StringComparer.InvariantCultureIgnoreCase);
             _tactics = new Dictionary<string, ITactic>(StringComparer.InvariantCultureIgnoreCase);
-            _rollModifiers = new List<IModifier>();
             _actionFilters = new List<ActionFilter>();
 
             Location = Location.Monastery;
@@ -195,6 +195,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 throw new Exception("Insufficient Grace.");
             Grace -= amount;
             UpdateAvailableActions();
+        }
+
+        private IItem GetItem(int itemId)
+        {
+            var item = Inventory.SingleOrDefault(x => x.Id == itemId);
+            if (item == null)
+                throw new ArgumentOutOfRangeException(nameof(itemId), itemId, "Unknown item.");
+            return item;
         }
 
         public void TakeWound()
@@ -401,12 +409,12 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void AddModifier(IModifier rollModifier)
         {
-            _rollModifiers.Add(rollModifier);
+            _modifiers.Add(rollModifier);
         }
 
-        public IEnumerable<IModifier> GetRollModifiers()
+        public IEnumerable<IModifier> GetModifiers()
         {
-            return _rollModifiers;
+            return _modifiers;
         }
 
         public void AssignDiceToTargets(ICollection<TargetDieAssignment> assignments)
@@ -432,7 +440,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void RemoveRollModifiers(string name)
         {
-            _rollModifiers.RemoveAll(x => x.Name == name);
+            _modifiers.RemoveAll(x => x.Name == name);
         }
 
         public void AddAction(ICommand command)
@@ -739,6 +747,28 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             HasTakenTurn = LoseNextTurn;
             LoseNextTurn = false;
             UpdateAvailableActions();
+        }
+
+        public void AddRollModifier(IRollModifier modifier)
+        {
+            _rollModifiers.Add(modifier);
+        }
+
+        public IEnumerable<IRollModifier> GetRollModifiers()
+        {
+            var itemModifiers = GetLocationInventory().Where(item => item is IRollModifier).Cast<IRollModifier>();
+            return _rollModifiers.Concat(itemModifiers);
+        }
+
+        public void TradeItemTo(int itemId, Hero toHero)
+        {
+            if (toHero.Location != Location) return;
+            var item = GetItem(itemId);
+            if (item is HolyRelic && toHero.Inventory.Any(x => x is HolyRelic)) return;
+            RemoveFromInventory(item);
+            toHero.AddToInventory(item);
+            if (item is HolyRelic)
+                toHero.LoseSecrecy("Holy Relic");
         }
     }
 }

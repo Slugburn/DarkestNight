@@ -33,8 +33,7 @@ namespace Slugburn.DarkestNight.Rules.Rolls
         {
             var total = Hero.GetModifiedTotal(BaseDiceCount, ModifierType);
             ActualRoll = Die.Roll(total);
-            AdjustedRoll = ActualRoll.ToList();
-            _rollHandlers.ForEach(x => x.HandleRoll(Hero, this));
+            AdjustRoll();
             Hero.Triggers.Send(HeroTrigger.Rolled, ModifierType);
         }
 
@@ -56,9 +55,10 @@ namespace Slugburn.DarkestNight.Rules.Rolls
         public void AdjustRoll()
         {
             // reset the adjusted roll back to the actual roll
-            AdjustedRoll = ActualRoll.ToList();
-            foreach (var handler in _rollHandlers)
-                handler.HandleRoll(Hero, this);
+            var adjusted = Hero.GetRollModifiers()
+                .Aggregate<IRollModifier, ICollection<int>>(ActualRoll, (current, modifier) => modifier.Modify(Hero, ModifierType, current));
+            AdjustedRoll = adjusted.ToList();
+            _rollHandlers.ForEach(x => x.HandleRoll(Hero, this));
         }
     }
 }

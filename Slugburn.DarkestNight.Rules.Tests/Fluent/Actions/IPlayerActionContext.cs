@@ -21,5 +21,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         IPlayerActionContext SelectsHero(string heroName);
         IPlayerActionContext AnswersQuestion(string title, bool answer);
         IPlayerActionContext SelectsSearchResult(string resultName = null);
+        IPlayerActionContext TradesItem(string itemName, string fromHero, string toHero);
     }
 }

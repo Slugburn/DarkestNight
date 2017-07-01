@@ -122,6 +122,7 @@
     <Compile Include="Events\IEventCard.cs" />
     <Compile Include="Extensions\BlightExtension.cs" />
     <Compile Include="Extensions\CardExtensions.cs" />
+    <Compile Include="Extensions\DiceExtension.cs" />
     <Compile Include="Extensions\EnemyExtension.cs" />
     <Compile Include="Extensions\EventExtension.cs" />
     <Compile Include="Extensions\SpaceExtension.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="Items\Waystone.cs" />
     <Compile Include="Modifiers\BonusPowerModifer.cs" />
     <Compile Include="Extensions\ModifierExtension.cs" />
+    <Compile Include="Modifiers\IRollModifier.cs" />
     <Compile Include="Modifiers\StaticBonusPowerModifer.cs" />
     <Compile Include="Players\Callback.cs" />
     <Compile Include="Players\CallbackRouter.cs" />

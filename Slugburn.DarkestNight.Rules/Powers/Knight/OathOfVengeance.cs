@@ -1,10 +1,11 @@
-using System.Linq;
+using System.Collections.Generic;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Knight
 {
-    class OathOfVengeance : Oath
+    class OathOfVengeance : Oath, IRollModifier
     {
         public OathOfVengeance()
         {
@@ -14,10 +15,15 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             BreakText = "Hide or search; you lose 1 Grace.";
         }
 
+        protected override void OnLearn()
+        {
+            base.OnLearn();
+            Owner.AddRollModifier(this);
+        }
+
         public override void Activate(Hero hero)
         {
             base.Activate(hero);
-            hero.Triggers.Add(HeroTrigger.Rolled, Name, new AfterRoll());
             hero.Triggers.Add(HeroTrigger.FightWon, Name, new OathFulfilled());
             hero.Triggers.Add(HeroTrigger.Hidden, Name, new OathBroken());
             hero.Triggers.Add(HeroTrigger.Searched, Name, new OathBroken());
@@ -33,18 +39,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         {
             hero.LoseGrace();
             Deactivate(hero);
-        }
-
-        private class AfterRoll : ITriggerHandler<Hero>
-        {
-            public void HandleTrigger(Hero hero, string source, TriggerContext context)
-            {
-                if (hero.ConflictState == null) return;
-                if (!hero.IsTargetNecromancer()) return;
-                var originalRoll = hero.CurrentRoll.AdjustedRoll.OrderByDescending(x=>x).ToList();
-                var newRoll = new[] {originalRoll.First() + 1}.Concat(originalRoll.Skip(1)).ToList();
-                hero.CurrentRoll.AdjustedRoll = newRoll;
-            }
         }
 
         private class OathFulfilled : ITriggerHandler<Hero>
@@ -64,6 +58,12 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
                 var oath = (IOath)hero.GetPower(source);
                 oath.Break(hero);
             }
+        }
+
+        public ICollection<int> Modify(Hero hero, ModifierType modifierType, ICollection<int> roll)
+        {
+            if (modifierType != ModifierType.FightDice || Exhausted || !IsActive) return roll;
+            return hero.IsTargetNecromancer() ? roll.AddOneToHighest() : roll;
         }
     }
 
