@@ -27,7 +27,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         public override bool IsUsable(Hero hero)
         {
             if (!base.IsUsable(hero)) return false;
-            var hasActiveOath = hero.Powers.Where(x => x is IOath).Cast<IOath>().Any(x => x.IsActive);
+            var hasActiveOath = hero.Powers.WhereIs<IOath>().Any(x => x.IsActive);
             return !hasActiveOath;
         }
     }

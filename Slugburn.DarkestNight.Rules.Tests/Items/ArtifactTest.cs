@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Slugburn.DarkestNight.Rules.Items.Artifacts;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Items
@@ -23,10 +24,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Items
         }
 
         [Test]
-        public void GhostMail()
+        public void GhostMail_SpendSecrecy()
         {
             TestScenario.Game
-                .WithHero().HasItems("Ghost Mail")
+                .WithHero().HasItems("Ghost Mail").IsTakingTurn(false)
+                .Then(Verify.Hero().CanTakeAction(GhostMail.CommandName))
+                .When.Player.TakesAction(GhostMail.CommandName);
         }
     }
 }

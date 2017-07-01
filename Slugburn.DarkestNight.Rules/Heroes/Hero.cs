@@ -149,7 +149,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             var heroCommands = _commands.Values;
             var locationCommands = GetSpace().GetActions();
-            var itemCommands = GetLocationInventory().Where(item => item is ICommand).Cast<ICommand>();
+            var itemCommands = GetLocationInventory().WhereIs<ICommand>();
             var actions = heroCommands.Concat(locationCommands).Concat(itemCommands)
                 .Where(x => x.IsAvailable(this)).Select(x => x.Name);
 
@@ -364,11 +364,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             return Powers.SingleOrDefault(x => x.Name == name);
         }
 
-        public IEnumerable<T> GetPowers<T>()
-        {
-            return Powers.Where(x => x is T).Cast<T>();
-        }
-
         public void TakeAction(IAction action)
         {
             action.Execute(this);
@@ -422,7 +417,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public IEnumerable<IModifier> GetModifiers()
         {
-            return _modifiers.Concat(Inventory.Where(item=>item is IModifier).Cast<IModifier>());
+            return _modifiers.Concat(Inventory.WhereIs<IModifier>());
         }
 
         public void AssignDiceToTargets(ICollection<TargetDieAssignment> assignments)
@@ -461,7 +456,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (_commands.ContainsKey(commandName))
                 return _commands[commandName];
             var space = GetSpace();
-            var itemAction = (ICommand) Inventory.FirstOrDefault(item => item.Name == commandName);
+            var itemAction = Inventory.WhereIs<ICommand>().FirstOrDefault(item => item.Name == commandName);
             if (itemAction != null)
                 return itemAction;
             var locationAction = space.GetAction(commandName);
@@ -631,6 +626,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public bool CanSpendGrace => Grace > 0 || (Intercession?.CanIntercedeFor(this) ?? false);
 
+        public bool CanSpendSecrecy => Secrecy > 0;
+
         internal Intercession Intercession { get; set; }
 
         public IEnumerable<IItem> GetInventory()
@@ -764,7 +761,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public IEnumerable<IRollModifier> GetRollModifiers()
         {
-            var itemModifiers = GetLocationInventory().Where(item => item is IRollModifier).Cast<IRollModifier>();
+            var itemModifiers = GetLocationInventory().WhereIs<IRollModifier>();
             return _rollModifiers.Concat(itemModifiers);
         }
 

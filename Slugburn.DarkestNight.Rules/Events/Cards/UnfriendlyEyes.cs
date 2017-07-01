@@ -8,12 +8,12 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             .Text("Count the blights in your location")
             .RowSelector(h => h.GetBlights().Count)
             .Row(0, "Lose 1 Secrecy", o => o.Option("lose-secrecy", "Lose Secrecy"))
-            .Row(1, 2, "Spend 1 Secrecy or lose 1 Grace", o => o
-                .Option("spend-secrecy", "Spend Secrecy", hero => hero.Secrecy > 0)
-                .Option("lose-grace", "Lose Grace"))
-            .Row(3, 4, "Spend 1 Grace or +1 Darkness", o => o
-                .Option("spend-grace", "Spend Grace", hero => hero.CanSpendGrace)
-                .Option("increase-darkness", "+1 Darkness")));
+            .Row(1, 2, "Spend 1 Secrecy or lose 1 Grace",
+                o => o.Option("spend-secrecy", "Spend Secrecy", hero => hero.CanSpendSecrecy)
+                    .Option("lose-grace", "Lose Grace"))
+            .Row(3, 4, "Spend 1 Grace or +1 Darkness",
+                o => o.Option("spend-grace", "Spend Grace", hero => hero.CanSpendGrace)
+                    .Option("increase-darkness", "+1 Darkness")));
 
         public void Resolve(Hero hero, string option)
         {

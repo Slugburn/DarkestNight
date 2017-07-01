@@ -121,9 +121,9 @@
     <Compile Include="Events\HeroEvent.cs" />
     <Compile Include="Events\IEventCard.cs" />
     <Compile Include="Extensions\BlightExtension.cs" />
-    <Compile Include="Extensions\CardExtensions.cs" />
     <Compile Include="Extensions\DiceExtension.cs" />
     <Compile Include="Extensions\EnemyExtension.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\EventExtension.cs" />
     <Compile Include="Extensions\SpaceExtension.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />

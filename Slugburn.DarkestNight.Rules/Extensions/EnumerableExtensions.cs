@@ -4,8 +4,13 @@ using System.Linq;
 
 namespace Slugburn.DarkestNight.Rules
 {
-    public static class CardExtensions
+    public static class EnumerableExtensions
     {
+        public static IEnumerable<T> WhereIs<T>(this IEnumerable<object> items)
+        {
+            return items.Where(item => item is T).Cast<T>();
+        }
+
         private static readonly Random Random = new Random();
 
         public static List<T> Shuffle<T>(this IEnumerable<T> source)
@@ -33,6 +38,5 @@ namespace Slugburn.DarkestNight.Rules
         {
             return Draw(source, 1).FirstOrDefault();
         }
-
     }
 }

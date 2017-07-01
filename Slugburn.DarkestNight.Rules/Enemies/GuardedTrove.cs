@@ -35,7 +35,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             else
             {
                 var options = new List<HeroEventOption>();
-                if (hero.Secrecy > 0)
+                if (hero.CanSpendSecrecy)
                     options.Add(new HeroEventOption("spend-secrecy","Spend Secrecy"));
                 options.Add(new HeroEventOption("draw-event", "Draw Event"));
                 hero.CurrentEvent.Options = options;

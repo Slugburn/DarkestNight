@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -33,7 +34,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 
         internal static void DeactivateAllForms(Hero hero)
         {
-            hero.Powers.Where(x => x is IDruidForm).Cast<IDruidForm>().ToList().ForEach(x => x.Deactivate(hero));
+            hero.Powers.WhereIs<IDruidForm>().ToList().ForEach(x => x.Deactivate(hero));
         }
 
         private class ActivateForm : PowerAction
@@ -64,7 +65,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 
             public bool IsAvailable(Hero hero)
             {
-                return hero.IsActionAvailable && hero.GetPowers<IDruidForm>().Any(x => x.IsActive);
+                return hero.IsActionAvailable && hero.Powers.WhereIs<IDruidForm>().Any(x => x.IsActive);
             }
         }
     }

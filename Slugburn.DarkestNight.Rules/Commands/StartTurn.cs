@@ -17,10 +17,15 @@ namespace Slugburn.DarkestNight.Rules.Commands
 
         public bool IsAvailable(Hero hero)
         {
+            return IsValid(hero);
+        }
+
+        internal static bool IsValid(Hero hero)
+        {
             var game = hero.Game;
             return !hero.HasTakenTurn
                    && !game.Necromancer.IsTakingTurn
                    && !game.Heroes.Any(h => h.IsTakingTurn);
         }
-    }
+   }
 }

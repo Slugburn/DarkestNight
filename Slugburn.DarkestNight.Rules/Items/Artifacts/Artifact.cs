@@ -2,7 +2,7 @@
 
 namespace Slugburn.DarkestNight.Rules.Items.Artifacts
 {
-    abstract class Artifact : Item, IArtifact
+    public abstract class Artifact : Item, IArtifact
     {
         public static IEnumerable<string> CreateDeck()
         {
