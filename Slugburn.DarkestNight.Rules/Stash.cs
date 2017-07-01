@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules
 
         public IEnumerable<T> GetAll<T>()
         {
-            return _items.WhereIs<T>();
+            return _items.OfType<T>();
         }
     }
 }

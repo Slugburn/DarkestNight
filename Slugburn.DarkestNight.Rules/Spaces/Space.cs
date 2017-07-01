@@ -56,7 +56,7 @@ namespace Slugburn.DarkestNight.Rules.Spaces
 
         public IEnumerable<T> GetBlights<T>() where T: IBlight
         {
-            return _blights.WhereIs<T>();
+            return _blights.OfType<T>();
         }
 
         public IEnumerable<IAction> GetActions()

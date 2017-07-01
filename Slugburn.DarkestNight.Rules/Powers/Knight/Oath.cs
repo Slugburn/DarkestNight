@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -27,7 +28,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         public override bool IsUsable(Hero hero)
         {
             if (!base.IsUsable(hero)) return false;
-            var hasActiveOath = hero.Powers.WhereIs<IOath>().Any(x => x.IsActive);
+            var hasActiveOath = hero.Powers.OfType<IOath>().Any(x => x.IsActive);
             return !hasActiveOath;
         }
     }

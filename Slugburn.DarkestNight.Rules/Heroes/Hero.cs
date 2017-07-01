@@ -149,7 +149,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             var heroCommands = _commands.Values;
             var locationCommands = GetSpace().GetActions();
-            var itemCommands = GetLocationInventory().WhereIs<ICommand>();
+            var itemCommands = GetLocationInventory().OfType<ICommand>();
             var actions = heroCommands.Concat(locationCommands).Concat(itemCommands)
                 .Where(x => x.IsAvailable(this)).Select(x => x.Name);
 
@@ -417,7 +417,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public IEnumerable<IModifier> GetModifiers()
         {
-            return _modifiers.Concat(Inventory.WhereIs<IModifier>());
+            return _modifiers.Concat(Inventory.OfType<IModifier>());
         }
 
         public void AssignDiceToTargets(ICollection<TargetDieAssignment> assignments)
@@ -456,7 +456,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (_commands.ContainsKey(commandName))
                 return _commands[commandName];
             var space = GetSpace();
-            var itemAction = Inventory.WhereIs<ICommand>().FirstOrDefault(item => item.Name == commandName);
+            var itemAction = Inventory.OfType<ICommand>().FirstOrDefault(item => item.Name == commandName);
             if (itemAction != null)
                 return itemAction;
             var locationAction = space.GetAction(commandName);
@@ -761,7 +761,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public IEnumerable<IRollModifier> GetRollModifiers()
         {
-            var itemModifiers = GetLocationInventory().WhereIs<IRollModifier>();
+            var itemModifiers = GetLocationInventory().OfType<IRollModifier>();
             return _rollModifiers.Concat(itemModifiers);
         }
 

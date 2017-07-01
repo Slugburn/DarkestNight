@@ -32,7 +32,7 @@ namespace Slugburn.DarkestNight.Rules
 
         public static List<IEnemy> GenerateEnemies(this IEnumerable<IBlight> blights)
         {
-            return blights.WhereIs<EnemyLair>().Select(x=>EnemyFactory.Create(x.EnemyName)).ToList();
+            return blights.OfType<EnemyLair>().Select(x=>EnemyFactory.Create(x.EnemyName)).ToList();
         }
     }
 }
