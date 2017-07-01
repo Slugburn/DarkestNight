@@ -66,7 +66,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             else if (data is IEnumerable<int>)
             {
                 var blightId = ((IEnumerable<int>) data).Single();
-                hero.Game.DestroyBlight(blightId);
+                hero.Game.DestroyBlight(hero, blightId);
             }
         }
     }

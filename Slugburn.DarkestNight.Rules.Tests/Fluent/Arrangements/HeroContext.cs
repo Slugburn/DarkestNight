@@ -156,7 +156,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 
         public IHeroContext HasItems(params string[] itemNames)
         {
-            var items = itemNames.Select(ItemFactory.Create);
+            var game = GetGame();
+            var items = itemNames.Select(game.CreateItem);
             foreach (var item in items)
                 _hero.AddToInventory(item);
             return this;

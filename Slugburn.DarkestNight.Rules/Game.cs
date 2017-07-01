@@ -6,6 +6,7 @@ using Slugburn.DarkestNight.Rules.Blights.Implementations;
 using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Events;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Items;
 using Slugburn.DarkestNight.Rules.Items.Artifacts;
 using Slugburn.DarkestNight.Rules.Maps;
 using Slugburn.DarkestNight.Rules.Players;
@@ -125,13 +126,9 @@ namespace Slugburn.DarkestNight.Rules
             hero.JoinGame(this, player);
         }
 
-        public void IncreaseDarkness()
+        public void IncreaseDarkness(int count = 1)
         {
-            // increase darkness by one automatically
-            Darkness++;
-
-            // increase darkness by number of descrations in play
-            Darkness += Board.Spaces.Sum(space => space.Blights.Count(blight => blight is Desecration));
+            Darkness+=count;
 
             if (Darkness <= 30)
                 return;
@@ -176,12 +173,16 @@ namespace Slugburn.DarkestNight.Rules
             Darkness = Math.Max(0, Darkness - 1);
         }
 
-        public void DestroyBlight(int blightId)
+        public void DestroyBlight(Hero hero, int blightId)
         {
             var blight = _blights[blightId];
-            _blights.Remove(blightId);
             var location = blight.Location;
             var space = Board[location];
+            // Shrouds prevent any other type of blight from being destroyed
+            if (!(blight is Shroud))
+                if (space.GetActiveBlights<Shroud>(hero).Any()) return;
+
+            _blights.Remove(blightId);
             space.RemoveBlight(blight);
             Triggers.Send(GameTrigger.BlightDestroyed, location);
         }
@@ -223,6 +224,16 @@ namespace Slugburn.DarkestNight.Rules
         public IEnumerable<IBlight> GetBlights()
         {
             return Board.Spaces.SelectMany(s => s.Blights);
+        }
+
+        public IEnumerable<T> GetActiveBlights<T>() where T: IBlight
+        {
+            return Board.Spaces.SelectMany(x => x.GetActiveBlights<T>());
+        }
+
+        public IItem CreateItem(string itemName)
+        {
+            return ItemFactory.Create(NextId(), itemName);
         }
     }
 }

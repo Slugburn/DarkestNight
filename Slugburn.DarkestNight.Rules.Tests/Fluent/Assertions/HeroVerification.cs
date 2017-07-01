@@ -13,7 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private readonly string _heroName;
         private readonly List<Location> _invalidLocations;
         private readonly List<Location> _specifiedLocations;
-        private bool _expectedActionAvailable;
+        private bool? _isActionAvailable;
         private int _expectedAvailableMovement;
         private bool _expectedCanGainGrace;
         private int _expectedDiceCount;
@@ -45,7 +45,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         public HeroVerification(string heroName)
         {
             _heroName = heroName;
-            _expectedActionAvailable = true;
             _expectedCanGainGrace = true;
             _invalidLocations = new List<Location>();
             _specifiedLocations = new List<Location>();
@@ -77,9 +76,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
                 Assert.That(hero.Grace, Is.EqualTo(_grace), $"Unexpected Grace for {hero.Name}.");
             if (_secrecy.HasValue)
                 Assert.That(hero.Secrecy, Is.EqualTo(_secrecy), "Unexpected Secrecy.");
-            Assert.That(hero.IsActionAvailable, Is.EqualTo(_expectedActionAvailable),
-                _expectedActionAvailable ? "Should not have used action." : "Should have used action.");
-            Assert.That(hero.CanGainGrace, Is.EqualTo(_expectedCanGainGrace), "Unexpected CanGainGrace");
+            hero.IsActionAvailable.ShouldBeIfNotNull(_isActionAvailable, "IsActionAvailable");
+            Assert.That(hero.CanGainGrace(), Is.EqualTo(_expectedCanGainGrace), "Unexpected CanGainGrace");
             Assert.That(hero.Location, Is.EqualTo(_location));
             var validLocations = hero.GetValidMovementLocations().ToList();
             var disallowedMovement = validLocations.Intersect(_invalidLocations);
@@ -201,13 +199,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 
         public HeroVerification HasNotUsedAction()
         {
-            _expectedActionAvailable = true;
+            _isActionAvailable = true;
             return this;
         }
 
         public HeroVerification HasUsedAction()
         {
-            _expectedActionAvailable = false;
+            _isActionAvailable = false;
             return this;
         }
 

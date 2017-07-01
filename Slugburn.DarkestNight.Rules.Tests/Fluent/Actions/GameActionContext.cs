@@ -19,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         public IGameActionContext BlightDestroyed(string location, string blightType)
         {
             var blightId = GetBlightId(location, blightType);
-            GetGame().DestroyBlight(blightId);
+            GetGame().DestroyBlight(GetHero(null), blightId);
             return this;
         }
 

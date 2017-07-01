@@ -14,13 +14,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
         public override void Activate(Hero hero)
         {
             base.Activate(hero);
-            hero.CanGainGrace = false;
+            hero.IsGraceGainBlocked = true;
         }
 
         public override bool Deactivate(Hero hero)
         {
             if (!base.Deactivate(hero)) return false;
-            hero.CanGainGrace = true;
+            hero.IsGraceGainBlocked = false;
             return true;
         }
 

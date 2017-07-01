@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Slugburn.DarkestNight.Rules.Blights.Implementations;
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Players;
@@ -52,7 +53,10 @@ namespace Slugburn.DarkestNight.Rules.Enemies
         public void StartTurn()
         {
             IsTakingTurn = true;
-            _game.IncreaseDarkness();
+
+            // increase darkness by one plus number of descrations in play
+            var darknessIncrease = 1 + _game.GetActiveBlights<Desecration>().Count();
+            _game.IncreaseDarkness(darknessIncrease);
 
             // roll to detect and move
             MovementRoll = Die.Roll();

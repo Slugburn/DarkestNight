@@ -33,7 +33,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
 
         private static bool IsValidTarget(Hero hero, Hero target)
         {
-            return target.Location == hero.Location && target.Grace < target.DefaultGrace && target.CanGainGrace;
+            return target.Location == hero.Location && target.Grace < target.DefaultGrace && target.CanGainGrace();
         }
 
         internal class BenedictionAction : PowerAction, ICallbackHandler

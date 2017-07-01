@@ -22,7 +22,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 
         public INecromancerContext IsTakingTurn(bool isTakingTurn = true)
         {
-            GetGame().Necromancer.IsTakingTurn = isTakingTurn;
+            var necromancer = GetGame().Necromancer;
+            if (!isTakingTurn)
+                necromancer.IsTakingTurn = false;
+            else
+                necromancer.StartTurn();
+
             return this;
         }
     }

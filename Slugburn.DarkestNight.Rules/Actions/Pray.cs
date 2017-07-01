@@ -23,7 +23,9 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public override bool IsAvailable(Hero hero)
         {
-            return base.IsAvailable(hero) && (hero.Grace < hero.DefaultGrace || hero.Powers.Any(p => p.Exhausted));
+            return base.IsAvailable(hero)
+                   && (hero.Grace < hero.DefaultGrace && hero.CanGainGrace()
+                       || hero.Powers.Any(p => p.Exhausted));
         }
 
         private class PrayerRoll : IRollHandler

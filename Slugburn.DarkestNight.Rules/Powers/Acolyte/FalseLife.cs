@@ -23,7 +23,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
         public override bool IsUsable(Hero hero)
         {
-            return base.IsUsable(hero) && hero.Grace < hero.DefaultGrace && hero.Location != Location.Monastery;
+            return base.IsUsable(hero) && hero.Grace < hero.DefaultGrace && hero.Location != Location.Monastery && hero.CanGainGrace();
         }
 
         internal class FalseLifeAction : PowerCommand

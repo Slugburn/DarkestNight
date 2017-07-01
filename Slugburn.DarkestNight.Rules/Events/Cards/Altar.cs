@@ -9,7 +9,8 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             EventDetail.Create("Altar", 3,
                 x => x.Text("Roll 1d and take the highest")
                     .Row(4, 6, "Pure Altar", "You may spend 1 Secrecy to gain 1 Grace",
-                        o => o.Option("spend-secrecy", "Spend Secrecy", h => h.Secrecy > 0).Option("cont", "Continue"))
+                        o => o.Option("spend-secrecy", "Spend Secrecy", h => h.Secrecy > 0 && h.CanGainGrace())
+                            .Option("cont", "Continue"))
                     .Row(1, 3, "Defiled Altar", "Spend 1 Grace or +1 Darkness",
                         o => o.Option("spend-grace", "Spend Grace", h => h.CanSpendGrace).Option("increase-darkness", "+1 Darkness"))
                     .Option("roll", "Roll"));

@@ -23,7 +23,7 @@ namespace Slugburn.DarkestNight.Rules.Blights
 
         public void Win(Hero hero)
         {
-            hero.Game.DestroyBlight(Id);
+            hero.Game.DestroyBlight(hero, Id);
             hero.Triggers.Send(HeroTrigger.DestroyedBlight);
         }
 

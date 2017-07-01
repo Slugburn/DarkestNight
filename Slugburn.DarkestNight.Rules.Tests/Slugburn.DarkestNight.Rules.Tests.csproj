@@ -62,7 +62,13 @@
     <Compile Include="Blights\CorruptionTest.cs" />
     <Compile Include="Blights\CurseTest.cs" />
     <Compile Include="Blights\DarkFogTest.cs" />
+    <Compile Include="Blights\DesecrationTest.cs" />
     <Compile Include="Blights\EnemyLairTest.cs" />
+    <Compile Include="Blights\EvilPresenceTest.cs" />
+    <Compile Include="Blights\ShroudTest.cs" />
+    <Compile Include="Blights\SpiesTest.cs" />
+    <Compile Include="Blights\TaintTest.cs" />
+    <Compile Include="Blights\UnholyAuraTest.cs" />
     <Compile Include="Events\AltarTest.cs" />
     <Compile Include="Events\CloseCallTest.cs" />
     <Compile Include="Events\DarkScryingTest.cs" />

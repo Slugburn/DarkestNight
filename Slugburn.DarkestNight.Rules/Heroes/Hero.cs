@@ -43,7 +43,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             _stash = new Stash();
             Triggers = new TriggerRegistry<HeroTrigger, Hero>(this);
             IsActionAvailable = true;
-            CanGainGrace = true;
+            IsGraceGainBlocked = false;
 
             _commands = new Dictionary<string, ICommand>(StringComparer.InvariantCultureIgnoreCase);
             _tactics = new Dictionary<string, ITactic>(StringComparer.InvariantCultureIgnoreCase);
@@ -102,7 +102,15 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public IList<string> AvailableActions { get; set; }
 
-        public bool CanGainGrace { get; set; }
+        public bool CanGainGrace()
+        {
+            if (IsGraceGainBlocked) return false;
+            // Taints prevent gaining Grace
+            return !IsAffectedByBlight<Taint>();
+        }
+
+        public bool IsGraceGainBlocked { get; set; }
+
         public List<IEnemy> Enemies { get; set; }
 
         public int TravelSpeed { get; set; }
@@ -278,6 +286,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void GainGrace(int amount, int max)
         {
+            if (!CanGainGrace()) return;
+
             if (Grace < max)
                 Grace = Math.Min(Grace + amount, max);
         }
@@ -404,15 +414,20 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var validRolls = assignments.Select(x => x.DieValue).Intersect(CurrentRoll.AdjustedRoll).Count() == assignments.Count;
             if (!validRolls)
                 throw new Exception("Invalid die values specified.");
-            var validTargets = assignments.Select(x => x.TargetId).Intersect(ConflictState.SelectedTargets.Select(x => x.Id)).Count() == assignments.Count;
+            var selectedTargets = ConflictState.SelectedTargets.ToList();
+            var validTargets = assignments.Select(x => x.TargetId).Intersect(selectedTargets.Select(x => x.Id)).Count() == assignments.Count;
             if (!validTargets)
                 throw new Exception("Invalid targets specified.");
-            foreach (var assignment in assignments)
-            {
-                var target = ConflictState.SelectedTargets.Single(x => x.Id == assignment.TargetId);
-                target.ResultNumber = assignment.DieValue;
+
+            // Assign the die values
+            var targetDieValues = (from target in selectedTargets
+                join assignment in assignments on target.Id equals assignment.TargetId
+                select new {target, assignment.DieValue}).ToList();
+            targetDieValues.ForEach(x => x.target.ResultNumber = x.DieValue);
+
+            // resolve attacks
+            foreach (var target in selectedTargets)
                 ResolveAttack(target);
-            }
         }
 
         public void RemoveRollModifiers(string name)
@@ -420,7 +435,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             _rollModifiers.RemoveAll(x => x.Name == name);
         }
 
-        public void AddAction(Commands.ICommand command)
+        public void AddAction(ICommand command)
         {
             _commands.Add(command.Name, command);
         }
@@ -441,7 +456,12 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public bool IsAffectedByBlight<T>() where T : IBlight
         {
-            return GetSpace().GetActiveBlights<T>().Any() ;
+            return GetActiveBlights<T>().Any() ;
+        }
+
+        public IEnumerable<T> GetActiveBlights<T>() where T : IBlight
+        {
+            return GetSpace().GetActiveBlights<T>();
         }
 
         public bool HasAction(string actionName)
@@ -576,7 +596,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void AcceptConflictResult()
         {
             var targets = ConflictState.SelectedTargets;
-            var target = targets.First();
+            // Shrouds are priority target since they prevent destruction of other blight types
+            var prioritizedTargets = targets.OrderBy(t=>t.Conflict is Shroud ? 0: 1);
+
+            var target = prioritizedTargets.First();
             var enemy = target.Conflict as IEnemy;
             target.Resolve(this);
             targets.Remove(target);
@@ -664,11 +687,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             _endingTurn = true;
             IsActionAvailable = false;
 
-            var spies = GetSpace().GetActiveBlights<Spies>().Count();
+            var spies = GetActiveBlights<Spies>().Count();
             LoseSecrecy(spies, "Spies");
 
             // Enemy lair blights generate enemies to fight/elude
-            var enemies = GetSpace().GetActiveBlights<EnemyLair>().GenerateEnemies().ToList();
+            var enemies = GetActiveBlights<EnemyLair>().GenerateEnemies().ToList();
             if (enemies.Any())
             {
                 Enemies.AddRange(enemies);

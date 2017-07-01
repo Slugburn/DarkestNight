@@ -8,5 +8,6 @@ namespace Slugburn.DarkestNight.Rules.Items
     {
         string Text { get; }
         Hero Owner { get; set; }
+        int Id { get; }
     }
 }

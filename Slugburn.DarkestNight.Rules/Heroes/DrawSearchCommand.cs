@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Slugburn.DarkestNight.Rules.Items;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Powers;
@@ -21,35 +20,36 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             public void HandleCallback(Hero hero, string path, object data)
             {
                 var result = (Find) data;
+                var game = hero.Game;
                 switch (result)
                 {
                     case Find.Key:
-                        hero.AddToInventory(new Key());
+                        hero.AddToInventory(game.CreateItem("Key"));
                         break;
                     case Find.BottledMagic:
-                        hero.AddToInventory(new BottledMagic());
+                        hero.AddToInventory(game.CreateItem("Bottled Magic"));
                         break;
                     case Find.SupplyCache:
                         SuppyCache(hero);
                         break;
                     case Find.TreasureChest:
-                        hero.AddToInventory(new TreasureChest());
+                        hero.AddToInventory(game.CreateItem("Treasure Chest"));
                         break;
                     case Find.Waystone:
-                        hero.AddToInventory(new Waystone());
+                        hero.AddToInventory(game.CreateItem("Waystone"));
                         break;
                     case Find.ForgottenShrine:
                         hero.GainGrace(2, int.MaxValue);
                         break;
                     case Find.VanishingDust:
-                        hero.AddToInventory(new VanishingDust());
+                        hero.AddToInventory(game.CreateItem("Vanishing Dust"));
                         break;
                     case Find.Epiphany:
                         Epiphany(hero);
                         break;
                     case Find.Artifact:
-                        var artifactName = hero.Game.ArtifactDeck.Draw();
-                        var artifact = ItemFactory.Create(artifactName);
+                        var artifactName = game.ArtifactDeck.Draw();
+                        var artifact = game.CreateItem(artifactName);
                         hero.AddToInventory(artifact);
                         break;
                     default:
