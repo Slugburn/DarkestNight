@@ -19,5 +19,10 @@ namespace Slugburn.DarkestNight.Rules.Tests
             if (expected.HasValue)
                 actual.ShouldBe(expected.Value, message);
         }
+        public static void ShouldBeIfNotNull<T>(this T actual, T expected, string message) where T:class
+        {
+            if (expected != null)
+                actual.ShouldBe(expected, message);
+        }
     }
 }

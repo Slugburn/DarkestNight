@@ -22,6 +22,12 @@ namespace Slugburn.DarkestNight.Rules.Players.Models
 
         public class Option
         {
+            public Option(string code, string text)
+            {
+                Code = code;
+                Text = text;
+            }
+
             public string Code { get; set; }
             public string Text { get; set; }
         }
@@ -33,7 +39,7 @@ namespace Slugburn.DarkestNight.Rules.Players.Models
                 Title = obj.Title,
                 Text = obj.Text,
                 Fate = obj.Fate,
-                Options = obj.Options.Select(o => new Option {Code = o.Code, Text = o.Text}).ToArray()
+                Options = obj.Options.Select(o => new Option(o.Code, o.Text)).ToArray()
             };
             if (obj.Rows != null)
                 e.Rows = obj.Rows.Select(r=> new Row

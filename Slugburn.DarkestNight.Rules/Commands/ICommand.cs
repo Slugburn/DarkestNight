@@ -6,7 +6,7 @@ namespace Slugburn.DarkestNight.Rules.Commands
     {
         string Name { get; }
         string Text { get; }
-        void Execute(Hero hero);
         bool IsAvailable(Hero hero);
+        void Execute(Hero hero);
     }
 }

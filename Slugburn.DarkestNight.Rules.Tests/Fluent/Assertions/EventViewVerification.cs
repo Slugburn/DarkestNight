@@ -7,39 +7,43 @@ using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
-    public class EventViewVerification : IVerifiable
+    public class EventViewVerification : ChildVerification
     {
         private string[] _options;
         private string _activeRowText;
         private string _activeRowSubText;
         private string _title;
-        private int _fate;
+        private int? _fate;
         private string _text;
         private bool _isVisible = true;
 
-        public EventViewVerification IsVisible(bool expected = true)
+        public EventViewVerification(IVerifiable parent) : base(parent)
         {
-            _isVisible = expected;
-            return this;
         }
 
-        public void Verify(ITestRoot root)
+        public override void Verify(ITestRoot root)
         {
             var player = root.Get<FakePlayer>();
             var view = player.Event;
             if (_isVisible)
-                player.State.ShouldBe(PlayerState.Event);
+                view.ShouldNotBeNull();
             else
                 view.ShouldBeNull();
             if (_title != null)
             {
                 view.Title.ShouldBe(_title);
-                view.Fate.ShouldBe(_fate);
-                view.Text.ShouldBe(_text);
+                view.Fate.ShouldBeIfNotNull(_fate, "Fate");
+                view.Text.ShouldBeIfNotNull(_text, "Text");
             }
             if (_options != null)
                 view.Options.Select(x => x.Text).ShouldBe(_options);
             VerifyActiveRow(view);
+        }
+
+        public EventViewVerification IsVisible(bool expected = true)
+        {
+            _isVisible = expected;
+            return this;
         }
 
         private void VerifyActiveRow(PlayerEvent view)
@@ -75,11 +79,29 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
+        public EventViewVerification HasTitle(string expected)
+        {
+            _title = expected;
+            return this;
+        }
+
         public EventViewVerification HasBody(string title, int fate, string text)
         {
             _title = title;
             _fate = fate;
             _text = text;
+            return this;
+        }
+
+        public EventViewVerification HasFate(int expected)
+        {
+            _fate = expected;
+            return this;
+        }
+
+        public EventViewVerification HasText(string expected)
+        {
+            _text = expected;
             return this;
         }
     }

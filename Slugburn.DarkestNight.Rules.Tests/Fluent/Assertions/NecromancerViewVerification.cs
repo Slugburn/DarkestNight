@@ -6,13 +6,17 @@ using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
-    public class NecromancerViewVerification : IVerifiable
+    public class NecromancerViewVerification : ChildVerification
     {
         private int _roll;
         private Location _movingTo;
         private List<string> _detected;
 
-        public void Verify(ITestRoot root)
+        public NecromancerViewVerification(IVerifiable parent) : base(parent)
+        {
+        }
+
+        public override void Verify(ITestRoot root)
         {
             var player = root.Get<FakePlayer>();
             player.State.ShouldBe(PlayerState.Necromancer);

@@ -33,6 +33,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 
         public ITestRoot Then(IVerifiable verifiable)
         {
+            while (verifiable is IChildVerifiable)
+                verifiable = ((IChildVerifiable) verifiable).Parent;
             verifiable.Verify(this);
             return this;
         }

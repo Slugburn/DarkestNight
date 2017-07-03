@@ -2,9 +2,13 @@ using Shouldly;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
-    public class HeroEventVerification : IVerifiable
+    public class HeroEventVerification : ChildVerification
     {
         private bool? _canBeIgnored;
+
+        public HeroEventVerification(IVerifiable parent) : base(parent)
+        {
+        }
 
         public HeroEventVerification CanBeIgnored(bool expected = true)
         {
@@ -12,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public void Verify(ITestRoot root)
+        public override void Verify(ITestRoot root)
         {
             var r = (TestRoot)root;
             var hero = r.GetGame().ActingHero;

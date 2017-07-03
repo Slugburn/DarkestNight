@@ -51,21 +51,23 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             }
         }
 
-        private class DeactivateForm : IAction
+        private class DeactivateForm : StandardAction
         {
             public const string ActionName = "Deactivate Form";
-            public string Name => ActionName;
 
-            public string Text => "Deactivate all Forms.";
+            public DeactivateForm() : base(ActionName)
+            {
+                Text = "Deactivate all Forms.";
+            }
 
-            public void Execute(Hero hero)
+            public override void Execute(Hero hero)
             {
                 DeactivateAllForms(hero);
             }
 
-            public bool IsAvailable(Hero hero)
+            public override bool IsAvailable(Hero hero)
             {
-                return hero.IsActionAvailable && hero.Powers.OfType<IDruidForm>().Any(x => x.IsActive);
+                return base.IsAvailable(hero) &&  hero.Powers.OfType<IDruidForm>().Any(x => x.IsActive);
             }
         }
     }

@@ -17,6 +17,11 @@ namespace Slugburn.DarkestNight.Rules.Actions
                    + "Succeed or fail, you lose 1 Secrecy for revealing yourself.";
         }
 
+        public override bool IsAvailable(Hero hero)
+        {
+            return base.IsAvailable(hero) && hero.GetBlights().Any();
+        }
+
         public override void Execute(Hero hero)
         {
             hero.SetRoll(RollBuilder.Create<AttackRoll>());
@@ -33,10 +38,6 @@ namespace Slugburn.DarkestNight.Rules.Actions
             hero.DisplayConflictState();
         }
 
-        public override bool IsAvailable(Hero hero)
-        {
-            return base.IsAvailable(hero) && hero.GetBlights().Any();
-        }
 
         private class AttackRoll : IRollHandler
         {

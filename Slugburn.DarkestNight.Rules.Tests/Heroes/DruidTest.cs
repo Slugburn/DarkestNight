@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Slugburn.DarkestNight.Rules.Tests.Fakes;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
 using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 
@@ -181,7 +180,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WithHero("Druid").HasPowers("Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form")
                 .Secrecy(0) // secrecy needs to be <5 in order to use hide
                 .Power("Tree Form").IsActive()
-                .When.Player.StartsTurn()
+                .Given.Hero("Druid").IsTakingTurn()
                 .Then(Verify.Hero().HasAvailableActions("Hide", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form"));
         }
 
@@ -214,7 +213,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario
                 .Game.WithHero("Druid").HasPowers("Visions")
                 .Given.Hero().HasDrawnEvent("Renewal")
-                .Then(Verify.Hero().CurrentEvent.CanBeIgnored(false))
+                .Then(Verify.Hero().HasUnresolvedEvents(1).CurrentEvent.CanBeIgnored(false))
                 .Then(Verify.Player.EventView.HasOptions("Continue"));
         }
 

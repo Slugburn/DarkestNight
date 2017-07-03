@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public virtual bool IsAvailable(Hero hero)
         {
-            return hero.IsTakingTurn && hero.IsActionAvailable && hero.CurrentEvent == null;
+            return hero.State == HeroState.TakingTurn && hero.IsTakingTurn && hero.IsActionAvailable && hero.CurrentEvent == null;
         }
     }
 }

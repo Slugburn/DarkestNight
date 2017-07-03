@@ -34,7 +34,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             if (!Owner.CanSpendGrace) return false;
             if (Owner.Grace < amount) return false;
             var question = new PlayerAskQuestion("Intercession",
-                $"Should {Owner.Name} spend {amount} Grace instead of {other.Name} losing {amount} Grace?");
+                $"Should {Owner.Name} spend {amount} Grace instead of {other.Name} losing {amount} Grace?", new[] {"Yes", "No"});
             other.Player.DisplayAskQuestion(question, Callback.ForPower(Owner, this, $"{other.Name}:loss:{amount}"));
             return true;
         }
@@ -49,7 +49,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
                 return true;
             }
             var question = new PlayerAskQuestion("Intercession",
-                $"Should {Owner.Name} spend {amount} Grace instead of {other.Name} spending {amount} Grace?");
+                $"Should {Owner.Name} spend {amount} Grace instead of {other.Name} spending {amount} Grace?", new [] {"Yes", "No"});
             other.Player.DisplayAskQuestion(question, Callback.ForPower(Owner, this, $"{other.Name}:spent:{amount}"));
             return true;
         }
@@ -61,18 +61,18 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             var otherName = args[0];
             var op = args[1];
             var amount = int.Parse(args[2]);
-            var answer = (bool) data;
+            var answer = (string) data;
             var other = hero.Game.GetHero(otherName);
             if (op == "loss")
             {
-                if (answer)
+                if (answer == "Yes")
                     Owner.SpendGrace(amount);
                 else
                     other.LoseGrace(amount, false);
             }
             else if (op == "spent")
             {
-                if (answer)
+                if (answer == "Yes")
                     Owner.SpendGrace(amount);
                 else
                     other.SpendGrace(amount, false);

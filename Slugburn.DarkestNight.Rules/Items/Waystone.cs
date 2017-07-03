@@ -32,7 +32,7 @@ namespace Slugburn.DarkestNight.Rules.Items
             hero.MoveTo(location);
             hero.GainSecrecy(1, int.MaxValue);
             Owner.RemoveFromInventory(this);
-            hero.UpdateAvailableActions();
+            hero.UpdateAvailableCommands();
         }
     }
 }

@@ -16,40 +16,53 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 
         protected override void OnLearn()
         {
-            Owner.Triggers.Add(HeroTrigger.EventDrawn, Name, new VisionsEventDrawnHandler());
-            Owner.Triggers.Add(HeroTrigger.EventOptionSelected, Name, new VisionsEventOptionsSelectedHandler());
+            Owner.Game.Triggers.Add(GameTrigger.EventDrawn, Name, new VisionsEventDrawnHandler(this));
+            Owner.Game.Triggers.Add(GameTrigger.EventOptionSelected, Name, new VisionsEventOptionsSelectedHandler(this));
         }
 
 
-        private class VisionsEventDrawnHandler : ITriggerHandler<Hero>
+        private class VisionsEventDrawnHandler : ITriggerHandler<Game>
         {
-            public void HandleTrigger(Hero registrar, string source, TriggerContext context)
+            private readonly Visions _visions;
+
+            public VisionsEventDrawnHandler(Visions visions)
             {
-                var hero = registrar;
-                var power = hero.GetPower(PowerName);
-                if (!power.IsUsable(hero)) return;
+                _visions = visions;
+            }
+
+            public void HandleTrigger(Game game, string source, TriggerContext context)
+            {
+                var hero = _visions.Owner;
+                if (hero != game.ActingHero) return;
+                if (!_visions.IsUsable(hero)) return;
                 var card = hero.CurrentEvent;
                 if (!card.IsIgnorable) return;
                 card.AddOption(PowerName, $"Ignore [{PowerName}]");
             }
         }
 
-        private class VisionsEventOptionsSelectedHandler : ITriggerHandler<Hero>
+        private class VisionsEventOptionsSelectedHandler : ITriggerHandler<Game>
         {
-            public void HandleTrigger(Hero registrar, string source, TriggerContext context)
+            private readonly Visions _visions;
+
+            public VisionsEventOptionsSelectedHandler(Visions visions)
             {
-                var hero = registrar;
+                _visions = visions;
+            }
+
+            public void HandleTrigger(Game game, string source, TriggerContext context)
+            {
+                var hero = _visions.Owner;
                 var selectedOption = hero.CurrentEvent.SelectedOption;
                 if (selectedOption != PowerName) return;
 
-                var power = hero.GetPower(PowerName);
-                if (!power.IsUsable(hero)) return;
+                if (!_visions.IsUsable(hero)) return;
                 var card = hero.CurrentEvent;
                 if (!card.IsIgnorable) return;
 
                 context.Cancel = true;
                 hero.EndEvent();
-                power.Exhaust(hero);
+                _visions.Exhaust(hero);
             }
         }
     }

@@ -9,13 +9,17 @@ using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
-    public class BlightSelectionViewVerification : IVerifiable
+    public class BlightSelectionViewVerification : ChildVerification
     {
         private readonly List<BlightLocationVerification> _locations = new List<BlightLocationVerification>();
         private readonly List<PlayerBlight> _playerBlights = new List<PlayerBlight>();
         private int _max = 1;
 
-        public void Verify(ITestRoot root)
+        public BlightSelectionViewVerification(IVerifiable parent) : base(parent)
+        {
+        }
+
+        public override void Verify(ITestRoot root)
         {
             var view = root.Get<FakePlayer>().BlightSelection;
             var expected = _playerBlights.Select(ToDescription);
@@ -43,18 +47,16 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public class BlightLocationVerification : IVerifiable
+        public class BlightLocationVerification : ChildVerification
         {
             private readonly Location _location;
-            private readonly BlightSelectionViewVerification _parent;
 
-            public BlightLocationVerification(BlightSelectionViewVerification parent, Location location)
+            public BlightLocationVerification(BlightSelectionViewVerification parent, Location location) :base(parent)
             {
-                _parent = parent;
                 _location = location;
             }
 
-            public void Verify(ITestRoot root)
+            public override void Verify(ITestRoot root)
             {
             }
 
@@ -62,8 +64,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             {
                 var playerBlights = blights.Select(x => x.ToEnum<BlightType>())
                     .Select(blight => new PlayerBlight {Location = _location.ToString(), BlightType = blight.ToString()});
-                _parent._playerBlights.AddRange(playerBlights);
-                return _parent;
+                var parent = (BlightSelectionViewVerification)Parent;
+                parent._playerBlights.AddRange(playerBlights);
+                return parent;
             }
         }
     }

@@ -86,9 +86,25 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             Prayer = view;
         }
 
+        public void AddHero(PlayerHero view)
+        {
+            Heroes.Add(view);
+        }
+
+        public void UpdateHeroCommands(string heroName, IEnumerable<PlayerCommand> commands)
+        {
+            Heroes.Single(x => x.Name == heroName).Commands = commands.ToList();
+        }
+
+        public void UpdateHeroStatus(string heroName, PlayerHeroStatus status)
+        {
+            Heroes.Single(x => x.Name == heroName).Status = status;
+        }
+
         public PlayerAskQuestion AskQuestion { get; set; }
         public PlayerSearch Search { get; set; }
         public PlayerPrayer Prayer { get; set; }
+        public List<PlayerHero> Heroes { get; set; } = new List<PlayerHero>();
 
 
         public void SelectEventOption(string option)
@@ -160,7 +176,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             CallbackRouter.Route(_game, _callback, selectedHero);
         }
 
-        public void AnswerQuestion(bool answer)
+        public void AnswerQuestion(string answer)
         {
             CallbackRouter.Route(_game, _callback, answer);
         }

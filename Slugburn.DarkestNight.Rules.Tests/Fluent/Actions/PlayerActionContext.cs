@@ -156,9 +156,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             return this;
         }
 
-        public IPlayerActionContext AnswersQuestion(string title, bool answer)
+        public IPlayerActionContext AnswersQuestion(string title, string answer)
         {
             var player = GetPlayer();
+            player.AskQuestion.ShouldNotBeNull("No question has been asked.");
             player.AskQuestion.Title.ShouldBe(title);
             player.AnswerQuestion(answer);
             return this;

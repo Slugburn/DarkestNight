@@ -7,11 +7,11 @@ namespace Slugburn.DarkestNight.Rules.Players.Models
     public class PlayerHeroSelection
     {
 
-        public ICollection<PlayerHero> Heroes { get; set; }
+        public ICollection<string> Heroes { get; set; }
 
         public PlayerHeroSelection(IEnumerable<Hero> heroes) : base()
         {
-            Heroes = heroes.Select(PlayerHero.FromHero).ToList();
+            Heroes = heroes.Select(h=>h.Name).ToList();
         }
     }
 }

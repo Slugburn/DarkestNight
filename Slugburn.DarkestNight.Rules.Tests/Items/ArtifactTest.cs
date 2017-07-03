@@ -1,5 +1,5 @@
-﻿using NUnit.Framework;
-using Slugburn.DarkestNight.Rules.Items.Artifacts;
+﻿using System;
+using NUnit.Framework;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Items
@@ -7,6 +7,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Items
     [TestFixture]
     public class ArtifactTest
     {
+        // 1d in fights.
         [Test]
         public void BloodRing()
         {
@@ -15,6 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Items
                 .Then(Verify.Hero().FightDice(2));
         }
 
+        // +1d in searches.
         [Test]
         public void CrystalBall()
         {
@@ -23,13 +25,25 @@ namespace Slugburn.DarkestNight.Rules.Tests.Items
                 .Then(Verify.Hero().SearchDice(2));
         }
 
+        // +1d when eluding.
         [Test]
-        public void GhostMail_SpendSecrecy()
+        public void MagicMask()
         {
             TestScenario.Game
-                .WithHero().HasItems("Ghost Mail").IsTakingTurn(false)
-                .Then(Verify.Hero().CanTakeAction(GhostMail.CommandName))
-                .When.Player.TakesAction(GhostMail.CommandName);
+                .WithHero().HasItems("Magic Mask")
+                .Then(Verify.Hero().EludeDice(2));
+        }
+
+        // You may ignore the effect of one blight each turn.
+        [Test]
+        public void VanishingCowl()
+        {
+            TestScenario.Game
+                .WithHero().At("Village").HasItems("Vanishing Cowl")
+                .Location("Castle").HasBlights("Curse")
+                .When.Player.TakesAction("Vanishing Cowl").SelectsBlight("Castle", "Curse")
+                .When.Player.TakesAction("Travel").SelectsLocation("Castle")
+                .Then(Verify.Player.Hero().LostGrace(0));
         }
     }
 }

@@ -3,13 +3,17 @@ using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
-    public class PrayerViewVerification : IVerifiable
+    public class PrayerViewVerification : ChildVerification
     {
         private int[] _roll;
         private int _before;
         private int _after;
 
-        public void Verify(ITestRoot root)
+        public PrayerViewVerification(IVerifiable parent) : base(parent)
+        {
+        }
+
+        public override void Verify(ITestRoot root)
         {
             var view = root.Get<FakePlayer>().Prayer;
             view.ShouldNotBeNull();

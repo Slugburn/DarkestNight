@@ -162,12 +162,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
 
         // Intercession (Bonus)
         // Whenever a hero at your location loses or spends Grace, they may spend your Grace instead.
-        [TestCase(true)]
-        [TestCase(false)]
-        public void Intercession_Spend(bool answer)
+        [TestCase("Yes")]
+        [TestCase("No")]
+        public void Intercession_Spend(string answer)
         {
-            var expectedPriestLoss = answer ? 1 : 0;
-            var expectedKnightLoss = answer ? 0 : 1;
+            var expectedPriestLoss = answer == "Yes" ? 1 : 0;
+            var expectedKnightLoss = answer == "Yes" ? 0 : 1;
             TestScenario.Game
                 .WithHero("Knight").At("Village")
                 .WithHero("Priest").At("Village").HasPowers("Intercession")
@@ -189,12 +189,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Then(Verify.Hero("Priest").LostGrace());
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void Intercession_LostGrace(bool answer)
+        [TestCase("Yes")]
+        [TestCase("No")]
+        public void Intercession_LostGrace(string answer)
         {
-            var expectedPriestLoss = answer ? 1 : 0;
-            var expectedKnightLoss = answer ? 0 : 1;
+            var expectedPriestLoss = answer == "Yes" ? 1 : 0;
+            var expectedKnightLoss = answer == "Yes" ? 0 : 1;
             TestScenario.Game
                 .WithHero("Knight").HasPowers("Reckless Abandon")
                 .WithHero("Priest").HasPowers("Intercession")

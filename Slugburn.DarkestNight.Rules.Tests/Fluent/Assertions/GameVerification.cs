@@ -8,6 +8,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private bool? _eventDeckIsReshuffled;
         private NecromancerVerification _necromancer;
 
+        public IVerifiable Parent => null;
+
         public void Verify(ITestRoot root)
         {
             var game = root.Get<Game>();
@@ -27,7 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         {
             get
             {
-                _necromancer = new NecromancerVerification();
+                _necromancer = new NecromancerVerification(this);
                 return _necromancer;
             }
         }

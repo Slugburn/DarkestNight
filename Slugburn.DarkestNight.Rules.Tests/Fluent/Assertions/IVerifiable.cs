@@ -4,4 +4,9 @@
     {
         void Verify(ITestRoot root);
     }
+
+    public interface IChildVerifiable : IVerifiable
+    {
+        IVerifiable Parent { get; }
+    }
 }

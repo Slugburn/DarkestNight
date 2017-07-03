@@ -74,6 +74,17 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             return this;
         }
 
+        public IGameContext NextEvent(params string[] eventNames)
+        {
+            var deck = GetGame().Events;
+            foreach (var eventName in eventNames.Reverse())
+            {
+                deck.Remove(eventName);
+                deck.Insert(0, eventName);
+            }
+            return this;
+        }
+
         public IGameContext NextBlight(params string[] blightNames)
         {
             foreach (var blightName in blightNames)

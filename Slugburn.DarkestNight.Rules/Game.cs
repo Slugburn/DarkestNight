@@ -10,6 +10,7 @@ using Slugburn.DarkestNight.Rules.Items;
 using Slugburn.DarkestNight.Rules.Items.Artifacts;
 using Slugburn.DarkestNight.Rules.Maps;
 using Slugburn.DarkestNight.Rules.Players;
+using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Spaces;
 using Slugburn.DarkestNight.Rules.Triggers;
@@ -124,6 +125,7 @@ namespace Slugburn.DarkestNight.Rules
         {
             Heroes.Add(hero);
             hero.JoinGame(this, player);
+            player.AddHero(PlayerHero.FromHero(hero));
         }
 
         public void IncreaseDarkness(int count = 1)

@@ -3,6 +3,8 @@
     public enum GameTrigger
     {
         BlightDestroyed,
-        NecromancerDetectsHeroes
+        NecromancerDetectsHeroes,
+        EventDrawn,
+        EventOptionSelected,
     }
 }

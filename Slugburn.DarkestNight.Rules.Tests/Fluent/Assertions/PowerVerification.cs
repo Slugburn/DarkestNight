@@ -9,7 +9,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private bool _exhausted;
         private bool _isActive;
 
-        public PowerVerification(string powerName)
+        public IVerifiable Parent => null;
+
+        public PowerVerification(string powerName) 
         {
             _powerName = powerName;
         }

@@ -55,6 +55,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             Enemies = new List<IEnemy>();
         }
 
+        public HeroState State { get; set; }
+
         private bool LoseNextTurn { get; set; }
         public TriggerRegistry<HeroTrigger, Hero> Triggers { get; }
         public RollState CurrentRoll { get; set; }
@@ -100,7 +102,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public ConflictState ConflictState { get; set; }
 
-        public IList<string> AvailableActions { get; set; }
+        public IList<ICommand> AvailableCommands { get; set; }
 
         public bool CanGainGrace()
         {
@@ -126,7 +128,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void AddActionFilter(string name, ICollection<string> allowed)
         {
-            var filter = new ActionFilter {Name = name, Allowed = allowed};
+            var filter = new ActionFilter(name, allowed);
             _actionFilters.Add(filter);
         }
 
@@ -145,24 +147,24 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             return Game.Board[Location];
         }
 
-        public IList<string> GetAvailableActions()
+        private IList<ICommand> GetAvailableCommands()
         {
             var heroCommands = _commands.Values;
             var locationCommands = GetSpace().GetActions();
             var itemCommands = GetLocationInventory().OfType<ICommand>();
             var actions = heroCommands.Concat(locationCommands).Concat(itemCommands)
-                .Where(x => x.IsAvailable(this)).Select(x => x.Name);
+                .Where(x => x.IsAvailable(this));
 
             // use a free action if we've got one
             if (HasFreeAction)
             {
                 if (_freeActionFilter == null) return actions.ToList();
                 return actions
-                    .Intersect(_freeActionFilter.Allowed)
-                    .Concat(new[] {"Skip Free Action"})
+                    .Where(_freeActionFilter.IsAllowed)
+                    .Concat(new [] { _commands["Skip Free Action"] })
                     .ToList();
             }
-            var filtered = _actionFilters.Aggregate(actions, (x, filter) => x.Intersect(filter.Allowed));
+            var filtered = _actionFilters.Aggregate(actions, (x, filter) => x.Where(filter.IsAllowed));
             return filtered.ToList();
         }
 
@@ -183,8 +185,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (interceded) return;
             var before = Grace;
             Grace = Math.Max(Grace - amount, 0);
-            if (Grace != before)
-                UpdateAvailableActions();
+            if (Grace == before) return;
+            UpdateHeroStatus();
+            UpdateAvailableCommands();
         }
 
         public void SpendGrace(int amount, bool canIntercede = true)
@@ -194,7 +197,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (Grace - amount < 0)
                 throw new Exception("Insufficient Grace.");
             Grace -= amount;
-            UpdateAvailableActions();
+            UpdateHeroStatus();
+            UpdateAvailableCommands();
         }
 
         private IItem GetItem(int itemId)
@@ -233,20 +237,23 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             var card = EventFactory.CreateCard(eventName);
             CurrentEvent = card.Detail.GetHeroEvent(this);
-            Triggers.Send(HeroTrigger.EventDrawn);
-            UpdateAvailableActions();
+            Game.Triggers.Send(GameTrigger.EventDrawn);
+            State = HeroState.EventDrawn;
+            UpdateAvailableCommands();
             DisplayCurrentEvent();
         }
 
         public void LoseSecrecy(string sourceName)
         {
             LoseSecrecy(1, sourceName);
+            UpdateHeroStatus();
         }
 
         public void LoseSecrecy(int amount, string sourceName = null)
         {
             if (!Triggers.Send(HeroTrigger.LosingSecrecy, sourceName)) return;
             Secrecy = Math.Max(Secrecy - amount, 0);
+            UpdateHeroStatus();
         }
 
         public void SpendSecrecy(int amount)
@@ -254,10 +261,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (Secrecy - amount < 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
             Secrecy -= amount;
-            UpdateAvailableActions();
+            UpdateHeroStatus();
+            UpdateAvailableCommands();
         }
-
-
 
         public void ChooseAction()
         {
@@ -276,8 +282,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             Location = location;
             var curses = GetBlights().Count(b => b is Curse && !Game.IsBlightSupressed(b, this));
             LoseGrace(curses);
-            UpdateAvailableActions();
             _movedDuringTurn = true;
+            UpdateHeroStatus();
+            UpdateAvailableCommands();
             Triggers.Send(HeroTrigger.Moved);
         }
 
@@ -285,19 +292,20 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             if (Secrecy < max)
                 Secrecy = Math.Min(Secrecy+amount, max);
-        }
-
-        public void SetDice(ModifierType modifierType, int count)
-        {
-            throw new NotImplementedException();
+            UpdateHeroStatus();
         }
 
         public void GainGrace(int amount, int max)
         {
             if (!CanGainGrace()) return;
+            if (Grace >= max) return;
+            Grace = Math.Min(Grace + amount, max);
+            UpdateHeroStatus();
+        }
 
-            if (Grace < max)
-                Grace = Math.Min(Grace + amount, max);
+        public void UpdateHeroStatus()
+        {
+            Player.UpdateHeroStatus(Name, PlayerHeroStatus.FromHero(this));
         }
 
         public void DrawPower(Callback callback)
@@ -323,7 +331,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             power.Learn(this);
             Powers.Add(power);
-            UpdateAvailableActions();
+            UpdateAvailableCommands();
         }
 
         public void JoinGame(Game game, IPlayer player)
@@ -397,7 +405,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             CurrentRoll.BaseName = tactic.Name;
 
             CurrentRoll.Roll();
-            UpdateAvailableActions();
+            UpdateAvailableCommands();
         }
 
         public void AcceptRoll()
@@ -456,13 +464,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (_commands.ContainsKey(commandName))
                 return _commands[commandName];
             var space = GetSpace();
-            var itemAction = Inventory.OfType<ICommand>().FirstOrDefault(item => item.Name == commandName);
+            var itemAction = GetLocationInventory().OfType<ICommand>().FirstOrDefault(item => item.Name == commandName);
             if (itemAction != null)
                 return itemAction;
             var locationAction = space.GetAction(commandName);
             if (locationAction != null)
                 return locationAction;
-            throw new ArgumentOutOfRangeException(nameof(commandName), commandName);
+            throw new CommandNotAvailableException(this, commandName);
         }
 
         public bool IsAffectedByBlight<T>() where T : IBlight
@@ -497,9 +505,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             ContinueTurn();
         }
 
-        private void ContinueTurn()
+        internal void ContinueTurn()
         {
-            UpdateAvailableActions();
+            if (State == HeroState.TurnStarted)
+            {
+                ContinueStartTurn();
+                return;
+            }
+            State = HeroState.ContinuingTurn;
             // Face any undefeated enemies
             if (Enemies.Any())
             {
@@ -515,7 +528,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             }
 
             if (_endingTurn)
-                EndTurn();
+                ContinueEndTurn();
+
+            State = HeroState.TakingTurn;
+            UpdateAvailableCommands();
         }
 
         public void RollEventDice(IRollHandler rollHandler)
@@ -550,7 +566,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (!validCodes.Contains(optionCode))
                 throw new ArgumentOutOfRangeException(nameof(optionCode), optionCode, $"Valid codes: {validCodes.ToCsv()}");
             CurrentEvent.SelectedOption = optionCode;
-            if (!Triggers.Send(HeroTrigger.EventOptionSelected))
+            if (!Game.Triggers.Send(GameTrigger.EventOptionSelected))
                 return;
             ResolveSelectedEventOption();
         }
@@ -580,9 +596,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void AddToInventory(IItem item)
         {
-            item.Owner = this;
+            item.SetOwner(this);
             Inventory.Add(item);
-            UpdateAvailableActions();
+            UpdateAvailableCommands();
         }
 
         public IEnumerable<IItem> GetLocationInventory()
@@ -591,9 +607,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             return heroesAtCurrentLocation.SelectMany(hero => hero.GetInventory());
         }
 
-        public void UpdateAvailableActions()
+        public void UpdateAvailableCommands()
         {
-            AvailableActions = GetAvailableActions();
+            var before = new HashSet<string>(AvailableCommands?.Select(x => x.Name) ?? new string[0]);
+            AvailableCommands = GetAvailableCommands();
+            var after = new HashSet<string>(AvailableCommands?.Select(x => x.Name) ?? new string[0]);
+            if (!before.SetEquals(after))
+                Player.UpdateHeroCommands(Name, PlayerCommand.FromCommands(AvailableCommands));
         }
 
         public void DisplayConflictState()
@@ -659,14 +679,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             _freeActionFilter = null;
             if (filter == null)
             {
-                UpdateAvailableActions();
+                UpdateAvailableCommands();
                 return;
             }
             var filtered = Powers.Where(p => p is IActionPower && filter(p)).ToList();
             if (filtered.Any())
             {
-                _freeActionFilter = new ActionFilter {Name = "Free", Allowed = filtered.Select(p => p.Name).ToList()};
-                UpdateAvailableActions();
+                _freeActionFilter = new ActionFilter("Free", filtered.Select(p => p.Name).ToList());
+                UpdateAvailableCommands();
             }
             else
             {
@@ -680,13 +700,26 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             Game.ActingHero = this;
             _movedDuringTurn = false;
+            State = HeroState.TurnStarted;
+            var commands = GetAvailableCommands().OfType<IStartOfTurnCommand>().Where(cmd => !(cmd is ContinueTurn));
+            if (commands.Any())
+            {
+                UpdateAvailableCommands();
+                return;
+            }
+
+            ContinueStartTurn();
+        }
+
+        private void ContinueStartTurn()
+        {
             var necromancer = Game.Necromancer;
             var withNecromancer = Location == necromancer.Location;
             if (withNecromancer)
                 LoseSecrecy("Necromancer");
             if (GetInventory().Any(item => item is HolyRelic))
                 LoseSecrecy("Holy Relic");
-            UpdateAvailableActions();
+            UpdateAvailableCommands();
             Triggers.Send(HeroTrigger.StartedTurn);
 
             if (withNecromancer && Secrecy == 0)
@@ -695,7 +728,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 DrawEvent();
         }
 
-        internal void TryToEndTurn()
+        internal void EndTurn()
         {
             _endingTurn = true;
             IsActionAvailable = false;
@@ -712,10 +745,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 return;
             }
 
-            EndTurn();
+            ContinueEndTurn();
         }
 
-        private void EndTurn()
+        private void ContinueEndTurn()
         {
             _endingTurn = false;
             if (Location == Location.Monastery && !_movedDuringTurn)
@@ -730,7 +763,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void SetLocation(Location location)
         {
             Location = location;
-            UpdateAvailableActions();
+            UpdateAvailableCommands();
+            UpdateHeroStatus();
         }
 
         private void DefendAgainst(List<IEnemy> enemies)
@@ -751,7 +785,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             IsActionAvailable = true;
             HasTakenTurn = LoseNextTurn;
             LoseNextTurn = false;
-            UpdateAvailableActions();
+            UpdateAvailableCommands();
         }
 
         public void AddRollModifier(IRollModifier modifier)

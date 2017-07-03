@@ -13,5 +13,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
         IGameContext NextSearchResult(params Find[] results);
         IGameContext NewDay();
         IGameContext NextArtifact(string artifactName);
+        IGameContext NextEvent(params string[] eventNames);
     }
 }

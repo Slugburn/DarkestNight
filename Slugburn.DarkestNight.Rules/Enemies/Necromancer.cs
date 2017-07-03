@@ -76,7 +76,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             }
 
             foreach (var hero in _game.Heroes)
-                hero.UpdateAvailableActions();
+                hero.UpdateAvailableCommands();
         }
 
         public void CompleteTurn()

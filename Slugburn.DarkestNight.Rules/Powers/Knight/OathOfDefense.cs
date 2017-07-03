@@ -51,9 +51,8 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
 
         private class OathOfDefenseActive : ITriggerHandler<Hero>
         {
-            public void HandleTrigger(Hero registrar, string source, TriggerContext context)
+            public void HandleTrigger(Hero hero, string source, TriggerContext context)
             {
-                var hero = registrar;
                 hero.GainGrace(1, hero.DefaultGrace);
             }
         }

@@ -16,16 +16,23 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private string[] _heroNames;
         private SearchViewVerification _searchView;
         private PrayerViewVerification _prayerView;
+        private readonly Dictionary<string, PlayerHeroVerification>  _heroViews = new Dictionary<string, PlayerHeroVerification>();
+
 
         public void Verify(ITestRoot root)
         {
+            var game = root.Get<Game>();
             var player = root.Get<FakePlayer>();
             if (_locations != null)
                 Assert.That(player.ValidLocations, Is.EquivalentTo(_locations));
             if (_powerNames != null)
                 Assert.That(player.Powers.Select(x=>x.Name), Is.EquivalentTo(_powerNames));
             if (_heroNames != null)
-                Assert.That(player.HeroSelection.Heroes.Select(x=>x.Name), Is.EquivalentTo(_heroNames));
+                Assert.That(player.HeroSelection.Heroes, Is.EquivalentTo(_heroNames));
+
+            var playerHeroVerifications = game.Heroes.Select(hero => hero.Name).Select(name => _heroViews.ContainsKey(name) ? _heroViews[name] : new PlayerHeroVerification(this, name));
+            foreach (var verification in playerHeroVerifications)
+                verification.Verify(root);
 
             _conflictView?.Verify(root);
             _eventView?.Verify(root);
@@ -34,11 +41,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             _searchView?.Verify(root);
         }
 
+        public IVerifiable Parent => null;
+
         public EventViewVerification EventView
         {
             get
             {
-                _eventView = new EventViewVerification();
+                _eventView = new EventViewVerification(this);
                 return _eventView;
             }
         }
@@ -47,7 +56,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         {
             get
             {
-                _blightSelectionView = new BlightSelectionViewVerification();
+                _blightSelectionView = new BlightSelectionViewVerification(this);
                 return _blightSelectionView;
             }
         }
@@ -56,7 +65,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         {
             get
             {
-                _conflictView = new ConflictViewVerification();
+                _conflictView = new ConflictViewVerification(this);
                 return _conflictView;
             }
         }
@@ -65,7 +74,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         {
             get
             {
-                _necromancerView = new NecromancerViewVerification();
+                _necromancerView = new NecromancerViewVerification(this);
                 return _necromancerView;
             }
         }
@@ -74,7 +83,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         {
             get
             {
-                _searchView = new SearchViewVerification();
+                _searchView = new SearchViewVerification(this);
                 return _searchView;
             }
         }
@@ -83,7 +92,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         {
             get
             {
-                _prayerView = new PrayerViewVerification();
+                _prayerView = new PrayerViewVerification(this);
                 return _prayerView;
             } 
         }
@@ -104,6 +113,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         {
             _heroNames = heroNames;
             return this;
+        }
+
+        public PlayerHeroVerification Hero(string heroName = "Joe")
+        {
+            var verification = new PlayerHeroVerification(this, heroName);
+            _heroViews.Add(heroName, verification);
+            return verification;
         }
     }
 }

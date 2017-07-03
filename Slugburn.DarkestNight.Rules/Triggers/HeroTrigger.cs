@@ -8,8 +8,6 @@ namespace Slugburn.DarkestNight.Rules.Triggers
         Rolled,
         StartedTurn,
         LosingSecrecy,
-        EventDrawn,
-        EventOptionSelected,
         Moved,
         DestroyedBlight,
         FightWon,

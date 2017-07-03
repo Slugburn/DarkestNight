@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private bool? _hasRelic;
         private int? _searchTarget;
 
-        public LocationVerification(string location)
+        public LocationVerification(string location) 
         {
             _location = location;
         }

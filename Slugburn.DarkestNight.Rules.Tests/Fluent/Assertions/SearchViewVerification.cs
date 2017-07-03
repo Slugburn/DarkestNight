@@ -4,12 +4,16 @@ using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
-    public class SearchViewVerification : IVerifiable
+    public class SearchViewVerification : ChildVerification
     {
         private string[] _results;
         private int[] _roll;
 
-        public void Verify(ITestRoot root)
+        public SearchViewVerification(IVerifiable parent) : base(parent)
+        {
+        }
+
+        public override void Verify(ITestRoot root)
         {
             var view = root.Get<FakePlayer>().Search;
             view.ShouldNotBeNull("Search result selection is null");

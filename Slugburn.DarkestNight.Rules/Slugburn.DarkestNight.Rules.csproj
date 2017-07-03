@@ -45,6 +45,7 @@
     <Compile Include="Blights\BlightFactory.cs" />
     <Compile Include="Commands\CommandNotAvailableException.cs" />
     <Compile Include="Actions\Attack.cs" />
+    <Compile Include="Commands\ContinueTurn.cs" />
     <Compile Include="Commands\EndTurn.cs" />
     <Compile Include="Actions\AttackNecromancer.cs" />
     <Compile Include="Actions\Hide.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="Actions\RetrieveRelic.cs" />
     <Compile Include="Actions\Search.cs" />
     <Compile Include="Actions\StandardAction.cs" />
+    <Compile Include="Commands\IStartOfTurnCommand.cs" />
     <Compile Include="Commands\SkipFreeAction.cs" />
     <Compile Include="Commands\StartTurn.cs" />
     <Compile Include="Actions\Travel.cs" />
@@ -130,6 +132,7 @@
     <Compile Include="Heroes\ActionFilter.cs" />
     <Compile Include="Heroes\DefenseRollHandler.cs" />
     <Compile Include="Heroes\HeroFactory.cs" />
+    <Compile Include="Heroes\HeroState.cs" />
     <Compile Include="Heroes\IHeroFactory.cs" />
     <Compile Include="Heroes\Impl\Prince.cs" />
     <Compile Include="Heroes\Impl\Rogue.cs" />
@@ -166,10 +169,14 @@
     <Compile Include="Players\Models\PlayerAskQuestion.cs" />
     <Compile Include="Players\Models\PlayerBlight.cs" />
     <Compile Include="Players\Models\PlayerBlightSelection.cs" />
+    <Compile Include="Players\Models\PlayerCommand.cs" />
     <Compile Include="Players\Models\PlayerConflict.cs" />
     <Compile Include="Players\Models\PlayerEvent.cs" />
     <Compile Include="Players\Models\PlayerHero.cs" />
     <Compile Include="Players\Models\PlayerHeroSelection.cs" />
+    <Compile Include="Players\Models\PlayerHeroStatus.cs" />
+    <Compile Include="Players\Models\PlayerHeroValue.cs" />
+    <Compile Include="Players\Models\PlayerItem.cs" />
     <Compile Include="Players\Models\PlayerNecromancer.cs" />
     <Compile Include="Players\Models\PlayerPower.cs" />
     <Compile Include="Players\Models\PlayerPrayer.cs" />

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Items;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
@@ -47,14 +46,16 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
         public IHeroContext Secrecy(int value)
         {
             _hero.Secrecy = value;
-            _hero.UpdateAvailableActions();
+            _hero.UpdateAvailableCommands();
+            _hero.UpdateHeroStatus();
             return this;
         }
 
         public IHeroContext Grace(int value)
         {
             _hero.Grace = value;
-            _hero.UpdateAvailableActions();
+            _hero.UpdateAvailableCommands();
+            _hero.UpdateHeroStatus();
             return this;
         }
 
@@ -129,6 +130,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             if (isTakingTurn)
             {
                 game.ActingHero = _hero;
+                _hero.State = HeroState.TakingTurn;
                 _hero.IsActionAvailable = true;
             }
             else
@@ -136,21 +138,21 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
                 if (game.ActingHero == _hero)
                     game.ActingHero = null;
             }
-            _hero.UpdateAvailableActions();
+            _hero.UpdateAvailableCommands();
             return this;
         }
 
         public IHeroContext HasTakenTurn(bool hasTakenTurn = true)
         {
             _hero.HasTakenTurn = hasTakenTurn;
-            _hero.UpdateAvailableActions();
+            _hero.UpdateAvailableCommands();
             return this;
         }
 
         public IHeroContext HasUsedAction(bool hasTakenaction = true)
         {
             _hero.IsActionAvailable = false;
-            _hero.UpdateAvailableActions();
+            _hero.UpdateAvailableCommands();
             return this;
         }
 

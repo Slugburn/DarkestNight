@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using Slugburn.DarkestNight.Rules.Blights;
-using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Triggers;
+﻿using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Commands
 {
@@ -14,12 +11,12 @@ namespace Slugburn.DarkestNight.Rules.Commands
 
         public void Execute(Hero hero)
         {
-            hero.TryToEndTurn();
+            hero.EndTurn();
         }
 
         public bool IsAvailable(Hero hero)
         {
-            return hero.IsTakingTurn && hero.CurrentEvent == null && hero.ConflictState == null;
+            return hero.IsTakingTurn && hero.State == HeroState.TakingTurn && hero.CurrentEvent == null && hero.ConflictState == null;
         }
 
     }

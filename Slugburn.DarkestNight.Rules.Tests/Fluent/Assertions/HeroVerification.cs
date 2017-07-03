@@ -42,15 +42,18 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private bool _hasFreeAction;
         private bool? _isTakingTurn;
 
-        public HeroVerification(string heroName)
+        public IVerifiable Parent => null;
+
+        public HeroVerification(string heroName) 
         {
             _heroName = heroName;
             _expectedCanGainGrace = true;
             _invalidLocations = new List<Location>();
             _specifiedLocations = new List<Location>();
+            CurrentEvent = new HeroEventVerification(this);
         }
 
-        public HeroEventVerification CurrentEvent { get; } = new HeroEventVerification();
+        public HeroEventVerification CurrentEvent { get; } 
 
         private void SetExpectations(Hero hero)
         {
@@ -141,20 +144,20 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             if (_powerDeckContains != null)
                 Assert.That(hero.PowerDeck, Is.EquivalentTo(_powerDeckContains));
             if (_facingEnemies != null)
-                hero.Enemies.Select(x => x.Name).ShouldBeEquivalent(_facingEnemies);;
+                hero.Enemies.Select(x => x.Name).ShouldBeEquivalent(_facingEnemies);
         }
 
         private void VerifyActions(Hero hero)
         {
-            if (hero.AvailableActions == null)
-                hero.UpdateAvailableActions();
+            if (hero.AvailableCommands == null)
+                hero.UpdateAvailableCommands();
             if (_availableActions != null)
-                Assert.That(hero.AvailableActions, Is.EquivalentTo(_availableActions));
+                hero.AvailableCommands.Select(x=>x.Name).ShouldBeEquivalent(_availableActions);
             foreach (var kvp in _powerAvailability)
             {
                 var actionName = kvp.Key;
                 var expected = kvp.Value;
-                var actual = hero.AvailableActions.Contains(actionName);
+                var actual = hero.AvailableCommands.Select(x=>x.Name).Contains(actionName);
                 var expectedDescription = expected ? "" : "not ";
                 actual.ShouldBe(expected, $"Expected action '{actionName}' to {expectedDescription}be available");
             }
