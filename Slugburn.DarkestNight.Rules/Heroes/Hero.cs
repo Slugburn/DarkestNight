@@ -9,9 +9,9 @@ using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Events;
 using Slugburn.DarkestNight.Rules.Items;
+using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Players;
-using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Powers.Priest;
 using Slugburn.DarkestNight.Rules.Rolls;
@@ -305,7 +305,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void UpdateHeroStatus()
         {
-            Player.UpdateHeroStatus(Name, PlayerHeroStatus.FromHero(this));
+            Player.UpdateHeroStatus(Name, HeroStatusModel.FromHero(this));
         }
 
         public void DrawPower(Callback callback)
@@ -495,7 +495,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void DisplayCurrentEvent()
         {
-            Player.DisplayEvent(PlayerEvent.From(CurrentEvent));
+            Player.DisplayEvent(EventModel.From(CurrentEvent));
             Player.State = PlayerState.Event;
         }
 
@@ -613,7 +613,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             AvailableCommands = GetAvailableCommands();
             var after = new HashSet<string>(AvailableCommands?.Select(x => x.Name) ?? new string[0]);
             if (!before.SetEquals(after))
-                Player.UpdateHeroCommands(Name, PlayerCommand.FromCommands(AvailableCommands));
+                Player.UpdateHeroCommands(Name, CommandModel.FromCommands(AvailableCommands));
         }
 
         public void DisplayConflictState()

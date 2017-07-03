@@ -3,8 +3,8 @@ using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Players;
-using Slugburn.DarkestNight.Rules.Players.Models;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Priest
 {
@@ -49,7 +49,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
 
                 var validTargets = hero.Game.Heroes.Where(target => IsValidTarget(hero, target)).ToList();
 
-                var view = new PlayerHeroSelection(validTargets);
+                var view = new HeroSelectionModel(validTargets);
                 hero.Player.DisplayHeroSelection(view, Callback.ForCommand(hero, this));
             }
 

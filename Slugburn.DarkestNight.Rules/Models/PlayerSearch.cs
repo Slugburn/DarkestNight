@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
 
-namespace Slugburn.DarkestNight.Rules.Players.Models
+namespace Slugburn.DarkestNight.Rules.Models
 {
     public class PlayerSearch
     {
@@ -14,7 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Players.Models
         {
             var search = new PlayerSearch {Roll = hero.CurrentRoll.AdjustedRoll};
             if (searchResults!= null)
-                search.SearchResults = searchResults.Select(x => x.ToDescription()).ToList();
+                search.SearchResults = searchResults.Select(x => FindExtension.ToDescription(x)).ToList();
             return search;
         }
     }

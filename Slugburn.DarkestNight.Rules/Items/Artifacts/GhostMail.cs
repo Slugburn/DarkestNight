@@ -1,7 +1,7 @@
 ﻿using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Players;
-using Slugburn.DarkestNight.Rules.Players.Models;
 
 namespace Slugburn.DarkestNight.Rules.Items.Artifacts
 {
@@ -22,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Items.Artifacts
 
         public void Execute(Hero hero)
         {
-            var question = new PlayerAskQuestion(Name, Text, new[] {"Spend Grace", "Spend Secrecy"});
+            var question = new QuestionModel(Name, Text, new[] {"Spend Grace", "Spend Secrecy"});
             hero.Player.DisplayAskQuestion(question, Callback.ForCommand(hero, this));
         }
 

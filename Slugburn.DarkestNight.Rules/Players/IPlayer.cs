@@ -1,24 +1,24 @@
 ﻿using System.Collections.Generic;
-using Slugburn.DarkestNight.Rules.Players.Models;
+using Slugburn.DarkestNight.Rules.Models;
 
 namespace Slugburn.DarkestNight.Rules.Players
 {
     public interface IPlayer
     {
         PlayerState State { get; set; }
-        void DisplayEvent(PlayerEvent playerEvent);
-        void DisplayConflict(PlayerConflict conflict);
-        void DisplayPowers(ICollection<PlayerPower> powers, Callback callback);
-        void DisplayBlightSelection(PlayerBlightSelection blightSelection, Callback callback);
+        void DisplayEvent(EventModel playerEvent);
+        void DisplayConflict(ConflictModel conflict);
+        void DisplayPowers(ICollection<PowerModel> powers, Callback callback);
+        void DisplayBlightSelection(BlightSelectionModel blightSelection, Callback callback);
         void DisplayLocationSelection(ICollection<string> locations, Callback callback);
-        void DisplayNecromancer(PlayerNecromancer necromancer);
-        void DisplayHeroSelection(PlayerHeroSelection view, Callback callback);
-        void DisplayAskQuestion(PlayerAskQuestion view, Callback callback);
+        void DisplayNecromancer(NecromancerModel necromancer);
+        void DisplayHeroSelection(HeroSelectionModel view, Callback callback);
+        void DisplayAskQuestion(QuestionModel view, Callback callback);
         void DisplaySearch(PlayerSearch view, Callback callback);
         void DisplayPrayer(PlayerPrayer view);
-        void AddHero(PlayerHero view);
-        void UpdateBoard(PlayerBoard view);
-        void UpdateHeroCommands(string heroName, IEnumerable<PlayerCommand> commands);
-        void UpdateHeroStatus(string heroName, PlayerHeroStatus status);
+        void AddHero(HeroModel view);
+        void UpdateBoard(BoardModel view);
+        void UpdateHeroCommands(string heroName, IEnumerable<CommandModel> commands);
+        void UpdateHeroStatus(string heroName, HeroStatusModel status);
     }
 }

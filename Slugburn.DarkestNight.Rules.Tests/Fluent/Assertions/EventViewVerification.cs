@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using Shouldly;
+using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Players;
-using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
@@ -46,7 +46,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        private void VerifyActiveRow(PlayerEvent view)
+        private void VerifyActiveRow(EventModel view)
         {
             var text = _activeRowText;
             var subText = _activeRowSubText;

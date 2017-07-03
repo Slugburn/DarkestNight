@@ -166,23 +166,6 @@
     <Compile Include="Players\CallbackRouter.cs" />
     <Compile Include="Players\ICallbackHandler.cs" />
     <Compile Include="Players\IPlayer.cs" />
-    <Compile Include="Players\Models\PlayerAskQuestion.cs" />
-    <Compile Include="Players\Models\PlayerBlight.cs" />
-    <Compile Include="Players\Models\PlayerBlightSelection.cs" />
-    <Compile Include="Players\Models\PlayerBoard.cs" />
-    <Compile Include="Players\Models\PlayerBoardLocation.cs" />
-    <Compile Include="Players\Models\PlayerCommand.cs" />
-    <Compile Include="Players\Models\PlayerConflict.cs" />
-    <Compile Include="Players\Models\PlayerEvent.cs" />
-    <Compile Include="Players\Models\PlayerHero.cs" />
-    <Compile Include="Players\Models\PlayerHeroSelection.cs" />
-    <Compile Include="Players\Models\PlayerHeroStatus.cs" />
-    <Compile Include="Players\Models\PlayerHeroValue.cs" />
-    <Compile Include="Players\Models\PlayerItem.cs" />
-    <Compile Include="Players\Models\PlayerNecromancer.cs" />
-    <Compile Include="Players\Models\PlayerPower.cs" />
-    <Compile Include="Players\Models\PlayerPrayer.cs" />
-    <Compile Include="Players\Models\PlayerSearch.cs" />
     <Compile Include="Players\PlayerModelExtension.cs" />
     <Compile Include="Players\PlayerState.cs" />
     <Compile Include="Powers\Acolyte\BlindingBlack.cs" />
@@ -283,8 +266,27 @@
     <Compile Include="Spaces\Swamp.cs" />
     <Compile Include="Spaces\Village.cs" />
     <Compile Include="Triggers\TriggerRegistry.cs" />
+    <Compile Include="Models\QuestionModel.cs" />
+    <Compile Include="Models\BlightModel.cs" />
+    <Compile Include="Models\BlightSelectionModel.cs" />
+    <Compile Include="Models\BoardModel.cs" />
+    <Compile Include="Models\LocationModel.cs" />
+    <Compile Include="Models\CommandModel.cs" />
+    <Compile Include="Models\ConflictModel.cs" />
+    <Compile Include="Models\EventModel.cs" />
+    <Compile Include="Models\HeroModel.cs" />
+    <Compile Include="Models\HeroSelectionModel.cs" />
+    <Compile Include="Models\HeroStatusModel.cs" />
+    <Compile Include="Models\HeroValueModel.cs" />
+    <Compile Include="Models\ItemModel.cs" />
+    <Compile Include="Models\NecromancerModel.cs" />
+    <Compile Include="Models\PowerModel.cs" />
+    <Compile Include="Models\PlayerPrayer.cs" />
+    <Compile Include="Models\PlayerSearch.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Players\Models\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

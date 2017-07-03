@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Players;
-using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Powers;
 
 namespace Slugburn.DarkestNight.Rules.Heroes
@@ -53,7 +53,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             var powerNames = hero.PowerDeck.Draw(2);
             var powers = powerNames.Select(PowerFactory.Create).ToList();
-            var viewModel = PlayerPower.FromPowers(powers).ToList();
+            var viewModel = PowerModel.FromPowers(powers).ToList();
             hero.Player.DisplayPowers(viewModel, Callback.For(hero, new SupplyCacheCallback(powerNames)));
         }
 
@@ -61,7 +61,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             var powerNames = hero.PowerDeck;
             var powers = powerNames.Select(PowerFactory.Create).ToList();
-            var viewModel = PlayerPower.FromPowers(powers).ToList();
+            var viewModel = PowerModel.FromPowers(powers).ToList();
             hero.Player.DisplayPowers(viewModel, Callback.For(hero, new EpiphanyCallback()));
         }
 

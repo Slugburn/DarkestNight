@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Players;
-using Slugburn.DarkestNight.Rules.Players.Models;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Priest
 {
@@ -11,7 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
         {
             base.Activate(hero);
             var validHeroes = hero.Game.Heroes.Where(h => h.Location == hero.Location);
-            var view = new PlayerHeroSelection(validHeroes);
+            var view = new HeroSelectionModel(validHeroes);
             hero.Player.DisplayHeroSelection(view, Callback.ForPower(hero, this));
         }
 

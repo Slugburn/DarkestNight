@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Players.Models;
+using Slugburn.DarkestNight.Rules.Models;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
@@ -17,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         public override void Verify(ITestRoot root)
         {
             var hero = root.Get<Hero>();
-            var view = root.Get<PlayerHero>();
+            var view = root.Get<HeroModel>();
             _expected = _expected ?? hero.AvailableCommands.Select(x => x.Name);
             view.Commands.Select(x=>x.Name).ShouldBeEquivalent(_expected);
         }

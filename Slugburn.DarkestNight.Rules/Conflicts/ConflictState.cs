@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Players;
-using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Conflicts
@@ -32,7 +32,7 @@ namespace Slugburn.DarkestNight.Rules.Conflicts
 
         public void Display(IPlayer player)
         {
-            player.DisplayConflict(PlayerConflict.FromConflictState(this));
+            player.DisplayConflict(ConflictModel.FromConflictState(this));
             player.State = PlayerState.Conflict;
         }
 

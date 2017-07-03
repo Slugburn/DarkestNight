@@ -1,6 +1,6 @@
-﻿namespace Slugburn.DarkestNight.Rules.Players.Models
+﻿namespace Slugburn.DarkestNight.Rules.Models
 {
-    public class PlayerHeroValue
+    public class HeroValueModel
     {
         public int Value { get; set; }
         public int Default { get; set; }

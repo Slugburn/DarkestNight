@@ -2,8 +2,8 @@
 using System.Linq;
 using Shouldly;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Players;
-using Slugburn.DarkestNight.Rules.Players.Models;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 {
@@ -18,34 +18,34 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             _game = game;
         }
 
-        public PlayerBlightSelection BlightSelection { get; set; }
-        public PlayerConflict Conflict { get; set; }
-        public PlayerEvent Event { get; set; }
-        public ICollection<PlayerPower> Powers { get; set; }
+        public BlightSelectionModel BlightSelection { get; set; }
+        public ConflictModel Conflict { get; set; }
+        public EventModel Event { get; set; }
+        public ICollection<PowerModel> Powers { get; set; }
         public ICollection<string> ValidLocations { get; set; }
-        public PlayerNecromancer Necromancer { get; set; }
+        public NecromancerModel Necromancer { get; set; }
 
-        public PlayerHeroSelection HeroSelection { get; set; }
+        public HeroSelectionModel HeroSelection { get; set; }
 
         public PlayerState State { get; set; }
 
-        public void DisplayEvent(PlayerEvent playerEvent)
+        public void DisplayEvent(EventModel playerEvent)
         {
             Event = playerEvent;
         }
 
-        public void DisplayConflict(PlayerConflict conflict)
+        public void DisplayConflict(ConflictModel conflict)
         {
             Conflict = conflict;
         }
 
-        public void DisplayPowers(ICollection<PlayerPower> powers, Callback callback)
+        public void DisplayPowers(ICollection<PowerModel> powers, Callback callback)
         {
             Powers = powers;
             _callback = callback;
         }
 
-        public void DisplayBlightSelection(PlayerBlightSelection blightSelection, Callback callback)
+        public void DisplayBlightSelection(BlightSelectionModel blightSelection, Callback callback)
         {
             BlightSelection = blightSelection;
             _callback = callback;
@@ -57,18 +57,18 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             _callback = callback;
         }
 
-        public void DisplayNecromancer(PlayerNecromancer necromancer)
+        public void DisplayNecromancer(NecromancerModel necromancer)
         {
             Necromancer = necromancer;
         }
 
-        public void DisplayHeroSelection(PlayerHeroSelection view, Callback callback)
+        public void DisplayHeroSelection(HeroSelectionModel view, Callback callback)
         {
             HeroSelection = view;
             _callback = callback;
         }
 
-        public void DisplayAskQuestion(PlayerAskQuestion view, Callback callback)
+        public void DisplayAskQuestion(QuestionModel view, Callback callback)
         {
             AskQuestion = view;
             _callback = callback;
@@ -85,31 +85,31 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             Prayer = view;
         }
 
-        public void AddHero(PlayerHero view)
+        public void AddHero(HeroModel view)
         {
             Heroes.Add(view);
         }
 
-        public void UpdateBoard(PlayerBoard view)
+        public void UpdateBoard(BoardModel view)
         {
             Board = view;
         }
 
-        public void UpdateHeroCommands(string heroName, IEnumerable<PlayerCommand> commands)
+        public void UpdateHeroCommands(string heroName, IEnumerable<CommandModel> commands)
         {
             Heroes.Single(x => x.Name == heroName).Commands = commands.ToList();
         }
 
-        public void UpdateHeroStatus(string heroName, PlayerHeroStatus status)
+        public void UpdateHeroStatus(string heroName, HeroStatusModel status)
         {
             Heroes.Single(x => x.Name == heroName).Status = status;
         }
 
-        public PlayerAskQuestion AskQuestion { get; set; }
+        public QuestionModel AskQuestion { get; set; }
         public PlayerSearch Search { get; set; }
         public PlayerPrayer Prayer { get; set; }
-        public List<PlayerHero> Heroes { get; set; } = new List<PlayerHero>();
-        public PlayerBoard Board { get; set; }
+        public List<HeroModel> Heroes { get; set; } = new List<HeroModel>();
+        public BoardModel Board { get; set; }
         
         public void SelectEventOption(string option)
         {

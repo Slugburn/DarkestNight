@@ -4,7 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Shouldly;
 using Slugburn.DarkestNight.Rules.Blights;
-using Slugburn.DarkestNight.Rules.Players.Models;
+using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
     public class BlightSelectionViewVerification : ChildVerification
     {
         private readonly List<BlightLocationVerification> _locations = new List<BlightLocationVerification>();
-        private readonly List<PlayerBlight> _playerBlights = new List<PlayerBlight>();
+        private readonly List<BlightModel> _playerBlights = new List<BlightModel>();
         private int _max = 1;
 
         public BlightSelectionViewVerification(IVerifiable parent) : base(parent)
@@ -29,7 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             view.Max.ShouldBe(_max);
         }
 
-        private static string ToDescription(PlayerBlight x)
+        private static string ToDescription(BlightModel x)
         {
             return $"{x.Location}-{x.BlightType}";
         }
@@ -63,7 +63,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             public BlightSelectionViewVerification WithBlights(params string[] blights)
             {
                 var playerBlights = blights.Select(x => x.ToEnum<BlightType>())
-                    .Select(blight => new PlayerBlight {Location = _location.ToString(), BlightType = blight.ToString()});
+                    .Select(blight => new BlightModel {Location = _location.ToString(), BlightType = blight.ToString()});
                 var parent = (BlightSelectionViewVerification)Parent;
                 parent._playerBlights.AddRange(playerBlights);
                 return parent;

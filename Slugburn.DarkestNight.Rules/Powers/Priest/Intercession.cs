@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Players;
-using Slugburn.DarkestNight.Rules.Players.Models;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Priest
 {
@@ -33,7 +33,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
         {
             if (!Owner.CanSpendGrace) return false;
             if (Owner.Grace < amount) return false;
-            var question = new PlayerAskQuestion("Intercession",
+            var question = new QuestionModel("Intercession",
                 $"Should {Owner.Name} spend {amount} Grace instead of {other.Name} losing {amount} Grace?", new[] {"Yes", "No"});
             other.Player.DisplayAskQuestion(question, Callback.ForPower(Owner, this, $"{other.Name}:loss:{amount}"));
             return true;
@@ -48,7 +48,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
                 Owner.SpendGrace(amount);
                 return true;
             }
-            var question = new PlayerAskQuestion("Intercession",
+            var question = new QuestionModel("Intercession",
                 $"Should {Owner.Name} spend {amount} Grace instead of {other.Name} spending {amount} Grace?", new [] {"Yes", "No"});
             other.Player.DisplayAskQuestion(question, Callback.ForPower(Owner, this, $"{other.Name}:spent:{amount}"));
             return true;

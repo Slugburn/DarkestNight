@@ -3,9 +3,9 @@ using System.Linq;
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Tactics;
 
-namespace Slugburn.DarkestNight.Rules.Players.Models
+namespace Slugburn.DarkestNight.Rules.Models
 {
-    public class PlayerConflict
+    public class ConflictModel
     {
         public List<Target> Targets { get; set; }
         public List<Tactic> Tactics { get; set; }
@@ -35,7 +35,7 @@ namespace Slugburn.DarkestNight.Rules.Players.Models
             public string Effect { get; set; }
         }
 
-        public static PlayerConflict FromConflictState(ConflictState state)
+        public static ConflictModel FromConflictState(ConflictState state)
         {
             var targets = state.SelectedTargets?.Select(CreateTarget).ToList() ?? state.AvailableTargets.Select(CreateTarget).ToList();
             var tactics = state.SelectedTactic == null 
@@ -47,7 +47,7 @@ namespace Slugburn.DarkestNight.Rules.Players.Models
             var resolvedTargets = state.SelectedTargets?.Where(x => x.ResultNumber != null).ToList();
             if (resolvedTargets != null && resolvedTargets.Any())
                 win = resolvedTargets.Any(x => x.IsWin);
-            return new PlayerConflict {Targets = targets, Tactics = tactics, TargetCount = targetCount, Roll = roll, Win = win};
+            return new ConflictModel {Targets = targets, Tactics = tactics, TargetCount = targetCount, Roll = roll, Win = win};
         }
 
         private static Tactic CreateTactic(TacticInfo x)

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Players;
-using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Spaces;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
@@ -33,8 +33,8 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                     hero.RollEventDice(new EventRollHandler(Detail));
                     return;
                 case "destroy-blight":
-                    var blights = PlayerBlight.Create(hero.Game.GetBlights());
-                    var selection = new PlayerBlightSelection(blights);
+                    var blights = BlightModel.Create(hero.Game.GetBlights());
+                    var selection = new BlightSelectionModel(blights);
                     hero.Player.DisplayBlightSelection(selection, Callback.ForEvent(hero, this));
                     break;
                 case "draw-power":

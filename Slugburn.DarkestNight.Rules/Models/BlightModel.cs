@@ -2,11 +2,11 @@
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
 
-namespace Slugburn.DarkestNight.Rules.Players.Models
+namespace Slugburn.DarkestNight.Rules.Models
 {
-    public class PlayerBlight
+    public class BlightModel
     {
-        public PlayerBlight(IBlight blight)
+        public BlightModel(IBlight blight)
         {
             Id = blight.Id;
             Location = blight.Location.ToString();
@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Players.Models
             Might = blight.Might;
         }
 
-        public PlayerBlight()
+        public BlightModel()
         {
         }
 
@@ -23,9 +23,9 @@ namespace Slugburn.DarkestNight.Rules.Players.Models
         public string BlightType { get; set; }
         public int Might { get; set; }
 
-        public static List<PlayerBlight> Create(IEnumerable<IBlight> blights)
+        public static List<BlightModel> Create(IEnumerable<IBlight> blights)
         {
-            return blights.Select(blight=>new PlayerBlight(blight)).ToList();
+            return blights.Select(blight=>new BlightModel(blight)).ToList();
         }
     }
 }

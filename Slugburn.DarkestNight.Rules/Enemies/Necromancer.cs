@@ -4,8 +4,8 @@ using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights.Implementations;
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Players;
-using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Triggers;
 
@@ -72,7 +72,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
 
             foreach (var player in _game.Players)
             {
-                player.DisplayNecromancer(PlayerNecromancer.From(this));
+                player.DisplayNecromancer(NecromancerModel.From(this));
                 player.State = PlayerState.Necromancer;
             }
 

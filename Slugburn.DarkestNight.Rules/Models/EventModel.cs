@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using Slugburn.DarkestNight.Rules.Events;
 
-namespace Slugburn.DarkestNight.Rules.Players.Models
+namespace Slugburn.DarkestNight.Rules.Models
 {
-    public class PlayerEvent
+    public class EventModel
     {
         public string Title { get; set; }
         public string Text { get; set; }
@@ -32,9 +32,9 @@ namespace Slugburn.DarkestNight.Rules.Players.Models
             public string Text { get; set; }
         }
 
-        public static PlayerEvent From(HeroEvent obj)
+        public static EventModel From(HeroEvent obj)
         {
-            var e = new PlayerEvent
+            var e = new EventModel
             {
                 Title = obj.Title,
                 Text = obj.Text,

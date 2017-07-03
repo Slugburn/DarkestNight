@@ -3,8 +3,8 @@ using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Players;
-using Slugburn.DarkestNight.Rules.Players.Models;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Items.Artifacts
@@ -24,8 +24,8 @@ namespace Slugburn.DarkestNight.Rules.Items.Artifacts
 
         public void Execute(Hero hero)
         {
-            var playerBlights = PlayerBlight.Create(hero.Game.GetBlights());
-            hero.Player.DisplayBlightSelection(new PlayerBlightSelection(playerBlights), Callback.ForCommand(hero, this));
+            var playerBlights = BlightModel.Create(hero.Game.GetBlights());
+            hero.Player.DisplayBlightSelection(new BlightSelectionModel(playerBlights), Callback.ForCommand(hero, this));
         }
 
         public void HandleCallback(Hero hero, string path, object data)

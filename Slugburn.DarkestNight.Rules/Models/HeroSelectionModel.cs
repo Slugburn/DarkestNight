@@ -2,14 +2,14 @@
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
 
-namespace Slugburn.DarkestNight.Rules.Players.Models
+namespace Slugburn.DarkestNight.Rules.Models
 {
-    public class PlayerHeroSelection
+    public class HeroSelectionModel
     {
 
         public ICollection<string> Heroes { get; set; }
 
-        public PlayerHeroSelection(IEnumerable<Hero> heroes) : base()
+        public HeroSelectionModel(IEnumerable<Hero> heroes) : base()
         {
             Heroes = heroes.Select(h=>h.Name).ToList();
         }

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Slugburn.DarkestNight.Rules.Heroes;
 
-namespace Slugburn.DarkestNight.Rules.Players.Models
+namespace Slugburn.DarkestNight.Rules.Models
 {
     public class PlayerPrayer
     {
