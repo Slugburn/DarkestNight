@@ -169,6 +169,8 @@
     <Compile Include="Players\Models\PlayerAskQuestion.cs" />
     <Compile Include="Players\Models\PlayerBlight.cs" />
     <Compile Include="Players\Models\PlayerBlightSelection.cs" />
+    <Compile Include="Players\Models\PlayerBoard.cs" />
+    <Compile Include="Players\Models\PlayerBoardLocation.cs" />
     <Compile Include="Players\Models\PlayerCommand.cs" />
     <Compile Include="Players\Models\PlayerConflict.cs" />
     <Compile Include="Players\Models\PlayerEvent.cs" />

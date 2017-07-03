@@ -63,6 +63,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             DetectedHeroes = _game.Heroes.Where(h => h.Location != Location.Monastery).Where(h => h.Secrecy < MovementRoll).ToList();
 
             DetermineDestination();
+            _game.UpdatePlayerBoard();
         }
 
         public void DetermineDestination()
@@ -92,28 +93,40 @@ namespace Slugburn.DarkestNight.Rules.Enemies
 
             _game.CreateBlights(Location, blightsCreated);
             IsTakingTurn = false;
+            _game.UpdatePlayerBoard();
+            _game.StartNewDay();
         }
 
         private Location GetDestination()
         {
             var necromancerSpace = _game.Board[Location];
             var rollLocation = necromancerSpace.MoveChart[MovementRoll];
-            Location destination;
             if (!DetectedHeroes.Any())
             {
                 // move based on roll
-                destination = rollLocation;
+                return rollLocation;
             }
-            else
+            // move toward closest detected hero
+            var alreadyHere = DetectedHeroes.Any(h => h.Location == Location);
+            if (alreadyHere)
+                return Location;
+
+            var adjacentToNecromancer = _game.Board[Location].AdjacentLocations
+                // make sure the Necromancer can never move to Monastery
+                .Except(new[] {Location.Monastery})
+                .ToList();
+            var adjacentHeroes = DetectedHeroes.Where(x => adjacentToNecromancer.Contains(x.Location)).ToList();
+            if (adjacentHeroes.Any())
             {
-                // move toward closest detected hero
-                var handled = _game.Triggers.Send(GameTrigger.NecromancerDetectsHeroes);
-                // TODO: update to find closest
-                destination = handled
-                    ? DetectedHeroes.First().Location
-                    : rollLocation;
+                var destination = adjacentHeroes.Shuffle().First().Location;
+                return destination;
             }
-            return destination;
+            // select one of the remaining detected heroes at random
+            var selected = DetectedHeroes.Shuffle().First();
+            // destination is going to be a location that is adjacent to both Necromancer and selected hero
+            var adjacentToHero = _game.Board[selected.Location].AdjacentLocations;
+            var adjacentToBoth = adjacentToNecromancer.Intersect(adjacentToHero);
+            return adjacentToBoth.Shuffle().First();
         }
     }
 }

@@ -18,6 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
             var game = new Game();
             var player = new FakePlayer(game);
             game.AddPlayer(player);
+            game.UpdatePlayerBoard();
             var context = new GameContext(game, player);
             return context;
         }

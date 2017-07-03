@@ -2,7 +2,6 @@
 using System.Linq;
 using Shouldly;
 using Slugburn.DarkestNight.Rules.Blights;
-using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
 
@@ -91,6 +90,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             Heroes.Add(view);
         }
 
+        public void UpdateBoard(PlayerBoard view)
+        {
+            Board = view;
+        }
+
         public void UpdateHeroCommands(string heroName, IEnumerable<PlayerCommand> commands)
         {
             Heroes.Single(x => x.Name == heroName).Commands = commands.ToList();
@@ -105,8 +109,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         public PlayerSearch Search { get; set; }
         public PlayerPrayer Prayer { get; set; }
         public List<PlayerHero> Heroes { get; set; } = new List<PlayerHero>();
-
-
+        public PlayerBoard Board { get; set; }
+        
         public void SelectEventOption(string option)
         {
             var matching = Event.Options.SingleOrDefault(x => x.Text == option);

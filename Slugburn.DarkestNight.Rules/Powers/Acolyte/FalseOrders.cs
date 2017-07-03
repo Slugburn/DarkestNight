@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
+using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Players.Models;
@@ -42,7 +43,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                     var destinationSpace = game.Board[destination];
                     var maxMoveCount = 4 - destinationSpace.Blights.Count;
                     var space = hero.GetSpace();
-                    var playerBlights = space.Blights.Select(PlayerBlight.FromBlight).ToList();
+                    var playerBlights = PlayerBlight.Create(space.Blights);
                     hero.Player.DisplayBlightSelection(new PlayerBlightSelection(playerBlights, maxMoveCount), Callback.ForCommand(hero, this));
                 }
                 else if (data is IEnumerable<int>)

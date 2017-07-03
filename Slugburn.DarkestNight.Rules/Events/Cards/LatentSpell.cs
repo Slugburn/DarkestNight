@@ -33,7 +33,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                     hero.RollEventDice(new EventRollHandler(Detail));
                     return;
                 case "destroy-blight":
-                    var blights = hero.Game.Board.Spaces.SelectMany(s => s.Blights.Select(PlayerBlight.FromBlight)).ToList();
+                    var blights = PlayerBlight.Create(hero.Game.GetBlights());
                     var selection = new PlayerBlightSelection(blights);
                     hero.Player.DisplayBlightSelection(selection, Callback.ForEvent(hero, this));
                     break;

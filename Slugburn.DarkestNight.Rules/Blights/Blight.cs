@@ -7,6 +7,7 @@ namespace Slugburn.DarkestNight.Rules.Blights
     public abstract class Blight : IBlight
     {
         private Space _space;
+        private int _might;
         public BlightType Type { get; }
 
         protected Blight(BlightType type)
@@ -16,7 +17,13 @@ namespace Slugburn.DarkestNight.Rules.Blights
 
         public int Id { get; set; }
         public string Name { get; protected set; }
-        public int Might { get; protected set; }
+
+        public int Might
+        {
+            get { return _might + (_space.Game.Darkness >= 25 ? 1 : 0); }
+            set { _might = value; }
+        }
+
         public string EffectText { get; protected set; }
         public string DefenseText { get; protected set; }
         public Location Location => _space.Location;

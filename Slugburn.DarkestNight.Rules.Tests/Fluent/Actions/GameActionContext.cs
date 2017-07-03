@@ -7,7 +7,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
     public interface IGameActionContext : IWhen
     {
         IGameActionContext BlightDestroyed(string location, string blight);
-        IGameActionContext NecromancerActs(IFakeContext rolls);
+        IGameActionContext NecromancerActs(IFakeContext rolls = null);
     }
 
     public class GameActionContext : WhenContext, IGameActionContext

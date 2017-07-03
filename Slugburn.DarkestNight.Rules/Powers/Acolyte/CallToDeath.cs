@@ -1,6 +1,5 @@
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
-using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Modifiers;
@@ -46,7 +45,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                 {
                     ConflictType = ConflictType.Attack,
                     AvailableTactics = hero.GetAvailableFightTactics().GetInfo(hero),
-                    AvailableTargets = hero.GetBlights().GetTargetInfo(),
+                    AvailableTargets = hero.GetBlights().GetTargetInfo(hero.Game),
                     MinTarget = 2,
                     MaxTarget = 2
                 };

@@ -133,7 +133,10 @@ namespace Slugburn.DarkestNight.Rules
             Darkness+=count;
 
             if (Darkness <= 30)
+            {
+                UpdatePlayerBoard();
                 return;
+            }
 
             // cap darkness at 30 but create a blight in the monastery for every darkness above 30
             CreateBlights(Location.Monastery, Darkness - 30);
@@ -236,6 +239,11 @@ namespace Slugburn.DarkestNight.Rules
         public IItem CreateItem(string itemName)
         {
             return ItemFactory.Create(NextId(), itemName);
+        }
+
+        public void UpdatePlayerBoard()
+        {
+            Players.ForEach(p => p.UpdateBoard(new PlayerBoard(this)));
         }
     }
 }

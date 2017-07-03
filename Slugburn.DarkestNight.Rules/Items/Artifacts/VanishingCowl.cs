@@ -24,7 +24,7 @@ namespace Slugburn.DarkestNight.Rules.Items.Artifacts
 
         public void Execute(Hero hero)
         {
-            var playerBlights = hero.Game.GetBlights().Select(PlayerBlight.FromBlight).ToList();
+            var playerBlights = PlayerBlight.Create(hero.Game.GetBlights());
             hero.Player.DisplayBlightSelection(new PlayerBlightSelection(playerBlights), Callback.ForCommand(hero, this));
         }
 

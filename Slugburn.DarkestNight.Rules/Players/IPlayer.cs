@@ -17,6 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Players
         void DisplaySearch(PlayerSearch view, Callback callback);
         void DisplayPrayer(PlayerPrayer view);
         void AddHero(PlayerHero view);
+        void UpdateBoard(PlayerBoard view);
         void UpdateHeroCommands(string heroName, IEnumerable<PlayerCommand> commands);
         void UpdateHeroStatus(string heroName, PlayerHeroStatus status);
     }

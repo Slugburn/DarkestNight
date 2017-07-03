@@ -9,7 +9,7 @@ namespace Slugburn.DarkestNight.Rules
 {
     public static class BlightExtension
     {
-        public static List<TargetInfo> GetTargetInfo(this IEnumerable<IBlight> blights)
+        public static List<TargetInfo> GetTargetInfo(this IEnumerable<IBlight> blights, Game game)
         {
             return blights.Select(GetTargetInfo).ToList();
         }

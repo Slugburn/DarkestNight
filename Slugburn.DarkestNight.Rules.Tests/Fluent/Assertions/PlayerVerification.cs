@@ -19,6 +19,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private readonly Dictionary<string, PlayerHeroVerification>  _heroViews = new Dictionary<string, PlayerHeroVerification>();
 
 
+        public PlayerVerification()
+        {
+            BoardView = new BoardViewVerification(this);
+        }
+
         public void Verify(ITestRoot root)
         {
             var game = root.Get<Game>();
@@ -34,14 +39,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             foreach (var verification in playerHeroVerifications)
                 verification.Verify(root);
 
+            BoardView.Verify(root);
             _conflictView?.Verify(root);
             _eventView?.Verify(root);
             _blightSelectionView?.Verify(root);
             _necromancerView?.Verify(root);
             _searchView?.Verify(root);
         }
-
-        public IVerifiable Parent => null;
 
         public EventViewVerification EventView
         {
@@ -96,6 +100,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
                 return _prayerView;
             } 
         }
+
+        public BoardViewVerification BoardView { get; }
 
         public PlayerVerification LocationSelectionView(params string[] locations)
         {

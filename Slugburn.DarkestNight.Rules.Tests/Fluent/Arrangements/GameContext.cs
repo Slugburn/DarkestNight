@@ -39,7 +39,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 
         public IGameContext Darkness(int value)
         {
-            GetGame().Darkness = value;
+            var game = GetGame();
+            game.Darkness = value;
+            game.UpdatePlayerBoard();
             return this;
         }
 
