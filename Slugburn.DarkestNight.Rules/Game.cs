@@ -243,7 +243,14 @@ namespace Slugburn.DarkestNight.Rules
 
         public void UpdatePlayerBoard()
         {
-            Players.ForEach(p => p.UpdateBoard(new BoardModel(this)));
+            foreach (var player in Players)
+                player.UpdateBoard(new BoardModel(this));
+        }
+
+        public void UpdateAvailableCommands()
+        {
+            foreach (var hero in Heroes)
+                hero.UpdateAvailableCommands();
         }
     }
 }

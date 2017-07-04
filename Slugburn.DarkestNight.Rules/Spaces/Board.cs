@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Spaces
         public static Board CreateFor(Game game)
         {
             var board = new Board();
-            var spaces = new Space[] { new Monastery(), new Mountains(), new Castle(), new Swamp(), new Ruins(), new Forest(), new Village() };
+            var spaces = new Space[] { new Monastery(), new Mountains(), new Village(),  new Forest(), new Castle(), new Swamp(), new Ruins()};
             foreach (var space in spaces)
                 space.Game = game;
             board._spaces = spaces.ToDictionary(space => space.Location);

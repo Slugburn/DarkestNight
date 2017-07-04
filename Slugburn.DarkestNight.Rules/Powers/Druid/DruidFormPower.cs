@@ -37,7 +37,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             hero.Powers.OfType<IDruidForm>().ToList().ForEach(x => x.Deactivate(hero));
         }
 
-        private class ActivateForm : PowerAction
+        private class ActivateForm : ActivatePowerAction
         {
             public ActivateForm(IActionPower power) : base(power)
             {
@@ -46,8 +46,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             public override void Execute(Hero hero)
             {
                 DeactivateAllForms(hero);
-                var power = (IDruidForm) hero.GetPower(Name);
-                power.Activate(hero);
+                base.Execute(hero);
             }
         }
 

@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels">
+    <DataTemplate DataType="{x:Type vm:Location}">
+        <StackPanel Width="100"  Background="{Binding Highlight}" Margin="10">
+            <StackPanel.InputBindings>
+                <MouseBinding Gesture="LeftClick" Command="{Binding SelectCommand}"></MouseBinding>
+            </StackPanel.InputBindings>
+            <Label FontWeight="Bold" Content="{Binding Name}" />
+            <ItemsControl ItemsSource="{Binding Tokens}" />
+            <ItemsControl ItemsSource="{Binding Blights}" />
+        </StackPanel>
+    </DataTemplate>
+
+</ResourceDictionary>

@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Slugburn.DarkestNight.Rules;
+using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Powers;
+using Slugburn.DarkestNight.Wpf.ViewModels;
 
 namespace Slugburn.DarkestNight.Wpf
 {
@@ -23,6 +15,20 @@ namespace Slugburn.DarkestNight.Wpf
         public MainWindow()
         {
             InitializeComponent();
+            var game = new Game();
+            var player = (Player)DataContext;
+            player.Game = game;
+            game.AddPlayer(player);
+            game.PopulateInitialBlights();
+            var heroes = new string[] { "Acolyte", "Druid", "Knight", "Priest" }.Select(HeroFactory.Create);
+            foreach (var hero in heroes)
+            {
+                game.AddHero(hero, player);
+                var startingPowers = hero.PowerDeck.Select(PowerFactory.Create).Where(x => x.StartingPower).Shuffle().Take(3).Select(x => x.Name).ToList();
+                foreach (var powerName in startingPowers)
+                    hero.LearnPower(powerName);
+            }
+            game.UpdatePlayerBoard();
         }
     }
 }

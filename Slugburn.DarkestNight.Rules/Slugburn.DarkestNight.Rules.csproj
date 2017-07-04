@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\IAction.cs" />
+    <Compile Include="Actions\TravelHandler.cs" />
     <Compile Include="Blights\BlightFactory.cs" />
     <Compile Include="Commands\CommandNotAvailableException.cs" />
     <Compile Include="Actions\Attack.cs" />
@@ -158,6 +159,9 @@
     <Compile Include="Items\TreasureChest.cs" />
     <Compile Include="Items\VanishingDust.cs" />
     <Compile Include="Items\Waystone.cs" />
+    <Compile Include="Models\GameModel.cs" />
+    <Compile Include="Models\TacticModel.cs" />
+    <Compile Include="Models\TargetModel.cs" />
     <Compile Include="Modifiers\BonusPowerModifer.cs" />
     <Compile Include="Extensions\ModifierExtension.cs" />
     <Compile Include="Modifiers\IRollModifier.cs" />

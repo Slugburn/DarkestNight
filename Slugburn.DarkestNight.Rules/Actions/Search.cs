@@ -44,12 +44,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             public void AcceptRoll(Hero hero, RollState rollState)
             {
                 if (rollState.Win)
-                {
                     hero.DrawSearchResults(rollState.Successes);
-                }
-                else
-                {
-                }
             }
         }
 

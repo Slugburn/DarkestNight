@@ -57,14 +57,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             _callback = callback;
         }
 
-        public void DisplayNecromancer(NecromancerModel necromancer)
+        public void DisplayNecromancer(NecromancerModel model, Callback callback)
         {
-            Necromancer = necromancer;
+            Necromancer = model;
         }
 
-        public void DisplayHeroSelection(HeroSelectionModel view, Callback callback)
+        public void DisplayHeroSelection(HeroSelectionModel model, Callback callback)
         {
-            HeroSelection = view;
+            HeroSelection = model;
             _callback = callback;
         }
 

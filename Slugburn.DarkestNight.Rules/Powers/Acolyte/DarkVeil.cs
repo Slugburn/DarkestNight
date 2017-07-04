@@ -68,7 +68,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             public override bool IsAvailable(Hero hero)
             {
                 if (!base.IsAvailable(hero)) return false;
-                if (hero.ConflictState == null) return false;
+                if (hero.ConflictState?.SelectedTargets == null) return false;
                 if (!hero.ConflictState.SelectedTargets.Any()) return false;
                 var target = hero.ConflictState.SelectedTargets.First();
                 return target.ResultNumber != null && (target.Conflict is IBlight) && !target.IsWin;

@@ -1,0 +1,58 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels">
+    <DataTemplate DataType="{x:Type vm:Conflict}">
+        <Grid Background="DarkGray" Opacity="50">
+            <Grid Background="White" Height="180" Width="480">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Row="0"  Grid.Column="0">
+                    <Label>Targets</Label>
+                    <ListBox ItemsSource="{Binding Targets}" SelectedItem="{Binding SelectedTarget}" />
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="1">
+                    <Label>Tactis</Label>
+                    <ListBox ItemsSource="{Binding Tactics}" SelectedItem="{Binding SelectedTactic}" />
+                </StackPanel>
+                <Grid Grid.Row="1" Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" FontWeight="Bold">Roll</Label>
+                    <Label Grid.Column="1" Content="{Binding Roll}" />
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="1">
+                    <Button Command="{Binding RollCommand}" Visibility="{Binding RollCommandVisibility}">Roll Dice</Button>
+                    <Button Command="{Binding AcceptRollCommand}" Visibility="{Binding AcceptRollCommandVisibility}">Accept Roll</Button>
+                    <Button Command="{Binding AcceptResultCommand}" Visibility="{Binding AcceptResultCommandVisibility}">Accept Result</Button>
+                </Grid>
+            </Grid>
+        </Grid>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:Tactic}">
+        <TextBlock>
+         <TextBlock.Inlines>
+             <Run Text="{Binding Name}" FontWeight="Bold"/>
+             <Run Text=":" />
+             <Run Text="{Binding Type}" />
+             <Run Text="{Binding Dice}" />
+         </TextBlock.Inlines>
+        </TextBlock>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:Target}">
+        <TextBlock>
+            <TextBlock.Inlines>
+                <Run Text="{Binding Name}" FontWeight="Bold" />
+                <Run Text=":" />
+                <Run Text="{Binding TargetNumber}" />
+            </TextBlock.Inlines>
+        </TextBlock>
+    </DataTemplate>
+</ResourceDictionary>

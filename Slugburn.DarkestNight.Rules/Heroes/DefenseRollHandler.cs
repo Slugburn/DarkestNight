@@ -1,4 +1,5 @@
 using System.Linq;
+using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tactics;
 using Slugburn.DarkestNight.Rules.Triggers;
@@ -18,6 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void AcceptRoll(Hero hero, RollState rollState)
         {
             var conflictState = hero.ConflictState;
+            conflictState.IsRollAccepted = true;
             var tacticType = conflictState.GetTacticType();
             if (tacticType == TacticType.Elude)
                 hero.Triggers.Send(HeroTrigger.Eluding);
@@ -25,6 +27,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             target.ResultNumber = rollState.Result;
             if (rollState.Successes > 0 && target.TacticType == TacticType.Fight)
                 hero.Triggers.Send(HeroTrigger.FightWon);
+            hero.Player.DisplayConflict(ConflictModel.FromConflictState(conflictState));
         }
     }
 }

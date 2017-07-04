@@ -8,8 +8,8 @@ namespace Slugburn.DarkestNight.Rules.Models
         {
             return new HeroStatusModel
             {
-                Grace = new HeroValueModel { Value = hero.Grace, Default = hero.DefaultGrace },
-                Secrecy = new HeroValueModel { Value = hero.Secrecy, Default = hero.DefaultSecrecy },
+                Grace = new HeroValueModel("Grace", hero.Grace, hero.DefaultGrace),
+                Secrecy = new HeroValueModel("Secrecy", hero.Secrecy, hero.DefaultSecrecy),
                 Location = hero.Location.ToString(),
             };
         }

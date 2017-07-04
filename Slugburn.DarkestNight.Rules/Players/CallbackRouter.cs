@@ -11,7 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Players
 
         public static void Route(Game game, Callback callback, object data)
         {
-            var hero = game.GetHero(callback.HeroName);
+            var hero = callback.HeroName != null ? game.GetHero(callback.HeroName) : null;
             if (callback.Handler == null)
             {
                 var route = GetRoute(hero, callback);

@@ -3,4 +3,18 @@ using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Powers
 {
+    public class ActivatePowerAction : PowerAction
+    {
+        public ActivatePowerAction(IActionPower power) : base(power)
+        {
+        }
+
+        public override void Execute(Hero hero)
+        {
+            var power = (IActivateable)_power;
+            power.Activate(hero);
+            hero.IsActionAvailable = false;
+            hero.ContinueTurn();
+        }
+    }
 }

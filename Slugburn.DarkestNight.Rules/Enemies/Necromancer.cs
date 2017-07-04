@@ -11,7 +11,7 @@ using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Enemies
 {
-    public class Necromancer : IEnemy
+    public class Necromancer : IEnemy, ICallbackHandler
     {
         private readonly Game _game;
         public Location Destination { get; private set; }
@@ -72,7 +72,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
 
             foreach (var player in _game.Players)
             {
-                player.DisplayNecromancer(NecromancerModel.From(this));
+                player.DisplayNecromancer(NecromancerModel.From(this), Callback.For(null, this));
                 player.State = PlayerState.Necromancer;
             }
 
@@ -127,6 +127,11 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             var adjacentToHero = _game.Board[selected.Location].AdjacentLocations;
             var adjacentToBoth = adjacentToNecromancer.Intersect(adjacentToHero);
             return adjacentToBoth.Shuffle().First();
+        }
+
+        public void HandleCallback(Hero hero, string path, object data)
+        {
+            CompleteTurn();
         }
     }
 }

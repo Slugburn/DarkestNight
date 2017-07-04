@@ -27,7 +27,9 @@ namespace Slugburn.DarkestNight.Rules.Rolls
         public int Successes => AdjustedRoll.Count(x => x >= TargetNumber);
 
         public int BaseDiceCount { get; set; }
-        public Hero Hero { get; private set; }
+        public Hero Hero { get; }
+
+        public bool IsAccepted { get; set; }
 
         public void Roll()
         {
@@ -39,6 +41,7 @@ namespace Slugburn.DarkestNight.Rules.Rolls
 
         public void Accept()
         {
+            IsAccepted = true;
             _rollHandlers.ForEach(x => x.AcceptRoll(Hero, this));
         }
 

@@ -1,0 +1,23 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:models="clr-namespace:Slugburn.DarkestNight.Rules.Models;assembly=Slugburn.DarkestNight.Rules"
+                    xmlns:vm="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels">
+    <DataTemplate DataType="{x:Type vm:Blight}">
+        <Label Content="{Binding Name}" Background="Transparent">
+            <Label.ToolTip>
+                <StackPanel Background="LightGray">
+                    <Label Content="{Binding Name}" FontWeight="Bold"  />
+                    <TextBlock TextWrapping="Wrap" MaxWidth="200" Text="{Binding Effect}" />
+                    <TextBlock>
+                        <TextBlock.Inlines>
+                            <Run FontStyle="Italic">Might:</Run>
+                            <Run Text="{Binding Might}"></Run>
+                            <Run FontStyle="Italic">Defense:</Run>
+                            <Run Text="{Binding Defense}"></Run>
+                        </TextBlock.Inlines>
+                    </TextBlock>
+                </StackPanel>
+            </Label.ToolTip>
+        </Label>
+    </DataTemplate>
+</ResourceDictionary>

@@ -31,6 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
 
         public bool IntercedeForLostGrace(Hero other, int amount)
         {
+            if (Owner.Location != other.Location) return false;
             if (!Owner.CanSpendGrace) return false;
             if (Owner.Grace < amount) return false;
             var question = new QuestionModel("Intercession",
@@ -41,6 +42,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
 
         public bool IntercedeForSpentGrace(Hero other, int amount)
         {
+            if (Owner.Location != other.Location) return false;
             if (!CanIntercedeFor(other)) return false;
             if (Owner.Grace < amount) return false;
             if (other.Grace < amount)

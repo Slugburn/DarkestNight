@@ -20,6 +20,7 @@ namespace Slugburn.DarkestNight.Rules.Conflicts
         public ICollection<TargetInfo> AvailableTargets { get; set; }
         public ICollection<int> Roll { get; set; }
         public ICollection<ConflictTarget> Effects {get;} = new List<ConflictTarget>();
+        public bool IsRollAccepted { get; set; }
 
         public void Resolve(Hero hero)
         {

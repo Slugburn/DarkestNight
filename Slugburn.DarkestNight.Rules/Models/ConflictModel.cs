@@ -7,23 +7,46 @@ namespace Slugburn.DarkestNight.Rules.Models
 {
     public class ConflictModel
     {
-        public List<Target> Targets { get; set; }
-        public List<Tactic> Tactics { get; set; }
+        public List<TargetModel> Targets { get; set; }
+        public List<TacticModel> Tactics { get; set; }
         public int TargetCount { get; set; }
         public ICollection<int> Roll { get; set; }
+        public bool IsAccepted { get; set; }
 
         public ConflictEffect Effect { get; set; }
         public bool? Win { get; set; }
 
-        public class Tactic
+        public bool IsRollAccepted { get; set; }
+
+        public static ConflictModel FromConflictState(ConflictState state)
         {
-            public string Name { get; set; }
+            var targets = state.SelectedTargets?.Select(CreateTarget).ToList() ?? state.AvailableTargets.Select(CreateTarget).ToList();
+            var tactics = state.SelectedTactic == null
+                ? state.AvailableTactics.Select(CreateTactic).ToList()
+                : new List<TacticModel> {CreateTactic(state.SelectedTactic)};
+            var targetCount = state.MaxTarget;
+            var roll = state.Roll ?? new List<int>();
+            bool? win = null;
+            var resolvedTargets = state.SelectedTargets?.Where(x => x.ResultNumber != null).ToList();
+            if (resolvedTargets != null && resolvedTargets.Any())
+                win = resolvedTargets.Any(x => x.IsWin);
+            var isRollAccepted = state.IsRollAccepted;
+            return new ConflictModel {Targets = targets, Tactics = tactics, TargetCount = targetCount, Roll = roll, Win = win, IsRollAccepted = isRollAccepted};
         }
 
-        public class Target
+        private static TacticModel CreateTactic(TacticInfo info)
         {
-            public int Id { get; set; }
-            public string Name { get; set; }
+            return new TacticModel(info);
+        }
+
+        private static TargetModel CreateTarget(TargetInfo targetInfo)
+        {
+            return new TargetModel(targetInfo);
+        }
+
+        public static TargetModel CreateTarget(ConflictTarget target)
+        {
+            return new TargetModel(target);
         }
 
         public class ConflictEffect
@@ -34,36 +57,5 @@ namespace Slugburn.DarkestNight.Rules.Models
             public string Outcome { get; set; }
             public string Effect { get; set; }
         }
-
-        public static ConflictModel FromConflictState(ConflictState state)
-        {
-            var targets = state.SelectedTargets?.Select(CreateTarget).ToList() ?? state.AvailableTargets.Select(CreateTarget).ToList();
-            var tactics = state.SelectedTactic == null 
-                ? state.AvailableTactics.Select(CreateTactic).ToList() 
-                : new List<Tactic> {CreateTactic(state.SelectedTactic)};
-            var targetCount = state.MaxTarget;
-            var roll = state.Roll ?? new List<int>();
-            bool? win = null;
-            var resolvedTargets = state.SelectedTargets?.Where(x => x.ResultNumber != null).ToList();
-            if (resolvedTargets != null && resolvedTargets.Any())
-                win = resolvedTargets.Any(x => x.IsWin);
-            return new ConflictModel {Targets = targets, Tactics = tactics, TargetCount = targetCount, Roll = roll, Win = win};
-        }
-
-        private static Tactic CreateTactic(TacticInfo x)
-        {
-            return new Tactic {Name = x.Name};
-        }
-
-        private static Target CreateTarget(TargetInfo targetInfo)
-        {
-            return new Target {Id = targetInfo.Id, Name = targetInfo.Name};
-        }
-
-        public static Target CreateTarget(ConflictTarget target)
-        {
-            return new Target() {Id = target.Id, Name = target.Name};
-        }
     }
-
 }

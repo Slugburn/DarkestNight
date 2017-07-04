@@ -11,8 +11,8 @@ namespace Slugburn.DarkestNight.Rules.Players
         void DisplayPowers(ICollection<PowerModel> powers, Callback callback);
         void DisplayBlightSelection(BlightSelectionModel blightSelection, Callback callback);
         void DisplayLocationSelection(ICollection<string> locations, Callback callback);
-        void DisplayNecromancer(NecromancerModel necromancer);
-        void DisplayHeroSelection(HeroSelectionModel view, Callback callback);
+        void DisplayNecromancer(NecromancerModel model, Callback callback);
+        void DisplayHeroSelection(HeroSelectionModel model, Callback callback);
         void DisplayAskQuestion(QuestionModel view, Callback callback);
         void DisplaySearch(PlayerSearch view, Callback callback);
         void DisplayPrayer(PlayerPrayer view);

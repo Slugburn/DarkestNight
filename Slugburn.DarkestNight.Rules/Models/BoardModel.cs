@@ -11,6 +11,10 @@ namespace Slugburn.DarkestNight.Rules.Models
             Locations = game.Board.Spaces.Select(space => new LocationModel(game, space)).ToList();
         }
 
+        public BoardModel()
+        {
+        }
+
         public int Darkness { get; set; }
         public List<LocationModel> Locations { get; set; }
     }

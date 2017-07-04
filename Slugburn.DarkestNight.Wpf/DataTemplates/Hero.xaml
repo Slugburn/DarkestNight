@@ -1,0 +1,35 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels">
+    <DataTemplate DataType="{x:Type vm:Hero}">
+        <StackPanel Width="175" Background="{Binding Highlight}">
+            <StackPanel.InputBindings>
+                <MouseBinding Gesture="LeftClick" Command="{Binding SelectCommand}"></MouseBinding>
+            </StackPanel.InputBindings>
+            <Label Content="{Binding Name}" FontWeight="Bold" />
+            <ContentControl Content="{Binding Status}" />
+            <ItemsControl ItemsSource="{Binding Commands}" />
+        </StackPanel>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:HeroStatus}">
+        <StackPanel>
+            <ContentControl Content="{Binding Grace}" />
+            <ContentControl Content="{Binding Secrecy}" />
+        </StackPanel>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:HeroValue}">
+        <TextBlock>
+            <TextBlock.Inlines>
+                <Run Text="{Binding Name}" />
+                <Run Text="{Binding Value}" />
+                <Run >/</Run>
+                <Run Text ="{Binding Default}" />
+            </TextBlock.Inlines>
+        </TextBlock>
+    </DataTemplate>
+    <DataTemplate  DataType="{x:Type vm:HeroCommand}">
+        <StackPanel>
+            <Button Content="{Binding Name}" Command="{Binding Command}" />
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

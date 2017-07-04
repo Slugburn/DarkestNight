@@ -27,7 +27,7 @@ namespace Slugburn.DarkestNight.Rules.Players
 
         public static Callback For(Hero hero, ICallbackHandler handler)
         {
-            return new Callback(hero.Name, handler);
+            return new Callback(hero?.Name, handler);
         }
 
         private Callback(string heroName, string route)

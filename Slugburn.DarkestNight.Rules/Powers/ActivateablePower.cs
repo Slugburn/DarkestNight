@@ -1,5 +1,4 @@
 ﻿using System;
-using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Powers
@@ -37,19 +36,6 @@ namespace Slugburn.DarkestNight.Rules.Powers
             if (IsActive)
                 Deactivate(hero);
             base.Exhaust(hero);
-        }
-
-        public class ActivatePowerAction : PowerAction
-        {
-            public ActivatePowerAction(IActionPower power) : base(power)
-            {
-            }
-
-            public override void Execute(Hero hero)
-            {
-                var power = (IActivateable)_power;
-                power.Activate(hero);
-            }
         }
     }
 }
