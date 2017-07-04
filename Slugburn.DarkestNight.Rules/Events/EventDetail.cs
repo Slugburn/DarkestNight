@@ -7,9 +7,9 @@ namespace Slugburn.DarkestNight.Rules.Events
 {
     public class EventDetail
     {
+        private readonly List<EventRow> _rows = new List<EventRow>();
         private readonly List<EventEnemy> _enemies = new List<EventEnemy>();
         private readonly Dictionary<string, EventOption> _options = new Dictionary<string, EventOption>();
-        private readonly List<EventRow> _rows = new List<EventRow>();
 
         private string _text;
         private Func<Hero, int,int, bool> _rowSelector;
@@ -77,7 +77,12 @@ namespace Slugburn.DarkestNight.Rules.Events
                 Text = row.Text,
                 SubText = row.SubText,
                 IsActive = _rowSelector?.Invoke(hero, row.Min, row.Max) ?? false
-            }).ToList();
+            }).Concat(_enemies.Select(e => new HeroEventRow
+            {
+                Min = e.Min,
+                Max = e.Max,
+                Text = e.Name,
+            })).ToList();
         }
 
         public class EventDetailCreation

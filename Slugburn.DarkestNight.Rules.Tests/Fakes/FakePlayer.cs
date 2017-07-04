@@ -74,9 +74,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             _callback = callback;
         }
 
-        public void DisplaySearch(PlayerSearch view, Callback callback)
+        public void DisplaySearch(SearchModel model, Callback callback)
         {
-            Search = view;
+            Search = model;
             _callback = callback;
         }
 
@@ -95,7 +95,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             Board = view;
         }
 
-        public void UpdateHeroCommands(string heroName, IEnumerable<CommandModel> commands)
+        public void UpdateHeroCommands(string heroName, IEnumerable<PowerModel> powers, IEnumerable<CommandModel> commands)
         {
             Heroes.Single(x => x.Name == heroName).Commands = commands.ToList();
         }
@@ -106,7 +106,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         }
 
         public QuestionModel AskQuestion { get; set; }
-        public PlayerSearch Search { get; set; }
+        public SearchModel Search { get; set; }
         public PlayerPrayer Prayer { get; set; }
         public List<HeroModel> Heroes { get; set; } = new List<HeroModel>();
         public BoardModel Board { get; set; }
@@ -185,9 +185,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             CallbackRouter.Route(_game, _callback, answer);
         }
 
-        public void SelectSearchResult(string resultName)
+        public void SelectSearchResult(string code)
         {
-            CallbackRouter.Route(_game, _callback, resultName.ToFind());
+            CallbackRouter.Route(_game, _callback, code);
         }
 
         public void TradeItem(int itemId, string fromHeroName, string toHeroName)

@@ -11,7 +11,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
 {
     public class Location : INotifyPropertyChanged
     {
-        private int _searchTarget;
+        private string _searchTarget;
         private List<string> _tokens;
         private List<Blight> _blights;
         private Brush _highlight = new SolidColorBrush(Colors.LightGray);
@@ -20,14 +20,14 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         public Location(LocationModel model)
         {
             Name = model.Name;
-            SearchTarget = model.SearchTarget;
+            SearchTarget = model.SearchTarget > 0 ? $"{model.SearchTarget}+" : null;
             Tokens = model.Tokens;
             Blights = model.Blights.Select(b => new Blight(b)).ToList();
         }
 
         public string Name { get; set; }
 
-        public int SearchTarget
+        public string SearchTarget
         {
             get { return _searchTarget; }
             set

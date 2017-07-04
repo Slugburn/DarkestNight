@@ -11,9 +11,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes
     {
         public void HandleCallback(Hero hero, string path, object data)
         {
-            var result = (Find) data;
+            hero.Player.DisplaySearch(null, null);
+            var code = (string) data;
+            var find = code.ToEnum<Find>();
             var game = hero.Game;
-            switch (result)
+            switch (find)
             {
                 case Find.Key:
                     hero.AddToInventory(game.CreateItem("Key"));
@@ -53,7 +55,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             var powerNames = hero.PowerDeck.Draw(2);
             var powers = powerNames.Select(PowerFactory.Create).ToList();
-            var viewModel = PowerModel.FromPowers(powers).ToList();
+            var viewModel = PowerModel.Create(powers).ToList();
             hero.Player.DisplayPowers(viewModel, Callback.For(hero, new SupplyCacheCallback(powerNames)));
         }
 
@@ -61,7 +63,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             var powerNames = hero.PowerDeck;
             var powers = powerNames.Select(PowerFactory.Create).ToList();
-            var viewModel = PowerModel.FromPowers(powers).ToList();
+            var viewModel = PowerModel.Create(powers).ToList();
             hero.Player.DisplayPowers(viewModel, Callback.For(hero, new EpiphanyCallback()));
         }
 

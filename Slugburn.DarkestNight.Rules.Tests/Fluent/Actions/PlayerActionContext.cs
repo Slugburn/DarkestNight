@@ -168,7 +168,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         public IPlayerActionContext SelectsSearchResult(string resultName = null)
         {
             var player = GetPlayer();
-            resultName = resultName ?? player.Search.SearchResults.Single();
+            resultName = resultName ?? player.Search.SearchResults.Single().Code;
             player.SelectSearchResult(resultName);
             return this;
         }

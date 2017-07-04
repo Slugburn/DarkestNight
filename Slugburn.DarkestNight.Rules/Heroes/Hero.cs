@@ -408,7 +408,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             CurrentRoll.BaseName = tactic.Name;
 
             CurrentRoll.Roll();
+            ConflictState.Roll = CurrentRoll.AdjustedRoll;
             UpdateAvailableCommands();
+            DisplayConflictState();
         }
 
         public void AcceptRoll()
@@ -505,6 +507,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void EndEvent()
         {
             CurrentEvent = null;
+            Player.DisplayEvent(null);
             ContinueTurn();
         }
 
@@ -612,11 +615,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void UpdateAvailableCommands()
         {
-            var before = new HashSet<string>(AvailableCommands?.Select(x => x.Name) ?? new string[0]);
             AvailableCommands = GetAvailableCommands();
-            var after = new HashSet<string>(AvailableCommands?.Select(x => x.Name) ?? new string[0]);
-            if (!before.SetEquals(after))
-                Player.UpdateHeroCommands(Name, CommandModel.FromCommands(AvailableCommands));
+            Player.UpdateHeroCommands(Name, PowerModel.Create(Powers), CommandModel.Create(AvailableCommands));
         }
 
         public void DisplayConflictState()
@@ -824,7 +824,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         internal void DrawSearchResults(int count)
         {
             var results = Game.DrawSearchResult(Location, count);
-            Player.DisplaySearch(PlayerSearch.From(this, results), Callback.For(this, new SearchResultSelectedHandler()) );
+            Player.DisplaySearch(SearchModel.From(this, results), Callback.For(this, new SearchResultSelectedHandler()) );
         }
     }
 }

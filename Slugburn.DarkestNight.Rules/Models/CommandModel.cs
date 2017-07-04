@@ -9,14 +9,14 @@ namespace Slugburn.DarkestNight.Rules.Models
         public string Name { get; set; }
         public string Text { get; set; }
 
-        public static CommandModel FromCommand(ICommand command)
+        public static CommandModel Create(ICommand command)
         {
             return new CommandModel {Name = command.Name, Text = command.Text};
         }
 
-        public static IEnumerable<CommandModel> FromCommands(IEnumerable<ICommand> commands)
+        public static List<CommandModel> Create(IList<ICommand> commands)
         {
-            return commands.Select(FromCommand);
+            return commands?.Select(Create).ToList();
         }
     }
 }

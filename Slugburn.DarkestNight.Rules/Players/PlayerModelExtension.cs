@@ -9,7 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Players
     {
         public static List<PowerModel> ToPlayerPowers(this IEnumerable<IPower> powers)
         {
-            return powers.Select(PowerModel.FromPower).ToList();
+            return powers.Select(PowerModel.Create).ToList();
         }
     }
 }

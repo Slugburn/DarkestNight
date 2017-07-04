@@ -14,11 +14,11 @@ namespace Slugburn.DarkestNight.Rules.Players
         void DisplayNecromancer(NecromancerModel model, Callback callback);
         void DisplayHeroSelection(HeroSelectionModel model, Callback callback);
         void DisplayAskQuestion(QuestionModel view, Callback callback);
-        void DisplaySearch(PlayerSearch view, Callback callback);
+        void DisplaySearch(SearchModel model, Callback callback);
         void DisplayPrayer(PlayerPrayer view);
         void AddHero(HeroModel view);
         void UpdateBoard(BoardModel view);
-        void UpdateHeroCommands(string heroName, IEnumerable<CommandModel> commands);
+        void UpdateHeroCommands(string heroName, IEnumerable<PowerModel> powers, IEnumerable<CommandModel> commands);
         void UpdateHeroStatus(string heroName, HeroStatusModel status);
     }
 }

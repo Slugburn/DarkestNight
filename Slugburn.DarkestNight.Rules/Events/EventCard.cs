@@ -23,6 +23,7 @@ namespace Slugburn.DarkestNight.Rules.Events
         public void Resolve(Hero hero, string option)
         {
             _resolve(hero, option);
+            hero.EndEvent();
         }
     }
 }

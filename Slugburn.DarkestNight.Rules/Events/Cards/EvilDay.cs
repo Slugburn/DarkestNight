@@ -20,7 +20,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             switch (option)
             {
                 case "exhaust":
-                    var powers = hero.Powers.Where(x => !x.Exhausted).Select(PowerModel.FromPower).ToList();
+                    var powers = hero.Powers.Where(x => !x.Exhausted).Select(PowerModel.Create).ToList();
                     var player = hero.Player;
                     player.State = PlayerState.SelectPower;
                     player.DisplayPowers(powers, Callback.ForEvent(hero, this));

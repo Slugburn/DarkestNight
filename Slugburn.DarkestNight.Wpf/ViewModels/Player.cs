@@ -18,6 +18,8 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         private List<Hero> _heroes = new List<Hero>();
         private Game _game;
         private Conflict _conflict;
+        private EventVm _event;
+        private SearchVm _search;
 
         public Game Game
         {
@@ -25,7 +27,9 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             set
             {
                 _game = value;
-                Conflict = new Conflict(value);
+                Conflict = new Conflict(_game);
+                Event = new EventVm(_game);
+                Search = new SearchVm(_game);
             }
         }
 
@@ -62,6 +66,17 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
+        public EventVm Event
+        {
+            get { return _event; }
+            set
+            {
+                if (Equals(value, _event)) return;
+                _event = value;
+                OnPropertyChanged();
+            }
+        }
+
         public Conflict Conflict
         {
             get { return _conflict; }
@@ -73,10 +88,21 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public PlayerState State { get; set; }
-        public void DisplayEvent(EventModel playerEvent)
+        public SearchVm Search
         {
-            throw new NotImplementedException();
+            get { return _search; }
+            set
+            {
+                if (Equals(value, _search)) return;
+                _search = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public PlayerState State { get; set; }
+        public void DisplayEvent(EventModel model)
+        {
+            Event.Update(model);
         }
 
         public void DisplayConflict(ConflictModel model)
@@ -141,9 +167,9 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             throw new NotImplementedException();
         }
 
-        public void DisplaySearch(PlayerSearch view, Callback callback)
+        public void DisplaySearch(SearchModel model, Callback callback)
         {
-            throw new NotImplementedException();
+            Search.Update(model, callback);
         }
 
         public void DisplayPrayer(PlayerPrayer view)
@@ -162,10 +188,11 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             Locations = view.Locations.Select(l=>new Location(l)).ToList();
         }
 
-        public void UpdateHeroCommands(string heroName, IEnumerable<CommandModel> commands)
+        public void UpdateHeroCommands(string heroName, IEnumerable<PowerModel> powers, IEnumerable<CommandModel> commands)
         {
             var hero = Heroes.Single(x => x.Name == heroName);
-            hero.Commands = commands.Select(c=>new HeroCommand(Game, heroName, c)).ToList();
+            hero.Powers = Power.Create(powers);
+            hero.Commands = HeroCommand.Create(Game, heroName, commands);
         }
 
         public void UpdateHeroStatus(string heroName, HeroStatusModel status)

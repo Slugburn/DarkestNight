@@ -53,6 +53,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             public void HandleTrigger(Game game, string source, TriggerContext context)
             {
                 var hero = _visions.Owner;
+                if (hero.CurrentEvent == null) return;
                 var selectedOption = hero.CurrentEvent.SelectedOption;
                 if (selectedOption != PowerName) return;
 

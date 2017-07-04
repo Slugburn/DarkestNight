@@ -159,6 +159,8 @@
     <Compile Include="Items\TreasureChest.cs" />
     <Compile Include="Items\VanishingDust.cs" />
     <Compile Include="Items\Waystone.cs" />
+    <Compile Include="Models\EventOptionModel.cs" />
+    <Compile Include="Models\EventRowModel.cs" />
     <Compile Include="Models\GameModel.cs" />
     <Compile Include="Models\TacticModel.cs" />
     <Compile Include="Models\TargetModel.cs" />
@@ -286,7 +288,7 @@
     <Compile Include="Models\NecromancerModel.cs" />
     <Compile Include="Models\PowerModel.cs" />
     <Compile Include="Models\PlayerPrayer.cs" />
-    <Compile Include="Models\PlayerSearch.cs" />
+    <Compile Include="Models\SearchModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Players\Models\" />

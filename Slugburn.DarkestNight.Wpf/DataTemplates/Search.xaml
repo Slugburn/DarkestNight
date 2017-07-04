@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels">
+    <DataTemplate DataType="{x:Type vm:SearchVm}">
+        <Border BorderThickness="2">
+            <StackPanel Visibility="{Binding Visibility}" Background="White" Height="150" Width="300">
+                <Label FontWeight="Bold" HorizontalAlignment="Center" Padding="10">Search</Label>
+                <TextBlock HorizontalAlignment="Center">
+                    <TextBlock.Inlines>
+                        <Run FontWeight="Bold">Roll:</Run>
+                        <Run Text="{Binding Roll}" />
+                    </TextBlock.Inlines>
+                </TextBlock>
+                <ListBox Visibility="{Binding ResultsVisibility}" ItemsSource="{Binding Results}" SelectedItem="{Binding SelectedResult}" DisplayMemberPath="Name"
+                     HorizontalAlignment="Center" Width="180" Height="60" Padding="10">
+                </ListBox>
+                <Button Content="{Binding CommandText}" Command="{Binding Command}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Padding="10" />
+            </StackPanel>
+        </Border>
+    </DataTemplate>
+</ResourceDictionary>

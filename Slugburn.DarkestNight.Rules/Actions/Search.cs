@@ -31,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 .Target(space.GetSearchTarget(hero)));
             hero.Triggers.Send(HeroTrigger.Searched);
             state.Roll();
-            hero.Player.DisplaySearch(PlayerSearch.From(hero, null), Callback.ForCommand(hero, this));
+            hero.Player.DisplaySearch(SearchModel.From(hero, null), Callback.ForCommand(hero, this));
         }
 
         public class SearchRollHandler : IRollHandler
@@ -45,12 +45,15 @@ namespace Slugburn.DarkestNight.Rules.Actions
             {
                 if (rollState.Win)
                     hero.DrawSearchResults(rollState.Successes);
+                else
+                    hero.Player.DisplaySearch(null, null);
             }
         }
 
         public void HandleCallback(Hero hero, string path, object data)
         {
-            throw new System.NotImplementedException();
+            hero.Player.DisplaySearch(null, null);
+            hero.ContinueTurn();
         }
     }
 }

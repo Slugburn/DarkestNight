@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels"
         mc:Ignorable="d"
-        Title="Darkest Night" Height="480" Width="640" >
+        Title="Darkest Night" Height="600" Width="800" >
     <Window.DataContext>
         <vm:Player />
     </Window.DataContext>
@@ -15,16 +15,18 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="DataTemplates/Blight.xaml"/>
                 <ResourceDictionary Source="DataTemplates/Conflict.xaml"/>
+                <ResourceDictionary Source="DataTemplates/Event.xaml"/>
                 <ResourceDictionary Source="DataTemplates/Hero.xaml"/>
                 <ResourceDictionary Source="DataTemplates/Location.xaml"/>
+                <ResourceDictionary Source="DataTemplates/Search.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid>
+    <Grid Height="600" Width="800">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition />
+            <RowDefinition  />
+            <RowDefinition Height="300" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0">
             <TextBlock.Inlines>
@@ -46,8 +48,8 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
-        <ContentControl Grid.Row="0" Grid.RowSpan="2" Content="{Binding Conflict, diag:PresentationTraceSources.TraceLevel=High}" Visibility="{Binding Conflict.Visibility}"
-                        Background="LightGray" Opacity="50">
-        </ContentControl>
+        <ContentControl Grid.Row="0" Grid.RowSpan="2" Content="{Binding Event}" />
+        <ContentControl Grid.Row="0" Grid.RowSpan="2" Content="{Binding Conflict, diag:PresentationTraceSources.TraceLevel=High}" />
+        <ContentControl Grid.Row="0" Grid.RowSpan="2" Content="{Binding Search}" />
     </Grid>
 </Window>

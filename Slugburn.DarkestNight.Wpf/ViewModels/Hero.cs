@@ -14,18 +14,21 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
     {
         private readonly Game _game;
         private List<HeroCommand> _commands;
-        private HeroStatus _status;
         private SolidColorBrush _highlight;
         private ICommand _selectCommand;
+        private HeroStatus _status;
+        private List<Power> _powers;
 
         public Hero(Game game, HeroModel model)
         {
             _game = game;
             Name = model.Name;
             Status = new HeroStatus(model.Status);
+            Powers = Power.Create(model.Powers);
             if (model.Commands != null)
-                Commands = model.Commands.Select(c => new HeroCommand(_game, model.Name , c)).ToList();
+                Commands = model.Commands.Select(c => new HeroCommand(_game, model.Name, c)).ToList();
         }
+
         public string Name { get; set; }
 
         public List<HeroCommand> Commands
@@ -46,6 +49,17 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             {
                 if (Equals(value, _status)) return;
                 _status = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public List<Power> Powers
+        {
+            get { return _powers; }
+            set
+            {
+                if (Equals(value, _powers)) return;
+                _powers = value;
                 OnPropertyChanged();
             }
         }
@@ -80,4 +94,35 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
+
+    public class HeroCommand
+    {
+        private readonly Game _game;
+        private readonly string _heroName;
+
+        public HeroCommand(Game game, string heroName, CommandModel model)
+        {
+            _game = game;
+            _heroName = heroName;
+            Name = model.Name;
+            Text = model.Text;
+            Command = new CommandHandler(Execute);
+        }
+
+        public string Name { get; set; }
+        public string Text { get; set; }
+
+        public ICommand Command { get; set; }
+
+        private void Execute()
+        {
+            _game.GetHero(_heroName).ExecuteCommand(Name);
+        }
+
+        public static List<HeroCommand> Create(Game game, string heroName, IEnumerable<CommandModel> commands)
+        {
+            return commands.Select(c=>new HeroCommand(game, heroName, c)).ToList();
+        }
+    }
+
 }

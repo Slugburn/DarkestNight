@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:vm="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels">
     <DataTemplate DataType="{x:Type vm:Conflict}">
-        <Grid Background="DarkGray" Opacity="50">
+        <Grid Visibility="{Binding Visibility}">
+            <Grid Background="DarkGray" Opacity="0.50" />
             <Grid Background="White" Height="180" Width="480">
                 <Grid.RowDefinitions>
                     <RowDefinition />

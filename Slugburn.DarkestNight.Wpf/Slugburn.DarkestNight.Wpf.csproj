@@ -59,12 +59,14 @@
     <Compile Include="CommandHandler.cs" />
     <Compile Include="ViewModels\Blight.cs" />
     <Compile Include="ViewModels\Conflict.cs" />
-    <Compile Include="ViewModels\HeroCommand.cs" />
+    <Compile Include="ViewModels\EventVm.cs" />
     <Compile Include="ViewModels\Hero.cs" />
     <Compile Include="ViewModels\HeroStatus.cs" />
     <Compile Include="ViewModels\HeroValue.cs" />
     <Compile Include="ViewModels\Location.cs" />
     <Compile Include="ViewModels\Player.cs" />
+    <Compile Include="ViewModels\Power.cs" />
+    <Compile Include="ViewModels\SearchVm.cs" />
     <Compile Include="ViewModels\Tactic.cs" />
     <Compile Include="ViewModels\Target.cs" />
     <Page Include="DataTemplates\Blight.xaml">
@@ -75,6 +77,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="DataTemplates\Event.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DataTemplates\Hero.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -82,6 +88,10 @@
     <Page Include="DataTemplates\Location.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DataTemplates\Search.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

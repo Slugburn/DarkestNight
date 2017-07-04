@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Models
@@ -8,17 +9,19 @@ namespace Slugburn.DarkestNight.Rules.Models
     {
         public string Name { get; set; }
         public HeroStatusModel Status { get; set; }
+        public List<PowerModel> Powers { get; set; }
         public List<CommandModel> Commands { get; set; }
         public List<ItemModel> Inventory { get; set; }
 
 
-        public static HeroModel FromHero(Hero hero)
+        public static HeroModel Create(Hero hero)
         {
             return new HeroModel
             {
                 Name = hero.Name,
                 Status = HeroStatusModel.FromHero(hero),
-                Commands = hero.AvailableCommands?.Select(CommandModel.FromCommand).ToList(),
+                Powers = PowerModel.Create(hero.Powers),
+                Commands = CommandModel.Create(hero.AvailableCommands),
                 Inventory = hero.GetInventory().Select(ItemModel.FromItem).ToList()
             };
         }

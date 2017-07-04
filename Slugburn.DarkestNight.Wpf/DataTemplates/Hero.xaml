@@ -8,6 +8,7 @@
             </StackPanel.InputBindings>
             <Label Content="{Binding Name}" FontWeight="Bold" />
             <ContentControl Content="{Binding Status}" />
+            <ItemsControl ItemsSource="{Binding Powers}" />
             <ItemsControl ItemsSource="{Binding Commands}" />
         </StackPanel>
     </DataTemplate>
@@ -31,5 +32,17 @@
         <StackPanel>
             <Button Content="{Binding Name}" Command="{Binding Command}" />
         </StackPanel>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:Power}">
+        <TextBlock Text="{Binding Name}" FontStyle="{Binding Style}" TextDecorations="{Binding Decorations}">
+            <TextBlock.ToolTip>
+                <ToolTip>
+                    <StackPanel MaxWidth="200">
+                        <Label Content="{Binding Name}" FontWeight="Bold" HorizontalAlignment="Center" />
+                        <TextBlock Text="{Binding Text}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </ToolTip>
+            </TextBlock.ToolTip>
+        </TextBlock>
     </DataTemplate>
 </ResourceDictionary>

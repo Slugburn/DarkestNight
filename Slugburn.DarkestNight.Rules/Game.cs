@@ -125,7 +125,7 @@ namespace Slugburn.DarkestNight.Rules
         {
             Heroes.Add(hero);
             hero.JoinGame(this, player);
-            player.AddHero(HeroModel.FromHero(hero));
+            player.AddHero(HeroModel.Create(hero));
         }
 
         public void IncreaseDarkness(int count = 1)
@@ -189,6 +189,7 @@ namespace Slugburn.DarkestNight.Rules
 
             _blights.Remove(blightId);
             space.RemoveBlight(blight);
+            UpdatePlayerBoard();
             Triggers.Send(GameTrigger.BlightDestroyed, location);
         }
 

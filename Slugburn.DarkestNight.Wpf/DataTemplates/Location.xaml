@@ -2,14 +2,21 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:vm="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels">
     <DataTemplate DataType="{x:Type vm:Location}">
-        <StackPanel Width="100"  Background="{Binding Highlight}" Margin="10">
-            <StackPanel.InputBindings>
+        <Grid Width="90" Height="200"  Background="{Binding Highlight}" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.InputBindings>
                 <MouseBinding Gesture="LeftClick" Command="{Binding SelectCommand}"></MouseBinding>
-            </StackPanel.InputBindings>
-            <Label FontWeight="Bold" Content="{Binding Name}" />
-            <ItemsControl ItemsSource="{Binding Tokens}" />
-            <ItemsControl ItemsSource="{Binding Blights}" />
-        </StackPanel>
+            </Grid.InputBindings>
+            <StackPanel Grid.Row="0">
+                <Label Content="{Binding Name}" FontWeight="Bold" HorizontalAlignment="Center" />
+                <ItemsControl ItemsSource="{Binding Tokens}" />
+                <ItemsControl ItemsSource="{Binding Blights}" />
+            </StackPanel>
+            <Label Grid.Row="1" Content="{Binding SearchTarget}" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+        </Grid>
     </DataTemplate>
 
 </ResourceDictionary>

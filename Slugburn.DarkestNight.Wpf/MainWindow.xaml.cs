@@ -27,6 +27,7 @@ namespace Slugburn.DarkestNight.Wpf
                 var startingPowers = hero.PowerDeck.Select(PowerFactory.Create).Where(x => x.StartingPower).Shuffle().Take(3).Select(x => x.Name).ToList();
                 foreach (var powerName in startingPowers)
                     hero.LearnPower(powerName);
+                hero.UpdateAvailableCommands();
             }
             game.UpdatePlayerBoard();
         }

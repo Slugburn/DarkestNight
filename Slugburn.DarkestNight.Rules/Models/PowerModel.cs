@@ -7,15 +7,24 @@ namespace Slugburn.DarkestNight.Rules.Models
     public class PowerModel
     {
         public string Name { get; set; }
+        public string Text { get; set; }
+        public bool IsExhausted { get; set; }
+        public bool IsActive { get; set; }
 
-        public static IEnumerable<PowerModel> FromPowers(IEnumerable<IPower> powers)
+        public static List<PowerModel> Create(IEnumerable<IPower> powers)
         {
-            return powers.Select(FromPower);
+            return powers.Select(Create).ToList();
         }
 
-        public static PowerModel FromPower(IPower power)
+        public static PowerModel Create(IPower power)
         {
-            return new PowerModel {Name = power.Name};
+            return new PowerModel
+            {
+                Name = power.Name,
+                Text = power.Text,
+                IsExhausted = power.Exhausted,
+                IsActive = (power as IActivateable)?.IsActive ?? false
+            };
         }
     }
 }

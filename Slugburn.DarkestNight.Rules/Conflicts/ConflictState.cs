@@ -26,6 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Conflicts
         {
             var rollState = hero.CurrentRoll;
             var result = rollState.Result;
+            IsRollAccepted = true;
             var target = SelectedTargets.Single();
             var assignment = TargetDieAssignment.Create(target.Id, result);
             hero.AssignDiceToTargets(new[] {assignment});
