@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards.Enemies
             switch (option)
             {
                 case "cont":
-                    var enemy = GetEnemy(hero);
+                    var enemy = Detail.GetEnemyName(hero);
                     // unlike most enemy events, we may need to come back and choose between more options,
                     // so don't end event here
                     hero.FaceEnemy(enemy);

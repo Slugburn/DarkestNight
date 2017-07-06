@@ -10,19 +10,18 @@ using Slugburn.DarkestNight.Wpf.Annotations;
 
 namespace Slugburn.DarkestNight.Wpf.ViewModels
 {
-    public class Conflict : INotifyPropertyChanged
+    public class ConflictVm : INotifyPropertyChanged
     {
         private readonly Game _game;
         private CommandHandler _command;
         private string _commandText;
         private string _roll;
         private Tactic _selectedTactic;
-        private Target _selectedTarget;
         private IEnumerable<Tactic> _tactics;
-        private List<Target> _targets;
+        private List<TargetVm> _targets;
         private Visibility _visibility;
 
-        public Conflict(Game game)
+        public ConflictVm(Game game)
         {
             _game = game;
             Visibility = Visibility.Hidden;
@@ -50,24 +49,13 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public List<Target> Targets
+        public List<TargetVm> Targets
         {
             get { return _targets; }
             set
             {
                 if (Equals(value, _targets)) return;
                 _targets = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Target SelectedTarget
-        {
-            get { return _selectedTarget; }
-            set
-            {
-                if (Equals(value, _selectedTarget)) return;
-                _selectedTarget = value;
                 OnPropertyChanged();
             }
         }
@@ -123,8 +111,8 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         {
             Visibility = model == null ? Visibility.Hidden : Visibility.Visible;
             if (model == null) return;
-            Targets = model.Targets.Select(m => new Target(m)).ToList();
-            SelectedTarget = Targets.First();
+            Targets = model.Targets.Select(m => new TargetVm(m)).ToList();
+            Targets.First().IsSelected = true;
             Tactics = model.Tactics.Select(m => new Tactic(m)).ToList();
             SelectedTactic = Tactics.First();
             Roll = model.Roll.Select(x => x.ToString()).ToCsv();
@@ -132,9 +120,13 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             if (!model.Roll.Any())
             {
                 CommandText = "Roll";
-                commandAction = () => _game.ActingHero.SelectTactic(SelectedTactic.Name, new List<int> {SelectedTarget.Id});
+                Func<bool> canExecute = () => Targets.Count(t => t.IsSelected) == model.TargetCount;
+                Command = new CommandHandler(SelectTargetAndTactic, canExecute);
+                foreach (var target in Targets)
+                    target.PropertyChanged += (sender, e) => Command.OnCanExecuteChanged();
+                return;
             }
-            else if (!model.IsRollAccepted)
+            if (!model.IsRollAccepted)
             {
                 CommandText = "Accept Roll";
                 commandAction = () => _game.ActingHero.AcceptRoll();
@@ -146,9 +138,15 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
             Command = new CommandHandler(() =>
             {
-                Visibility = Visibility.Hidden;
                 commandAction();
             });
+        }
+
+        private void SelectTargetAndTactic()
+        {
+            Visibility = Visibility.Hidden;
+            var targetIds = Targets.Where(t => t.IsSelected).Select(t => t.Id).ToList();
+            _game.ActingHero.SelectTactic(SelectedTactic.Name, targetIds);
         }
 
         [NotifyPropertyChangedInvocator]

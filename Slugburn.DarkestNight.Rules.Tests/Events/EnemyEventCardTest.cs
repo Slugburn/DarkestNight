@@ -17,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         public void BlackBanner(int blightCount, string target)
         {
             var blights = Enumerable.Repeat("Desecration", blightCount).ToArray();
-            TestEnemyGeneratorEvent("Black Banner", target, "Count the blights in your location", 4,
+            TestMultipleTypeEnemyGeneratorEvent("Black Banner", target, "Count the blights in your location", 4,
                 given => given.Hero().At("Village").Location("Village").HasBlights(blights));
         }
 
@@ -28,7 +28,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         [TestCase(20, "Slayer")]
         public void DarkChampion(int darkness, string enemy)
         {
-            TestEnemyGeneratorEvent("Dark Champion", enemy, "Compare to Darkness", 3,
+            TestMultipleTypeEnemyGeneratorEvent("Dark Champion", enemy, "Compare to Darkness", 3,
                 given => given.Game.Darkness(darkness));
         }
 
@@ -39,7 +39,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         [TestCase(0, "Dread")]
         public void DeadServant(int secrecy, string enemy)
         {
-            TestEnemyGeneratorEvent("Dead Servant", enemy, "Compare to Secrecy", 3,
+            TestMultipleTypeEnemyGeneratorEvent("Dead Servant", enemy, "Compare to Secrecy", 3,
                 given => given.Hero().Secrecy(secrecy));
         }
 
@@ -50,7 +50,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         [TestCase(0, "Deadly Demon")]
         public void Demon(int secrecy, string enemy)
         {
-            TestEnemyGeneratorEvent("Demon", enemy, "Compare to Secrecy", 3,
+            TestMultipleTypeEnemyGeneratorEvent("Demon", enemy, "Compare to Secrecy", 3,
                 given => given.Hero().Secrecy(secrecy));
         }
 
@@ -65,7 +65,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         [TestCase(0, "Giant Horde")]
         public void Horde(int secrecy, string enemy)
         {
-            TestEnemyGeneratorEvent("Horde", enemy, "Compare to Secrecy", 3,
+            TestMultipleTypeEnemyGeneratorEvent("Horde", enemy, "Compare to Secrecy", 3,
                 given => given.Hero().Secrecy(secrecy));
         }
 
@@ -76,7 +76,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         [TestCase(25, "Reaper")]
         public void Patrols(int darkness, string enemy)
         {
-            TestEnemyGeneratorEvent("Patrols", enemy, "Compare to Darkness", 4,
+            TestMultipleTypeEnemyGeneratorEvent("Patrols", enemy, "Compare to Darkness", 4,
                 given => given.Game.Darkness(darkness));
         }
 
@@ -87,7 +87,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         [TestCase(0, "Slayer")]
         public void ShamblingHorror(int secrecy, string enemy)
         {
-            TestEnemyGeneratorEvent("Shambling Horror", enemy, "Compare to Secrecy", 4,
+            TestMultipleTypeEnemyGeneratorEvent("Shambling Horror", enemy, "Compare to Secrecy", 4,
                 given => given.Hero().Secrecy(secrecy));
         }
 
@@ -98,23 +98,29 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         [TestCase(0, "Hunter")]
         public void VengefulSpirit(int secrecy, string enemy)
         {
-            TestEnemyGeneratorEvent("Vengeful Spirit", enemy, "Compare to Secrecy", 4,
+            TestMultipleTypeEnemyGeneratorEvent("Vengeful Spirit", enemy, "Compare to Secrecy", 4,
                 given => given.Hero().Secrecy(secrecy));
         }
 
-        private static void TestEnemyGeneratorEvent(string eventName, string enemy, int expectedFate)
+        private static void TestSingleTypeEnemyGeneratorEvent(string eventName, string enemy, int expectedFate)
         {
-            TestEnemyGeneratorEvent(eventName, enemy, null, expectedFate, null);
+            TestScenario
+                .Game.WithHero()
+                .Given.Hero().HasDrawnEvent(eventName)
+                .Then(Verify.Player.EventView.HasBody(eventName, expectedFate, null).HasOptions("Continue"))
+                .When.Player.SelectsEventOption("Continue")
+                .Then(Verify.Hero().HasUnresolvedEvents(0).Secrecy(null))
+                .Then(Verify.Player.ConflictView.HasTargets(enemy));
         }
 
-        private static void TestEnemyGeneratorEvent(string eventName, string enemy, string text, int expectedFate, Func<IGiven, IGiven> designator)
+        private static void TestMultipleTypeEnemyGeneratorEvent(string eventName, string enemy, string text, int expectedFate, Func<IGiven, IGiven> designator)
         {
             designator = designator ?? (s => s);
             TestScenario
                 .Game.WithHero()
                 .Given.Configure(designator)
                 .Given.Hero().HasDrawnEvent(eventName)
-                .Then(Verify.Player.EventView.HasBody(eventName, expectedFate, text).HasOptions("Continue"))
+                .Then(Verify.Player.EventView.HasBody(eventName, expectedFate, text).HasOptions("Continue").ActiveRow(enemy))
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Hero().HasUnresolvedEvents(0).Secrecy(null))
                 .Then(Verify.Player.ConflictView.HasTargets(enemy));
@@ -123,31 +129,31 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
         [Test]
         public void Cultist()
         {
-            TestEnemyGeneratorEvent("Cultist", "Cultist", 1);
+            TestSingleTypeEnemyGeneratorEvent("Cultist", "Cultist", 1);
         }
 
         [Test]
         public void Lich()
         {
-            TestEnemyGeneratorEvent("Lich", "Lich", 4);
+            TestSingleTypeEnemyGeneratorEvent("Lich", "Lich", 4);
         }
 
         [Test]
         public void Looters()
         {
-            TestEnemyGeneratorEvent("Looters", "Looters", 2);
+            TestSingleTypeEnemyGeneratorEvent("Looters", "Looters", 2);
         }
 
         [Test]
         public void Tracker()
         {
-            TestEnemyGeneratorEvent("Tracker", "Tracker", 5);
+            TestSingleTypeEnemyGeneratorEvent("Tracker", "Tracker", 5);
         }
 
         [Test]
         public void VileMessenger()
         {
-            TestEnemyGeneratorEvent("Vile Messenger", "Vile Messenger", 4);
+            TestSingleTypeEnemyGeneratorEvent("Vile Messenger", "Vile Messenger", 4);
         }
     }
 }

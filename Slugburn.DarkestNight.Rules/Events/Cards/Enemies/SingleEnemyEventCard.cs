@@ -2,7 +2,7 @@
 {
     public class SingleEnemyEventCard : EnemyEventCard
     {
-        public SingleEnemyEventCard(string name, int fate) : base(name, fate, x=>x.Enemy(name).Option("cont", "Continue"))
+        public SingleEnemyEventCard(string name, int fate) : base(name, fate, x => x.Enemy(name).Option("cont", "Continue"))
         {
         }
     }

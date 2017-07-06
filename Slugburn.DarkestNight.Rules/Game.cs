@@ -247,5 +247,10 @@ namespace Slugburn.DarkestNight.Rules
         {
             throw new NotImplementedException();
         }
+
+        public void Win()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

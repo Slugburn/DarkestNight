@@ -58,7 +58,7 @@
     </ApplicationDefinition>
     <Compile Include="CommandHandler.cs" />
     <Compile Include="ViewModels\Blight.cs" />
-    <Compile Include="ViewModels\Conflict.cs" />
+    <Compile Include="ViewModels\ConflictVm.cs" />
     <Compile Include="ViewModels\EventVm.cs" />
     <Compile Include="ViewModels\Hero.cs" />
     <Compile Include="ViewModels\HeroStatus.cs" />
@@ -72,7 +72,7 @@
     <Compile Include="ViewModels\QuestionVm.cs" />
     <Compile Include="ViewModels\SearchVm.cs" />
     <Compile Include="ViewModels\Tactic.cs" />
-    <Compile Include="ViewModels\Target.cs" />
+    <Compile Include="ViewModels\TargetVm.cs" />
     <Page Include="DataTemplates\Blight.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

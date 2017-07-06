@@ -17,7 +17,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         private List<Location> _locations;
         private List<Hero> _heroes = new List<Hero>();
         private Game _game;
-        private Conflict _conflict;
+        private ConflictVm _conflict;
         private EventVm _event;
         private SearchVm _search;
         private QuestionVm _question;
@@ -30,7 +30,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             set
             {
                 _game = value;
-                Conflict = new Conflict(_game);
+                Conflict = new ConflictVm(_game);
                 Event = new EventVm(_game);
                 Search = new SearchVm(_game);
                 Question = new QuestionVm(_game);
@@ -105,7 +105,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public Conflict Conflict
+        public ConflictVm Conflict
         {
             get { return _conflict; }
             private set

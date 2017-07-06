@@ -29,9 +29,7 @@
         </TextBlock>
     </DataTemplate>
     <DataTemplate  DataType="{x:Type vm:HeroCommand}">
-        <StackPanel>
-            <Button Content="{Binding Name}" Command="{Binding Command}" />
-        </StackPanel>
+        <Button Content="{Binding Name}" Command="{Binding Command}" Margin="5" />
     </DataTemplate>
     <DataTemplate DataType="{x:Type vm:HeroPowerVm}">
         <TextBlock Text="{Binding Name}" FontStyle="{Binding Style}" TextDecorations="{Binding Decorations}" ToolTip="{Binding Card}" />

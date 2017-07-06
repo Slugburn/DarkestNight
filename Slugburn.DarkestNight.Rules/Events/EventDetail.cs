@@ -63,27 +63,36 @@ namespace Slugburn.DarkestNight.Rules.Events
             return _text;
         }
 
-        public List<EventEnemy> GetEnemies()
-        {
-            return _enemies.ToList();
-        }
-
         public List<HeroEventRow> CreateHeroRows(Hero hero)
         {
-            return _rows.Select(row => new HeroEventRow
+            return _rows.Select(row => CreateHeroRow(hero, row))
+                .Concat(_enemies.Select(e => CreateHeroRow(hero, e)))
+                .ToList();
+        }
+
+        private HeroEventRow CreateHeroRow(Hero hero, EventRow row)
+        {
+            return new HeroEventRow
             {
                 Min = row.Min,
                 Max = row.Max,
                 Text = row.Text,
                 SubText = row.SubText,
                 IsActive = _rowSelector?.Invoke(hero, row.Min, row.Max) ?? false
-            }).Concat(_enemies.Select(e => new HeroEventRow
-            {
-                Min = e.Min,
-                Max = e.Max,
-                Text = e.Name,
-            })).ToList();
+            };
         }
+
+        private HeroEventRow CreateHeroRow(Hero hero, EventEnemy enemy)
+        {
+            return new HeroEventRow
+            {
+                Min = enemy.Min,
+                Max = enemy.Max,
+                Text = enemy.Name,
+                IsActive = _rowSelector?.Invoke(hero, enemy.Min, enemy.Max) ?? false
+            };
+        }
+
 
         public class EventDetailCreation
         {
@@ -199,6 +208,14 @@ namespace Slugburn.DarkestNight.Rules.Events
                 Options = options,
                 IsIgnorable = Name != "Renewal"
             };
+        }
+
+        public string GetEnemyName(Hero hero)
+        {
+            var enemyName = _rowSelector != null
+                ? _enemies.Single(x => _rowSelector(hero, x.Min, x.Max)).Name
+                : _enemies.Single().Name;
+            return enemyName;
         }
     }
 }

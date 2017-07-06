@@ -65,6 +65,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             public void AcceptRoll(Hero hero, RollState rollState)
             {
                 hero.RemoveRollModifiers(PowerName);
+                hero.DisplayConflictState();
             }
         }
     }

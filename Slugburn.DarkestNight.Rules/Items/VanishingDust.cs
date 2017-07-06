@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Items
         public bool IsAvailable(Hero hero)
         {
             var roll = hero.CurrentRoll;
-            return roll?.AdjustedRoll != null && !roll.Win && roll.ModifierType == ModifierType.EludeDice;
+            return hero.State == HeroState.FacingEnemy && roll?.AdjustedRoll != null && !roll.Win && roll.ModifierType == ModifierType.EludeDice;
         }
 
         public void Execute(Hero hero)
