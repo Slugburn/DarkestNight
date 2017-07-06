@@ -17,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
         protected override void OnLearn()
         {
             _action = new CalmPray();
-            var space = Owner.GetSpace();
+            var space = Owner.Space;
             space.AddAction(_action);
             Owner.Triggers.Add(HeroTrigger.Moving, Name, this );
             Owner.Triggers.Add(HeroTrigger.Moved, Name, this);
@@ -26,9 +26,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
         public void HandleTrigger(Hero hero, string source, TriggerContext context)
         {
             if (context.WasTriggeredBy(HeroTrigger.Moving))
-                hero.GetSpace().RemoveAction(_action.Name);
+                hero.Space.RemoveAction(_action.Name);
             else if (context.WasTriggeredBy(HeroTrigger.Moved))
-                hero.GetSpace().AddAction(_action);
+                hero.Space.AddAction(_action);
         }
 
         internal class CalmPray : StandardAction

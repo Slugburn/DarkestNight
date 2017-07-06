@@ -27,7 +27,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 
         private void AddFormActions()
         {
-            if (!Owner.HasAction(DeactivateForm.ActionName))
+            if (!Owner.HasCommand(DeactivateForm.ActionName))
                 Owner.AddAction(new DeactivateForm());
             Owner.AddAction(new ActivateForm(this));
         }

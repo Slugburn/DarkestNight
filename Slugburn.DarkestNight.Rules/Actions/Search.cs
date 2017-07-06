@@ -24,14 +24,14 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public override void Execute(Hero hero)
         {
-            var space = hero.GetSpace();
+            var space = hero.Space;
             var state = hero.SetRoll(RollBuilder.Create<SearchRollHandler>()
                 .Type(ModifierType.SearchDice)
                 .Base("Search", 1)
                 .Target(space.GetSearchTarget(hero)));
             hero.Triggers.Send(HeroTrigger.Searched);
             state.Roll();
-            hero.Player.DisplaySearch(SearchModel.From(hero, null), Callback.ForCommand(hero, this));
+            hero.Player.DisplaySearch(SearchModel.From(hero, null), Callback.For(hero, this));
         }
 
         public class SearchRollHandler : IRollHandler
@@ -50,7 +50,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             }
         }
 
-        public void HandleCallback(Hero hero, string path, object data)
+        public void HandleCallback(Hero hero, object data)
         {
             hero.Player.DisplaySearch(null, null);
             hero.ContinueTurn();

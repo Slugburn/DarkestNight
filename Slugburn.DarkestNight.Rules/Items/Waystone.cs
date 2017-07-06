@@ -18,7 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Items
                 .Except(new[] {hero.Location})
                 .Select(loc => loc.ToString())
                 .ToList();
-            hero.Player.DisplayLocationSelection(destinations, Callback.ForCommand(hero, this));
+            hero.Player.DisplayLocationSelection(destinations, Callback.For(hero, this));
         }
 
         public bool IsAvailable(Hero hero)
@@ -26,7 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Items
             return hero.IsTakingTurn;
         }
 
-        public void HandleCallback(Hero hero, string path, object data)
+        public void HandleCallback(Hero hero, object data)
         {
             var location = (Location)data;
             hero.MoveTo(location);

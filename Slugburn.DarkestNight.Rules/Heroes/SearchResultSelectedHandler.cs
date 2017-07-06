@@ -9,7 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 {
     internal class SearchResultSelectedHandler : ICallbackHandler
     {
-        public void HandleCallback(Hero hero, string path, object data)
+        public void HandleCallback(Hero hero, object data)
         {
             hero.Player.DisplaySearch(null, null);
             var code = (string) data;
@@ -76,7 +76,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 _powerNames = powerNames;
             }
 
-            public void HandleCallback(Hero hero, string path, object data)
+            public void HandleCallback(Hero hero, object data)
             {
                 var selectedName = (string)data;
                 var notSelectedName = _powerNames.Single(x => x != selectedName);
@@ -87,7 +87,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         private class EpiphanyCallback : ICallbackHandler
         {
-            public void HandleCallback(Hero hero, string path, object data)
+            public void HandleCallback(Hero hero, object data)
             {
                 var selectedName = (string)data;
                 hero.PowerDeck.Remove(selectedName);

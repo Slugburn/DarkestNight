@@ -30,10 +30,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             {
                 DruidFormPower.DeactivateAllForms(hero);
                 var validDestionations = hero.GetValidMovementLocations().Select(x=>x.ToString()).ToList();
-                hero.Player.DisplayLocationSelection(validDestionations, Callback.ForCommand(hero, this));
+                hero.Player.DisplayLocationSelection(validDestionations, Callback.For(hero, this));
             }
 
-            public void HandleCallback(Hero hero, string path, object data)
+            public void HandleCallback(Hero hero, object data)
             {
                 // Move to selected location
                 var destination = (Location)data;
@@ -41,23 +41,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 
                 // Allow player to pick a new form
                 hero.AddFreeAction(p=>p is IDruidForm);
-            }
-
-            private class CelerityContinueAction : IAction
-            {
-                public string Name => "Continue";
-
-                public void Execute(Hero hero)
-                {
-                    hero.RemoveAction(Name);
-                }
-
-                public bool IsAvailable(Hero hero)
-                {
-                    return true;
-                }
-
-                public string Text => "Continue";
             }
         }
     }

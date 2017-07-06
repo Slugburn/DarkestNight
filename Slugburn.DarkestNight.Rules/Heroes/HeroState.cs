@@ -7,5 +7,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         TakingTurn,
         EventDrawn,
         ContinuingTurn,
+        FacingEnemy,
+        ResolvingEvent
     }
 }

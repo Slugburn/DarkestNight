@@ -13,7 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             ActiveText = "+1d when eluding.";
         }
 
-        public override void HandleCallback(Hero hero, string path, object data)
+        public override void HandleCallback(Hero hero, object data)
         {
             var selectedHero = (Hero)data;
             selectedHero.AddModifier(new PowerRollBonus(this, ModifierType.EludeDice, 1));

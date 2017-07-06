@@ -5,7 +5,7 @@ using Slugburn.DarkestNight.Rules.Players;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Priest
 {
-    class Intercession : BonusPower, ICallbackHandler
+    class Intercession : BonusPower
     {
         public Intercession()
         {
@@ -36,7 +36,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             if (Owner.Grace < amount) return false;
             var question = new QuestionModel("Intercession",
                 $"Should {Owner.Name} spend {amount} Grace instead of {other.Name} losing {amount} Grace?", new[] {"Yes", "No"});
-            other.Player.DisplayAskQuestion(question, Callback.ForPower(Owner, this, $"{other.Name}:loss:{amount}"));
+            other.Player.DisplayAskQuestion(question, Callback.For(other, new IntercessionCallbackHandler(Owner, "loss", amount)));
             return true;
         }
 
@@ -52,34 +52,44 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             }
             var question = new QuestionModel("Intercession",
                 $"Should {Owner.Name} spend {amount} Grace instead of {other.Name} spending {amount} Grace?", new [] {"Yes", "No"});
-            other.Player.DisplayAskQuestion(question, Callback.ForPower(Owner, this, $"{other.Name}:spent:{amount}"));
+            other.Player.DisplayAskQuestion(question, Callback.For(other, new IntercessionCallbackHandler(Owner, "spent", amount)));
             return true;
         }
 
 
-        public void HandleCallback(Hero hero, string path, object data)
+        private class IntercessionCallbackHandler : ICallbackHandler
         {
-            var args=path.Split(':');
-            var otherName = args[0];
-            var op = args[1];
-            var amount = int.Parse(args[2]);
-            var answer = (string) data;
-            var other = hero.Game.GetHero(otherName);
-            if (op == "loss")
+            private readonly Hero _owner;
+            private readonly string _op;
+            private readonly int _amount;
+
+            public IntercessionCallbackHandler(Hero owner, string op, int amount)
             {
-                if (answer == "Yes")
-                    Owner.SpendGrace(amount);
-                else
-                    other.LoseGrace(amount, false);
+                _owner = owner;
+                _op = op;
+                _amount = amount;
             }
-            else if (op == "spent")
+
+            public void HandleCallback(Hero hero, object data)
             {
-                if (answer == "Yes")
-                    Owner.SpendGrace(amount);
-                else
-                    other.SpendGrace(amount, false);
+                var other = hero;
+                var answer = (string)data;
+                switch (_op)
+                {
+                    case "loss":
+                        if (answer == "Yes")
+                            _owner.SpendGrace(_amount);
+                        else
+                            other.LoseGrace(_amount, false);
+                        break;
+                    case "spent":
+                        if (answer == "Yes")
+                            _owner.SpendGrace(_amount);
+                        else
+                            other.SpendGrace(_amount, false);
+                        break;
+                }
             }
         }
-
     }
 }

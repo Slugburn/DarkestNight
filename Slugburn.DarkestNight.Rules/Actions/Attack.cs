@@ -30,7 +30,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 ConflictType = ConflictType.Attack,
                 MinTarget = 1,
                 MaxTarget = 1,
-                AvailableTargets = hero.GetSpace().Blights.GetTargetInfo(hero.Game)
+                AvailableTargets = hero.Space.Blights.GetTargetInfo(hero.Game)
             };
             hero.ConflictState = conflictState;
             // hero.ConflictState.ConflictType needs to be set before calling hero.GetAvailableFightTactics()

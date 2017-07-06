@@ -30,9 +30,7 @@
                     <Label Grid.Column="1" Content="{Binding Roll}" />
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="1">
-                    <Button Command="{Binding RollCommand}" Visibility="{Binding RollCommandVisibility}">Roll Dice</Button>
-                    <Button Command="{Binding AcceptRollCommand}" Visibility="{Binding AcceptRollCommandVisibility}">Accept Roll</Button>
-                    <Button Command="{Binding AcceptResultCommand}" Visibility="{Binding AcceptResultCommandVisibility}">Accept Result</Button>
+                    <Button Content="{Binding CommandText}"  Command="{Binding Command}" />
                 </Grid>
             </Grid>
         </Grid>

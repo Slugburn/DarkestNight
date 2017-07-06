@@ -31,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
             private Location Destination { get; set; } // This gets set by the location selected handler
 
-            public void HandleCallback(Hero hero, string path, object data)
+            public void HandleCallback(Hero hero, object data)
             {
                 var game = hero.Game;
                 if (data is Location)
@@ -42,9 +42,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
                     var destinationSpace = game.Board[destination];
                     var maxMoveCount = 4 - destinationSpace.Blights.Count;
-                    var space = hero.GetSpace();
+                    var space = hero.Space;
                     var playerBlights = BlightModel.Create(space.Blights);
-                    hero.Player.DisplayBlightSelection(new BlightSelectionModel(playerBlights, maxMoveCount), Callback.ForCommand(hero, this));
+                    hero.Player.DisplayBlightSelection(new BlightSelectionModel(playerBlights, maxMoveCount), Callback.For(hero, this));
                 }
                 else if (data is IEnumerable<int>)
                 {
@@ -65,9 +65,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
             public override void Execute(Hero hero)
             {
-                var space = hero.GetSpace();
+                var space = hero.Space;
                 var potentialDestinations = space.AdjacentLocations.Select(x => x.ToString()).ToList();
-                hero.Player.DisplayLocationSelection(potentialDestinations, Callback.ForCommand(hero, this));
+                hero.Player.DisplayLocationSelection(potentialDestinations, Callback.For(hero, this));
             }
         }
     }

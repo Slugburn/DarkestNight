@@ -104,7 +104,10 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             {
                 SelectedResult = Results.First();
                 CommandText = "Accept Results";
-                Command = new CommandHandler(() => CallbackRouter.Route(_game, callback, SelectedResult.Code));
+                Command = new CommandHandler(() =>
+                {
+                    callback.Handle(SelectedResult.Code);
+                });
             }
         }
 

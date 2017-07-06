@@ -7,6 +7,7 @@ using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Rolls;
+using Slugburn.DarkestNight.Rules.Tactics;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Enemies
@@ -32,6 +33,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
 
         public void Win(Hero hero)
         {
+            if (hero.ConflictState.SelectedTactic.Type == TacticType.Elude) return;
             if (hero.GetBlights().Any())
                 throw new NotImplementedException();
             if (hero.HasHolyRelic())
@@ -129,7 +131,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             return adjacentToBoth.Shuffle().First();
         }
 
-        public void HandleCallback(Hero hero, string path, object data)
+        public void HandleCallback(Hero hero, object data)
         {
             CompleteTurn();
         }

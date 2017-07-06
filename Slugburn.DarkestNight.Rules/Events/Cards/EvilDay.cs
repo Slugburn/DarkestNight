@@ -23,7 +23,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                     var powers = hero.Powers.Where(x => !x.Exhausted).Select(PowerModel.Create).ToList();
                     var player = hero.Player;
                     player.State = PlayerState.SelectPower;
-                    player.DisplayPowers(powers, Callback.ForEvent(hero, this));
+                    player.DisplayPowers(powers, Callback.For(hero, this));
                     break;
                 case "draw":
                     var newEvents = hero.Game.Events.Draw(2);
@@ -38,7 +38,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             }
         }
 
-        public void HandleCallback(Hero hero, string path, object data)
+        public void HandleCallback(Hero hero, object data)
         {
             var powerName = (string) data;
             var power = hero.GetPower(powerName);

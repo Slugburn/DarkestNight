@@ -2,21 +2,24 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:vm="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels">
     <DataTemplate DataType="{x:Type vm:Location}">
-        <Grid Width="90" Height="200"  Background="{Binding Highlight}" Margin="5">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid.InputBindings>
-                <MouseBinding Gesture="LeftClick" Command="{Binding SelectCommand}"></MouseBinding>
-            </Grid.InputBindings>
-            <StackPanel Grid.Row="0">
-                <Label Content="{Binding Name}" FontWeight="Bold" HorizontalAlignment="Center" />
-                <ItemsControl ItemsSource="{Binding Tokens}" />
-                <ItemsControl ItemsSource="{Binding Blights}" />
-            </StackPanel>
-            <Label Grid.Row="1" Content="{Binding SearchTarget}" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-        </Grid>
+        <Border Width="90" Height="200"  Margin="5" BorderThickness="2" BorderBrush="Brown" Background="{Binding Highlight}" >
+            <Border.InputBindings>
+                <MouseBinding Gesture="LeftClick" Command="{Binding SelectCommand}" />
+            </Border.InputBindings>
+            <Grid Margin="5" >
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0">
+                    <Label Content="{Binding Name}" FontWeight="Bold" HorizontalAlignment="Center" />
+                    <ItemsControl ItemsSource="{Binding Tokens}" />
+                    <ItemsControl ItemsSource="{Binding Blights}" />
+                    <TextBlock Visibility="{Binding RelicVisiblity}" FontStyle="Italic">Relic</TextBlock>
+                </StackPanel>
+                <Label Grid.Row="1" Content="{Binding SearchTarget}" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+            </Grid>
+        </Border>
     </DataTemplate>
 
 </ResourceDictionary>

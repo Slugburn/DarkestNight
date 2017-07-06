@@ -5,7 +5,7 @@
     <DataTemplate DataType="{x:Type vm:Blight}">
         <Label Content="{Binding Name}" Background="Transparent">
             <Label.ToolTip>
-                <StackPanel Background="LightGray">
+                <StackPanel>
                     <Label Content="{Binding Name}" FontWeight="Bold"  />
                     <TextBlock TextWrapping="Wrap" MaxWidth="200" Text="{Binding Effect}" />
                     <TextBlock>

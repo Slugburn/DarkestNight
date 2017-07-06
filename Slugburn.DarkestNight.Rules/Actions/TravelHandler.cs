@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             hero.Player.DisplayLocationSelection(validLocations, Callback.For(hero, new TravelHandler()));
         }
 
-        public void HandleCallback(Hero hero, string path, object data)
+        public void HandleCallback(Hero hero, object data)
         {
             var location = (Location)data;
             hero.MoveTo(location);

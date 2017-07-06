@@ -64,8 +64,12 @@
     <Compile Include="ViewModels\HeroStatus.cs" />
     <Compile Include="ViewModels\HeroValue.cs" />
     <Compile Include="ViewModels\Location.cs" />
-    <Compile Include="ViewModels\Player.cs" />
-    <Compile Include="ViewModels\Power.cs" />
+    <Compile Include="ViewModels\PlayerVm.cs" />
+    <Compile Include="ViewModels\HeroPowerVm.cs" />
+    <Compile Include="ViewModels\PowerCardVm.cs" />
+    <Compile Include="ViewModels\PowerSelectionVm.cs" />
+    <Compile Include="ViewModels\PrayerVm.cs" />
+    <Compile Include="ViewModels\QuestionVm.cs" />
     <Compile Include="ViewModels\SearchVm.cs" />
     <Compile Include="ViewModels\Tactic.cs" />
     <Compile Include="ViewModels\Target.cs" />
@@ -88,6 +92,14 @@
     <Page Include="DataTemplates\Location.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DataTemplates\Power.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataTemplates\Question.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DataTemplates\Search.xaml">
       <SubType>Designer</SubType>

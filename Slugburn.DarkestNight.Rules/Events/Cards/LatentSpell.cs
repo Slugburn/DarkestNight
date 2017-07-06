@@ -35,14 +35,14 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 case "destroy-blight":
                     var blights = BlightModel.Create(hero.Game.GetBlights());
                     var selection = new BlightSelectionModel(blights);
-                    hero.Player.DisplayBlightSelection(selection, Callback.ForEvent(hero, this));
+                    hero.Player.DisplayBlightSelection(selection, Callback.For(hero, this));
                     break;
                 case "draw-power":
-                    hero.DrawPower(Callback.ForEvent(hero, this));
+                    hero.DrawPower(Callback.For(hero, this));
                     break;
                 case "move":
                     var locations = Game.GetAllLocations().Except(new[] {hero.Location}).Select(x=>x.ToString()).ToList();
-                    hero.Player.DisplayLocationSelection(locations, Callback.ForEvent(hero, this));
+                    hero.Player.DisplayLocationSelection(locations, Callback.For(hero, this));
                     hero.Player.State = PlayerState.SelectLocation;
                     break;
                 case "no-effect":
@@ -53,7 +53,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             hero.EndEvent();
         }
 
-        public void HandleCallback(Hero hero, string path, object data)
+        public void HandleCallback(Hero hero, object data)
         {
             if (data is Location)
             {

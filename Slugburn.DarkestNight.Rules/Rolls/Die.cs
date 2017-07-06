@@ -22,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Rolls
 
             int IDie.Roll()
             {
-                return Random.Next(1, 6);
+                return Random.Next(1, 7);
             }
         }
 

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using Slugburn.DarkestNight.Rules.Models;
@@ -14,8 +15,9 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         private string _searchTarget;
         private List<string> _tokens;
         private List<Blight> _blights;
-        private Brush _highlight = new SolidColorBrush(Colors.LightGray);
+        private Brush _highlight = new SolidColorBrush(Colors.White);
         private ICommand _selectCommand;
+        private Visibility _relicVisiblity;
 
         public Location(LocationModel model)
         {
@@ -23,6 +25,18 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             SearchTarget = model.SearchTarget > 0 ? $"{model.SearchTarget}+" : null;
             Tokens = model.Tokens;
             Blights = model.Blights.Select(b => new Blight(b)).ToList();
+            RelicVisiblity = model.HasRelic ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public Visibility RelicVisiblity
+        {
+            get { return _relicVisiblity; }
+            set
+            {
+                if (value == _relicVisiblity) return;
+                _relicVisiblity = value;
+                OnPropertyChanged();
+            }
         }
 
         public string Name { get; set; }

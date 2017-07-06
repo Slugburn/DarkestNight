@@ -23,10 +23,10 @@ namespace Slugburn.DarkestNight.Rules.Items.Artifacts
         public void Execute(Hero hero)
         {
             var question = new QuestionModel(Name, Text, new[] {"Spend Grace", "Spend Secrecy"});
-            hero.Player.DisplayAskQuestion(question, Callback.ForCommand(hero, this));
+            hero.Player.DisplayAskQuestion(question, Callback.For(hero, this));
         }
 
-        public void HandleCallback(Hero hero, string path, object data)
+        public void HandleCallback(Hero hero, object data)
         {
             var answer = (string) data;
             if (answer == "Spend Grace")

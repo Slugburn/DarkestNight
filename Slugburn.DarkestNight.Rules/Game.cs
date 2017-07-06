@@ -30,7 +30,6 @@ namespace Slugburn.DarkestNight.Rules
             Board = Board.CreateFor(this);
             Events = EventFactory.GetEventDeck().Shuffle();
             Maps = new MapFactory().CreateMaps().Shuffle();
-            MapsDiscard = new List<IMap>();
             Necromancer = new Necromancer(this);
             Darkness = 0;
             ArtifactDeck = Artifact.CreateDeck().Shuffle();
@@ -52,7 +51,6 @@ namespace Slugburn.DarkestNight.Rules
         public List<string> Events { get; set; }
 
         public IList<IMap> Maps { get; set; }
-        private List<IMap> MapsDiscard { get; set; }
 
         public Necromancer Necromancer { get; set; }
         public int Darkness { get; set; }
@@ -69,17 +67,9 @@ namespace Slugburn.DarkestNight.Rules
         private IMap DrawMapCard()
         {
             if (!Maps.Any())
-            {
-                Maps = MapsDiscard.Shuffle();
-                MapsDiscard = new List<IMap>();
-            }
+                Maps = new MapFactory().CreateMaps().Shuffle();
             var map = Maps.Draw();
             return map;
-        }
-
-        private void DiscardMapCard(IMap map)
-        {
-            MapsDiscard.Add(map);
         }
 
         public void CreateBlights(Location location, int count)
@@ -96,7 +86,6 @@ namespace Slugburn.DarkestNight.Rules
                 var blightType = map.GetBlight(location);
                 CreateBlight(location, blightType);
             }
-            DiscardMapCard(map);
         }
 
         public void CreateBlight(Location location, BlightType blightType)
@@ -211,7 +200,7 @@ namespace Slugburn.DarkestNight.Rules
         {
             for (var i = 0; i < count; i++)
             {
-                var map = Maps.Draw();
+                var map = DrawMapCard();
                 var result = map.GetSearchResult(location);
                 yield return result;
             }
@@ -252,6 +241,11 @@ namespace Slugburn.DarkestNight.Rules
         {
             foreach (var hero in Heroes)
                 hero.UpdateAvailableCommands();
+        }
+
+        public void Lose()
+        {
+            throw new NotImplementedException();
         }
     }
 }

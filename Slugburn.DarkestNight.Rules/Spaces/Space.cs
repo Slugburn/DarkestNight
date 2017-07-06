@@ -44,8 +44,18 @@ namespace Slugburn.DarkestNight.Rules.Spaces
 
         public void AddBlight(IBlight blight)
         {
-            _blights.Add(blight);
-            ((Blight)blight).SetSpace(this);
+            if (_blights.Count < 4)
+            {
+                _blights.Add(blight);
+                ((Blight) blight).SetSpace(this);
+            }
+            else
+            {
+                if (Location == Location.Monastery)
+                    Game.Lose();
+                else
+                    Game.Board[Location.Monastery].AddBlight(blight);
+            }
         }
 
         public void RemoveBlight(IBlight blight)

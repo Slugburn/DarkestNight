@@ -111,6 +111,16 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         }
 
         [Test]
+        public void SpriteForm_IgnoreEnemyLairs()
+        {
+            TestScenario.Game
+                .WithHero("Druid").At("Village").HasPowers("Sprite Form").Power("Sprite Form").IsActive()
+                .Location("Village").HasBlights("Skeletons")
+                .When.Player.TakesAction("End Turn")
+                .Then(Verify.Hero().CanGainGrace(false).IsIgnoringBlights().IsFacingEnemies());
+        }
+
+        [Test]
         public void SpriteForm_Activate()
         {
             TestScenario.Game

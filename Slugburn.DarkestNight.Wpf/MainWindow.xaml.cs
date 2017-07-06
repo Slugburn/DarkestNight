@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Wpf
         {
             InitializeComponent();
             var game = new Game();
-            var player = (Player)DataContext;
+            var player = (PlayerVm)DataContext;
             player.Game = game;
             game.AddPlayer(player);
             game.PopulateInitialBlights();

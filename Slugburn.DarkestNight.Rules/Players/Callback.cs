@@ -1,50 +1,26 @@
-﻿using Slugburn.DarkestNight.Rules.Actions;
-using Slugburn.DarkestNight.Rules.Commands;
-using Slugburn.DarkestNight.Rules.Events;
-using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Powers;
+﻿using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Players
 {
     public class Callback
     {
-        public static Callback ForCommand<T>(Hero hero, T action, string path = null) where T:ICommand, ICallbackHandler
-        {
-            path = path != null ? "/" + path : null;
-            return new Callback(hero.Name, $"Action:{action.Name}{path}");
-        }
+        private readonly ICallbackHandler _handler;
+        private readonly Hero _hero;
 
-        public static Callback ForPower<T>(Hero hero, T power, string path = null) where T: IPower, ICallbackHandler
+        private Callback(Hero hero, ICallbackHandler handler)
         {
-            path = path != null ? "/" + path : null;
-            return new Callback(hero.Name, $"Power:{power.Name}{path}");
-        }
-
-        public static Callback ForEvent<T>(Hero hero, T eventCard) where T:IEventCard, ICallbackHandler
-        {
-            return new Callback(hero.Name, $"Event:{eventCard.Detail.Name}");
+            _hero = hero;
+            _handler = handler;
         }
 
         public static Callback For(Hero hero, ICallbackHandler handler)
         {
-            return new Callback(hero?.Name, handler);
+            return new Callback(hero, handler);
         }
 
-        private Callback(string heroName, string route)
+        public void Handle(object data)
         {
-            HeroName = heroName;
-            Route = route;
+            _handler?.HandleCallback(_hero, data);
         }
-
-        private Callback(string heroName, ICallbackHandler handler)
-        {
-            HeroName = heroName;
-            Handler = handler;
-        }
-
-        public string HeroName { get; set; }
-        public string Route { get; set; }
-        public ICallbackHandler Handler { get; set; }
-
     }
 }

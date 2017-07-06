@@ -25,10 +25,10 @@ namespace Slugburn.DarkestNight.Rules.Items.Artifacts
         public void Execute(Hero hero)
         {
             var playerBlights = BlightModel.Create(hero.Game.GetBlights());
-            hero.Player.DisplayBlightSelection(new BlightSelectionModel(playerBlights), Callback.ForCommand(hero, this));
+            hero.Player.DisplayBlightSelection(new BlightSelectionModel(playerBlights), Callback.For(hero, this));
         }
 
-        public void HandleCallback(Hero hero, string path, object data)
+        public void HandleCallback(Hero hero, object data)
         {
             var blightId = ((IEnumerable<int>)data).Single();
             hero.Game.AddBlightSupression(new VanishingCowlBlightSupression(Name, hero, blightId));

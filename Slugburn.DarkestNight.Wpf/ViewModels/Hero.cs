@@ -17,14 +17,14 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         private SolidColorBrush _highlight;
         private ICommand _selectCommand;
         private HeroStatus _status;
-        private List<Power> _powers;
+        private List<HeroPowerVm> _powers;
 
         public Hero(Game game, HeroModel model)
         {
             _game = game;
             Name = model.Name;
             Status = new HeroStatus(model.Status);
-            Powers = Power.Create(model.Powers);
+            Powers = HeroPowerVm.Create(model.Powers);
             if (model.Commands != null)
                 Commands = model.Commands.Select(c => new HeroCommand(_game, model.Name, c)).ToList();
         }
@@ -53,7 +53,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public List<Power> Powers
+        public List<HeroPowerVm> Powers
         {
             get { return _powers; }
             set

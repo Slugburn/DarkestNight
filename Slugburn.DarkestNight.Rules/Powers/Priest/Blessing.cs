@@ -12,9 +12,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             base.Activate(hero);
             var validHeroes = hero.Game.Heroes.Where(h => h.Location == hero.Location);
             var view = new HeroSelectionModel(validHeroes);
-            hero.Player.DisplayHeroSelection(view, Callback.ForPower(hero, this));
+            hero.Player.DisplayHeroSelection(view, Callback.For(hero, this));
         }
 
-        public abstract void HandleCallback(Hero hero, string path, object data);
+        public abstract void HandleCallback(Hero hero, object data);
     }
 }

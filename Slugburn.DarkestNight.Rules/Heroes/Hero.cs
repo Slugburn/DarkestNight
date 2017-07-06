@@ -139,18 +139,18 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public ICollection<IBlight> GetBlights()
         {
-            return GetSpace().Blights;
+            return Space.Blights;
         }
 
-        public Space GetSpace()
+        public Space Space
         {
-            return Game.Board[Location];
+            get { return Game.Board[Location]; }
         }
 
         private IList<ICommand> GetAvailableCommands()
         {
             var heroCommands = _commands.Values;
-            var locationCommands = GetSpace().GetActions();
+            var locationCommands = Space.GetActions();
             var itemCommands = GetLocationInventory().OfType<ICommand>();
             var actions = heroCommands.Concat(locationCommands).Concat(itemCommands)
                 .Where(x => x.IsAvailable(this));
@@ -236,6 +236,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         private void DoEvent(string eventName)
         {
+            State = HeroState.ResolvingEvent;
             var card = EventFactory.CreateCard(eventName);
             CurrentEvent = card.Detail.GetHeroEvent(this);
             Game.Triggers.Send(GameTrigger.EventDrawn);
@@ -364,7 +365,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public IEnumerable<Location> GetValidMovementLocations(bool onlyAdjacent = true)
         {
-            var locations = onlyAdjacent ? GetSpace().AdjacentLocations : Game.GetAllLocations();
+            var locations = onlyAdjacent ? Space.AdjacentLocations : Game.GetAllLocations();
             var blocks = _stash.GetAll<PreventMovementEffect>();
             var valid = locations.Where(loc => !blocks.Any(block => block.Matches(loc)));
             return valid;
@@ -373,11 +374,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public IPower GetPower(string name)
         {
             return Powers.SingleOrDefault(x => x.Name == name);
-        }
-
-        public void TakeAction(IAction action)
-        {
-            action.Execute(this);
         }
 
         public void SelectTactic(string tacticName, ICollection<int> targetIds)
@@ -468,7 +464,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             if (_commands.ContainsKey(commandName))
                 return _commands[commandName];
-            var space = GetSpace();
+            var space = Space;
             var itemAction = GetLocationInventory().OfType<ICommand>().FirstOrDefault(item => item.Name == commandName);
             if (itemAction != null)
                 return itemAction;
@@ -485,17 +481,12 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public IEnumerable<T> GetActiveBlights<T>() where T : IBlight
         {
-            return GetSpace().GetActiveBlights<T>();
+            return Space.GetActiveBlights<T>(this);
         }
 
-        public bool HasAction(string actionName)
+        public bool HasCommand(string actionName)
         {
             return _commands.ContainsKey(actionName);
-        }
-
-        public void RemoveAction(string name)
-        {
-            _commands.Remove(name);
         }
 
         public void DisplayCurrentEvent()
@@ -726,7 +717,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             Triggers.Send(HeroTrigger.StartedTurn);
 
             if (withNecromancer && Secrecy == 0)
+            {
                 FaceEnemy(necromancer);
+            }
             else if (Location != Location.Monastery)
                 DrawEvent();
             else
@@ -780,6 +773,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         private void DefendAgainst(List<IEnemy> enemies)
         {
+            State = HeroState.FacingEnemy;
             SetRoll(RollBuilder.Create<DefenseRollHandler>());
             ConflictState = new ConflictState
             {

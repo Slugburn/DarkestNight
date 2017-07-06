@@ -13,8 +13,8 @@ namespace Slugburn.DarkestNight.Rules.Items
 
         public void Execute(Hero hero)
         {
-            hero.RemoveFromInventory(this);
-            hero.DrawPower(Callback.ForCommand(hero, this));
+            Owner.RemoveFromInventory(this);
+            hero.DrawPower(Callback.For(hero, this));
         }
 
         public bool IsAvailable(Hero hero)
@@ -22,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Items
             return true;
         }
 
-        public void HandleCallback(Hero hero, string path, object data)
+        public void HandleCallback(Hero hero, object data)
         {
             // ?
         }

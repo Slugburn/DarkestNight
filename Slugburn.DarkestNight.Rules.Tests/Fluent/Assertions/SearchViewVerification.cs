@@ -1,3 +1,4 @@
+using System.Linq;
 using NUnit.Framework;
 using Shouldly;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
@@ -18,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             var view = root.Get<FakePlayer>().Search;
             view.ShouldNotBeNull("Search result selection is null");
             if (_results!= null)
-                Assert.That(view.SearchResults, Is.EquivalentTo(_results));
+                Assert.That(view.SearchResults.Select(x=>x.Name), Is.EquivalentTo(_results));
             if (_roll != null)
                 Assert.That(view.Roll, Is.EquivalentTo(_roll));
         }

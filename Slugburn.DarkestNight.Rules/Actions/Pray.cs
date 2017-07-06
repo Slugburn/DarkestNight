@@ -18,7 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
         {
             var rollState = hero.SetRoll(RollBuilder.Create<PrayerRoll>().Type(ModifierType.PrayDice).Base("Pray", 2).Target(3));
             rollState.Roll();
-            hero.Player.DisplayPrayer(PlayerPrayer.From(hero));
+            hero.Player.DisplayPrayer(PrayerModel.From(hero));
         }
 
         public override bool IsAvailable(Hero hero)

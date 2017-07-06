@@ -169,7 +169,6 @@
     <Compile Include="Modifiers\IRollModifier.cs" />
     <Compile Include="Modifiers\StaticBonusPowerModifer.cs" />
     <Compile Include="Players\Callback.cs" />
-    <Compile Include="Players\CallbackRouter.cs" />
     <Compile Include="Players\ICallbackHandler.cs" />
     <Compile Include="Players\IPlayer.cs" />
     <Compile Include="Players\PlayerModelExtension.cs" />
@@ -287,7 +286,7 @@
     <Compile Include="Models\ItemModel.cs" />
     <Compile Include="Models\NecromancerModel.cs" />
     <Compile Include="Models\PowerModel.cs" />
-    <Compile Include="Models\PlayerPrayer.cs" />
+    <Compile Include="Models\PrayerModel.cs" />
     <Compile Include="Models\SearchModel.cs" />
   </ItemGroup>
   <ItemGroup>

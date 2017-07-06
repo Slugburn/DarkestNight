@@ -39,9 +39,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             Conflict = conflict;
         }
 
-        public void DisplayPowers(ICollection<PowerModel> powers, Callback callback)
+        public void DisplayPowers(ICollection<PowerModel> models, Callback callback)
         {
-            Powers = powers;
+            Powers = models;
             _callback = callback;
         }
 
@@ -68,9 +68,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             _callback = callback;
         }
 
-        public void DisplayAskQuestion(QuestionModel view, Callback callback)
+        public void DisplayAskQuestion(QuestionModel model, Callback callback)
         {
-            AskQuestion = view;
+            AskQuestion = model;
             _callback = callback;
         }
 
@@ -80,9 +80,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             _callback = callback;
         }
 
-        public void DisplayPrayer(PlayerPrayer view)
+        public void DisplayPrayer(PrayerModel model)
         {
-            Prayer = view;
+            Prayer = model;
         }
 
         public void AddHero(HeroModel view)
@@ -107,7 +107,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public QuestionModel AskQuestion { get; set; }
         public SearchModel Search { get; set; }
-        public PlayerPrayer Prayer { get; set; }
+        public PrayerModel Prayer { get; set; }
         public List<HeroModel> Heroes { get; set; } = new List<HeroModel>();
         public BoardModel Board { get; set; }
         
@@ -132,7 +132,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public void SelectLocation(Location location)
         {
-            CallbackRouter.Route(_game, _callback, location);
+            _callback.Handle(location);
         }
 
         public void ResolveConflict( string tacticName, ICollection<int> targetIds)
@@ -143,13 +143,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public void SelectPower(string powerName)
         {
-            CallbackRouter.Route(_game, _callback, powerName);
+            _callback.Handle(powerName);
         }
 
         public void SelectBlight(int blightId)
         {
             var data = new[] {blightId};
-            CallbackRouter.Route(_game, _callback, data);
+            _callback.Handle(data);
         }
 
         public void FinishNecromancerTurn()
@@ -171,23 +171,23 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public void SelectBlights(IEnumerable<int> blightIds)
         {
-            CallbackRouter.Route(_game, _callback, blightIds);
+            _callback.Handle(blightIds);
         }
 
         public void SelectHero(string heroName)
         {
             var selectedHero = _game.GetHero(heroName);
-            CallbackRouter.Route(_game, _callback, selectedHero);
+            _callback.Handle(selectedHero);
         }
 
         public void AnswerQuestion(string answer)
         {
-            CallbackRouter.Route(_game, _callback, answer);
+            _callback.Handle(answer);
         }
 
         public void SelectSearchResult(string code)
         {
-            CallbackRouter.Route(_game, _callback, code);
+            _callback.Handle(code);
         }
 
         public void TradeItem(int itemId, string fromHeroName, string toHeroName)

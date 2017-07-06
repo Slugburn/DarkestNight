@@ -31,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             var keys = hero.GetLocationInventory().Where(x => x is Key).Take(3).ToList();
             foreach (var key in keys)
                 key.Owner.RemoveFromInventory(key);
-            var space = hero.GetSpace();
+            var space = hero.Space;
             space.HasRelic = false;
             space.RemoveAction(Name);
         }

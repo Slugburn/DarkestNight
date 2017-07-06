@@ -33,16 +33,27 @@
             <Button Content="{Binding Name}" Command="{Binding Command}" />
         </StackPanel>
     </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:Power}">
-        <TextBlock Text="{Binding Name}" FontStyle="{Binding Style}" TextDecorations="{Binding Decorations}">
-            <TextBlock.ToolTip>
-                <ToolTip>
-                    <StackPanel MaxWidth="200">
-                        <Label Content="{Binding Name}" FontWeight="Bold" HorizontalAlignment="Center" />
-                        <TextBlock Text="{Binding Text}" TextWrapping="Wrap" />
-                    </StackPanel>
-                </ToolTip>
-            </TextBlock.ToolTip>
-        </TextBlock>
+    <DataTemplate DataType="{x:Type vm:HeroPowerVm}">
+        <TextBlock Text="{Binding Name}" FontStyle="{Binding Style}" TextDecorations="{Binding Decorations}" ToolTip="{Binding Card}" />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:PrayerVm}">
+        <Border Visibility="{Binding Visibility}" BorderThickness="2" Background="WhiteSmoke" Height="150" Width="200" BorderBrush="Black" >
+            <StackPanel>
+                <Label Content="Pray" FontWeight="Bold" HorizontalAlignment="Center" Padding="10" />
+                <TextBlock HorizontalAlignment="Center">
+                    <TextBlock.Inlines>
+                        <Run FontWeight="Bold">Roll:</Run>
+                        <Run Text="{Binding Roll}" />
+                    </TextBlock.Inlines>
+                </TextBlock>
+                <TextBlock HorizontalAlignment="Center">
+                    <TextBlock.Inlines>
+                        <Run FontWeight="Bold">Grace Gained:</Run>
+                        <Run Text="{Binding GraceGained}" />
+                    </TextBlock.Inlines>
+                </TextBlock>
+                <Button Content="Continue" Command="{Binding Command}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10" />
+            </StackPanel>
+        </Border>
     </DataTemplate>
 </ResourceDictionary>
