@@ -67,6 +67,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CommandHandler.cs" />
+    <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="ViewModels\Blight.cs" />
     <Compile Include="ViewModels\ConflictVm.cs" />
     <Compile Include="ViewModels\EventVm.cs" />

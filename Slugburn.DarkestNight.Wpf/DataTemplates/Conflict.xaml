@@ -4,41 +4,43 @@
     <DataTemplate DataType="{x:Type vm:ConflictVm}">
         <Grid Visibility="{Binding Visibility}">
             <Grid Background="DarkGray" Opacity="0.50" />
-            <Grid Background="White" Height="180" Width="480">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Row="0"  Grid.Column="0">
-                    <Label>Targets</Label>
-                    <ListBox ItemsSource="{Binding Targets}" SelectionMode="Multiple">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListBoxItem}">
-                                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                    </ListBox>
-                </StackPanel>
-                <StackPanel Grid.Row="0" Grid.Column="1">
-                    <Label>Tactis</Label>
-                    <ListBox ItemsSource="{Binding Tactics}" SelectedItem="{Binding SelectedTactic}" />
-                </StackPanel>
-                <Grid Grid.Row="1" Grid.Column="0">
+            <Border Background="White" Height="180" Width="400" BorderBrush="Black">
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" FontWeight="Bold">Roll</Label>
-                    <Label Grid.Column="1" Content="{Binding Roll}" />
+                    <StackPanel Grid.Row="0" Grid.Column="0">
+                        <Label>Targets</Label>
+                        <ListBox ItemsSource="{Binding Targets}" SelectionMode="Multiple">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListBoxItem}">
+                                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="1">
+                        <Label>Tactic</Label>
+                        <ListBox ItemsSource="{Binding Tactics}" SelectedItem="{Binding SelectedTactic}" />
+                    </StackPanel>
+                    <Grid Grid.Row="1" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" FontWeight="Bold">Roll</Label>
+                        <Label Grid.Column="1" Content="{Binding Roll}" />
+                    </Grid>
+                    <Grid Grid.Row="1" Grid.Column="1">
+                        <Button Content="{Binding CommandText}" Command="{Binding Command}" />
+                    </Grid>
                 </Grid>
-                <Grid Grid.Row="1" Grid.Column="1">
-                    <Button Content="{Binding CommandText}"  Command="{Binding Command}" />
-                </Grid>
-            </Grid>
+                </Border>
         </Grid>
     </DataTemplate>
     <DataTemplate DataType="{x:Type vm:Tactic}">
@@ -52,12 +54,21 @@
         </TextBlock>
     </DataTemplate>
     <DataTemplate DataType="{x:Type vm:TargetVm}">
-        <TextBlock>
-            <TextBlock.Inlines>
-                <Run Text="{Binding Name}" FontWeight="Bold" />
-                <Run Text=":" />
-                <Run Text="{Binding TargetNumber}" />
-            </TextBlock.Inlines>
-        </TextBlock>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="20" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0">
+                <TextBlock.Inlines>
+                    <Run Text="{Binding Name}" FontWeight="Bold" />
+                    <Run Text=":" />
+                    <Run Text="{Binding TargetNumber}" />
+                </TextBlock.Inlines>
+            </TextBlock>
+            <Border Grid.Column="1" Background="Black" BorderThickness="1" BorderBrush="Black" Height="20" Width="20" Visibility="{Binding ResultNumber, Converter={StaticResource NullToVisibilityConverter}}">
+                <TextBlock Foreground="White" FontWeight="Bold" Text="{Binding ResultNumber}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+        </Grid>
     </DataTemplate>
 </ResourceDictionary>

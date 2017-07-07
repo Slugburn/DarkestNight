@@ -13,12 +13,14 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         {
             Id = model.Id;
             Name = model.Name;
-            TargetNumber = model.Target?.ToString() ?? $"Fight {model.FightTarget} / Elude {model.EludeTarget}";
+            TargetNumber = model.TargetNumber?.ToString() ?? $"Fight {model.FightTarget} / Elude {model.EludeTarget}";
+            ResultNumber = model.Result;
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
         public string TargetNumber { get; set; }
+        public int? ResultNumber { get; set; }
 
         public bool IsSelected
         {

@@ -4,17 +4,13 @@ namespace Slugburn.DarkestNight.Rules.Models
 {
     public class TargetModel
     {
-        public TargetModel(int id, string name)
-        {
-            Id = id;
-            Name = name;
-        }
-
         public TargetModel(TargetInfo info)
         {
-            Id= info.Id;
+            Id = info.Id;
             Name = info.Name;
+            CanFight = info.CanFight;
             FightTarget = info.FightTarget;
+            CanElude = info.CanElude;
             EludeTarget = info.EludeTarget;
         }
 
@@ -22,16 +18,18 @@ namespace Slugburn.DarkestNight.Rules.Models
         {
             Id = target.Id;
             Name = target.Name;
-            Target = target.TargetNumber;
+            TargetNumber = target.TargetNumber;
+            Result = target.ResultNumber;
         }
 
 
         public int Id { get; set; }
         public string Name { get; set; }
+        public bool? CanFight { get; set; }
         public int? FightTarget { get; set; }
+        public bool? CanElude { get; set; }
         public int? EludeTarget { get; set; }
-        public int? Target { get; set; }
-
-
+        public int? TargetNumber { get; set; }
+        public int? Result { get; set; }
     }
 }
