@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Models
@@ -22,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Models
                 Status = HeroStatusModel.FromHero(hero),
                 Powers = PowerModel.Create(hero.Powers),
                 Commands = CommandModel.Create(hero.AvailableCommands),
-                Inventory = hero.GetInventory().Select(ItemModel.FromItem).ToList()
+                Inventory = ItemModel.Create(hero.GetInventory())
             };
         }
     }

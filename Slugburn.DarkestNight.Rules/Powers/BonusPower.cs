@@ -31,5 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Powers
         {
             Owner.AddModifier(modifer);
         }
+
+        public override string Html => $"<p><b>Bonus:</b> {Text}</p>";
     }
 }

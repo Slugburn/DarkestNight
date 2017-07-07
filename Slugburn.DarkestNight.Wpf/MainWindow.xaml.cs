@@ -2,6 +2,7 @@
 using System.Windows;
 using Slugburn.DarkestNight.Rules;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Items;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Wpf.ViewModels;
 

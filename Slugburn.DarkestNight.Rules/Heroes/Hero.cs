@@ -607,7 +607,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void UpdateAvailableCommands()
         {
             AvailableCommands = GetAvailableCommands();
-            Player.UpdateHeroCommands(Name, PowerModel.Create(Powers), CommandModel.Create(AvailableCommands));
+            Player.UpdateHeroCommands(new HeroActionModel(this));
         }
 
         public void DisplayConflictState()

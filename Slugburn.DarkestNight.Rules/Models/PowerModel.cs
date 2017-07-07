@@ -8,6 +8,7 @@ namespace Slugburn.DarkestNight.Rules.Models
     {
         public string Name { get; set; }
         public string Text { get; set; }
+        public string Html { get; set; }
         public bool IsExhausted { get; set; }
         public bool IsActive { get; set; }
 
@@ -22,9 +23,11 @@ namespace Slugburn.DarkestNight.Rules.Models
             {
                 Name = power.Name,
                 Text = power.Text,
+                Html = power.Html,
                 IsExhausted = power.Exhausted,
                 IsActive = (power as IActivateable)?.IsActive ?? false
             };
         }
+
     }
 }

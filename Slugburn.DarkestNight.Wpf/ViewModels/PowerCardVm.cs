@@ -6,7 +6,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
     {
         public static PowerCardVm Create(PowerModel model)
         {
-            return new PowerCardVm {Name= model.Name, Text = model.Text};
+            return new PowerCardVm {Name= model.Name, Text = $"<small>{model.Html}</small>"  };
         }
 
         public string Name { get; set; }

@@ -18,7 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Players
         void DisplayPrayer(PrayerModel model);
         void AddHero(HeroModel view);
         void UpdateBoard(BoardModel view);
-        void UpdateHeroCommands(string heroName, IEnumerable<PowerModel> powers, IEnumerable<CommandModel> commands);
+        void UpdateHeroCommands(HeroActionModel model);
         void UpdateHeroStatus(string heroName, HeroStatusModel status);
     }
 }

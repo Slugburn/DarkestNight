@@ -29,5 +29,8 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             var hasActiveOath = hero.Powers.OfType<IOath>().Any(x => x.IsActive);
             return !hasActiveOath;
         }
+
+        public override string Html => base.Html
+                                       + $"<p><b>Fulfill:</b> {FulfillText}</p><p><b>Break:</b> {BreakText}</p>";
     }
 }

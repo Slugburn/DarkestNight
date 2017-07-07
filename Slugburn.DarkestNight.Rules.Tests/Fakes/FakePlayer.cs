@@ -95,9 +95,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             Board = view;
         }
 
-        public void UpdateHeroCommands(string heroName, IEnumerable<PowerModel> powers, IEnumerable<CommandModel> commands)
+        public void UpdateHeroCommands(HeroActionModel model)
         {
-            Heroes.Single(x => x.Name == heroName).Commands = commands.ToList();
+            Heroes.Single(x => x.Name == model.HeroName).Commands = model.Commands.ToList();
         }
 
         public void UpdateHeroStatus(string heroName, HeroStatusModel status)

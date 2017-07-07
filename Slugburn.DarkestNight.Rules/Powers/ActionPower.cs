@@ -22,5 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Powers
                    && hero.ConflictState == null
                    && hero.CurrentEvent == null;
         }
+
+        public override string Html => $"<p><b>Action:</b> {Text}</p>";
     }
 }

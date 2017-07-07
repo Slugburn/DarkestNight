@@ -15,7 +15,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
     {
         private int _darkness;
         private List<Location> _locations;
-        private List<Hero> _heroes = new List<Hero>();
+        private List<HeroVm> _heroes = new List<HeroVm>();
         private Game _game;
         private ConflictVm _conflict;
         private EventVm _event;
@@ -83,7 +83,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public List<Hero> Heroes
+        public List<HeroVm> Heroes
         {
             get { return _heroes; }
             set
@@ -218,7 +218,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
 
         public void AddHero(HeroModel view)
         {
-            Heroes.Add(new Hero(Game, view));
+            Heroes.Add(new HeroVm(Game, view));
         }
 
         public void UpdateBoard(BoardModel view)
@@ -227,11 +227,12 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             Locations = view.Locations.Select(l=>new Location(l)).ToList();
         }
 
-        public void UpdateHeroCommands(string heroName, IEnumerable<PowerModel> powers, IEnumerable<CommandModel> commands)
+        public void UpdateHeroCommands(HeroActionModel model)
         {
-            var hero = Heroes.Single(x => x.Name == heroName);
-            hero.Powers = HeroPowerVm.Create(powers);
-            hero.Commands = HeroCommand.Create(Game, heroName, commands);
+            var hero = Heroes.Single(x => x.Name == model.HeroName);
+            hero.Commands = HeroCommand.Create(Game, model.HeroName, model.Commands);
+            hero.Powers = HeroPowerVm.Create(model.Powers);
+            hero.Items = ItemVm.Create(model.Items);
         }
 
         public void UpdateHeroStatus(string heroName, HeroStatusModel status)

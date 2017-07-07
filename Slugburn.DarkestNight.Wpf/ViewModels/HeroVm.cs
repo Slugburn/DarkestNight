@@ -10,7 +10,7 @@ using Slugburn.DarkestNight.Wpf.Annotations;
 
 namespace Slugburn.DarkestNight.Wpf.ViewModels
 {
-    public class Hero : INotifyPropertyChanged
+    public class HeroVm : INotifyPropertyChanged
     {
         private readonly Game _game;
         private List<HeroCommand> _commands;
@@ -18,8 +18,9 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         private ICommand _selectCommand;
         private HeroStatus _status;
         private List<HeroPowerVm> _powers;
+        private List<ItemVm> _items;
 
-        public Hero(Game game, HeroModel model)
+        public HeroVm(Game game, HeroModel model)
         {
             _game = game;
             Name = model.Name;
@@ -60,6 +61,17 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             {
                 if (Equals(value, _powers)) return;
                 _powers = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public List<ItemVm> Items
+        {
+            get { return _items; }
+            set
+            {
+                if (Equals(value, _items)) return;
+                _items = value;
                 OnPropertyChanged();
             }
         }

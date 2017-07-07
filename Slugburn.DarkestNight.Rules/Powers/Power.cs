@@ -9,6 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Powers
         public string Name { get; protected set; }
         public PowerType Type { get; protected set; }
         public string Text { get; protected set; }
+        public abstract string Html { get; }
         public bool StartingPower { get; protected set; }
 
         public bool Exhausted { get; set; }
