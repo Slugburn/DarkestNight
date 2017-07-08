@@ -163,6 +163,7 @@
     <Compile Include="Models\EventRowModel.cs" />
     <Compile Include="Models\GameModel.cs" />
     <Compile Include="Models\HeroActionModel.cs" />
+    <Compile Include="Models\ConflictTargetModel.cs" />
     <Compile Include="Models\TacticModel.cs" />
     <Compile Include="Models\TargetModel.cs" />
     <Compile Include="Modifiers\BonusPowerModifer.cs" />

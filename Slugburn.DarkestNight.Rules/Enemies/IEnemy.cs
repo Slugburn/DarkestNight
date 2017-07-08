@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Slugburn.DarkestNight.Rules.Conflicts;
+﻿using Slugburn.DarkestNight.Rules.Conflicts;
 
 namespace Slugburn.DarkestNight.Rules.Enemies
 {
@@ -7,6 +6,5 @@ namespace Slugburn.DarkestNight.Rules.Enemies
     {
         int Fight { get; }
         int Elude { get; }
-        IEnumerable<ConflictResult> GetResults();
     }
 }

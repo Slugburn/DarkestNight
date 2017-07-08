@@ -44,13 +44,6 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             hero.TakeWound();
         }
 
-        public IEnumerable<ConflictResult> GetResults()
-        {
-            yield return new ConflictResult("Win fight", "Sacrifice blight or (with holy relic) Necromancer slain");
-            yield return new ConflictResult("Win elude", "No effect");
-            yield return new ConflictResult("Failure", "Take wound");
-        }
-
         public void StartTurn()
         {
             IsTakingTurn = true;
@@ -133,6 +126,13 @@ namespace Slugburn.DarkestNight.Rules.Enemies
         public void HandleCallback(Hero hero, object data)
         {
             CompleteTurn();
+        }
+
+        public string OutcomeDescription(bool isWin, TacticType tacticType)
+        {
+            if (!isWin)
+                return "Wound";
+            return tacticType == TacticType.Fight ? "Sacrifice blight or (with holy relic) Necromancer slain" : "No effect";
         }
     }
 }

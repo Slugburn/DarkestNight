@@ -22,9 +22,9 @@ namespace Slugburn.DarkestNight.Rules.Conflicts
         public int Id { get; }
         public string Name { get; }
         public int TargetNumber { get; }
-        public int? ResultNumber { get; set; }
+        public int ResultDie { get; set; }
 
-        public bool IsWin => ResultNumber >= TargetNumber;
+        public bool IsWin => ResultDie >= TargetNumber;
 
         public void Resolve(Hero hero)
         {

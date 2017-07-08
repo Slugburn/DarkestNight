@@ -43,13 +43,17 @@ namespace Slugburn.DarkestNight.Rules.Actions
         {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
-                rollState.TargetNumber = hero.ConflictState.SelectedTargets.Single().TargetNumber;
+                var target = hero.ConflictState.SelectedTargets.Single();
+                rollState.TargetNumber = target.TargetNumber;
+                target.ResultDie = rollState.Result;
                 return rollState;
             }
 
             public void AcceptRoll(Hero hero, RollState rollState)
             {
-                hero.ConflictState.Resolve(hero);
+                foreach (var target in hero.ConflictState.SelectedTargets)
+                    hero.ResolveAttack(target);
+                hero.ResolveCurrentConflict();
             }
         }
     }

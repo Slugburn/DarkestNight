@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Slugburn.DarkestNight.Rules.Conflicts;
+﻿using System.Diagnostics.Eventing.Reader;
 using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Powers;
+using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Enemies
 {
@@ -26,9 +25,9 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             hero.TakeWound();
         }
 
-        public virtual IEnumerable<ConflictResult> GetResults()
+        public virtual string OutcomeDescription(bool isWin, TacticType tacticType)
         {
-            yield return new ConflictResult("Failure", "Take wound");
+            return !isWin ? "Wound." : null;
         }
     }
 }

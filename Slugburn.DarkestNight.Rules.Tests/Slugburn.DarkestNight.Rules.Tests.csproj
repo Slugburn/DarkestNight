@@ -104,7 +104,8 @@
     <Compile Include="Fluent\Arrangements\NecromancerContext.cs" />
     <Compile Include="Fluent\Assertions\BlightSelectionViewVerification.cs" />
     <Compile Include="Fluent\Assertions\BoardLocationViewVerification.cs" />
-    <Compile Include="Fluent\Assertions\ConflictViewVerification.cs" />
+    <Compile Include="Fluent\Assertions\SelectedTargetModelVerification.cs" />
+    <Compile Include="Fluent\Assertions\ConflictModelVerification.cs" />
     <Compile Include="Fluent\Assertions\EventViewVerification.cs" />
     <Compile Include="Fluent\Assertions\GameVerification.cs" />
     <Compile Include="Fluent\Assertions\BoardViewVerification.cs" />

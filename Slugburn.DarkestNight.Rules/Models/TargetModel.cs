@@ -19,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Models
             Id = target.Id;
             Name = target.Name;
             TargetNumber = target.TargetNumber;
-            Result = target.ResultNumber;
+            Result = target.ResultDie;
         }
 
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Enemies
 {
@@ -23,10 +24,9 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             hero.ExhaustPowers();
         }
 
-        public override IEnumerable<ConflictResult> GetResults()
+        public override string OutcomeDescription(bool isWin, TacticType tacticType)
         {
-            yield return new ConflictResult("Win", "Gain 1 Secrecy");
-            yield return new ConflictResult("Failure", "Exhaust all your powers");
+            return isWin ? "Gain 1 Secrecy" : "Exhaust all your powers";
         }
     }
 }

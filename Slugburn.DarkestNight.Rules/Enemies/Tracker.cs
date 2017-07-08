@@ -27,11 +27,12 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             hero.LoseSecrecy(2, "Enemy");
         }
 
-        public override IEnumerable<ConflictResult> GetResults()
+        public override string OutcomeDescription(bool isWin, TacticType tacticType)
         {
-            yield return new ConflictResult("Win fight", "Lose 1 Secrecy");
-            yield return new ConflictResult("Win elude", "No effect");
-            yield return new ConflictResult("Failure", "Lose 2 Secrecy");
+            if (!isWin) return "Lose 2 Secrecy";
+            return tacticType == TacticType.Fight
+                ? "Lose 1 Secrecy"
+                : null;
         }
     }
 }

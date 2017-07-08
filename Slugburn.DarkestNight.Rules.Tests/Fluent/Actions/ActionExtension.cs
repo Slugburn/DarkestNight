@@ -34,8 +34,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
                 .Targets(targetNames)
                 .UsesTactic(tacticName)
                 .ResolvesConflict(fake)
-                .AcceptsRoll()
-                .AcceptsConflictResults();
+                .AcceptsRoll();
         }
 
         public static IPlayerActionContext StartsTurn(this IPlayerActionContext context, string heroName = null)

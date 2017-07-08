@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Slugburn.DarkestNight.Rules.Conflicts;
-using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Powers;
+﻿using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Enemies
@@ -21,11 +18,10 @@ namespace Slugburn.DarkestNight.Rules.Enemies
                 hero.Game.DecreaseDarkness();
         }
 
-        public override IEnumerable<ConflictResult> GetResults()
+        public override string OutcomeDescription(bool isWin, TacticType tacticType)
         {
-            yield return new ConflictResult("Win fight", "-1 Darkness");
-            yield return new ConflictResult("Win elude", "No effect");
-            yield return new ConflictResult("Failure", "Take wound");
+            if (!isWin) return "Wound";
+            return tacticType == TacticType.Fight ? "-1 Darkness" : null;
         }
     }
 }

@@ -9,6 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Rolls
     public class RollState
     {
         private readonly List<IRollHandler> _rollHandlers = new List<IRollHandler>();
+        private IRollHandler _primaryRollHandler;
 
         internal RollState(Hero hero)
         {
@@ -43,6 +44,7 @@ namespace Slugburn.DarkestNight.Rules.Rolls
         {
             IsAccepted = true;
             _rollHandlers.ForEach(x => x.AcceptRoll(Hero, this));
+            _primaryRollHandler.AcceptRoll(Hero, this);
         }
 
         public void AddRollHandler<THandler>() where THandler : IRollHandler, new()
@@ -62,11 +64,17 @@ namespace Slugburn.DarkestNight.Rules.Rolls
                 .Aggregate<IRollModifier, ICollection<int>>(ActualRoll, (current, modifier) => modifier.Modify(Hero, ModifierType, current));
             AdjustedRoll = adjusted.ToList();
             _rollHandlers.ForEach(x => x.HandleRoll(Hero, this));
+            _primaryRollHandler.HandleRoll(Hero, this);
         }
 
         public void ForceWin()
         {
             AdjustedRoll = new List<int> {6};
+        }
+
+        public void SetPrimaryRollHandler(IRollHandler handler)
+        {
+            _primaryRollHandler = handler;
         }
     }
 }

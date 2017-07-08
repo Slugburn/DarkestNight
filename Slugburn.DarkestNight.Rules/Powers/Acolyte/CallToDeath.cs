@@ -1,5 +1,6 @@
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
+using Slugburn.DarkestNight.Rules.Blights.Implementations;
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Modifiers;
@@ -57,7 +58,26 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
-                hero.ConflictState.Roll = rollState.AdjustedRoll;
+                var roll = rollState.AdjustedRoll;
+                var conflict = hero.ConflictState;
+                conflict.Roll = roll;
+                // default die assignments for most efficent use of rolls
+                var bestDice = roll.OrderByDescending(x => x).Take(2).ToList();
+                var bestDie = bestDice[0];
+                var secondDie = bestDice[1];
+                var prioritizedTargets = conflict.SelectedTargets.OrderByDescending(t => t.Conflict is Shroud ? 10 : t.TargetNumber).ToList();
+                var harder = prioritizedTargets[0];
+                var easier = prioritizedTargets[1];
+                if (bestDie >= harder.TargetNumber || bestDie < easier.TargetNumber)
+                {
+                    harder.ResultDie = bestDie;
+                    easier.ResultDie = secondDie;
+                }
+                else
+                {
+                    easier.ResultDie = bestDie;
+                    harder.ResultDie = secondDie;
+                }
                 hero.DisplayConflictState();
                 return rollState;
             }
@@ -65,7 +85,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             public void AcceptRoll(Hero hero, RollState rollState)
             {
                 hero.RemoveRollModifiers(PowerName);
-                hero.DisplayConflictState();
+                foreach (var target in hero.ConflictState.SelectedTargets)
+                    hero.ResolveAttack(target);
+                hero.ResolveCurrentConflict();
             }
         }
     }

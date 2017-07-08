@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework.Constraints;
 using Shouldly;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Models;
@@ -161,12 +162,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         {
             var hero = _game.ActingHero;
             hero.AssignDiceToTargets(diceAssignment);
-        }
-
-        public void AcceptConflictResult()
-        {
-            var hero = _game.ActingHero;
-            hero.AcceptConflictResult();
         }
 
         public void SelectBlights(IEnumerable<int> blightIds)

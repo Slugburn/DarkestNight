@@ -6,15 +6,16 @@ using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
-    public class ConflictViewVerification : ChildVerification
+    public class ConflictModelVerification : ChildVerification
     {
         private List<int> _roll = new List<int>();
         private string[] _tacticNames;
         private int? _targetCount;
         private string[] _targetNames;
         private bool? _win;
+        private readonly List<SelectedTargetModelVerification> _selectedTargets = new List<SelectedTargetModelVerification>();
 
-        public ConflictViewVerification(IVerifiable parent) : base(parent)
+        public ConflictModelVerification(IVerifiable parent) : base(parent)
         {
         }
 
@@ -24,7 +25,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             var view = player.Conflict;
             view.ShouldNotBeNull();
 
-            view.Win.ShouldBe(_win);
+            if (_win.HasValue)
+                view.SelectedTargets.Single().IsWin.ShouldBe(_win.Value);
 
             if (_targetCount.HasValue)
                 view.TargetCount.ShouldBe(_targetCount.Value);
@@ -32,37 +34,47 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
                 Assert.That(view.Targets.Select(x => x.Name), Is.EquivalentTo(_targetNames));
             if (_tacticNames != null)
                 Assert.That(view.Tactics.Select(x => x.Name), Is.EquivalentTo(_tacticNames));
-            Assert.That(view.Roll, Is.EquivalentTo(_roll));
+            if (_roll.Any())
+                Assert.That(view.Roll, Is.EquivalentTo(_roll));
+            foreach (var selectedTarget in _selectedTargets)
+                selectedTarget.Verify(root);
         }
 
-        public ConflictViewVerification HasTargets(params string[] targetNames)
+        public ConflictModelVerification HasTargets(params string[] targetNames)
         {
             _targetNames = targetNames;
             return this;
         }
 
-        public ConflictViewVerification HasTactics(params string[] tacticNames)
+        public ConflictModelVerification HasTactics(params string[] tacticNames)
         {
             _tacticNames = tacticNames;
             return this;
         }
 
-        public ConflictViewVerification MustSelectTargets(int count)
+        public ConflictModelVerification MustSelectTargets(int count)
         {
             _targetCount = count;
             return this;
         }
 
-        public ConflictViewVerification Rolled(params int[] roll)
+        public ConflictModelVerification Rolled(params int[] roll)
         {
             _roll = roll.ToList();
             return this;
         }
 
-        public ConflictViewVerification Win(bool expected = true)
+        public ConflictModelVerification Win(bool expected = true)
         {
             _win = expected;
             return this;
+        }
+
+        public SelectedTargetModelVerification SelectedTarget(string targetName)
+        {
+            var verification = new SelectedTargetModelVerification(this, targetName);
+            _selectedTargets.Add(verification);
+            return verification;
         }
     }
 }

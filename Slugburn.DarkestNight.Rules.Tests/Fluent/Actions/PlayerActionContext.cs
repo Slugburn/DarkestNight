@@ -124,7 +124,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         public IPlayerActionContext AssignsDie(int dieValue, string targetName)
         {
             var conflict = GetPlayer().Conflict;
-            var target = conflict.Targets.SingleOrDefault(x => x.Name == targetName);
+            var target = conflict.SelectedTargets.SingleOrDefault(x => x.Name == targetName);
             if (target==null)
                 Assert.Fail($"{targetName} is not a valid target.");
             if (_diceAssignment == null)
@@ -132,13 +132,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             _diceAssignment.Add(new TargetDieAssignment {TargetId = target.Id, DieValue = dieValue});
             if (_diceAssignment.Count == conflict.TargetCount)
                 GetPlayer().AssignDiceToTargets(_diceAssignment);
-            return this;
-        }
-
-        public IPlayerActionContext AcceptsConflictResults(int count = 1)
-        {
-            for (var i = 0; i < count; i++)
-                GetPlayer().AcceptConflictResult();
             return this;
         }
 

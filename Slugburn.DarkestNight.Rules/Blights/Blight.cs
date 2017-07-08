@@ -1,5 +1,6 @@
 ﻿using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Spaces;
+using Slugburn.DarkestNight.Rules.Tactics;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Blights
@@ -39,6 +40,11 @@ namespace Slugburn.DarkestNight.Rules.Blights
         public void SetSpace(Space space)
         {
             _space = space;
+        }
+
+        public string OutcomeDescription(bool isWin, TacticType tacticType)
+        {
+            return isWin ? "Destroy blight." : DefenseText;
         }
     }
 }

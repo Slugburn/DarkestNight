@@ -110,7 +110,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Then(Verify.Player.EventView.HasBody(eventName, expectedFate, null).HasOptions("Continue"))
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Hero().HasUnresolvedEvents(0).Secrecy(null))
-                .Then(Verify.Player.ConflictView.HasTargets(enemy));
+                .Then(Verify.Player.ConflictModel.HasTargets(enemy));
         }
 
         private static void TestMultipleTypeEnemyGeneratorEvent(string eventName, string enemy, string text, int expectedFate, Func<IGiven, IGiven> designator)
@@ -123,7 +123,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Then(Verify.Player.EventView.HasBody(eventName, expectedFate, text).HasOptions("Continue").ActiveRow(enemy))
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Hero().HasUnresolvedEvents(0).Secrecy(null))
-                .Then(Verify.Player.ConflictView.HasTargets(enemy));
+                .Then(Verify.Player.ConflictModel.HasTargets(enemy));
         }
 
         [Test]

@@ -15,7 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Blights
                 .WithHero("Knight").At("Village").HasPowers("Charge", "Reckless Abandon", "Sprint")
                 .Location("Village").HasBlights("Confusion")
                 .Given.Hero().IsFacingEnemy("Skeleton")
-                .Then(Verify.Player.ConflictView.HasTactics("Fight", "Elude"));
+                .Then(Verify.Player.ConflictModel.HasTactics("Fight", "Elude"));
         }
 
         [Test]

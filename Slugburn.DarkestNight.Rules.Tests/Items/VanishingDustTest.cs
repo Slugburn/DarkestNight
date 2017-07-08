@@ -15,8 +15,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Items
                 .When.Player.Targets("Zombie").UsesTactic("Elude").ResolvesConflict(Fake.Rolls(1))
                 .Then(Verify.Hero().CanTakeAction("Vanishing Dust"))
                 .When.Player.TakesAction("Vanishing Dust")
-                .Then(Verify.Player.ConflictView.Rolled(1).Win())
-                .When.Player.AcceptsConflictResults()
+                .Then(Verify.Player.Hero().LostGrace(0))
+                .Then(Verify.Player.ConflictModel.Rolled(1).Win())
                 .Then(Verify.Hero().Rolled(6).HasItems());
         }
 

@@ -15,7 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Game.WithHero()
                 .Given.Hero().HasDrawnEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
-                .Then(Verify.Player.ConflictView.HasTargets("Guarded Trove"))
+                .Then(Verify.Player.ConflictModel.HasTargets("Guarded Trove"))
                 .Given.Game.NextSearchResult(Find.Waystone)
                 .When.Player.CompletesConflict("Guarded Trove", tactic, Fake.Rolls(6)).SelectsSearchResult()
                 .Then(Verify.Hero().LostSecrecy().HasItems("Waystone"));
@@ -28,7 +28,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Game.WithHero()
                 .Given.Hero().HasDrawnEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
-                .Then(Verify.Player.ConflictView.HasTargets("Guarded Trove"))
+                .Then(Verify.Player.ConflictModel.HasTargets("Guarded Trove"))
                 .When.Player.Eludes(Fake.Rolls(5)) 
                 .Then(Verify.Player.EventView.HasOptions("Spend Secrecy", "Draw Event"))
                 .When.Player.SelectsEventOption("Draw Event")
@@ -42,7 +42,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Game.WithHero()
                 .Given.Hero().HasDrawnEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
-                .Then(Verify.Player.ConflictView.HasTargets("Guarded Trove"))
+                .Then(Verify.Player.ConflictModel.HasTargets("Guarded Trove"))
                 .When.Player.Eludes(Fake.Rolls(5))
                 .Then(Verify.Player.EventView.HasOptions("Spend Secrecy", "Draw Event"))
                 .When.Player.SelectsEventOption("Spend Secrecy")
@@ -56,7 +56,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Game.WithHero().Secrecy(0)
                 .Given.Hero().HasDrawnEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
-                .Then(Verify.Player.ConflictView.HasTargets("Guarded Trove"))
+                .Then(Verify.Player.ConflictModel.HasTargets("Guarded Trove"))
                 .When.Player.Eludes(Fake.Rolls(5))
                 .Then(Verify.Player.EventView.HasOptions("Draw Event"));
         }
@@ -68,7 +68,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Game.WithHero()
                 .Given.Hero().HasDrawnEvent("Guarded Trove")
                 .When.Player.SelectsEventOption("Continue")
-                .Then(Verify.Player.ConflictView.HasTargets("Guarded Trove"))
+                .Then(Verify.Player.ConflictModel.HasTargets("Guarded Trove"))
                 .When.Player.Fights(Fake.Rolls(5))
                 .Then(Verify.Hero().WasWounded());
         }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Enemies
 {
@@ -21,9 +22,9 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             hero.LoseSecrecy(_secrecyLoss, "Enemy");
         }
 
-        public override IEnumerable<ConflictResult> GetResults()
+        public override string OutcomeDescription(bool isWin, TacticType tacticType)
         {
-            yield return new ConflictResult("Failure", $"Lose {_secrecyLoss} Secrecy");
+            return !isWin ? $"Lose {_secrecyLoss} Secrecy" : null;
         }
     }
 }

@@ -346,11 +346,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         internal void ResolveAttack(ConflictTarget target)
         {
-            if (target.IsWin)
-                Triggers.Send(HeroTrigger.FightWon);
+//            if (target.IsWin)
+//                Triggers.Send(HeroTrigger.FightWon);
             if (!(target.Conflict is Necromancer))
                 LoseSecrecy("Attack");
-            DisplayConflictState();
+//            DisplayConflictState();
         }
 
         public List<ITactic> GetAvailableFightTactics()
@@ -443,7 +443,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var targetDieValues = (from target in selectedTargets
                 join assignment in assignments on target.Id equals assignment.TargetId
                 select new {target, assignment.DieValue}).ToList();
-            targetDieValues.ForEach(x => x.target.ResultNumber = x.DieValue);
+            targetDieValues.ForEach(x => x.target.ResultDie = x.DieValue);
 
             // resolve attacks
             foreach (var target in selectedTargets)
@@ -620,22 +620,29 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void AcceptConflictResult()
         {
+            ResolveCurrentConflict();
+        }
+
+        public void ResolveCurrentConflict()
+        {
             var targets = ConflictState.SelectedTargets;
+            if (targets.Any(x=>x.ResultDie == 0))
+                throw new InvalidOperationException("All selected targets should have results assigned.");
+
             // Shrouds are priority target since they prevent destruction of other blight types
-            var prioritizedTargets = targets.OrderBy(t=>t.Conflict is Shroud ? 0: 1);
+            var prioritizedTargets = targets.OrderBy(t => t.Conflict is Shroud ? 0 : 1);
+            foreach (var target in prioritizedTargets)
+            {
+                if (target.TacticType == TacticType.Fight &&  target.IsWin)
+                    Triggers.Send(HeroTrigger.FightWon);
 
-            var target = prioritizedTargets.First();
-            var enemy = target.Conflict as IEnemy;
-            target.Resolve(this);
-            targets.Remove(target);
-
-            if (enemy != null)
-                Enemies.Remove(enemy);
-            if (!targets.Any())
-                ConflictState = null;
-            DisplayConflictState();
-            if (!targets.Any())
-                ContinueTurn();
+                target.Resolve(this);
+                var enemy = target.Conflict as IEnemy;
+                if (enemy != null)
+                    Enemies.Remove(enemy);
+            }
+            ConflictState = null;
+            ContinueTurn();
         }
 
         public bool CanSpendGrace => Grace > 0 || (Intercession?.CanIntercedeFor(this) ?? false);

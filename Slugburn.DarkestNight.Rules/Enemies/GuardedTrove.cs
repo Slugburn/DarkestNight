@@ -43,11 +43,12 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             }
         }
 
-        public override IEnumerable<ConflictResult> GetResults()
+        public override string OutcomeDescription(bool isWin, TacticType tacticType)
         {
-            yield return new ConflictResult("Win", "Lose 1 Secrecy and draw a search result");
-            yield return new ConflictResult("Fail fight", "Take wound");
-            yield return new ConflictResult("Fail elude", "Spend 1 Secrecy or draw another event");
+            if (isWin) return "Lose 1 Secrecy and draw a search result";
+            return tacticType == TacticType.Fight 
+                ? "Wound" 
+                : "Spend 1 Secrecy or draw another event";
         }
     }
 

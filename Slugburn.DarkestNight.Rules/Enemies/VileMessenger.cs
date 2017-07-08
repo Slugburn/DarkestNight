@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Enemies
 {
@@ -18,9 +19,9 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             hero.Game.IncreaseDarkness();
         }
 
-        public override IEnumerable<ConflictResult> GetResults()
+        public override string OutcomeDescription(bool isWin, TacticType tacticType)
         {
-            yield return new ConflictResult("Failure", "+1 Darkness");
+            return !isWin ? "+1 Darkness" : null;
         }
     }
 }

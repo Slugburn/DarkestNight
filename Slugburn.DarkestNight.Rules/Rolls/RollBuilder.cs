@@ -56,7 +56,7 @@ namespace Slugburn.DarkestNight.Rules.Rolls
                     BaseDiceCount = _baseDiceCount,
                     TargetNumber = _targetNumber
                 };
-                state.AddRollHandler(_handler);
+                state.SetPrimaryRollHandler(_handler);
                 return state;
             }
         }

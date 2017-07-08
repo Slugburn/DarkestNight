@@ -1,9 +1,6 @@
 ﻿using System.Linq;
-using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Conflicts;
-using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tactics;
 
@@ -52,15 +49,14 @@ namespace Slugburn.DarkestNight.Rules.Actions
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
                 rollState.TargetNumber = hero.Game.Necromancer.Fight;
+                var target = hero.ConflictState.SelectedTargets.Single();
+                target.ResultDie = rollState.Result;
                 return rollState;
             }
 
             public void AcceptRoll(Hero hero, RollState rollState)
             {
-                rollState.TargetNumber = hero.Game.Necromancer.Fight;
-                var target = hero.ConflictState.SelectedTargets.Single();
-                var assignment = TargetDieAssignment.Create(target.Id, rollState.Result);
-                hero.AssignDiceToTargets(new[] { assignment });
+                hero.ResolveCurrentConflict();
             }
         }
 

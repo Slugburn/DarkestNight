@@ -11,7 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private List<string> _locations;
         private List<string> _powerNames;
         private BlightSelectionViewVerification _blightSelectionView;
-        private ConflictViewVerification _conflictView;
+        private ConflictModelVerification _conflictModel;
         private NecromancerViewVerification _necromancerView;
         private string[] _heroNames;
         private SearchViewVerification _searchView;
@@ -40,7 +40,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
                 verification.Verify(root);
 
             BoardView.Verify(root);
-            _conflictView?.Verify(root);
+            _conflictModel?.Verify(root);
             _eventView?.Verify(root);
             _blightSelectionView?.Verify(root);
             _necromancerView?.Verify(root);
@@ -65,12 +65,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             }
         }
 
-        public ConflictViewVerification ConflictView
+        public ConflictModelVerification ConflictModel
         {
             get
             {
-                _conflictView = new ConflictViewVerification(this);
-                return _conflictView;
+                _conflictModel = new ConflictModelVerification(this);
+                return _conflictModel;
             }
         }
 

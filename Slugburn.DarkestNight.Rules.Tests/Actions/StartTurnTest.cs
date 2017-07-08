@@ -74,7 +74,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
                 .WithHero().Secrecy(0).At("Castle").IsTakingTurn(false)
                 .When.Player.TakesAction("Start Turn")
                 .Then(Verify.Hero().Secrecy(0).IsFacingEnemies("Necromancer").HasUnresolvedEvents(0))
-                .Then(Verify.Player.ConflictView.HasTargets("Necromancer"));
+                .Then(Verify.Player.ConflictModel.HasTargets("Necromancer"));
         }
 
         [Test]
