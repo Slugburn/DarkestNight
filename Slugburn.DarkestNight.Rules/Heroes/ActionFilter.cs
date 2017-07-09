@@ -3,7 +3,7 @@ using Slugburn.DarkestNight.Rules.Commands;
 
 namespace Slugburn.DarkestNight.Rules.Heroes
 {
-    internal class ActionFilter
+    public class ActionFilter : IActionFilter
     {
         private readonly HashSet<string> _allowed;
 

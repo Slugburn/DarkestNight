@@ -1,6 +1,7 @@
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
+using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 {
@@ -19,9 +20,16 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             Owner.AddAction(new ForbiddenArtsAction(this));
         }
 
+        public override bool IsUsable(Hero hero)
+        {
+            if (!base.IsUsable(hero)) return false;
+            var conflict = hero.ConflictState;
+            return conflict?.SelectedTactic?.Type == TacticType.Fight;
+        }
+
         private class ForbiddenArtsAction : PowerCommand
         {
-            public ForbiddenArtsAction(IPower power) : base(power)
+            public ForbiddenArtsAction(IPower power) : base(power, false)
             {
             }
 

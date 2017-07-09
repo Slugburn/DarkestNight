@@ -98,7 +98,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public void UpdateHeroCommands(HeroActionModel model)
         {
-            Heroes.Single(x => x.Name == model.HeroName).Commands = model.Commands.ToList();
+            var hero = Heroes.Single(x => x.Name == model.HeroName);
+            hero.Commands = model.Commands.ToList();
+            hero.Inventory = model.Items.ToList();
         }
 
         public void UpdateHeroStatus(string heroName, HeroStatusModel status)
@@ -122,8 +124,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public void AcceptRoll()
         {
+            AcceptedRoll = _game.ActingHero.CurrentRoll.AdjustedRoll;
             _game.ActingHero.AcceptRoll();
+            Conflict = null;
         }
+
+        public List<int> AcceptedRoll { get; set; }
 
         public void ExecuteCommand(string heroName, string commandName)
         {

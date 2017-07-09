@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:vm="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels">
+                    xmlns:vm="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d">
     <DataTemplate DataType="{x:Type vm:ConflictVm}">
         <Grid Visibility="{Binding Visibility}">
             <Grid Background="DarkGray" Opacity="0.50" />
@@ -14,18 +14,19 @@
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Row="0" Grid.Column="0">
-                        <Label>Targets</Label>
-                        <ListBox ItemsSource="{Binding Targets}" SelectionMode="Multiple">
+                    <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,3,0">
+                        <TextBlock FontWeight="Bold" Text="Targets" />
+                        <ListBox ItemsSource="{Binding Targets}" SelectionMode="{Binding TargetSelectionMode}" Visibility="{Binding Targets, Converter={StaticResource NullToVisibilityConverter}}" >
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="{x:Type ListBoxItem}">
                                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                                 </Style>
                             </ListBox.ItemContainerStyle>
                         </ListBox>
+                        <ItemsControl ItemsSource="{Binding SelectedTargets}" Visibility="{Binding SelectedTargets, Converter={StaticResource NullToVisibilityConverter}}" />
                     </StackPanel>
-                    <StackPanel Grid.Row="0" Grid.Column="1">
-                        <Label>Tactic</Label>
+                    <StackPanel Grid.Row="0" Grid.Column="1" Margin="3,0,0,0">
+                        <TextBlock FontWeight="Bold" Margin="0" Text="Tactic"/>
                         <ListBox ItemsSource="{Binding Tactics}" SelectedItem="{Binding SelectedTactic}" />
                     </StackPanel>
                     <Grid Grid.Row="1" Grid.Column="0">
@@ -33,25 +34,18 @@
                             <ColumnDefinition />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" FontWeight="Bold">Roll</Label>
-                        <Label Grid.Column="1" Content="{Binding Roll}" />
+                        <Label Grid.Column="0" FontWeight="Bold" Content="Roll"/>
+                        <ItemsControl Grid.Column="1" ItemsSource="{Binding Roll}" ItemTemplate="{StaticResource Die}" Style="{StaticResource HorizontalItemsControl}" />
                     </Grid>
                     <Grid Grid.Row="1" Grid.Column="1">
                         <Button Content="{Binding CommandText}" Command="{Binding Command}" />
                     </Grid>
                 </Grid>
-                </Border>
+            </Border>
         </Grid>
     </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:Tactic}">
-        <TextBlock>
-         <TextBlock.Inlines>
-             <Run Text="{Binding Name}" FontWeight="Bold"/>
-             <Run Text=":" />
-             <Run Text="{Binding Type}" />
-             <Run Text="{Binding Dice}" />
-         </TextBlock.Inlines>
-        </TextBlock>
+    <DataTemplate DataType="{x:Type vm:TacticVm}">
+        <TextBlock><Run Text="{Binding Name}" FontWeight="Bold"/><Run Text=" "/><Run Text=":" /><Run Text=" "/><Run Text="{Binding Type}" /><Run Text=" "/><Run Text="{Binding Dice}" /></TextBlock>
     </DataTemplate>
     <DataTemplate DataType="{x:Type vm:TargetVm}">
         <Grid>
@@ -59,16 +53,24 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="20" />
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0">
-                <TextBlock.Inlines>
-                    <Run Text="{Binding Name}" FontWeight="Bold" />
-                    <Run Text=":" />
-                    <Run Text="{Binding TargetNumber}" />
-                </TextBlock.Inlines>
-            </TextBlock>
-            <Border Grid.Column="1" Background="Black" BorderThickness="1" BorderBrush="Black" Height="20" Width="20" Visibility="{Binding ResultNumber, Converter={StaticResource NullToVisibilityConverter}}">
-                <TextBlock Foreground="White" FontWeight="Bold" Text="{Binding ResultNumber}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-            </Border>
+            <TextBlock Grid.Column="0"><Run Text="{Binding Name}" FontWeight="Bold" /><Run Text=" "/><Run Text=":" /><Run Text=" "/><Run Text="{Binding TargetNumber}" /></TextBlock>
+        </Grid>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:ConflictTargetVm}">
+        <Grid d:DesignWidth="200" d:DesignHeight="50">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Name}"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding TargetNumber}" HorizontalAlignment="Center" Width="20" />
+            <ContentControl Grid.Row="0" Grid.Column="2" Content="{Binding ResultNumber}" ContentTemplate="{StaticResource Die}" />
+            <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding OutcomeDescription}"/>
         </Grid>
     </DataTemplate>
 </ResourceDictionary>

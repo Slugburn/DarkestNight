@@ -24,6 +24,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public override void Execute(Hero hero)
         {
+            hero.State = HeroState.Attacking;
             hero.SetRoll(RollBuilder.Create<AttackRoll>());
             var conflictState = new ConflictState
             {
@@ -43,9 +44,11 @@ namespace Slugburn.DarkestNight.Rules.Actions
         {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
+                hero.ConflictState.Roll = rollState.AdjustedRoll;
                 var target = hero.ConflictState.SelectedTargets.Single();
                 rollState.TargetNumber = target.TargetNumber;
                 target.ResultDie = rollState.Result;
+                hero.DisplayConflictState();
                 return rollState;
             }
 

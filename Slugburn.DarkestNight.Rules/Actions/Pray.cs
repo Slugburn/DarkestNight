@@ -16,9 +16,9 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public override void Execute(Hero hero)
         {
+            hero.State = HeroState.Praying;
             var rollState = hero.SetRoll(RollBuilder.Create<PrayerRoll>().Type(ModifierType.PrayDice).Base("Pray", 2).Target(3));
             rollState.Roll();
-            hero.Player.DisplayPrayer(PrayerModel.From(hero));
         }
 
         public override bool IsAvailable(Hero hero)
@@ -32,6 +32,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
         {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
+                hero.Player.DisplayPrayer(PrayerModel.From(hero));
                 return rollState;
             }
 
@@ -41,6 +42,8 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 hero.GainGrace(successes, hero.DefaultGrace);
                 hero.RefreshPowers();
                 hero.Triggers.Send(HeroTrigger.Prayed);
+                hero.CurrentRoll = null;
+                hero.ContinueTurn();
             }
         }
     }

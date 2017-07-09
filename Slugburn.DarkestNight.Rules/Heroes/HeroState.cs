@@ -5,9 +5,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         WaitingForTurn,
         TurnStarted,
         TakingTurn,
-        EventDrawn,
         ContinuingTurn,
+        EventDrawn,
+        ResolvingEvent,
         FacingEnemy,
-        ResolvingEvent
+        Searching,
+        Attacking,
+        Praying,
+        Moving,
+        FinishedMoving
     }
 }

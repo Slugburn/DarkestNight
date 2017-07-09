@@ -16,8 +16,8 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         private readonly Game _game;
         private Visibility _visibility;
         private string _roll;
-        private List<SearchResult> _results;
-        private SearchResult _selectedResult;
+        private List<SearchResultVm> _results;
+        private SearchResultVm _selectedResult;
         private ICommand _command;
         private Visibility _resultsVisibility;
         private string _commandText;
@@ -50,7 +50,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public List<SearchResult> Results
+        public List<SearchResultVm> Results
         {
             get { return _results; }
             set
@@ -61,7 +61,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public SearchResult SelectedResult
+        public SearchResultVm SelectedResult
         {
             get { return _selectedResult; }
             set
@@ -92,13 +92,17 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
             Visibility = Visibility.Visible;
             Roll = model.Roll.Select(x => x.ToString()).ToCsv();
-            Results = SearchResult.Create(model.SearchResults);
+            Results = SearchResultVm.Create(model.SearchResults);
             var haveResults = Results?.Any() ?? false;
             ResultsVisibility = haveResults ? Visibility.Visible : Visibility.Hidden;
             if (!haveResults)
             {
                 CommandText = "Accept Roll";
-                Command = new CommandHandler(() => _game.ActingHero.AcceptRoll());
+                Command = new CommandHandler(() =>
+                {
+                    Visibility = Visibility.Hidden;
+                    _game.ActingHero.AcceptRoll();
+                });
             }
             else
             {
@@ -106,6 +110,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
                 CommandText = "Accept Results";
                 Command = new CommandHandler(() =>
                 {
+                    Visibility = Visibility.Hidden;
                     callback.Handle(SelectedResult.Code);
                 });
             }
@@ -140,28 +145,5 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-    }
-
-    public class SearchResult
-    {
-
-        public static List<SearchResult> Create(IEnumerable<SearchResultModel> models)
-        {
-            return models?.Select(Create).ToList();
-        }
-
-        public static SearchResult Create(SearchResultModel model)
-        {
-            return new SearchResult
-            {
-                Code = model.Code,
-                Name = model.Name,
-                Text = model.Text
-            };
-        }
-
-        public string Code { get; set; }
-        public string Name { get; set; }
-        public string Text { get; set; }
     }
 }

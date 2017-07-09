@@ -80,7 +80,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void BlessingOfPiety()
         {
             TestScenario.Game
-                .WithHero("Druid").Grace(0).At("Village")
+                .WithHero("Druid").Grace(0).Secrecy(0).At("Village")
                 .WithHero("Priest").HasPowers("Blessing of Piety").At("Village")
                 .When.Player.TakesAction("Priest", "Blessing of Piety").SelectsHero("Druid")
                 .Given.Hero("Druid").IsTakingTurn()

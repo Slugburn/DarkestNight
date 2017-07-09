@@ -51,12 +51,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Celerity_NoNewFormSelected()
         {
             TestScenario
-                .Game.WithHero("Druid").HasPowers("Celerity", "Sprite Form").At("Monastery")
+                .Game.WithHero("Druid").HasPowers("Celerity", "Sprite Form").At("Castle").Secrecy(0)
                 .When.Player.TakesAction("Celerity")
                 .When.Player.SelectsLocation("Village")
-                .Then(Verify.Hero().Location("Village").HasFreeAction().HasAvailableActions("Sprite Form", "Skip Free Action"))
+                .Then(Verify.Player.Hero("Druid").Secrecy(1))
+                .Then(Verify.Hero().Location("Village").HasFreeAction().HasAvailableActions("Sprite Form", "Skip Free Action").Secrecy(1))
                 .When.Player.TakesAction("Skip Free Action")
-                .Then(Verify.Hero().HasUsedAction().HasFreeAction(false));
+                .Then(Verify.Hero().HasUsedAction().HasFreeAction(false).Secrecy(1));
         }
 
         // Raven Form (Action): Deactivate all Forms. Optionally activate.
@@ -160,7 +161,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Power("Tree Form").IsActive()
                 .When.Player.TakesAction("Deactivate Form")
                 .Given.Hero().IsTakingTurn()
-                .Then(Verify.Hero().Grace(0).HasAvailableActions("Travel", "Search", "Tree Form", "End Turn"));
+                .Then(Verify.Hero().Grace(0).HasAvailableActions("Hide", "Search", "Travel", "Tree Form", "End Turn"));
         }
 
         [Test]
@@ -191,8 +192,20 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Secrecy(0) // secrecy needs to be <5 in order to use hide
                 .Power("Tree Form").IsActive()
                 .Given.Hero("Druid").IsTakingTurn()
-                .Then(Verify.Hero().HasAvailableActions("Hide", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form"));
+                .Then(Verify.Hero().HasAvailableActions("Hide", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form", "End Turn"));
         }
+
+        [Test]
+        public void TreeForm_And_Celerity()
+        {
+            TestScenario.Game
+                .WithHero("Druid").At("Village").HasPowers("Celerity", "Tree Form")
+                .When.Player.TakesAction("Celerity").SelectsLocation("Castle")
+                .Then(Verify.Player.Hero("Druid").Commands.Exactly("Tree Form", "Skip Free Action"))
+                .When.Player.TakesAction("Tree Form")
+                .Then(Verify.Player.Hero("Druid").Commands.Exactly());
+        }
+
 
         // Vines (Tactic): Exhaust to fight or elude with 4 dice.
         [Test]

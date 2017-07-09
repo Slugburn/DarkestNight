@@ -134,6 +134,7 @@
     <Compile Include="Heroes\DefenseRollHandler.cs" />
     <Compile Include="Heroes\HeroFactory.cs" />
     <Compile Include="Heroes\HeroState.cs" />
+    <Compile Include="Heroes\IActionFilter.cs" />
     <Compile Include="Heroes\IHeroFactory.cs" />
     <Compile Include="Heroes\Impl\Prince.cs" />
     <Compile Include="Heroes\Impl\Rogue.cs" />

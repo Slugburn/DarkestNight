@@ -7,14 +7,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
     public class HideTest
     {
         [Test]
-        public void AtOrAboveFiveSecrecyAndNoPowersExhausted()
-        {
-            TestScenario.Game
-                .WithHero("Priest").Secrecy(5).HasPowers("Calm").Power("Calm").IsExhausted(false)
-                .Then(Verify.Hero().CanTakeAction("Hide", false));
-        }
-
-        [Test]
         public void BelowFiveSecrecy()
         {
             TestScenario.Game

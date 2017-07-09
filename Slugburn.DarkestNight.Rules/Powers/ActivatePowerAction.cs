@@ -11,9 +11,8 @@ namespace Slugburn.DarkestNight.Rules.Powers
 
         public override void Execute(Hero hero)
         {
-            var power = (IActivateable)_power;
+            var power = (IActivateable)Power;
             power.Activate(hero);
-            hero.IsActionAvailable = false;
             hero.ContinueTurn();
         }
     }

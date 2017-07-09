@@ -17,8 +17,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Player.ConflictModel.HasTargets("Guarded Trove"))
                 .Given.Game.NextSearchResult(Find.Waystone)
-                .When.Player.CompletesConflict("Guarded Trove", tactic, Fake.Rolls(6)).SelectsSearchResult()
-                .Then(Verify.Hero().LostSecrecy().HasItems("Waystone"));
+                .When.Player.CompletesConflict("Guarded Trove", tactic, Fake.Rolls(6))
+                .Then(Verify.Player.SearchView.Results("Waystone"))
+                .Then(Verify.Player.ConflictModel.IsHidden())
+                .When.Player.SelectsSearchResult()
+                .Then(Verify.Player.ConflictModel.IsHidden())
+                .Then(Verify.Player.Hero().LostSecrecy(1).Inventory("Waystone").Commands.Includes("Waystone"));
         }
 
         [Test]

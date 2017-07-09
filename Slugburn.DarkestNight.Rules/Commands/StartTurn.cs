@@ -8,6 +8,7 @@ namespace Slugburn.DarkestNight.Rules.Commands
         public string Name => "Start Turn";
 
         public string Text => null;
+        public bool RequiresAction => false;
 
         public void Execute(Hero hero)
         {

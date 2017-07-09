@@ -33,6 +33,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
         [Test]
         public void Travel_MoveTwo()
         {
+            // should only gain 1 secrecy even though moving two spaces
             TestScenario.Game
                 .WithHero("Druid").At("Monastery").HasPowers("Raven Form").Power("Raven Form").IsActive().Secrecy(0)
                 .When.Player.TakesAction("Travel")

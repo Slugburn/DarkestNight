@@ -27,7 +27,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
         public class BlindingBlackAction : PowerCommand
         {
-            public BlindingBlackAction(IPower power) : base(power)
+            public BlindingBlackAction(IPower power) : base(power, false)
             {
             }
 

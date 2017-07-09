@@ -3,60 +3,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
 using Slugburn.DarkestNight.Rules;
 using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Wpf.Annotations;
 
 namespace Slugburn.DarkestNight.Wpf.ViewModels
 {
-    public class EventOption
-    {
-        public EventOption(Game game, EventOptionModel model)
-        {
-            Text = model.Text;
-            Command = new CommandHandler(
-                () => game.ActingHero.SelectEventOption(model.Code));
-        }
-
-
-        public static EventOption Create(Game game, EventOptionModel model)
-        {
-            return new EventOption(game, model);
-        }
-
-        public string Text { get; set; }
-
-        public ICommand Command { get; set; }
-    }
-
-    public class EventRow
-    {
-        private EventRow(EventRowModel model)
-        {
-            Text = model.Text;
-            SubText = model.SubText;
-            if (model.Max == int.MaxValue)
-                Range = $"{model.Min}+";
-            else if (model.Min == model.Max)
-                Range = model.Min.ToString();
-            else
-                Range = $"{model.Min} - {model.Max}";
-            Highlight = model.IsActive ? new SolidColorBrush(Colors.Yellow) : null;
-        }
-
-        public static EventRow Create(EventRowModel model)
-        {
-            return new EventRow(model);
-        }
-
-        public string Range { get; set; }
-        public string Text { get; set; }
-        public string SubText { get; set; }
-        public Brush Highlight { get; set; }
-    }
-
     public class EventVm : INotifyPropertyChanged
     {
         private readonly Game _game;
@@ -64,13 +16,17 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         private string _title;
         private string _text;
         private string _fate;
-        private List<EventRow> _rows;
-        private List<EventOption> _options;
+        private List<EventRowVm> _rows;
+        private List<EventOptionVm> _options;
 
         public EventVm(Game game)
         {
             _game = game;
             Visibility = Visibility.Hidden;
+        }
+
+        public EventVm()
+        {
         }
 
         public Visibility Visibility
@@ -117,7 +73,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public List<EventRow> Rows
+        public List<EventRowVm> Rows
         {
             get { return _rows; }
             set
@@ -128,7 +84,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public List<EventOption> Options
+        public List<EventOptionVm> Options
         {
             get { return _options; }
             set
@@ -150,9 +106,9 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             Title = model.Title;
             Text = model.Text;
             Fate = model.Fate > 0 ? model.Fate.ToString() : null;
-            Rows = model.Rows.Select(EventRow.Create).ToList();
+            Rows = model.Rows.Select(EventRowVm.Create).ToList();
             Options = model.Options
-                .Select(o => EventOption.Create(_game, o))
+                .Select(o => EventOptionVm.Create(_game, o))
                 .ToList();
         }
 

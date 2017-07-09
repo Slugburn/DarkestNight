@@ -20,6 +20,9 @@ namespace Slugburn.DarkestNight.Rules.Enemies
         public override void Win(Hero hero)
         {
             hero.LoseSecrecy("Enemy");
+            // finish the conflict before going back to the event
+            hero.Enemies.Remove(this);
+            hero.ConflictState = null;
             hero.DrawSearchResults(1);
             hero.EndEvent();
         }
@@ -27,6 +30,8 @@ namespace Slugburn.DarkestNight.Rules.Enemies
         public override void Failure(Hero hero)
         {
             var tacticType = hero.ConflictState.SelectedTactic.Type;
+            hero.Enemies.Remove(this);
+            hero.ConflictState = null;
             if (tacticType == TacticType.Fight)
             {
                 hero.TakeWound();

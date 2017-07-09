@@ -14,7 +14,6 @@ namespace Slugburn.DarkestNight.Rules.Actions
             hero.GainSecrecy(1, 5);
             hero.AvailableMovement = hero.TravelSpeed;
             TravelHandler.UseAvailableMovement(hero);
-            hero.ContinueTurn();
         }
     }
 }

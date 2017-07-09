@@ -31,13 +31,6 @@ namespace Slugburn.DarkestNight.Rules.Powers
             return true;
         }
 
-        public override void Exhaust(Hero hero)
-        {
-            if (IsActive)
-                Deactivate(hero);
-            base.Exhaust(hero);
-        }
-
         public override string Html => $"<p><b>Action:</b> {Text}</p><p><b>Active:</b> {ActiveText}</p>";
     }
 }

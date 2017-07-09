@@ -18,11 +18,5 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 hero.GainSecrecy(1, 5);
             hero.Triggers.Send(HeroTrigger.Hidden);
         }
-
-        public override bool IsAvailable(Hero hero)
-        {
-            return base.IsAvailable(hero)
-                   && (hero.Secrecy < 5 || hero.Powers.Any(power => power.Exhausted));
-        }
     }
 }

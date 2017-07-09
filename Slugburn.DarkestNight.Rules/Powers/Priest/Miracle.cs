@@ -24,7 +24,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
 
         internal class MiracleAction : PowerCommand
         {
-            public MiracleAction(IPower power) : base(power)
+            public MiracleAction(IPower power) : base(power, false)
             {
             }
 

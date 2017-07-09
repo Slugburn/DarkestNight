@@ -14,15 +14,27 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private string[] _targetNames;
         private bool? _win;
         private readonly List<SelectedTargetModelVerification> _selectedTargets = new List<SelectedTargetModelVerification>();
+        private bool? _isHidden;
 
         public ConflictModelVerification(IVerifiable parent) : base(parent)
         {
+        }
+
+        public ConflictModelVerification IsHidden(bool expected = true)
+        {
+            _isHidden = expected;
+            return this;
         }
 
         public override void Verify(ITestRoot root)
         {
             var player = root.Get<FakePlayer>();
             var view = player.Conflict;
+            if (_isHidden ?? false)
+            {
+                view.ShouldBeNull();
+                return;
+            }
             view.ShouldNotBeNull();
 
             if (_win.HasValue)

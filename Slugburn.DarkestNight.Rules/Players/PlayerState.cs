@@ -6,7 +6,6 @@
         Event,
         Conflict,
         SelectPower,
-        SelectBlight,
         SelectLocation,
         Necromancer
     }

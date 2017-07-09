@@ -1,4 +1,6 @@
 using System.Linq;
+using Slugburn.DarkestNight.Rules.Actions;
+using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Rolls;
@@ -8,9 +10,11 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
 {
     class OathOfValor : Oath
     {
+        private const string PowerName = "Oath of Valor";
+
         public OathOfValor()
         {
-            Name = "Oath of Valor";
+            Name = PowerName;
             ActiveText = "+1 die in fights.";
             FulfillText = "Win a fight; You may activate any Oath immediately.";
             BreakText = "Attempt to elude; you lose 1 Grace.";
@@ -34,7 +38,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         public override void Fulfill(Hero hero)
         {
             Deactivate(hero);
-            hero.AddFreeAction(p=>p is IOath);
+            hero.AddFreeAction(new OathOfValorActionFilter());
         }
 
         public override void Break(Hero hero)
@@ -58,6 +62,16 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             {
                 var oath = (IOath)hero.GetPower(source);
                 oath.Break(hero);
+            }
+        }
+
+        private class OathOfValorActionFilter : IActionFilter
+        {
+            public string Name => PowerName;
+            public bool IsAllowed(ICommand command)
+            {
+                var powerCommand = command as PowerCommand;
+                return powerCommand?.Power is IOath;
             }
         }
     }

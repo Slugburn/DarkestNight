@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
     {
         private string _searchTarget;
         private List<string> _tokens;
-        private List<Blight> _blights;
+        private List<BlightVm> _blights;
         private Brush _highlight = new SolidColorBrush(Colors.White);
         private ICommand _selectCommand;
         private Visibility _relicVisiblity;
@@ -24,7 +24,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             Name = model.Name;
             SearchTarget = model.SearchTarget > 0 ? $"{model.SearchTarget}+" : null;
             Tokens = model.Tokens;
-            Blights = model.Blights.Select(b => new Blight(b)).ToList();
+            Blights = BlightVm.CreateBlights(model.Blights);
             RelicVisiblity = model.HasRelic ? Visibility.Visible : Visibility.Collapsed;
         }
 
@@ -63,7 +63,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public List<Blight> Blights
+        public List<BlightVm> Blights
         {
             get { return _blights; }
             set

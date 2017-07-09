@@ -28,7 +28,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
         internal class FalseLifeAction : PowerCommand
         {
-            public FalseLifeAction(IPower power) : base(power)
+            public FalseLifeAction(IPower power) : base(power, false)
             {
             }
 

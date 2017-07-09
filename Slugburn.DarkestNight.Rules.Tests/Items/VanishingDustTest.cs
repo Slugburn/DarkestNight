@@ -14,10 +14,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Items
                 .WithHero().HasItems("Vanishing Dust").IsFacingEnemy("Zombie")
                 .When.Player.Targets("Zombie").UsesTactic("Elude").ResolvesConflict(Fake.Rolls(1))
                 .Then(Verify.Hero().CanTakeAction("Vanishing Dust"))
+                .Then(Verify.Player.ConflictModel.Rolled(1))
                 .When.Player.TakesAction("Vanishing Dust")
                 .Then(Verify.Player.Hero().LostGrace(0))
-                .Then(Verify.Player.ConflictModel.Rolled(1).Win())
-                .Then(Verify.Hero().Rolled(6).HasItems());
+                .Then(Verify.Hero().HasItems());
         }
 
         [Test]

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using Slugburn.DarkestNight.Rules;
 using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Wpf.Annotations;
@@ -15,11 +16,13 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         private readonly Game _game;
         private CommandHandler _command;
         private string _commandText;
-        private string _roll;
-        private Tactic _selectedTactic;
-        private IEnumerable<Tactic> _tactics;
+        private IEnumerable<int> _roll;
+        private TacticVm _selectedTactic;
+        private IEnumerable<TacticVm> _tactics;
         private List<TargetVm> _targets;
         private Visibility _visibility;
+        private SelectionMode _targetSelectionMode;
+        private List<ConflictTargetVm> _selectedTargets;
 
         public ConflictVm(Game game)
         {
@@ -38,7 +41,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public string Roll
+        public IEnumerable<int> Roll
         {
             get { return _roll; }
             set
@@ -60,7 +63,18 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public IEnumerable<Tactic> Tactics
+        public List<ConflictTargetVm> SelectedTargets
+        {
+            get { return _selectedTargets; }
+            set
+            {
+                if (Equals(value, _selectedTargets)) return;
+                _selectedTargets = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public IEnumerable<TacticVm> Tactics
         {
             get { return _tactics; }
             set
@@ -71,7 +85,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public Tactic SelectedTactic
+        public TacticVm SelectedTactic
         {
             get { return _selectedTactic; }
             set
@@ -104,6 +118,17 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
+        public SelectionMode TargetSelectionMode
+        {
+            get { return _targetSelectionMode; }
+            set
+            {
+                if (value == _targetSelectionMode) return;
+                _targetSelectionMode = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -111,35 +136,34 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         {
             Visibility = model == null ? Visibility.Hidden : Visibility.Visible;
             if (model == null) return;
-            Targets = model.Targets.Select(m => new TargetVm(m)).ToList();
-            Targets.First().IsSelected = true;
-            Tactics = model.Tactics.Select(m => new Tactic(m)).ToList();
-            SelectedTactic = Tactics.First();
-            Roll = model.Roll.Select(x => x.ToString()).ToCsv();
-            Action commandAction;
-            if (!model.Roll.Any())
+            Targets = TargetVm.Create(model.Targets);
+            if (Targets != null)
+                Targets.First().IsSelected = true;
+            TargetSelectionMode = model.TargetCount == 1 ? SelectionMode.Single : SelectionMode.Multiple;
+            SelectedTargets = ConflictTargetVm.Create(model.SelectedTargets);
+            Tactics = TacticVm.CreateTactics(model);
+            SelectedTactic = model.SelectedTactic != null
+                ? new TacticVm(model.SelectedTactic)
+                : Tactics.First();
+
+            Roll = model.Roll;
+            if (Targets != null && SelectedTargets == null)
             {
                 CommandText = "Roll";
                 Func<bool> canExecute = () => Targets.Count(t => t.IsSelected) == model.TargetCount;
                 Command = new CommandHandler(SelectTargetAndTactic, canExecute);
                 foreach (var target in Targets)
                     target.PropertyChanged += (sender, e) => Command.OnCanExecuteChanged();
-                return;
-            }
-            if (!model.IsRollAccepted)
-            {
-                CommandText = "Accept Roll";
-                commandAction = () => _game.ActingHero.AcceptRoll();
             }
             else
             {
-                CommandText = "Accept Result";
-                commandAction = () => _game.ActingHero.AcceptConflictResult();
+                CommandText = "Accept Roll";
+                Command = new CommandHandler(() =>
+                {
+                    Visibility = Visibility.Hidden;
+                    _game.ActingHero.AcceptRoll();
+                });
             }
-            Command = new CommandHandler(() =>
-            {
-                commandAction();
-            });
         }
 
         private void SelectTargetAndTactic()

@@ -9,6 +9,8 @@ namespace Slugburn.DarkestNight.Rules.Commands
         public string Text => "Resolve the effects of any blights in your location that trigger at the end of a turn.\n"
                               + "If you spent your entire turn in the Monastery, gain 1 Secrecy (up to default).";
 
+        public bool RequiresAction => false;
+
         public void Execute(Hero hero)
         {
             hero.EndTurn();

@@ -1,4 +1,6 @@
-﻿using Slugburn.DarkestNight.Rules.Heroes;
+﻿using System.Collections.Generic;
+using Slugburn.DarkestNight.Rules.Commands;
+using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Druid
@@ -19,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             base.Activate(hero);
             hero.IsGraceGainBlocked = false;
             hero.Triggers.Add(HeroTrigger.StartedTurn, Name, new TreeFormStartTurnHandler());
-            hero.AddActionFilter(PowerName, new[] { "Hide", "Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form" });
+            hero.AddActionFilter(new TreeFormActionFilter());
         }
 
         public override bool Deactivate(Hero hero)
@@ -30,11 +32,21 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             return true;
         }
 
+        private class TreeFormActionFilter : IActionFilter
+        {
+            private static readonly ICollection<string> Allowed = new[] { "Hide", "Tree Form", "Celerity", "Raven Form", "Sprite Form", "Wolf Form", "Deactivate Form" };
+            public string Name => PowerName;
+            public bool IsAllowed(ICommand command)
+            {
+                return !command.RequiresAction || Allowed.Contains(command.Name);
+            }
+        }
+
         private class TreeFormStartTurnHandler : ITriggerHandler<Hero>
         {
-            public void HandleTrigger(Hero registrar, string source, TriggerContext context)
+            public void HandleTrigger(Hero hero, string source, TriggerContext context)
             {
-                registrar.GainGrace(2, registrar.DefaultGrace);
+                hero.GainGrace(2, hero.DefaultGrace);
             }
         }
     }

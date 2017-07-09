@@ -11,7 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
         {
             TestScenario.Game
                 .WithHero().Secrecy(0).At("Monastery")
-                .When.Player.TakesAction("Hide").TakesAction("End Turn")
+                .When.Player.TakesAction("Hide")
                 .Then(Verify.Hero().HasUsedAction().Secrecy(2));
         }
 
@@ -22,7 +22,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
                 .WithHero().Secrecy(0).At("Monastery").HasItems("Waystone")
                 .When.Player.TakesAction("Waystone").SelectsLocation("Village")
                 .When.Player.TakesAction("Travel").SelectsLocation("Monastery")
-                .When.Player.TakesAction("End Turn")
                 .Then(Verify.Hero().HasUsedAction()
                     .Secrecy(2)); // gained 1 from using Waystone and 1 from Travel
         }
@@ -31,8 +30,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
         public void AfterAllPlayersHaveFinishedTheirTurn()
         {
             TestScenario.Game
-                .WithHero("Acolyte").At("Monastery")
-                .WithHero("Priest").At("Monastery")
+                .WithHero("Acolyte").At("Monastery").IsTakingTurn(false)
+                .WithHero("Priest").At("Monastery").IsTakingTurn(false)
                 .When.Player.TakesAction("Acolyte", "Start Turn").TakesAction("Acolyte", "End Turn")
                 .When.Player.TakesAction("Priest", "Start Turn").TakesAction("Priest", "End Turn")
                 .Then(Verify.Game.Darkness(1).Necromancer.IsTakingTurn());

@@ -1,4 +1,5 @@
-﻿using Slugburn.DarkestNight.Rules.Heroes;
+﻿using System.Collections.Generic;
+using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Players;
@@ -7,7 +8,7 @@ using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
-    public class Search : StandardAction, ICallbackHandler
+    public class Search : StandardAction
     {
         public Search() : base("Search")
         {
@@ -24,6 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public override void Execute(Hero hero)
         {
+            hero.State = HeroState.Searching;
             var space = hero.Space;
             var state = hero.SetRoll(RollBuilder.Create<SearchRollHandler>()
                 .Type(ModifierType.SearchDice)
@@ -31,13 +33,14 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 .Target(space.GetSearchTarget(hero)));
             hero.Triggers.Send(HeroTrigger.Searched);
             state.Roll();
-            hero.Player.DisplaySearch(SearchModel.From(hero, null), Callback.For(hero, this));
+            hero.DisplaySearch(CallbackHandler);
         }
 
         public class SearchRollHandler : IRollHandler
         {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
+                hero.DisplaySearch(CallbackHandler);
                 return rollState;
             }
 
@@ -46,14 +49,18 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 if (rollState.Win)
                     hero.DrawSearchResults(rollState.Successes);
                 else
-                    hero.Player.DisplaySearch(null, null);
+                    hero.ContinueTurn();
             }
         }
 
-        public void HandleCallback(Hero hero, object data)
+        public static ICallbackHandler CallbackHandler => new MyCallbackHandler();
+
+        private class MyCallbackHandler : ICallbackHandler
         {
-            hero.Player.DisplaySearch(null, null);
-            hero.ContinueTurn();
+            public void HandleCallback(Hero hero, object data)
+            {
+                hero.ContinueTurn();
+            }
         }
     }
 }

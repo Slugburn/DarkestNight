@@ -13,7 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             // Hide or search; you lose 1 Grace
             TestScenario.Game
-                .WithHero("Knight").HasPowers("Oath of Vengeance").Power("Oath of Vengeance").IsActive()
+                .WithHero("Knight").At("Village").HasPowers("Oath of Vengeance").Power("Oath of Vengeance").IsActive()
                 .When.Player.TakesAction(action)
                 .Then(Verify.Hero().HasUsedAction().LostGrace());
         }
@@ -72,8 +72,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario.Game
                 .WithHero("Knight").HasPowers("Holy Mantle").Grace(0)
                 .Then(Verify.Hero().DefaultGrace(6).Grace(0))
-                .When.Player.TakesAction("Pray", Fake.Rolls(2, 3)).AcceptsRoll()
-                .Then(Verify.Hero().Rolled(3, 4).DefaultGrace(6).Grace(2).HasUsedAction());
+                .When.Player.TakesAction("Pray", Fake.Rolls(2, 3))
+                .Then(Verify.Player.PrayerView.Roll(3,4))
+                .When.Player.AcceptsRoll()
+                .Then(Verify.Player.Hero("Knight").Grace(2).DefaultGrace(6));
         }
 
         // Oath of Defense (Action): 
@@ -223,18 +225,34 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         }
 
         [Test]
-        public void OathOfValor_FulfillOnDefense()
+        public void OathOfValor_FulfillFightingEventEnemy()
+        {
+            // Win a fight; You may activate any Oath immediately.
+            TestScenario
+                .Game.WithHero("Knight").At("Village").HasPowers("Oath of Valor")
+                .Power("Oath of Valor").IsActive()
+                .Given.Hero("Knight").IsTakingTurn(false)
+                .Given.Game.NextEvent("Lich")
+                .When.Player.TakesAction("Knight", "Start Turn").SelectsEventOption("Continue").Fights(Fake.Rolls(6, 6))
+                .Then(Verify.Player.Hero("Knight").Commands.Exactly("Oath of Valor", "Skip Free Action"))
+                .When.Player.TakesAction("Oath of Valor")
+                .Then(Verify.Player.Hero("Knight").Commands.Exactly("Hide", "Search", "Travel", "End Turn"));
+        }
+
+        [Test]
+        public void OathOfValor_FulfillOnDefenseAtEndOfTurn()
         {
             // Win a fight; You may activate any Oath immediately.
             TestScenario
                 .Game.WithHero("Knight").HasPowers("Oath of Valor", "Oath of Vengeance").At("Village")
                 .Power("Oath of Valor").IsActive()
                 .Given.Location("Village").HasBlights("Skeletons")
-                .Given.Hero().IsFacingEnemy("Skeleton")
-                .When.Player.Fights(Fake.Rolls(6, 6))
-                .Then(Verify.Hero().HasFreeAction().HasAvailableActions("Oath of Valor", "Oath of Vengeance", "Skip Free Action"))
-                .Then(Verify.Power("Oath of Valor").IsActive(false));
+                .When.Player.TakesAction("End Turn").Fights(Fake.Rolls(6,6))
+                .Then(Verify.Player.Hero("Knight").Commands.Exactly("Oath of Valor", "Oath of Vengeance", "Skip Free Action"))
+                .When.Player.TakesAction("Oath of Valor")
+                .Then(Verify.Player.Hero("Knight").Commands.Exactly());
         }
+
 
         // Oath of Vengeance
         [Test]

@@ -22,6 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
 
         public void Resolve(Hero hero, string option)
         {
+            var callback = Callback.For(hero, this);
             switch (option)
             {
                 case "discard-event":
@@ -33,16 +34,16 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                     hero.RollEventDice(new EventRollHandler(Detail));
                     return;
                 case "destroy-blight":
-                    var blights = BlightModel.Create(hero.Game.GetBlights());
-                    var selection = new BlightSelectionModel(blights);
-                    hero.Player.DisplayBlightSelection(selection, Callback.For(hero, this));
+                    var blights = hero.Game.GetBlights();
+                    var selection = BlightSelectionModel.Create("Destroy Blight [Latent Spell]", blights, 1, callback);
+                    hero.Player.DisplayBlightSelection(selection, callback);
                     break;
                 case "draw-power":
-                    hero.DrawPower(Callback.For(hero, this));
+                    hero.DrawPower(callback);
                     break;
                 case "move":
                     var locations = Game.GetAllLocations().Except(new[] {hero.Location}).Select(x=>x.ToString()).ToList();
-                    hero.Player.DisplayLocationSelection(locations, Callback.For(hero, this));
+                    hero.Player.DisplayLocationSelection(locations, callback);
                     hero.Player.State = PlayerState.SelectLocation;
                     break;
                 case "no-effect":

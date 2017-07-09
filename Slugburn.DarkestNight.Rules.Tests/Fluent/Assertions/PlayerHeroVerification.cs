@@ -10,12 +10,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private readonly string _heroName;
         private readonly PlayerHeroCommandVerification _commands;
         private string _name;
+        private int? _defaultGrace;
         private int? _grace;
-        private int _defaultGrace;
-        private int? _secrecy;
-        private int _defaultSecrecy;
-        private string _location;
         private int? _lostGrace;
+        private int? _defaultSecrecy;
+        private int? _secrecy;
+        private int? _lostSecrecy;
+        private string _location;
+        private string[] _inventory;
 
         public PlayerHeroVerification(IVerifiable parent, string heroName) : base(parent)
         {
@@ -33,18 +35,28 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             root.Set(hero);
             SetExpected(hero);
             view.Name.ShouldBe(hero.Name);
-            view.Status.Grace.Value.ShouldBe(_grace.Value);
-            view.Status.Grace.Default.ShouldBe(hero.DefaultGrace);
-            view.Status.Secrecy.Value.ShouldBe(_secrecy.Value);
+            view.Status.Grace.Value.ShouldBeIfNotNull(_grace, "Grace");
+            view.Status.Grace.Default.ShouldBeIfNotNull(_defaultGrace, "Default Grace");
+            view.Status.Secrecy.Value.ShouldBeIfNotNull(_secrecy, "Secrecy");
             view.Status.Secrecy.Default.ShouldBe(hero.DefaultSecrecy);
             view.Status.Location.ShouldBe(hero.Location.ToString());
+            if (_inventory != null)
+                view.Inventory.Select(x=>x.Name).ShouldBeEquivalent(_inventory);
             _commands.Verify(root);
         }
 
         private void SetExpected(Hero hero)
         {
+            _defaultGrace = _defaultGrace ?? hero.DefaultGrace;
             _grace = _grace ?? (hero.DefaultGrace - _lostGrace ?? hero.Grace);
-            _secrecy = _secrecy ?? hero.Secrecy;
+            _defaultSecrecy = _defaultSecrecy ?? hero.DefaultSecrecy;
+            _secrecy = _secrecy ?? (hero.DefaultSecrecy - _lostSecrecy ?? hero.Secrecy);
+        }
+
+        public PlayerHeroVerification DefaultGrace(int expected)
+        {
+            _defaultGrace = expected;
+            return this;
         }
 
         public PlayerHeroVerification Grace(int expected)
@@ -62,6 +74,18 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         public PlayerHeroVerification LostGrace(int expected)
         {
             _lostGrace = expected;
+            return this;
+        }
+
+        public PlayerHeroVerification LostSecrecy(int expected)
+        {
+            _lostSecrecy = expected;
+            return this;
+        }
+
+        public PlayerHeroVerification Inventory(params string[] expected)
+        {
+            _inventory = expected;
             return this;
         }
     }

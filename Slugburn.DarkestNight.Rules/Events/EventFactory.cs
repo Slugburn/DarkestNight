@@ -95,6 +95,7 @@ namespace Slugburn.DarkestNight.Rules.Events
             foreach (var blight in hero.GetBlights().ToList())
                 space.RemoveBlight(blight);
             hero.Game.CreateBlights(hero.Location, count);
+            hero.Game.UpdatePlayerBoard();
         }
     }
 }

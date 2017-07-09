@@ -60,7 +60,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             {
                 var roll = rollState.AdjustedRoll;
                 var conflict = hero.ConflictState;
-                conflict.Roll = roll;
                 // default die assignments for most efficent use of rolls
                 var bestDice = roll.OrderByDescending(x => x).Take(2).ToList();
                 var bestDie = bestDice[0];

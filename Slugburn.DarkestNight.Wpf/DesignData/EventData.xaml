@@ -1,0 +1,11 @@
+﻿<m:EventVm xmlns:m="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels"
+            Title="Event Title" Text="The quick brown fox ran over the lazy dog." Visibility="Visible" Fate="7"  >
+    <m:EventVm.Rows>
+        <m:EventRowVm Range="1-2" Highlight="Yellow" Text="I wish I were an Oscar Meyer weiner." SubText="Happy birthday to you!" />
+        <m:EventRowVm Range="3+" Text="Blah blah blah..."/>
+    </m:EventVm.Rows>
+    <m:EventVm.Options>
+        <m:EventOptionVm Text="Command 1" />
+        <m:EventOptionVm Text="Command 2" />
+    </m:EventVm.Options>
+</m:EventVm>

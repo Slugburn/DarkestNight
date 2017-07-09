@@ -11,7 +11,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
     {
         public void HandleCallback(Hero hero, object data)
         {
-            hero.Player.DisplaySearch(null, null);
             var code = (string) data;
             var find = code.ToEnum<Find>();
             var game = hero.Game;
@@ -49,6 +48,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+            hero.ContinueTurn();
         }
 
         private static void SuppyCache(Hero hero)
@@ -82,6 +82,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 var notSelectedName = _powerNames.Single(x => x != selectedName);
                 hero.LearnPower(PowerFactory.Create(selectedName));
                 hero.PowerDeck.Add(notSelectedName);
+                hero.ContinueTurn();
             }
         }
 
@@ -93,6 +94,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 hero.PowerDeck.Remove(selectedName);
                 hero.ShufflePowerDeck();
                 hero.LearnPower(PowerFactory.Create(selectedName));
+                hero.ContinueTurn();
             }
         }
 

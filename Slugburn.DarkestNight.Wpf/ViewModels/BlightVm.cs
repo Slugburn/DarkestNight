@@ -7,20 +7,24 @@ using Slugburn.DarkestNight.Wpf.Annotations;
 
 namespace Slugburn.DarkestNight.Wpf.ViewModels
 {
-    public class TargetVm : INotifyPropertyChanged
+    public class BlightVm : INotifyPropertyChanged
     {
         private bool _isSelected;
 
-        public TargetVm(TargetModel model)
+        public BlightVm(BlightModel model)
         {
             Id = model.Id;
             Name = model.Name;
-            TargetNumber = $"Fight {model.FightTarget} / Elude {model.EludeTarget}";
+            Effect = model.Effect;
+            Might = model.Might;
+            Defense = model.Defense;
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public string TargetNumber { get; set; }
+        public string Effect { get; set; }
+        public int Might { get; set; }
+        public string Defense { get; set; }
 
         public bool IsSelected
         {
@@ -35,15 +39,15 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public static List<BlightVm> CreateBlights(IEnumerable<BlightModel> models)
+        {
+            return models.Select(b => new BlightVm(b)).ToList();
+        }
+
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public static List<TargetVm> Create(List<TargetModel> models)
-        {
-            return models?.Select(m => new TargetVm(m)).ToList();
         }
     }
 }

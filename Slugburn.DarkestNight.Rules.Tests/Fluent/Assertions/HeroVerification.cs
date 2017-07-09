@@ -5,6 +5,7 @@ using Shouldly;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Rolls;
+using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
 {
@@ -70,6 +71,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         public void Verify(ITestRoot root)
         {
             var game = root.Get<Game>();
+            var player = root.Get<FakePlayer>();
             var hero = ((TestRoot)root).GetHero(_heroName);
             SetExpectations(hero);
             hero.IsTakingTurn.ShouldBeIfNotNull(_isTakingTurn, "IsTakingTurn");
@@ -120,12 +122,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             var searchDice = dice.Total;
             if (_searchDice != null)
                 Assert.That(searchDice, Is.EqualTo(_searchDice), "Unexpected number of Search dice.");
+            var roll = (hero.CurrentRoll?.AdjustedRoll ?? player.AcceptedRoll);
             if (_expectedDiceCount > 0)
-                hero.CurrentRoll.AdjustedRoll.Count.ShouldBe(_expectedDiceCount, "Unexpected number of dice rolled.");
+                roll.Count.ShouldBe(_expectedDiceCount, "Unexpected number of dice rolled.");
             if (_expectedRoll != null)
             {
                 Assert.That(hero.CurrentRoll, Is.Not.Null, "No roll was made");
-                Assert.That(hero.CurrentRoll.AdjustedRoll, Is.EquivalentTo(_expectedRoll));
+                Assert.That(roll, Is.EquivalentTo(_expectedRoll));
             }
             hero.HasFreeAction.ShouldBe(_hasFreeAction);
             if (_expectedInventory != null)

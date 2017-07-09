@@ -8,6 +8,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
     {
         public static void UseAvailableMovement(Hero hero)
         {
+            hero.State = HeroState.Moving;
             var validLocations = hero.GetValidMovementLocations().Select(x => x.ToString()).ToList();
             hero.Player.DisplayLocationSelection(validLocations, Callback.For(hero, new TravelHandler()));
         }
@@ -18,7 +19,14 @@ namespace Slugburn.DarkestNight.Rules.Actions
             hero.MoveTo(location);
             hero.AvailableMovement--;
             if (hero.AvailableMovement > 0)
+            {
                 UseAvailableMovement(hero);
+            }
+            else
+            {
+                hero.State = HeroState.FinishedMoving;
+                hero.ContinueTurn();
+            }
         }
 
     }

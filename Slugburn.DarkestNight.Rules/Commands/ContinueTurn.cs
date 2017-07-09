@@ -6,6 +6,7 @@ namespace Slugburn.DarkestNight.Rules.Commands
     {
         public string Name => "Continue";
         public string Text => "Continue turn";
+        public bool RequiresAction => false;
 
         public bool IsAvailable(Hero hero)
         {

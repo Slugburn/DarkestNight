@@ -24,8 +24,10 @@ namespace Slugburn.DarkestNight.Rules.Items.Artifacts
 
         public void Execute(Hero hero)
         {
-            var playerBlights = BlightModel.Create(hero.Game.GetBlights());
-            hero.Player.DisplayBlightSelection(new BlightSelectionModel(playerBlights), Callback.For(hero, this));
+            var blights = hero.Game.GetBlights();
+            var callback = Callback.For(hero, this);
+            var selection = BlightSelectionModel.Create("Ignore Blight [Vanishing Cowl]", blights, 1, callback);
+            hero.Player.DisplayBlightSelection(selection, callback);
         }
 
         public void HandleCallback(Hero hero, object data)

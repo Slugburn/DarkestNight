@@ -19,6 +19,6 @@ namespace Slugburn.DarkestNight.Rules.Items
             Owner = hero;
         }
 
-
+        public bool RequiresAction => false;
     }
 }

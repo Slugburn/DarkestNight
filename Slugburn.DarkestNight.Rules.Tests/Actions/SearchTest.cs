@@ -73,7 +73,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
                 .When.Player.CompletesSearch()
                 .Then(Verify.Player.PowerSelectionView("Camouflage", "Celerity", "Raven Form", "Tranquility", "Tree Form", "Vines", "Wolf Form"))
                 .When.Player.SelectsPower("Raven Form")
-                .Then(Verify.Hero().HasUsedAction()
+                .Then(Verify.Hero("Druid").HasUsedAction()
                     .HasPowers("Animal Companion", "Sprite Form", "Visions", "Raven Form")
                     .PowerDeckContains("Camouflage", "Celerity", "Tranquility", "Tree Form", "Vines", "Wolf Form"));
         }

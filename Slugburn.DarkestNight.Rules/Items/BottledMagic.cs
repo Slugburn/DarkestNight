@@ -28,5 +28,6 @@ namespace Slugburn.DarkestNight.Rules.Items
             // It must be a fight roll
             return state.SelectedTactic.Type == TacticType.Fight;
         }
+
     }
 }

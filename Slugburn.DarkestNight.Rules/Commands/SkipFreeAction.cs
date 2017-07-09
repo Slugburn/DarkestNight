@@ -6,6 +6,7 @@ namespace Slugburn.DarkestNight.Rules.Commands
     {
         public string Name => "Skip Free Action";
         public string Text => "Bypass your chance for a free action.";
+        public bool RequiresAction => false;
 
         public void Execute(Hero hero)
         {

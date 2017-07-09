@@ -6,18 +6,20 @@ namespace Slugburn.DarkestNight.Rules.Actions
 {
     public abstract class PowerCommand : ICommand
     {
-        protected readonly IPower _power;
+        public IPower Power { get; }
 
-        protected PowerCommand(IPower power)
+        protected PowerCommand(IPower power, bool requiresAction)
         {
-            _power = power;
+            Power = power;
+            RequiresAction = requiresAction;
             Name = power.Name;
             Text = power.Text;
         }
 
-        protected PowerCommand(string name, IPower power)
+        protected PowerCommand(string name, IPower power, bool requiresAction)
         {
-            _power = power;
+            Power = power;
+            RequiresAction = requiresAction;
             Name = name;
             Text = power.Text;
         }
@@ -25,22 +27,23 @@ namespace Slugburn.DarkestNight.Rules.Actions
         public string Name { get; protected set; }
 
         public string Text { get; protected set; }
+        public bool RequiresAction { get; }
 
         public abstract void Execute(Hero hero);
 
         public virtual bool IsAvailable(Hero hero)
         {
-            return _power.IsUsable(hero);
+            return Power.IsUsable(hero);
         }
     }
 
     public abstract class PowerAction : PowerCommand, IAction
     {
-        protected PowerAction(IActionPower power) : base(power)
+        protected PowerAction(IActionPower power) : base(power, true)
         {
         }
 
-        protected PowerAction(string name, IActionPower power) : base(name, power)
+        protected PowerAction(string name, IActionPower power) : base(name, power, true)
         {
         }
     }

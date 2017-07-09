@@ -14,14 +14,6 @@ namespace Slugburn.DarkestNight.Rules.Models
             EludeTarget = info.EludeTarget;
         }
 
-        public TargetModel(ConflictTarget target)
-        {
-            Id = target.Id;
-            Name = target.Name;
-            TargetNumber = target.TargetNumber;
-            Result = target.ResultDie;
-        }
-
 
         public int Id { get; set; }
         public string Name { get; set; }
@@ -29,7 +21,5 @@ namespace Slugburn.DarkestNight.Rules.Models
         public int? FightTarget { get; set; }
         public bool? CanElude { get; set; }
         public int? EludeTarget { get; set; }
-        public int? TargetNumber { get; set; }
-        public int? Result { get; set; }
     }
 }

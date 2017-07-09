@@ -15,9 +15,9 @@ namespace Slugburn.DarkestNight.Rules.Powers
 
         public override bool IsUsable(Hero hero)
         {
-            return base.IsUsable(hero)
-                   && hero.State == HeroState.TakingTurn
-                   && hero.IsTakingTurn
+            if (!base.IsUsable(hero)) return false;
+            if (hero.HasFreeAction) return true;
+            return hero.State == HeroState.TakingTurn && hero.IsTakingTurn
                    && hero.IsActionAvailable
                    && hero.ConflictState == null
                    && hero.CurrentEvent == null;

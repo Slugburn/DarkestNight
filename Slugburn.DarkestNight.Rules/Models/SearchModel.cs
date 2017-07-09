@@ -9,7 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Models
         public List<SearchResultModel> SearchResults { get; set; }
         public List<int> Roll { get; set; }
 
-        public static SearchModel From(Hero hero, IEnumerable<Find> finds)
+        public static SearchModel Create(Hero hero, IEnumerable<Find> finds)
         {
             var search = new SearchModel {Roll = hero.CurrentRoll.AdjustedRoll};
             if (finds!= null)
