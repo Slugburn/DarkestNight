@@ -69,7 +69,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public void Update(QuestionModel model, Callback callback)
+        public void Update(QuestionModel model, Callback<string> callback)
         {
             Visibility = Visibility.Visible;
             Title = model.Title;
@@ -77,7 +77,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             Answers = model.Answers.Select(answer => CreateQuestionAnswer(answer, callback)).ToList();
         }
 
-        private QuestionAnswer CreateQuestionAnswer(string answer, Callback callback)
+        private QuestionAnswer CreateQuestionAnswer(string answer, Callback<string> callback)
         {
             var command = new CommandHandler(() =>
             {

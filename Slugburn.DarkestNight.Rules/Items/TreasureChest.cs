@@ -4,7 +4,7 @@ using Slugburn.DarkestNight.Rules.Players;
 
 namespace Slugburn.DarkestNight.Rules.Items
 {
-    class TreasureChest : Item, ICommand, ICallbackHandler
+    class TreasureChest : Item, ICommand, ICallbackHandler<string>
     {
         public TreasureChest() : base("Treasure Chest")
         {
@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Items
         public void Execute(Hero hero)
         {
             Owner.RemoveFromInventory(this);
-            hero.DrawPower(Callback.For(hero, this));
+            hero.DrawPower();
         }
 
         public bool IsAvailable(Hero hero)
@@ -22,9 +22,9 @@ namespace Slugburn.DarkestNight.Rules.Items
             return true;
         }
 
-        public void HandleCallback(Hero hero, object data)
+        public void HandleCallback(Hero hero, string data)
         {
-            // ?
+            hero.ContinueTurn();
         }
 
     }

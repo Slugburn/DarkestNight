@@ -12,9 +12,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             ActiveText = "Gain 1 Grace (up to default) when hiding.";
         }
 
-        public override void HandleCallback(Hero hero, object data)
+        public override void HandleCallback(Hero hero, Hero data)
         {
-            var selectedHero = (Hero)data;
+            var selectedHero = data;
             selectedHero.Triggers.Add(HeroTrigger.Hidden, Name, new BlessingOfPietyWhenHiding(this));
         }
 

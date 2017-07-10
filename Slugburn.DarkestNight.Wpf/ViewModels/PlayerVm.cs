@@ -1,20 +1,22 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using System.Windows.Media;
 using Slugburn.DarkestNight.Rules;
+using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Wpf.Annotations;
+using Slugburn.DarkestNight.Wpf.Commands;
 
 namespace Slugburn.DarkestNight.Wpf.ViewModels
 {
     public class PlayerVm : IPlayer, INotifyPropertyChanged
     {
         private int _darkness;
-        private List<Location> _locations;
+        private List<LocationVm> _locations;
         private List<HeroVm> _heroes = new List<HeroVm>();
         private Game _game;
         private ConflictVm _conflict;
@@ -23,6 +25,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         private QuestionVm _question;
         private PowerSelectionVm _powerSelection;
         private PrayerVm _prayer;
+        private ICommand _command;
 
         public Game Game
         {
@@ -72,7 +75,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public List<Location> Locations
+        public List<LocationVm> Locations
         {
             get { return _locations; }
             set
@@ -138,6 +141,17 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
+        public ICommand Command
+        {
+            get { return _command; }
+            set
+            {
+                if (Equals(value, _command)) return;
+                _command = value;
+                OnPropertyChanged();
+            }
+        }
+
         public PlayerState State { get; set; }
         public void DisplayEvent(EventModel model)
         {
@@ -149,17 +163,17 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             Conflict.Update(model);
         }
 
-        public void DisplayPowers(ICollection<PowerModel> models, Callback callback)
+        public void DisplayPowers(ICollection<PowerModel> models, Callback<string> callback)
         {
             PowerSelection.Update(models, callback);
         }
 
-        public void DisplayBlightSelection(BlightSelectionModel blightSelection, Callback callback)
+        public void DisplayBlightSelection(BlightSelectionModel model)
         {
-            throw new NotImplementedException();
+            new SelectBlightsCommand(this, model).Execute();
         }
 
-        public void DisplayLocationSelection(ICollection<string> locations, Callback callback)
+        public void DisplayLocationSelection(ICollection<string> locations, Callback<Location> callback)
         {
             var valid = (from name in locations join loc in Locations on name equals loc.Name select loc).ToList();
             foreach (var location in valid)
@@ -172,17 +186,17 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
                         inner.Highlight = new SolidColorBrush(Colors.White);
                         inner.SelectCommand = null;
                     }
-                    callback.Handle(location.Name.ToEnum<Rules.Location>());
+                    callback.Handle(location.Name.ToEnum<Location>());
                 });
             }
         }
 
-        public void DisplayNecromancer(NecromancerModel model, Callback callback)
+        public void DisplayNecromancer(NecromancerModel model, Callback<object> callback)
         {
             callback.Handle(null);
         }
 
-        public void DisplayHeroSelection(HeroSelectionModel model, Callback callback)
+        public void DisplayHeroSelection(HeroSelectionModel model, Callback<Hero> callback)
         {
             var valid = (from name in model.Heroes join hero in Heroes on name equals hero.Name select hero).ToList();
             foreach (var hero in valid)
@@ -201,12 +215,12 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public void DisplayAskQuestion(QuestionModel model, Callback callback)
+        public void DisplayAskQuestion(QuestionModel model, Callback<string> callback)
         {
             Question.Update(model, callback);
         }
 
-        public void DisplaySearch(SearchModel model, Callback callback)
+        public void DisplaySearch(SearchModel model, Callback<Find> callback)
         {
             Search.Update(model, callback);
         }
@@ -221,10 +235,10 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             Heroes.Add(new HeroVm(Game, view));
         }
 
-        public void UpdateBoard(BoardModel view)
+        public void UpdateBoard(BoardModel model)
         {
-            Darkness = view.Darkness;
-            Locations = view.Locations.Select(l=>new Location(l)).ToList();
+            Darkness = model.Darkness;
+            Locations = LocationVm.CreateLocations(model.Locations);
         }
 
         public void UpdateHeroCommands(HeroActionModel model)

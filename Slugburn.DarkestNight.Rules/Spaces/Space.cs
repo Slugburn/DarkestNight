@@ -12,14 +12,15 @@ namespace Slugburn.DarkestNight.Rules.Spaces
     {
         private readonly List<IBlight> _blights = new List<IBlight>();
         private readonly Dictionary<string, IAction> _actions = new Dictionary<string, IAction>();
-        private int _baseSearchTarget;
+        private int? _baseSearchTarget;
 
 
         public Location Location { get; protected set; }
         public string Name { get; protected set; }
 
-        public int GetSearchTarget(Hero hero)
+        public int? GetSearchTarget(Hero hero)
         {
+            if (_baseSearchTarget == null) return null;
             var darkFogs = GetActiveBlights<DarkFog>(hero).Count();
             return _baseSearchTarget + darkFogs*2;
         }

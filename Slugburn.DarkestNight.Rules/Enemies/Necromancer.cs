@@ -11,7 +11,7 @@ using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Enemies
 {
-    public class Necromancer : IEnemy, ICallbackHandler
+    public class Necromancer : IEnemy, ICallbackHandler<object>
     {
         private readonly Game _game;
         public Location Destination { get; private set; }

@@ -57,7 +57,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
         }
 
 
-        private class IntercessionCallbackHandler : ICallbackHandler
+        private class IntercessionCallbackHandler : ICallbackHandler<string>
         {
             private readonly Hero _owner;
             private readonly string _op;
@@ -70,7 +70,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
                 _amount = amount;
             }
 
-            public void HandleCallback(Hero hero, object data)
+            public void HandleCallback(Hero hero, string data)
             {
                 var other = hero;
                 var answer = (string)data;

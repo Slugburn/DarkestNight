@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Players;
+﻿using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Priest
@@ -17,9 +15,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             ActiveText = "Gain an extra Grace (up to default) when praying.";
         }
 
-        public override void HandleCallback(Hero hero, object data)
+        public override void HandleCallback(Hero hero, Hero data)
         {
-            var selectedHero = (Hero) data;
+            var selectedHero = data;
             selectedHero.Triggers.Add(HeroTrigger.Prayed, Name, new BlessingOfFaithWhenPraying(hero.Name) );
         }
 

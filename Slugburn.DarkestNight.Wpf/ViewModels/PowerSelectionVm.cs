@@ -69,7 +69,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public void Update(IEnumerable<PowerModel> models, Callback callback)
+        public void Update(IEnumerable<PowerModel> models, Callback<string> callback)
         {
             Visibility = Visibility.Visible;
             Cards = models.Select(PowerCardVm.Create).ToList();

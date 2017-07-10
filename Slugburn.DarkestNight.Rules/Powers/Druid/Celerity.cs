@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Commands;
@@ -21,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             Owner.AddAction(new CelerityAction(this));
         }
 
-        private class CelerityAction : PowerAction, ICallbackHandler
+        private class CelerityAction : PowerAction, ICallbackHandler<Location>
         {
             public CelerityAction(IActionPower power) : base(power)
             {
@@ -33,14 +34,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
                 hero.GainSecrecy(1, 5);
                 var validDestinations = hero.GetValidMovementLocations().Select(x=>x.ToString()).ToList();
                 hero.State = HeroState.Moving;
-
-                hero.Player.DisplayLocationSelection(validDestinations, Callback.For(hero, this));
+                hero.SelectLocation(validDestinations, this);
             }
 
-            public void HandleCallback(Hero hero, object data)
+            public void HandleCallback(Hero hero, Location data)
             {
                 // Move to selected location
-                var destination = (Location)data;
+                var destination = data;
                 hero.MoveTo(destination);
                 hero.State = HeroState.FinishedMoving;
 

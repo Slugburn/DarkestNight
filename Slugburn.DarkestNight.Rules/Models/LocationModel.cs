@@ -18,7 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Models
         public string Name { get; set; }
         public bool HasRelic { get; set; }
         public List<string> Tokens { get; set; }
-        public int SearchTarget { get; set; }
+        public int? SearchTarget { get; set; }
         public List<BlightModel> Blights { get; set; }
 
         private List<string> CreateTokens(Game game, Location location)

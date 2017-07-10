@@ -141,10 +141,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             return Space.Blights;
         }
 
-        public Space Space
-        {
-            get { return Game.Board[Location]; }
-        }
+        public Space Space => Game.Board[Location];
 
         private IList<ICommand> GetAvailableCommands()
         {
@@ -311,11 +308,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             Player.UpdateHeroStatus(Name, HeroStatusModel.FromHero(this));
         }
 
-        public void DrawPower(Callback callback)
+        public void DrawPower()
         {
             var powerName = PowerDeck.First();
             var power = LearnPower(powerName);
-            Player.DisplayPowers(new[] { power }.ToPlayerPowers(), callback);
+            Player.DisplayPowers(new[] { power }.ToPlayerPowers(), Callback.For(this, new ContinueTurnHandler<string>()));
             Player.State = PlayerState.SelectPower;
         }
 
@@ -411,6 +408,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         public void AcceptRoll()
         {
             CurrentRoll.Accept();
+            if (CurrentRoll?.TargetNumber > 0)
+                CurrentRoll = null;
         }
 
         public void AddTactic(ITactic tactic)
@@ -620,6 +619,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void DisplayConflictState()
         {
+            UpdateAvailableCommands();
             if (ConflictState == null)
             {
                 Player.DisplayConflict(null);
@@ -651,6 +651,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             }
             ConflictState = null;
             CurrentRoll = null;
+            DisplayConflictState();
             ContinueTurn();
         }
 
@@ -827,9 +828,21 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             DisplaySearch(new SearchResultSelectedHandler(), results);
         }
 
-        public void DisplaySearch(ICallbackHandler callbackHandler, IEnumerable<Find> finds = null)
+        public void DisplaySearch(ICallbackHandler<Find> callbackHandler, IEnumerable<Find> finds = null)
         {
             Player.DisplaySearch(SearchModel.Create(this, finds), Callback.For(this, callbackHandler));
+        }
+
+        public void SelectLocation(List<string> validDestinations, ICallbackHandler<Location> callbackHandler )
+        {
+            State = HeroState.SelectingLocation;
+            Player.DisplayLocationSelection(validDestinations, Callback.For(this, callbackHandler));
+        }
+
+        public void SelectBlights(BlightSelectionModel selection)
+        {
+            State = HeroState.SelectingBlights;
+            Player.DisplayBlightSelection(selection);
         }
     }
 }

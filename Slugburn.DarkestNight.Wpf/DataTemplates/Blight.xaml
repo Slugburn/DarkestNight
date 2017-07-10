@@ -2,21 +2,27 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:vm="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels">
     <DataTemplate DataType="{x:Type vm:BlightVm}">
-        <TextBlock Text="{Binding Name}" TextAlignment="Center">
-            <TextBlock.ToolTip>
-                <StackPanel>
-                    <Label Content="{Binding Name}" FontWeight="Bold" HorizontalAlignment="Center"  />
-                    <TextBlock TextWrapping="Wrap" MaxWidth="200" Text="{Binding Effect}" TextAlignment="Left" />
-                    <TextBlock TextAlignment="Left">
-                        <TextBlock.Inlines>
-                            <Run FontStyle="Italic">Might:</Run>
-                            <Run Text="{Binding Might}"></Run>
-                            <Run FontStyle="Italic">Defense:</Run>
-                            <Run Text="{Binding Defense}"></Run>
-                        </TextBlock.Inlines>
-                    </TextBlock>
-                </StackPanel>
-            </TextBlock.ToolTip>
-        </TextBlock>
+        <StackPanel Background="{Binding Highlight}" Orientation="Horizontal" >
+            <StackPanel.InputBindings>
+                <MouseBinding MouseAction="LeftClick" Command="{Binding Command}" />
+            </StackPanel.InputBindings>
+            <CheckBox IsChecked="{Binding IsSelected}" Visibility="{Binding IsSelectable, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <TextBlock Text="{Binding Name}" TextAlignment="Center" >
+                <TextBlock.ToolTip>
+                    <StackPanel>
+                        <Label Content="{Binding Name}" FontWeight="Bold" HorizontalAlignment="Center" />
+                        <TextBlock TextWrapping="Wrap" MaxWidth="200" Text="{Binding Effect}" TextAlignment="Left" />
+                        <TextBlock TextAlignment="Left">
+                            <TextBlock.Inlines>
+                                <Run FontStyle="Italic">Might:</Run>
+                                <Run Text="{Binding Might}"></Run>
+                                <Run FontStyle="Italic">Defense:</Run>
+                                <Run Text="{Binding Defense}"></Run>
+                            </TextBlock.Inlines>
+                        </TextBlock>
+                    </StackPanel>
+                </TextBlock.ToolTip>
+            </TextBlock>
+            </StackPanel>
     </DataTemplate>
 </ResourceDictionary>

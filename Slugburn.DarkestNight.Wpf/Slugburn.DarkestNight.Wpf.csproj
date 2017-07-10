@@ -67,9 +67,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CommandHandler.cs" />
+    <Compile Include="Commands\SelectBlightsCommand.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="ViewModels\BlightVm.cs" />
-    <Compile Include="ViewModels\BlightSelectionVm.cs" />
     <Compile Include="ViewModels\ConflictVm.cs" />
     <Compile Include="ViewModels\EventOptionVm.cs" />
     <Compile Include="ViewModels\EventRowVm.cs" />
@@ -78,7 +79,7 @@
     <Compile Include="ViewModels\HeroStatus.cs" />
     <Compile Include="ViewModels\HeroValue.cs" />
     <Compile Include="ViewModels\ItemVm.cs" />
-    <Compile Include="ViewModels\Location.cs" />
+    <Compile Include="ViewModels\LocationVm.cs" />
     <Compile Include="ViewModels\PlayerVm.cs" />
     <Compile Include="ViewModels\HeroPowerVm.cs" />
     <Compile Include="ViewModels\PowerCardVm.cs" />

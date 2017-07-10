@@ -20,7 +20,7 @@ namespace Slugburn.DarkestNight.Rules.Models
 
     public class SearchResultModel
     {
-        public string Code { get; set; }
+        public Find Code { get; set; }
         public string Name { get; set; }
         public string Text { get; set; }
 
@@ -28,7 +28,7 @@ namespace Slugburn.DarkestNight.Rules.Models
         {
             return new SearchResultModel
             {
-                Code = find.ToString(),
+                Code = find,
                 Name = find.ToDescription(),
             };
         }

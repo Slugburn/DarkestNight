@@ -27,7 +27,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             space.Blights.Select(x => x.Type.ToString()).ShouldBeEquivalent(_blights);
 
             space.HasRelic.ShouldBeIfNotNull(_hasRelic, "HasRelic");
-            space.GetSearchTarget(null).ShouldBeIfNotNull(_searchTarget, "SearchTarget");
+            var searchTarget = space.GetSearchTarget(null) ?? 0;
+            searchTarget.ShouldBeIfNotNull(_searchTarget, "SearchTarget");
 
             if (_actionExists != null)
             {

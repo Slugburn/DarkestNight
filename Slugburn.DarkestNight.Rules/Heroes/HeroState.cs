@@ -13,6 +13,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         Attacking,
         Praying,
         Moving,
-        FinishedMoving
+        FinishedMoving,
+        SelectingLocation,
+        SelectingBlights
     }
 }

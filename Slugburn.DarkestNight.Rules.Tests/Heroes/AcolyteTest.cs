@@ -114,8 +114,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario.Game
                 .WithHero("Acolyte").HasPowers("Dark Veil").At("Swamp")
-                .Location("Swamp").HasBlights("Spies")
-                .When.Player.TakesAction("Attack").Targets("Spies").ResolvesConflict(Fake.Rolls(1))
+                .Location("Swamp").HasBlights("Skeletons")
+                .When.Player.TakesAction("Attack").Targets("Skeletons").ResolvesConflict(Fake.Rolls(1))
+                .Then(Verify.Player.Hero("Acolyte").Commands.Exactly("Dark Veil [ignore defense]"))
                 .When.Player.TakesAction("Dark Veil [ignore defense]")
                 .When.Player.AcceptsRoll()
                 .Then(Verify.Power("Dark Veil").IsExhausted())
@@ -141,9 +142,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         {
             TestScenario.Game
                 .WithHero("Acolyte").HasPowers("Death Mask").At("Swamp")
-                .Location("Swamp").HasBlights("Spies")
+                .Location("Swamp").HasBlights("Skeletons")
                 .When.Player.TakesAction("Attack").Fights(Fake.Rolls(1))
-                .Then(Verify.Hero().HasUsedAction().LostSecrecy()); // loses Secrecy for Spies defense, but not for making attack
+                .Then(Verify.Hero().WasWounded().LostSecrecy(0)); 
         }
 
         [Test]

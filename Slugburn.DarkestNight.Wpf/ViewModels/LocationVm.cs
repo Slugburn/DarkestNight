@@ -10,7 +10,7 @@ using Slugburn.DarkestNight.Wpf.Annotations;
 
 namespace Slugburn.DarkestNight.Wpf.ViewModels
 {
-    public class Location : INotifyPropertyChanged
+    public class LocationVm : INotifyPropertyChanged
     {
         private string _searchTarget;
         private List<string> _tokens;
@@ -19,15 +19,24 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         private ICommand _selectCommand;
         private Visibility _relicVisiblity;
 
-        public Location(LocationModel model)
+        private static LocationVm Create(LocationModel model)
         {
-            Name = model.Name;
-            SearchTarget = model.SearchTarget > 0 ? $"{model.SearchTarget}+" : null;
-            Tokens = model.Tokens;
-            Blights = BlightVm.CreateBlights(model.Blights);
-            RelicVisiblity = model.HasRelic ? Visibility.Visible : Visibility.Collapsed;
+            var vm = new LocationVm
+            {
+                Name = model.Name,
+                SearchTarget = model.SearchTarget != null ? $"{model.SearchTarget}+" : null,
+                Tokens = model.Tokens,
+                Blights = BlightVm.CreateBlights(model.Blights),
+                RelicVisiblity = model.HasRelic ? Visibility.Visible : Visibility.Collapsed
+            };
+            return vm;
         }
 
+        public static List<LocationVm> CreateLocations(IEnumerable<LocationModel> locationModels)
+        {
+            return locationModels.Select(Create).ToList();
+        }
+        
         public Visibility RelicVisiblity
         {
             get { return _relicVisiblity; }
@@ -103,5 +112,6 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
     }
 }

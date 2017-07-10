@@ -7,7 +7,7 @@ using Slugburn.DarkestNight.Rules.Powers;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class EvilDay : IEventCard, ICallbackHandler
+    public class EvilDay : IEventCard, ICallbackHandler<string>
     {
         public EventDetail Detail => EventDetail.Create("Evil Day", 5,
             x => x
@@ -23,7 +23,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                     var powers = hero.Powers.Where(x => !x.Exhausted).Select(PowerModel.Create).ToList();
                     var player = hero.Player;
                     player.State = PlayerState.SelectPower;
-                    player.DisplayPowers(powers, Callback.For(hero, this));
+                    player.DisplayPowers(powers, Callback.For<string>(hero, this));
                     break;
                 case "draw":
                     var newEvents = hero.Game.Events.Draw(2);
@@ -38,9 +38,9 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             }
         }
 
-        public void HandleCallback(Hero hero, object data)
+        public void HandleCallback(Hero hero, string data)
         {
-            var powerName = (string) data;
+            var powerName = data;
             var power = hero.GetPower(powerName);
             power.Exhaust(hero);
             hero.EndEvent();

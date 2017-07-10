@@ -2,8 +2,8 @@
 
 namespace Slugburn.DarkestNight.Rules.Players
 {
-    public interface ICallbackHandler
+    public interface ICallbackHandler<in T>
     {
-        void HandleCallback(Hero hero, object data);
+        void HandleCallback(Hero hero, T data);
     }
 }

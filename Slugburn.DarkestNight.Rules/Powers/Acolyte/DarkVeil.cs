@@ -31,6 +31,11 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             {
             }
 
+            public override bool IsAvailable(Hero hero)
+            {
+                return base.IsAvailable(hero) && hero.IsTakingTurn && hero.State == HeroState.TakingTurn;
+            }
+
             public override void Execute(Hero hero)
             {
                 hero.Game.AddBlightSupression(this);
@@ -68,9 +73,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             public override bool IsAvailable(Hero hero)
             {
                 if (!base.IsAvailable(hero)) return false;
-                if (hero.ConflictState?.SelectedTargets == null) return false;
-                if (!hero.ConflictState.SelectedTargets.Any()) return false;
-                var target = hero.ConflictState.SelectedTargets.First();
+                var selectedTargets = hero.ConflictState?.SelectedTargets;
+                if (selectedTargets == null) return false;
+                if (!selectedTargets.Any()) return false;
+                var target = selectedTargets.First();
                 return target.ResultDie > 0 && (target.Conflict is IBlight) && !target.IsWin;
             }
         }

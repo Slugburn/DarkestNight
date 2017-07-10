@@ -18,6 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Events
             e.Rows.Activate(rollState.Result);
             var result = rollState.Result;
             e.Options = _detail.GetHeroEventOptions(hero, result);
+            hero.UpdateAvailableCommands();
             hero.DisplayCurrentEvent();
             return rollState;
         }

@@ -26,7 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Blights
                 .WithHero().At("Village")
                 .Location("Village").HasBlights("Spies")
                 .When.Player.TakesAction("Attack").Fights(Fake.Rolls(1))
-                .Then(Verify.Hero().LostSecrecy(2)); // lose secrecy for both attacking and the Spies' defense
+                .Then(Verify.Hero().LostSecrecy(3)); // lose secrecy for attacking, Spies' defense and Spies' effect
         }
     }
 }

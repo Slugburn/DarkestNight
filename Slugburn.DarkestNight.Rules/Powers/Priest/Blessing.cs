@@ -5,7 +5,7 @@ using Slugburn.DarkestNight.Rules.Players;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Priest
 {
-    abstract class Blessing:ActivateablePower, ICallbackHandler
+    abstract class Blessing:ActivateablePower, ICallbackHandler<Hero>
     {
         public override void Activate(Hero hero)
         {
@@ -15,6 +15,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             hero.Player.DisplayHeroSelection(view, Callback.For(hero, this));
         }
 
-        public abstract void HandleCallback(Hero hero, object data);
+        public abstract void HandleCallback(Hero hero, Hero data);
     }
 }

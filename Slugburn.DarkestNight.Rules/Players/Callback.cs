@@ -2,23 +2,26 @@
 
 namespace Slugburn.DarkestNight.Rules.Players
 {
-    public class Callback
+    public static class Callback
     {
-        private readonly ICallbackHandler _handler;
+        public static Callback<T> For<T>(Hero hero, ICallbackHandler<T> handler)
+        {
+            return new Callback<T>(hero, handler);
+        }
+    }
+
+    public class Callback<T>
+    {
+        private readonly ICallbackHandler<T> _handler;
         private readonly Hero _hero;
 
-        private Callback(Hero hero, ICallbackHandler handler)
+        internal Callback(Hero hero, ICallbackHandler<T> handler)
         {
             _hero = hero;
             _handler = handler;
         }
 
-        public static Callback For(Hero hero, ICallbackHandler handler)
-        {
-            return new Callback(hero, handler);
-        }
-
-        public void Handle(object data)
+        public void Handle(T data)
         {
             _handler?.HandleCallback(_hero, data);
         }

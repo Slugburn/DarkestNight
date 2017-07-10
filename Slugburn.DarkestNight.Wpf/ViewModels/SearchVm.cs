@@ -83,7 +83,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public void Update(SearchModel model, Callback callback)
+        public void Update(SearchModel model, Callback<Find> callback)
         {
             if (model == null)
             {

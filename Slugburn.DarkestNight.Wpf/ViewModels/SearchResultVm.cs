@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Slugburn.DarkestNight.Rules;
 using Slugburn.DarkestNight.Rules.Models;
 
 namespace Slugburn.DarkestNight.Wpf.ViewModels
@@ -22,7 +23,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             };
         }
 
-        public string Code { get; set; }
+        public Find Code { get; set; }
         public string Name { get; set; }
         public string Text { get; set; }
     }

@@ -13,12 +13,14 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" d:LayoutOverrides="Height" Margin="0,0,0,5">
-                        <TextBlock Text="{Binding Fate}" HorizontalAlignment="Right" />
-                        <TextBlock Text="{Binding Title}" FontWeight="Bold" HorizontalAlignment="Center" />
+                    <Grid Grid.Row="0" d:LayoutOverrides="Height" Margin="0,0,0,5" Background="Black">
+                        <Border HorizontalAlignment="Right" BorderBrush="Black" BorderThickness="1" CornerRadius="8" Width="16" Height="16" Margin="2" Background="White" >
+                            <TextBlock Text="{Binding Fate}" Width="6.47" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Margin="0" />
+                        </Border>
+                        <TextBlock Text="{Binding Title}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" />
                     </Grid>
-                    <TextBlock Grid.Row="1" Text="{Binding Text}" TextWrapping="Wrap" Margin="0,0,0,5"/>
-                    <ItemsControl Grid.Row="2" ItemsSource="{Binding Rows}">
+                    <TextBlock Grid.Row="1" Text="{Binding Text}" TextWrapping="Wrap" Margin="5,0,5,5" Visibility="{Binding Text, Converter={StaticResource NullToVisibilityConverter}}"/>
+                    <ItemsControl Grid.Row="2" ItemsSource="{Binding Rows}" Margin="5,0">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid Background="{Binding Highlight}" d:DesignWidth="143.25" >
@@ -26,7 +28,7 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="{Binding Range}" TextAlignment="Center" Width="Auto" Margin="2"/>
+                                    <TextBlock Grid.Column="0" Text="{Binding Range}" TextAlignment="Center" Width="35" Margin="2"/>
                                     <StackPanel Grid.Column="1" Margin="2">
                                         <TextBlock Text="{Binding Text}" TextWrapping="Wrap" />
                                         <TextBlock Text="{Binding SubText}" TextWrapping="Wrap" Visibility="{Binding SubText, Converter={StaticResource NullToVisibilityConverter}}" />
@@ -45,21 +47,5 @@
                 </Grid>
             </Border>
         </Grid>
-    </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:EventRowVm}" >
-        <Grid Background="{Binding Highlight}" d:DesignWidth="143.25" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="{Binding Range}" TextAlignment="Center" Width="Auto" Margin="2"/>
-            <StackPanel Grid.Column="1" Margin="2">
-                <TextBlock Text="{Binding Text}" TextWrapping="Wrap" />
-                <TextBlock Text="{Binding SubText}" TextWrapping="Wrap" Visibility="{Binding SubText, Converter={StaticResource NullToVisibilityConverter}}" />
-            </StackPanel>
-        </Grid>
-    </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:EventOptionVm}">
-        <Button Content="{Binding Text}" Command="{Binding Command}" Margin="2,0" />
     </DataTemplate>
 </ResourceDictionary>

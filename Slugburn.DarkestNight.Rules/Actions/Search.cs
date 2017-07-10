@@ -30,7 +30,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             var state = hero.SetRoll(RollBuilder.Create<SearchRollHandler>()
                 .Type(ModifierType.SearchDice)
                 .Base("Search", 1)
-                .Target(space.GetSearchTarget(hero)));
+                .Target(space.GetSearchTarget(hero) ?? 0));
             hero.Triggers.Send(HeroTrigger.Searched);
             state.Roll();
             hero.DisplaySearch(CallbackHandler);
@@ -53,11 +53,11 @@ namespace Slugburn.DarkestNight.Rules.Actions
             }
         }
 
-        public static ICallbackHandler CallbackHandler => new MyCallbackHandler();
+        public static ICallbackHandler<Find> CallbackHandler => new MyCallbackHandler();
 
-        private class MyCallbackHandler : ICallbackHandler
+        private class MyCallbackHandler : ICallbackHandler<Find>
         {
-            public void HandleCallback(Hero hero, object data)
+            public void HandleCallback(Hero hero, Find data)
             {
                 hero.ContinueTurn();
             }

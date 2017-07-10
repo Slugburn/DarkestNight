@@ -4,7 +4,8 @@
              xmlns:converters="clr-namespace:Slugburn.DarkestNight.Wpf.Converters"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"></converters:NullToVisibilityConverter>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <Style x:Key="HorizontalItemsControl" TargetType="ItemsControl">
             <Setter Property="ItemsPanel">
                 <Setter.Value>

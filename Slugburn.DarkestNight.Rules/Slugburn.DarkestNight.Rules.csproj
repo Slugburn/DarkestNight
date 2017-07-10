@@ -131,6 +131,7 @@
     <Compile Include="Extensions\SpaceExtension.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Heroes\ActionFilter.cs" />
+    <Compile Include="Heroes\ContinueTurnHandler.cs" />
     <Compile Include="Heroes\DefenseRollHandler.cs" />
     <Compile Include="Heroes\HeroFactory.cs" />
     <Compile Include="Heroes\HeroState.cs" />

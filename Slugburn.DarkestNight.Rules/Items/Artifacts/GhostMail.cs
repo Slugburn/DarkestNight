@@ -5,7 +5,7 @@ using Slugburn.DarkestNight.Rules.Players;
 
 namespace Slugburn.DarkestNight.Rules.Items.Artifacts
 {
-    public class GhostMail : Artifact, IStartOfTurnCommand, ICallbackHandler
+    public class GhostMail : Artifact, IStartOfTurnCommand, ICallbackHandler<string>
     {
         public GhostMail() : base("Ghost Mail")
         {
@@ -26,9 +26,9 @@ namespace Slugburn.DarkestNight.Rules.Items.Artifacts
             hero.Player.DisplayAskQuestion(question, Callback.For(hero, this));
         }
 
-        public void HandleCallback(Hero hero, object data)
+        public void HandleCallback(Hero hero, string data)
         {
-            var answer = (string) data;
+            var answer = data;
             if (answer == "Spend Grace")
             {
                 hero.SpendGrace(1);

@@ -9,7 +9,7 @@ using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Items.Artifacts
 {
-    class VanishingCowl : Artifact, ICommand, ICallbackHandler, ITriggerHandler<Hero>
+    class VanishingCowl : Artifact, ICommand, ICallbackHandler<IEnumerable<int>>, ITriggerHandler<Hero>
     {
          
         public VanishingCowl() : base("Vanishing Cowl")
@@ -27,12 +27,12 @@ namespace Slugburn.DarkestNight.Rules.Items.Artifacts
             var blights = hero.Game.GetBlights();
             var callback = Callback.For(hero, this);
             var selection = BlightSelectionModel.Create("Ignore Blight [Vanishing Cowl]", blights, 1, callback);
-            hero.Player.DisplayBlightSelection(selection, callback);
+            hero.SelectBlights(selection);
         }
 
-        public void HandleCallback(Hero hero, object data)
+        public void HandleCallback(Hero hero, IEnumerable<int> data)
         {
-            var blightId = ((IEnumerable<int>)data).Single();
+            var blightId = data.Single();
             hero.Game.AddBlightSupression(new VanishingCowlBlightSupression(Name, hero, blightId));
             hero.Triggers.Add(HeroTrigger.StartedTurn, Name, this);
             hero.ContinueTurn();

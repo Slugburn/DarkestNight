@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Players;
-using Slugburn.DarkestNight.Rules.Spaces;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class LatentSpell : IEventCard, ICallbackHandler
+    public class LatentSpell : IEventCard, ICallbackHandler<Location>, ICallbackHandler<IEnumerable<int>>
     {
         public EventDetail Detail { get; } = EventDetail.Create("Latent Spell", 2, x => x
             .Text("Lose 1 Secrecy. Then, spend 1 Grace or discard this event without further effect.\nRoll 1d and take the highest")
@@ -22,7 +20,6 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
 
         public void Resolve(Hero hero, string option)
         {
-            var callback = Callback.For(hero, this);
             switch (option)
             {
                 case "discard-event":
@@ -35,15 +32,15 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                     return;
                 case "destroy-blight":
                     var blights = hero.Game.GetBlights();
-                    var selection = BlightSelectionModel.Create("Destroy Blight [Latent Spell]", blights, 1, callback);
-                    hero.Player.DisplayBlightSelection(selection, callback);
+                    var selection = BlightSelectionModel.Create("Destroy Blight [Latent Spell]", blights, 1, Callback.For<IEnumerable<int>>(hero, this));
+                    hero.SelectBlights(selection);
                     break;
                 case "draw-power":
-                    hero.DrawPower(callback);
+                    hero.DrawPower();
                     break;
                 case "move":
                     var locations = Game.GetAllLocations().Except(new[] {hero.Location}).Select(x=>x.ToString()).ToList();
-                    hero.Player.DisplayLocationSelection(locations, callback);
+                    hero.SelectLocation(locations, this);
                     hero.Player.State = PlayerState.SelectLocation;
                     break;
                 case "no-effect":
@@ -54,18 +51,17 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             hero.EndEvent();
         }
 
-        public void HandleCallback(Hero hero, object data)
+        public void HandleCallback(Hero hero, Location data)
         {
-            if (data is Location)
-            {
-                var location = (Location)data;
-                hero.MoveTo(location);
-            }
-            else if (data is IEnumerable<int>)
-            {
-                var blightId = ((IEnumerable<int>) data).Single();
-                hero.Game.DestroyBlight(hero, blightId);
-            }
+            hero.MoveTo(data);
+            hero.ContinueTurn();
+        }
+
+        public void HandleCallback(Hero hero, IEnumerable<int> data)
+        {
+            var blightId = data.Single();
+            hero.Game.DestroyBlight(hero, blightId);
+            hero.ContinueTurn();
         }
     }
 

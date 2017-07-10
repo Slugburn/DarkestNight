@@ -123,7 +123,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Events
                 .Then(Verify.Player.EventView.HasBody(eventName, expectedFate, text).HasOptions("Continue").ActiveRow(enemy))
                 .When.Player.SelectsEventOption("Continue")
                 .Then(Verify.Hero().HasUnresolvedEvents(0).Secrecy(null))
-                .Then(Verify.Player.ConflictModel.HasTargets(enemy));
+                .Then(Verify.Player.ConflictModel.HasTargets(enemy))
+                .Then(Verify.Player.Hero().Commands.Exactly());
         }
 
         [Test]

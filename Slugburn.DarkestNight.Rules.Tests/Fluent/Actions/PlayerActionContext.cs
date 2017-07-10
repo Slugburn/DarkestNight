@@ -162,8 +162,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
         {
             var player = GetPlayer();
             var possibleResults = player.Search.SearchResults;
-            resultName = resultName !=null ? (possibleResults.Single(x=>x.Name == resultName).Code) : possibleResults.Single().Code;
-            player.SelectSearchResult(resultName);
+            var selectedCode =  resultName !=null ? (possibleResults.Single(x=>x.Name == resultName).Code) : possibleResults.Single().Code;
+            player.SelectSearchResult(selectedCode);
             return this;
         }
 

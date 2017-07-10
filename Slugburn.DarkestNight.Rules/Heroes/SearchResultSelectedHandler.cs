@@ -7,12 +7,11 @@ using Slugburn.DarkestNight.Rules.Powers;
 
 namespace Slugburn.DarkestNight.Rules.Heroes
 {
-    internal class SearchResultSelectedHandler : ICallbackHandler
+    internal class SearchResultSelectedHandler : ICallbackHandler<Find>
     {
-        public void HandleCallback(Hero hero, object data)
+        public void HandleCallback(Hero hero, Find data)
         {
-            var code = (string) data;
-            var find = code.ToEnum<Find>();
+            var find = data;
             var game = hero.Game;
             switch (find)
             {
@@ -67,7 +66,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             hero.Player.DisplayPowers(viewModel, Callback.For(hero, new EpiphanyCallback()));
         }
 
-        internal class SupplyCacheCallback : ICallbackHandler
+        internal class SupplyCacheCallback : ICallbackHandler<string>
         {
             private readonly List<string> _powerNames;
 
@@ -76,9 +75,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 _powerNames = powerNames;
             }
 
-            public void HandleCallback(Hero hero, object data)
+            public void HandleCallback(Hero hero, string data)
             {
-                var selectedName = (string)data;
+                var selectedName = data;
                 var notSelectedName = _powerNames.Single(x => x != selectedName);
                 hero.LearnPower(PowerFactory.Create(selectedName));
                 hero.PowerDeck.Add(notSelectedName);
@@ -86,9 +85,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             }
         }
 
-        private class EpiphanyCallback : ICallbackHandler
+        private class EpiphanyCallback : ICallbackHandler<string>
         {
-            public void HandleCallback(Hero hero, object data)
+            public void HandleCallback(Hero hero, string data)
             {
                 var selectedName = (string)data;
                 hero.PowerDeck.Remove(selectedName);

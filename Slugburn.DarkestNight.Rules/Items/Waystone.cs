@@ -5,7 +5,7 @@ using Slugburn.DarkestNight.Rules.Players;
 
 namespace Slugburn.DarkestNight.Rules.Items
 {
-    class Waystone : Item, ICommand, ICallbackHandler
+    class Waystone : Item, ICommand, ICallbackHandler<Location>
     {
         public Waystone() : base("Waystone")
         {
@@ -18,7 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Items
                 .Except(new[] {hero.Location})
                 .Select(loc => loc.ToString())
                 .ToList();
-            hero.Player.DisplayLocationSelection(destinations, Callback.For(hero, this));
+            hero.SelectLocation(destinations, this);
         }
 
         public bool IsAvailable(Hero hero)
@@ -26,13 +26,13 @@ namespace Slugburn.DarkestNight.Rules.Items
             return hero.IsTakingTurn;
         }
 
-        public void HandleCallback(Hero hero, object data)
+        public void HandleCallback(Hero hero, Location data)
         {
-            var location = (Location)data;
+            var location = data;
             hero.MoveTo(location);
             hero.GainSecrecy(1, int.MaxValue);
             Owner.RemoveFromInventory(this);
-            hero.UpdateAvailableCommands();
+            hero.ContinueTurn();
         }
     }
 }

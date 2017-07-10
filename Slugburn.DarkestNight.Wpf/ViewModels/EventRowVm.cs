@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             else if (model.Min == model.Max)
                 Range = model.Min.ToString();
             else
-                Range = $"{model.Min} - {model.Max}";
+                Range = $"{model.Min}-{model.Max}";
             Highlight = model.IsActive ? new SolidColorBrush(Colors.Yellow) : null;
         }
 
