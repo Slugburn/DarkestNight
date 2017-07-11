@@ -21,8 +21,8 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
         protected override void OnLearn()
         {
-            Owner.AddAction(new DarkVeilIgnoreEffects(this));
-            Owner.AddAction(new DarkVeilIgnoreDefense(this));
+            Owner.AddCommand(new DarkVeilIgnoreEffects(this));
+            Owner.AddCommand(new DarkVeilIgnoreDefense(this));
         }
 
         private class DarkVeilIgnoreEffects : PowerCommand, IBlightSupression, ITriggerHandler<Hero>

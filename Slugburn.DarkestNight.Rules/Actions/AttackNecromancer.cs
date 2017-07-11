@@ -48,7 +48,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
         {
             public RollState HandleRoll(Hero hero, RollState rollState)
             {
-                rollState.TargetNumber = hero.Game.Necromancer.Fight;
+                rollState.TargetNumber = hero.Game.Necromancer.Fight ?? 0;
                 var target = hero.ConflictState.SelectedTargets.Single();
                 target.ResultDie = rollState.Result;
                 hero.DisplayConflictState();

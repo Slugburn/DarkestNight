@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Slugburn.DarkestNight.Rules.Conflicts;
-using Slugburn.DarkestNight.Rules.Heroes;
+﻿using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Enemies
@@ -10,7 +8,6 @@ namespace Slugburn.DarkestNight.Rules.Enemies
         public Looters()
         {
             Name = "Looters";
-            Fight = 0;
             Elude = 4;
         }
 

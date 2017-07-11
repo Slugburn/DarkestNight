@@ -69,6 +69,7 @@
     <Compile Include="Blights\SpiesTest.cs" />
     <Compile Include="Blights\TaintTest.cs" />
     <Compile Include="Blights\UnholyAuraTest.cs" />
+    <Compile Include="Conflicts\ConflictTest.cs" />
     <Compile Include="DarknessTest.cs" />
     <Compile Include="Events\AltarTest.cs" />
     <Compile Include="Events\CloseCallTest.cs" />

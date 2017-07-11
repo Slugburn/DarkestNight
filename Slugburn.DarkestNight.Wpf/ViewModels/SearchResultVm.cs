@@ -7,6 +7,9 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
 {
     public class SearchResultVm
     {
+        public SearchResultVm()
+        {
+        }
 
         public static List<SearchResultVm> Create(IEnumerable<SearchResultModel> models)
         {

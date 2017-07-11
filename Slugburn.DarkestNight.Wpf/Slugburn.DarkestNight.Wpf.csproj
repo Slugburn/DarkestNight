@@ -132,6 +132,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </DesignData>
+    <Page Include="DesignData\SearchData.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="DesignData\NecromancerData.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

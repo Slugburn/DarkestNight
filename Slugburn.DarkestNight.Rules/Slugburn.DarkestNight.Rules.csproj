@@ -212,6 +212,7 @@
     <Compile Include="Powers\Druid\Visions.cs" />
     <Compile Include="Powers\Druid\WolfForm.cs" />
     <Compile Include="Powers\IActivateable.cs" />
+    <Compile Include="Powers\IRestorable.cs" />
     <Compile Include="Powers\Knight\Charge.cs" />
     <Compile Include="Powers\Knight\ConsecratedBlade.cs" />
     <Compile Include="Powers\Knight\HardRide.cs" />

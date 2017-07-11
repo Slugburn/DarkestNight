@@ -29,7 +29,8 @@ namespace Slugburn.DarkestNight.Rules.Models
             return new SearchResultModel
             {
                 Code = find,
-                Name = find.ToDescription(),
+                Name = find.ToName(),
+                Text = find.ToText()
             };
         }
 

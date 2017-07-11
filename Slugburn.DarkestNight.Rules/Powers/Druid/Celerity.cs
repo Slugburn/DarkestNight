@@ -19,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 
         protected override void OnLearn()
         {
-            Owner.AddAction(new CelerityAction(this));
+            Owner.AddCommand(new CelerityAction(this));
         }
 
         private class CelerityAction : PowerAction, ICallbackHandler<Location>

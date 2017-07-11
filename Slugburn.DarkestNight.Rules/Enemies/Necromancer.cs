@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights.Implementations;
+using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Players;
@@ -28,19 +28,32 @@ namespace Slugburn.DarkestNight.Rules.Enemies
         public bool IsTakingTurn { get; set; }
 
         public string Name => "Necromancer";
-        public int Fight => 7;
-        public int Elude => 6;
+        public int? Fight => 7;
+        public int? Elude => 6;
 
-        public void Win(Hero hero)
+        void IConflict.Win(Hero hero)
         {
             if (hero.ConflictState.SelectedTactic.Type == TacticType.Elude) return;
-            if (hero.GetBlights().Any())
-                throw new NotImplementedException();
+            var blights = hero.GetBlights();
+            if (blights.Any())
+            {
+                if (blights.Count == 1)
+                {
+                    var blight = blights.Single();
+                    hero.Game.DestroyBlight(hero, blight.Id);
+                }
+                else
+                {
+                    var callback = Callback.For(hero, new DestroyBlightHandler());
+                    var model = BlightSelectionModel.Create("Destroy Blight", blights, 1, callback);
+                    hero.SelectBlights(model);
+                }
+            }
             else if (hero.HasHolyRelic())
                 _game.Win();
         }
 
-        public void Failure(Hero hero)
+        void IConflict.Failure(Hero hero)
         {
             hero.TakeWound();
         }
@@ -138,6 +151,15 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             if (!isWin)
                 return "Wound";
             return tacticType == TacticType.Fight ? "Sacrifice blight or (with holy relic) Necromancer slain" : "No effect";
+        }
+
+        private class DestroyBlightHandler : ICallbackHandler<IEnumerable<int>>
+        {
+            public void HandleCallback(Hero hero, IEnumerable<int> blightIds)
+            {
+                var blightId = blightIds.Single();
+                hero.Game.DestroyBlight(hero, blightId);
+            }
         }
     }
 }

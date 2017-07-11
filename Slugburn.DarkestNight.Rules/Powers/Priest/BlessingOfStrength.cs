@@ -13,10 +13,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             ActiveText = "+1d in fights.";
         }
 
-        public override void HandleCallback(Hero hero, Hero data)
+        protected override void ActivateOnTarget()
         {
-            var selectedHero = data;
-            selectedHero.AddModifier(new PowerRollBonus(this, ModifierType.FightDice, 1));
+            Target.AddModifier(new PowerRollBonus(this, ModifierType.FightDice, 1));
         }
     }
 }

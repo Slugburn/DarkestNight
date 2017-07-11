@@ -454,7 +454,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             _modifiers.RemoveAll(x => x.Name == name);
         }
 
-        public void AddAction(ICommand command)
+        public void AddCommand(ICommand command)
         {
             _commands.Add(command.Name, command);
         }
@@ -783,12 +783,18 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             State = HeroState.FacingEnemy;
             SetRoll(RollBuilder.Create<DefenseRollHandler>());
+            var validTacticTypes = new List<TacticType>();
+            if (enemies.Any(x=>x.Fight.HasValue))
+                validTacticTypes.Add(TacticType.Fight);
+            if (enemies.Any(x=>x.Elude.HasValue))
+                validTacticTypes.Add(TacticType.Elude);
+            var availableTactics = GetAvailableTactics().Where(t => validTacticTypes.Contains(t.Type));
             ConflictState = new ConflictState
             {
                 MaxTarget = 1,
                 MinTarget = 1,
                 AvailableTargets = enemies.GetTargetInfo(),
-                AvailableTactics = GetAvailableTactics().GetInfo(this)
+                AvailableTactics = availableTactics.GetInfo(this)
             };
             DisplayConflictState();
         }
@@ -851,13 +857,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             return new HeroData
             {
                 Name = Name,
-                DefaultGrace = _baseDefaultGrace,
-                DefaultSecrecy = DefaultSecrecy,
                 Grace = Grace,
                 Secrecy = Secrecy,
                 Location = Location,
                 PowerDeck = PowerDeck,
-                Powers = Powers.Select(x => PowerData.Create(x)).ToList(),
+                Powers = Powers.Select(PowerData.Create).ToList(),
                 Inventory = Inventory.Select(x => x.Name).ToList(),
             };
         }

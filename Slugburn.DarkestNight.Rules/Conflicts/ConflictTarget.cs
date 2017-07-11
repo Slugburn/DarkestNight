@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Conflicts
             Conflict = conflict;
             Id = targetInfo.Id;
             Name = conflict.Name;
-            TargetNumber = tacticType == TacticType.Fight ? targetInfo.FightTarget : targetInfo.EludeTarget;
+            TargetNumber = tacticType == TacticType.Fight ? (targetInfo.FightTarget ?? 0) : (targetInfo.EludeTarget ?? 0);
         }
 
         public IConflict Conflict { get; }

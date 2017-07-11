@@ -15,7 +15,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
     {
         private readonly Game _game;
         private Visibility _visibility;
-        private string _roll;
+        private List<int> _roll;
         private List<SearchResultVm> _results;
         private SearchResultVm _selectedResult;
         private ICommand _command;
@@ -26,6 +26,12 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         {
             _game = game;
             Visibility = Visibility.Hidden;
+        }
+
+        public SearchVm()
+        {
+            Results = new List<SearchResultVm>();
+            Roll = new List<int>();
         }
 
         public Visibility Visibility
@@ -39,7 +45,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public string Roll
+        public List<int> Roll
         {
             get { return _roll; }
             set
@@ -91,7 +97,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
                 return;
             }
             Visibility = Visibility.Visible;
-            Roll = model.Roll.Select(x => x.ToString()).ToCsv();
+            Roll = model.Roll.ToList();
             Results = SearchResultVm.Create(model.SearchResults);
             var haveResults = Results?.Any() ?? false;
             ResultsVisibility = haveResults ? Visibility.Visible : Visibility.Hidden;

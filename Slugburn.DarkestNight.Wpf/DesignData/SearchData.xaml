@@ -1,0 +1,12 @@
+﻿<m:SearchVm xmlns:m="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels"
+            xmlns:sys="clr-namespace:System;assembly=mscorlib"
+            Visibility="Visible" CommandText="Accept Roll" >
+    <m:SearchVm.Roll>
+        <sys:Int32>1</sys:Int32>
+        <sys:Int32>5</sys:Int32>
+    </m:SearchVm.Roll>
+    <m:SearchVm.Results>
+        <m:SearchResultVm Name="Key" Text="Three keys may be discarded to retrieve a holy relic (as an action)." />
+        <m:SearchResultVm Name="Waystone" Text="Discard during your turn to instantly move to any location and gain 1 Secrecy." />
+    </m:SearchVm.Results>
+</m:SearchVm>

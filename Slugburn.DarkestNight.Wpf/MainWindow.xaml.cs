@@ -27,6 +27,11 @@ namespace Slugburn.DarkestNight.Wpf
             else
                 CreateGame(game, player);
             game.UpdatePlayerBoard();
+            foreach (var hero in game.Heroes)
+            {
+                hero.UpdateHeroStatus();
+                hero.UpdateAvailableCommands();
+            }
         }
 
         private static void CreateGame(Game game, IPlayer player)

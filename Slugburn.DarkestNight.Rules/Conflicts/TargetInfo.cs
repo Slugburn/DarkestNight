@@ -14,8 +14,8 @@ namespace Slugburn.DarkestNight.Rules.Conflicts
         public string Name { get; }
         public bool CanFight { get; set; }
         public bool CanElude { get; set; }
-        public int FightTarget { get; set; }
-        public int EludeTarget { get; set; }
+        public int? FightTarget { get; set; }
+        public int? EludeTarget { get; set; }
         public List<ConflictResult> Results { get; set; }
         public IConflict Conflict { get; set; }
     }

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.Eventing.Reader;
-using Slugburn.DarkestNight.Rules.Heroes;
+﻿using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Enemies
@@ -11,9 +10,9 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             return new Enemy {Name = name, Fight = fight, Elude = elude};
         }
 
-        public int Fight { get; set; }
+        public int? Fight { get; set; }
         public string Name { get; set; }
-        public int Elude { get; set; }
+        public int? Elude { get; set; }
 
         public virtual void Win(Hero hero)
         {

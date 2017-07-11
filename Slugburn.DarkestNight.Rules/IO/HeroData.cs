@@ -1,16 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Items;
-using Slugburn.DarkestNight.Rules.Powers;
 
 namespace Slugburn.DarkestNight.Rules.IO
 {
     public class HeroData
     {
         public string Name { get; set; }
-        public int DefaultGrace { get; set; }
-        public int DefaultSecrecy { get; set; }
         public int Grace { get; set; }
         public int Secrecy { get; set; }
         public Location Location { get; set; }
@@ -20,29 +16,15 @@ namespace Slugburn.DarkestNight.Rules.IO
 
         public void Restore(Game game)
         {
-            var hero = new Hero
-            {
-                Name = Name,
-                DefaultGrace = DefaultGrace,
-                DefaultSecrecy = DefaultSecrecy,
-                Grace = Grace,
-                Secrecy = Secrecy,
-                Location = Location,
-            };
+            var hero = HeroFactory.Create(Name);
+            hero.Grace = Grace;
+            hero.Secrecy = Secrecy;
+            hero.Location = Location;
+            hero.PowerDeck.Clear();
             hero.PowerDeck.AddRange(PowerDeck);
             game.AddHero(hero, game.Players.Single());
             foreach (var powerData in Powers)
-            {
-                var power = PowerFactory.Create(powerData.Name);
-                hero.LearnPower(power);
-                if (powerData.Exhausted)
-                    power.Exhaust(hero);
-                if (powerData.IsActive ?? false)
-                {
-                    var activatable = power as IActivateable;
-                    activatable?.Activate(hero);
-                }
-            }
+                powerData.Restore(hero);
             foreach (var itemName in Inventory)
                 hero.AddToInventory(game.CreateItem(itemName));
         }

@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
 
         protected override void OnLearn()
         {
-            Owner.AddAction(new MiracleAction(this));
+            Owner.AddCommand(new MiracleAction(this));
         }
 
         public override bool IsUsable(Hero hero)

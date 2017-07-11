@@ -5,7 +5,7 @@ namespace Slugburn.DarkestNight.Rules.Powers
 {
     public abstract class ActivateablePower : ActionPower, IActivateable
     {
-        public bool IsActive { get; private set; }
+        public bool IsActive { get; protected set; }
 
         public override bool IsUsable(Hero hero)
         {
@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Powers
 
         protected override void OnLearn()
         {
-            Owner.AddAction(new ActivatePowerAction(this));
+            Owner.AddCommand(new ActivatePowerAction(this));
         }
 
         public virtual void Activate(Hero hero)

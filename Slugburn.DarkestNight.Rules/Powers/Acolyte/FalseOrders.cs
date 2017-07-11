@@ -19,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
         protected override void OnLearn()
         {
-            Owner.AddAction(new FalseOrdersAction(this));
+            Owner.AddCommand(new FalseOrdersAction(this));
         }
 
         private class FalseOrdersAction : PowerAction, ICallbackHandler<Location>, ICallbackHandler<IEnumerable<int>>

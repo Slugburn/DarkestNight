@@ -17,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
         protected override void OnLearn()
         {
-            Owner.AddAction(new ForbiddenArtsAction(this));
+            Owner.AddCommand(new ForbiddenArtsAction(this));
         }
 
         public override bool IsUsable(Hero hero)

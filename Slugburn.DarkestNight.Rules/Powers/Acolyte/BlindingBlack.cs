@@ -25,7 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         protected override void OnLearn()
         {
             var action = new BlindingBlackAction(this);
-            Owner.AddAction(action);
+            Owner.AddCommand(action);
         }
 
         public class BlindingBlackAction : PowerCommand

@@ -19,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
                 case "Fearful Demon":
                     return new ScoutingEnemy(name, 3, 4, 2);
                 case "Flying Demon":
-                    return new ScoutingEnemy(name, 0, 6, 1);
+                    return new ScoutingEnemy(name, null, 6, 1);
                 case "Ghoul":
                     return Enemy.Create(name, 4, 3);
                 case "Giant Horde":
@@ -41,7 +41,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
                 case "Revenant":
                     return Enemy.Create(name, 5, 4);
                 case "Scout":
-                    return new ScoutingEnemy(name, 0, 5, 1);
+                    return new ScoutingEnemy(name, null, 5, 1);
                 case "Shade":
                     return Enemy.Create(name, 3, 5);
                 case "Shadow":

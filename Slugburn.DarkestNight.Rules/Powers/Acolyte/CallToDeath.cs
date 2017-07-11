@@ -1,6 +1,5 @@
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
-using Slugburn.DarkestNight.Rules.Blights.Implementations;
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Modifiers;
@@ -22,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
         protected override void OnLearn()
         {
-            Owner.AddAction(new CallToDeathAction(this));
+            Owner.AddCommand(new CallToDeathAction(this));
         }
 
 
@@ -64,7 +63,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                 var bestDice = roll.OrderByDescending(x => x).Take(2).ToList();
                 var bestDie = bestDice[0];
                 var secondDie = bestDice[1];
-                var prioritizedTargets = conflict.SelectedTargets.OrderByDescending(t => t.Conflict is Shroud ? 10 : t.TargetNumber).ToList();
+                var prioritizedTargets = conflict.SelectedTargets.OrderByDescending(t => t.TargetNumber).ToList();
                 var harder = prioritizedTargets[0];
                 var easier = prioritizedTargets[1];
                 if (bestDie >= harder.TargetNumber || bestDie < easier.TargetNumber)

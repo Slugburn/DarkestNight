@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Slugburn.DarkestNight.Rules.Conflicts;
-using Slugburn.DarkestNight.Rules.Heroes;
+﻿using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Enemies
@@ -9,7 +7,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
     {
         private readonly int _secrecyLoss;
 
-        public ScoutingEnemy(string name, int fight, int elude, int secrecyLoss)
+        public ScoutingEnemy(string name, int? fight, int elude, int secrecyLoss)
         {
             Name = name;
             Fight = fight;

@@ -15,10 +15,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             ActiveText = "Gain an extra Grace (up to default) when praying.";
         }
 
-        public override void HandleCallback(Hero hero, Hero data)
+        protected override void ActivateOnTarget()
         {
-            var selectedHero = data;
-            selectedHero.Triggers.Add(HeroTrigger.Prayed, Name, new BlessingOfFaithWhenPraying(hero.Name) );
+            Target.Triggers.Add(HeroTrigger.Prayed, Name, new BlessingOfFaithWhenPraying(Owner.Name));
         }
 
         internal class BlessingOfFaithWhenPraying : ITriggerHandler<Hero>

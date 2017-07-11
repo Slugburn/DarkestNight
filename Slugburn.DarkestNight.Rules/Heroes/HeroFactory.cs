@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Commands;
-using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Heroes
@@ -40,7 +39,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 {new StartTurn(), new Travel(), new Hide(), new Attack(), new Search(),
                     new AttackNecromancer(), new EndTurn(), new ContinueTurn(),  new SkipFreeAction() };
             foreach (var action in defaultActions)
-                hero.AddAction(action);
+                hero.AddCommand(action);
             var defaultTactics = new ITactic[] {new BasicFightTactic(), new BasicEludeTactic()};
             foreach (var tactic in defaultTactics)
                 hero.AddTactic(tactic);

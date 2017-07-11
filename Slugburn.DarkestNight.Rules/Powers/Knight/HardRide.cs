@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
 
         protected override void OnLearn()
         {
-            Owner.AddAction(new HardRideAction(this));
+            Owner.AddCommand(new HardRideAction(this));
         }
 
         private class HardRideAction : PowerAction

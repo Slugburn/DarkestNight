@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Slugburn.DarkestNight.Rules.Conflicts;
+﻿using System.Collections.Generic;
 using Slugburn.DarkestNight.Rules.Events;
 using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Tactics;
 
 namespace Slugburn.DarkestNight.Rules.Enemies
