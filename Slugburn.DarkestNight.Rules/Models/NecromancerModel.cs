@@ -1,27 +1,43 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Slugburn.DarkestNight.Rules.Enemies;
+﻿using Slugburn.DarkestNight.Rules.Enemies;
+using Slugburn.DarkestNight.Rules.Players;
 
 namespace Slugburn.DarkestNight.Rules.Models
 {
     public class NecromancerModel
     {
-        public NecromancerModel(int roll, Location movingTo, List<string> detected)
+        public int Roll { get; set; }
+        public Location Location { get; set; }
+        public Location RolledDestination { get; set; }
+        public Location Destination { get; set; }
+        public string DetectedHero { get; set; }
+        public Callback<object> Callback { get; set; }
+
+        public static NecromancerModel Create(Necromancer necromancer)
         {
-            Roll = roll;
-            MovingTo = movingTo;
-            Detected = detected;
+            return new NecromancerModel
+            {
+                Location = necromancer.Location,
+                Roll = necromancer.MovementRoll,
+                RolledDestination = necromancer.RolledDestination,
+                Destination = necromancer.Destination,
+                DetectedHero = necromancer.DetectedHero?.Name,
+                Callback = Players.Callback.For(null, necromancer)
+            };
         }
 
-        public int Roll { get; set; }
-
-        public Location MovingTo { get; set; }
-
-        public ICollection<string> Detected { get; }
-
-        public static NecromancerModel From(Necromancer necromancer)
+        
+        public string Description
         {
-            return new NecromancerModel(necromancer.MovementRoll, necromancer.Destination, necromancer.DetectedHeroes.Select(x => x.Name).ToList());
+            get
+            {
+                if (Destination == RolledDestination)
+                    return Destination == Location
+                        ? $"The Necromancer is staying at the {Location}."
+                        : $"The Necromancer is moving to the {Destination}.";
+                return Destination == Location
+                    ? $"The Necromancer detected the {DetectedHero}, so he is staying at the {Destination} instead of moving to the {RolledDestination}."
+                    : $"The Necromancer detected the {DetectedHero}, so he is moving to the {Destination} instead of the {RolledDestination}.";
+            }
         }
     }
 }

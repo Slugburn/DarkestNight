@@ -6,6 +6,7 @@ using Slugburn.DarkestNight.Rules.Blights.Implementations;
 using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Events;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.IO;
 using Slugburn.DarkestNight.Rules.Items;
 using Slugburn.DarkestNight.Rules.Items.Artifacts;
 using Slugburn.DarkestNight.Rules.Maps;
@@ -25,14 +26,14 @@ namespace Slugburn.DarkestNight.Rules
 
         public Game()
         {
+            Darkness = 0;
+            Necromancer = new Necromancer(this);
             Heroes = new List<Hero>();
-            Triggers = new TriggerRegistry<GameTrigger, Game>(this);
             Board = Board.CreateFor(this);
             Events = EventFactory.GetEventDeck().Shuffle();
             Maps = new MapFactory().CreateMaps().Shuffle();
-            Necromancer = new Necromancer(this);
-            Darkness = 0;
             ArtifactDeck = Artifact.CreateDeck().Shuffle();
+            Triggers = new TriggerRegistry<GameTrigger, Game>(this);
             BlightFactory = new BlightFactory();
         }
 
@@ -59,6 +60,7 @@ namespace Slugburn.DarkestNight.Rules
 
         public void StartNewDay()
         {
+            Players.ForEach(p => p.OnNewDay());
             ActingHero = null;
             foreach (var hero in Heroes)
                 hero.StartNewDay();
@@ -251,6 +253,19 @@ namespace Slugburn.DarkestNight.Rules
         public void Win()
         {
             throw new NotImplementedException();
+        }
+
+        public void RestoreFrom(GameData data)
+        {
+            Darkness = data.Darkness;
+            foreach (var heroData in data.Heroes)
+                heroData.Restore(this);
+            foreach (var spaceData in data.Spaces)
+                spaceData.Restore(this);
+            ArtifactDeck = data.ArtifactDeck;
+            Events = data.EventDeck;
+            Necromancer.Location = data.NecromancerLocation;
+            Maps = data.MapDeck.Select(Map.Create).ToList();
         }
     }
 }

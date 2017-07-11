@@ -25,7 +25,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
 
         public IGameActionContext NecromancerActs(IFakeContext rolls = null)
         {
-            GetGame().Necromancer.StartTurn();
+            var game = GetGame();
+            game.ActingHero = null;
+            game.Necromancer.StartTurn();
             return this;
         }
     }

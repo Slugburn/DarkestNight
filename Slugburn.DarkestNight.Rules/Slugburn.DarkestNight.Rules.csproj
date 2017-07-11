@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
@@ -130,6 +134,8 @@
     <Compile Include="Extensions\EventExtension.cs" />
     <Compile Include="Extensions\SpaceExtension.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="IO\GameData.cs" />
+    <Compile Include="IO\GameSerializer.cs" />
     <Compile Include="Heroes\ActionFilter.cs" />
     <Compile Include="Heroes\ContinueTurnHandler.cs" />
     <Compile Include="Heroes\DefenseRollHandler.cs" />
@@ -144,6 +150,10 @@
     <Compile Include="Heroes\Impl\Wizard.cs" />
     <Compile Include="Heroes\PreventMovementEffect.cs" />
     <Compile Include="Heroes\SearchResultSelectedHandler.cs" />
+    <Compile Include="IO\HeroData.cs" />
+    <Compile Include="IO\MapData.cs" />
+    <Compile Include="IO\PowerData.cs" />
+    <Compile Include="IO\SpaceData.cs" />
     <Compile Include="Items\Artifacts\Artifact.cs" />
     <Compile Include="Items\Artifacts\BloodRing.cs" />
     <Compile Include="Items\Artifacts\CrystalBall.cs" />
@@ -295,6 +305,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Players\Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

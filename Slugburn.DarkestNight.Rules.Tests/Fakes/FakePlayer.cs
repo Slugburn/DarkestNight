@@ -58,7 +58,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             _callback = callback;
         }
 
-        public void DisplayNecromancer(NecromancerModel model, Callback<object> callback)
+        public void DisplayNecromancer(NecromancerModel model)
         {
             Necromancer = model;
         }
@@ -106,6 +106,10 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         public void UpdateHeroStatus(string heroName, HeroStatusModel status)
         {
             Heroes.Single(x => x.Name == heroName).Status = status;
+        }
+
+        public void OnNewDay()
+        {
         }
 
         public QuestionModel AskQuestion { get; set; }

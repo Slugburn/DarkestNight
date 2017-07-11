@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d">
+
+    <DataTemplate DataType="{x:Type vm:NecromancerVm}" >
+        <Grid Visibility="{Binding Visibility}" d:DataContext="{d:DesignData Source=../DesignData/NecromancerData.xaml}" d:DesignHeight="250" d:DesignWidth="450" >
+            <Border Background="DarkGray" Opacity="0.50" Width="Auto" Height="Auto"/>
+            <Border Width="300" Background="White" BorderBrush="Black" BorderThickness="1" Height="150">
+                <Grid Margin="5" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Margin="0,2" Background="Black"  >
+                        <TextBlock Text="Necromancer" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"  />
+                    </Border>
+                    <TextBlock Grid.Row="1" Text="{Binding Text}" TextWrapping="Wrap" VerticalAlignment="Top" />
+                    <Button Grid.Row="2" Content="Continue" Command="{Binding Command}" Width="100" />
+                </Grid>
+            </Border>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

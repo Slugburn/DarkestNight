@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Blights.Implementations;
-using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Players;
@@ -14,8 +13,10 @@ namespace Slugburn.DarkestNight.Rules.Enemies
     public class Necromancer : IEnemy, ICallbackHandler<object>
     {
         private readonly Game _game;
+        public Location RolledDestination { get; private set; }
         public Location Destination { get; private set; }
         public List<Hero> DetectedHeroes { get; private set; }
+        public Hero DetectedHero { get; private set; }
         public int MovementRoll { get; private set; }
 
         public Necromancer(Game game)
@@ -66,7 +67,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
 
             foreach (var player in _game.Players)
             {
-                player.DisplayNecromancer(NecromancerModel.From(this), Callback.For(null, this));
+                player.DisplayNecromancer(NecromancerModel.Create(this));
                 player.State = PlayerState.Necromancer;
             }
 
@@ -76,16 +77,15 @@ namespace Slugburn.DarkestNight.Rules.Enemies
 
         public void CompleteTurn()
         {
-            Destination = GetDestination();
             Location = Destination;
 
-            var blightsCreated = 1;
+            var blightsToCreate = 1;
             if (_game.Darkness >= 10 && !_game.Board[Location].Blights.Any())
-                blightsCreated++;
+                blightsToCreate++;
             if (_game.Darkness >= 20 && MovementRoll <= 2)
-                blightsCreated++;
+                blightsToCreate++;
 
-            _game.CreateBlights(Location, blightsCreated);
+            _game.CreateBlights(Location, blightsToCreate);
             IsTakingTurn = false;
             _game.UpdatePlayerBoard();
             _game.StartNewDay();
@@ -94,16 +94,20 @@ namespace Slugburn.DarkestNight.Rules.Enemies
         private Location GetDestination()
         {
             var necromancerSpace = _game.Board[Location];
-            var rollLocation = necromancerSpace.MoveChart[MovementRoll];
+            RolledDestination = necromancerSpace.MoveChart[MovementRoll];
             if (!DetectedHeroes.Any())
             {
+                DetectedHero = null;
                 // move based on roll
-                return rollLocation;
+                return RolledDestination;
             }
             // move toward closest detected hero
-            var alreadyHere = DetectedHeroes.Any(h => h.Location == Location);
-            if (alreadyHere)
+            var alreadyHere = DetectedHeroes.Where(h => h.Location == Location).ToList();
+            if (alreadyHere.Any())
+            {
+                DetectedHero = alreadyHere.Shuffle().First();
                 return Location;
+            }
 
             var adjacentToNecromancer = _game.Board[Location].AdjacentLocations
                 // make sure the Necromancer can never move to Monastery
@@ -112,13 +116,14 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             var adjacentHeroes = DetectedHeroes.Where(x => adjacentToNecromancer.Contains(x.Location)).ToList();
             if (adjacentHeroes.Any())
             {
-                var destination = adjacentHeroes.Shuffle().First().Location;
+                DetectedHero = adjacentHeroes.Shuffle().First();
+                var destination = DetectedHero.Location;
                 return destination;
             }
             // select one of the remaining detected heroes at random
-            var selected = DetectedHeroes.Shuffle().First();
+            DetectedHero = DetectedHeroes.Shuffle().First();
             // destination is going to be a location that is adjacent to both Necromancer and selected hero
-            var adjacentToHero = _game.Board[selected.Location].AdjacentLocations;
+            var adjacentToHero = _game.Board[DetectedHero.Location].AdjacentLocations;
             var adjacentToBoth = adjacentToNecromancer.Intersect(adjacentToHero);
             return adjacentToBoth.Shuffle().First();
         }

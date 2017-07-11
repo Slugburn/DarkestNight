@@ -8,6 +8,7 @@ using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Enemies;
 using Slugburn.DarkestNight.Rules.Events;
+using Slugburn.DarkestNight.Rules.IO;
 using Slugburn.DarkestNight.Rules.Items;
 using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Modifiers;
@@ -843,6 +844,22 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             State = HeroState.SelectingBlights;
             Player.DisplayBlightSelection(selection);
+        }
+
+        public HeroData GetData()
+        {
+            return new HeroData
+            {
+                Name = Name,
+                DefaultGrace = _baseDefaultGrace,
+                DefaultSecrecy = DefaultSecrecy,
+                Grace = Grace,
+                Secrecy = Secrecy,
+                Location = Location,
+                PowerDeck = PowerDeck,
+                Powers = Powers.Select(x => PowerData.Create(x)).ToList(),
+                Inventory = Inventory.Select(x => x.Name).ToList(),
+            };
         }
     }
 }

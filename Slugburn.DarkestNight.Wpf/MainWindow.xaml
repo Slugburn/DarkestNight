@@ -18,6 +18,7 @@
                 <ResourceDictionary Source="DataTemplates/Event.xaml"/>
                 <ResourceDictionary Source="DataTemplates/Hero.xaml"/>
                 <ResourceDictionary Source="DataTemplates/Location.xaml"/>
+                <ResourceDictionary Source="DataTemplates/Necromancer.xaml"/>
                 <ResourceDictionary Source="DataTemplates/Power.xaml"/>
                 <ResourceDictionary Source="DataTemplates/Question.xaml"/>
                 <ResourceDictionary Source="DataTemplates/Search.xaml"/>
@@ -47,5 +48,6 @@
         <ContentControl Grid.Row="0" Grid.RowSpan="3" Content="{Binding PowerSelection}" />
         <ContentControl Grid.Row="0" Grid.RowSpan="3" Content="{Binding Question}" />
         <ContentControl Grid.Row="0" Grid.RowSpan="2" Content="{Binding Prayer}" />
+        <ContentControl Grid.Row="0" Grid.RowSpan="2" Content="{Binding Necromancer}" />
     </Grid>
 </Window>

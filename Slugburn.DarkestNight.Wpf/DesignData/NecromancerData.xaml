@@ -1,0 +1,3 @@
+﻿<m:NecromancerVm xmlns:m="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels"
+            Text="The Necromancer detected the Acolyte, so he is moving to the Swamp instead of the Village." Visibility="Visible" >
+</m:NecromancerVm>

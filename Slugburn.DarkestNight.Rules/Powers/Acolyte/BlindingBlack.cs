@@ -16,7 +16,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
         public override bool IsUsable(Hero hero)
         {
-            return base.IsUsable(hero) && hero.Game.Necromancer.IsTakingTurn && hero.Game.Necromancer.DetectedHeroes.Any();
+            var necromancer = hero.Game.Necromancer;
+            return base.IsUsable(hero) && 
+                necromancer.IsTakingTurn 
+                && necromancer.Destination != necromancer.RolledDestination;
         }
 
         protected override void OnLearn()
@@ -33,7 +36,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
             public override void Execute(Hero hero)
             {
-                var power = hero.GetPower(Name);
                 if (!IsAvailable(hero))
                     throw new CommandNotAvailableException(hero, this);
 
@@ -41,7 +43,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                 necromancer.DetectedHeroes.Clear();
                 necromancer.DetermineDestination();
 
-                power.Exhaust(hero);
+                Power.Exhaust(hero);
             }
         }
     }

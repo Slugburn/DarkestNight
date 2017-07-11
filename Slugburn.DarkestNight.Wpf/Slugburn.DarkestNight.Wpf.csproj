@@ -80,6 +80,7 @@
     <Compile Include="ViewModels\HeroValue.cs" />
     <Compile Include="ViewModels\ItemVm.cs" />
     <Compile Include="ViewModels\LocationVm.cs" />
+    <Compile Include="ViewModels\NecromancerVm.cs" />
     <Compile Include="ViewModels\PlayerVm.cs" />
     <Compile Include="ViewModels\HeroPowerVm.cs" />
     <Compile Include="ViewModels\PowerCardVm.cs" />
@@ -98,6 +99,10 @@
     <Page Include="DataTemplates\Conflict.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataTemplates\Necromancer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="DataTemplates\Event.xaml">
       <SubType>Designer</SubType>
@@ -127,6 +132,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </DesignData>
+    <Page Include="DesignData\NecromancerData.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -175,10 +184,7 @@
       <Name>Slugburn.DarkestNight.Rules</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-    <Folder Include="Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

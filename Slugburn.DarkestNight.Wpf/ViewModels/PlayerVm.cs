@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Windows.Media;
 using Slugburn.DarkestNight.Rules;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.IO;
 using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Wpf.Annotations;
@@ -26,6 +28,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         private PowerSelectionVm _powerSelection;
         private PrayerVm _prayer;
         private ICommand _command;
+        private NecromancerVm _necromancer;
 
         public Game Game
         {
@@ -39,6 +42,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
                 Question = new QuestionVm(_game);
                 PowerSelection = new PowerSelectionVm(_game);
                 Prayer = new PrayerVm(_game);
+                Necromancer = new NecromancerVm();
             }
         }
 
@@ -141,6 +145,18 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
+        public NecromancerVm Necromancer
+        {
+            get { return _necromancer; }
+            set
+            {
+                if (Equals(value, _necromancer)) return;
+                _necromancer = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         public ICommand Command
         {
             get { return _command; }
@@ -191,9 +207,9 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public void DisplayNecromancer(NecromancerModel model, Callback<object> callback)
+        public void DisplayNecromancer(NecromancerModel model)
         {
-            callback.Handle(null);
+            Necromancer.Update(model);
         }
 
         public void DisplayHeroSelection(HeroSelectionModel model, Callback<Hero> callback)
@@ -253,6 +269,21 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         {
             var hero = Heroes.Single(x => x.Name == heroName);
             hero.Status = new HeroStatus(status);
+        }
+
+        public void OnNewDay()
+        {
+            SaveGame();
+        }
+
+        private void SaveGame()
+        {
+            var serializer = new GameSerializer();
+            const string path = "game.json";
+            if (File.Exists(path))
+                File.Delete(path);
+            using (var writer = File.CreateText(path))
+                serializer.Write(_game, writer);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

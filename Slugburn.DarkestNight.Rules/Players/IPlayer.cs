@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Players
         void DisplayPowers(ICollection<PowerModel> models, Callback<string> callback);
         void DisplayBlightSelection(BlightSelectionModel model);
         void DisplayLocationSelection(ICollection<string> locations, Callback<Location> callback);
-        void DisplayNecromancer(NecromancerModel model, Callback<object> callback);
+        void DisplayNecromancer(NecromancerModel model);
         void DisplayHeroSelection(HeroSelectionModel model, Callback<Hero> callback);
         void DisplayAskQuestion(QuestionModel model, Callback<string> callback);
         void DisplaySearch(SearchModel model, Callback<Find> callback);
@@ -21,5 +21,6 @@ namespace Slugburn.DarkestNight.Rules.Players
         void UpdateBoard(BoardModel model);
         void UpdateHeroCommands(HeroActionModel model);
         void UpdateHeroStatus(string heroName, HeroStatusModel status);
+        void OnNewDay();
     }
 }

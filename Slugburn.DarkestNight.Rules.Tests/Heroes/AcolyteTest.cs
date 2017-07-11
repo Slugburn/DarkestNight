@@ -57,11 +57,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WithHero("Acolyte").HasPowers("Blinding Black").At("Swamp").Secrecy(0)
                 .Necromancer.At("Castle")
                 .When.Game.NecromancerActs(Fake.Rolls(5))
-                .Then(Verify.Hero().CanTakeAction("Blinding Black"))
-                .Then(Verify.Player.NecromancerView.Roll(5).Detected("Acolyte").MovingTo("Swamp"))
+                .Then(Verify.Player.NecromancerView.Description("The Necromancer detected the Acolyte, so he is moving to the Swamp instead of the Village."))
+                .Then(Verify.Player.Hero("Acolyte").Commands.Exactly("Blinding Black"))
                 .When.Player.TakesAction("Blinding Black")
                 .Then(Verify.Power("Blinding Black").IsExhausted())
-                .Then(Verify.Player.NecromancerView.Roll(5).Detected().MovingTo("Village"))
+                .Then(Verify.Player.NecromancerView.Description("The Necromancer is moving to the Village."))
                 .When.Player.AcceptsNecromancerTurn()
                 .Then(Verify.Game.Darkness(1).Necromancer.At("Village"));
         }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Slugburn.DarkestNight.Rules.Blights;
+using Slugburn.DarkestNight.Rules.IO;
 
 namespace Slugburn.DarkestNight.Rules.Maps
 {
@@ -7,11 +8,17 @@ namespace Slugburn.DarkestNight.Rules.Maps
     {
         private readonly Dictionary<Location, BlightType> _blights;
         private readonly Dictionary<Location, Find> _finds;
-        
+
+        private Map(Dictionary<Location, BlightType> blights, Dictionary<Location, Find> finds)
+        {
+            _blights = blights;
+            _finds = finds;
+        }
+
         public Map(BlightType[] blightType, Find[] searches)
         {
-            _blights = new Dictionary<Location, BlightType>()
-                       {
+            _blights = new Dictionary<Location, BlightType>
+            {
                            {Location.Mountains, blightType[0]},
                            {Location.Castle, blightType[1]},
                            {Location.Village, blightType[2]},
@@ -39,6 +46,11 @@ namespace Slugburn.DarkestNight.Rules.Maps
         public Find GetSearchResult(Location location)
         {
             return _finds[location];
+        }
+
+        public static IMap Create(MapData data)
+        {
+            return new Map(data.Blights, data.Finds);
         }
     }
 }

@@ -19,8 +19,6 @@ namespace Slugburn.DarkestNight.Rules.Powers
 
         public virtual void Activate(Hero hero)
         {
-            if (!IsUsable(hero))
-                throw new InvalidOperationException($"{Name} is not usable.");
             IsActive = true;
         }
 
