@@ -853,10 +853,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             return Player.SelectLocation(choices);
         }
 
-        public void SelectBlights(BlightSelectionModel selection)
+        public async Task<IEnumerable<int>> SelectBlights(BlightSelectionModel selection)
         {
             State = HeroState.SelectingBlights;
-            Player.DisplayBlightSelection(selection);
+            return await Player.SelectBlights(selection);
         }
 
         public HeroData GetData()

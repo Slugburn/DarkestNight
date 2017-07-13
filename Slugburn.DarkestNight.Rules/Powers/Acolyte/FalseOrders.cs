@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -22,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             Owner.AddCommand(new FalseOrdersAction(this));
         }
 
-        private class FalseOrdersAction : PowerAction, ICallbackHandler<IEnumerable<int>>
+        private class FalseOrdersAction : PowerAction
         {
             public FalseOrdersAction(IActionPower power) : base(power)
             {
@@ -34,30 +33,22 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             {
                 var space = hero.Space;
                 var potentialDestinations = space.AdjacentLocations.Select(x => x.ToString()).ToList();
-                var location = await hero.SelectLocation(potentialDestinations);
+                var destination = await hero.SelectLocation(potentialDestinations);
                 var game = hero.Game;
                 var action = (FalseOrdersAction)hero.GetCommand(PowerName);
-                action.Destination = location;
+                action.Destination = destination;
 
-                var destinationSpace = game.Board[location];
+                var destinationSpace = game.Board[destination];
                 var maxMoveCount = 4 - destinationSpace.Blights.Count;
-                var callback = Callback.For<IEnumerable<int>>(hero, this);
-                var selection = BlightSelectionModel.Create(Name, space.Blights, maxMoveCount, callback);
-                hero.SelectBlights(selection);
-            }
+                var selection = BlightSelectionModel.Create(Name, space.Blights, maxMoveCount);
+                var blightIds = await hero.SelectBlights(selection);
 
-            public void HandleCallback(Hero hero, IEnumerable<int> blightIds)
-            {
-                var game = hero.Game;
-                var action = (FalseOrdersAction) hero.GetCommand(PowerName);
-                var destination = action.Destination;
                 foreach (var blightId in blightIds)
                 {
                     var blight = game.GetBlight(blightId);
                     var sourceSpace = game.Board[blight.Location];
                     sourceSpace.RemoveBlight(blight);
 
-                    var destinationSpace = game.Board[destination];
                     destinationSpace.AddBlight(blight);
                 }
                 game.UpdatePlayerBoard();

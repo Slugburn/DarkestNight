@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Players
         void DisplayEvent(EventModel playerEvent);
         void DisplayConflict(ConflictModel conflict);
         void DisplayPowers(ICollection<PowerModel> models, Callback<string> callback);
-        void DisplayBlightSelection(BlightSelectionModel model);
+        Task<IEnumerable<int>> SelectBlights(BlightSelectionModel model);
         Task<Location> SelectLocation(ICollection<string> locations);
         void DisplayNecromancer(NecromancerModel model);
         void DisplayHeroSelection(HeroSelectionModel model, Callback<Hero> callback);

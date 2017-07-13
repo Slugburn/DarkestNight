@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using Slugburn.DarkestNight.Rules.Models;
-using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Wpf.ViewModels;
 
 namespace Slugburn.DarkestNight.Wpf.Commands
@@ -12,22 +12,23 @@ namespace Slugburn.DarkestNight.Wpf.Commands
         private readonly PlayerVm _playerVm;
         private readonly List<BlightVm> _blights;
         private readonly int _max;
-        private readonly Callback<IEnumerable<int>> _callback;
+        private readonly TaskCompletionSource<IEnumerable<int>> _completionSource;
 
         public SelectBlightsCommand(PlayerVm playerVm, BlightSelectionModel model)
         {
             _playerVm = playerVm;
             _max = model.Max;
             _blights = GetBlights(model);
-            _callback = model.Callback;
+            _completionSource = new TaskCompletionSource<IEnumerable<int>>();
         }
 
-        public void Execute()
+        public Task<IEnumerable<int>> Execute()
         {
             if (_max == 1 || _blights.Count == 1)
                 SelectSingleBlight();
             else
                 SelectMultipleBlights();
+            return _completionSource.Task;
         }
 
         private void SelectSingleBlight()
@@ -42,7 +43,7 @@ namespace Slugburn.DarkestNight.Wpf.Commands
         private void OnSingleBlightSelected(BlightVm vm)
         {
             _blights.ForEach(x => x.Clear());
-            _callback.Handle(new[] {vm.Id});
+            _completionSource.SetResult(new[] { vm.Id });
         }
 
         private void SelectMultipleBlights()
@@ -67,7 +68,7 @@ namespace Slugburn.DarkestNight.Wpf.Commands
             var selectedIds = _blights.Where(x => x.IsSelected).Select(x => x.Id).ToList();
             _blights.ForEach(x => x.Clear());
             _playerVm.Command = null;
-            _callback.Handle(selectedIds);
+            _completionSource.SetResult(selectedIds);
         }
 
         private List<BlightVm> GetBlights(BlightSelectionModel model)

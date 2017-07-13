@@ -186,9 +186,9 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             PowerSelection.Update(models, callback);
         }
 
-        public void DisplayBlightSelection(BlightSelectionModel model)
+        public Task<IEnumerable<int>> SelectBlights(BlightSelectionModel model)
         {
-            new SelectBlightsCommand(this, model).Execute();
+            return new SelectBlightsCommand(this, model).Execute();
         }
 
         public Task<Location> SelectLocation(ICollection<string> locations)

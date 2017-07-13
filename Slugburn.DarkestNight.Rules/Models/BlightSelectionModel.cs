@@ -6,23 +6,21 @@ namespace Slugburn.DarkestNight.Rules.Models
 {
     public class BlightSelectionModel
     {
-        public BlightSelectionModel(string title, ICollection<BlightModel> blights, int max, Callback<IEnumerable<int>> callback)
+        public BlightSelectionModel(string title, ICollection<BlightModel> blights, int max)
         {
             Title = title;
             Blights = blights;
             Max = max;
-            Callback = callback;
         }
 
         public string Title { get; }
         public ICollection<BlightModel> Blights { get; }
         public int Max { get; }
-        public Callback<IEnumerable<int>> Callback { get; }
 
-        public static BlightSelectionModel Create(string title, IEnumerable<IBlight> blights, int max, Callback<IEnumerable<int>> callback)
+        public static BlightSelectionModel Create(string title, IEnumerable<IBlight> blights, int max)
         {
             var blightModels = BlightModel.Create(blights);
-            var selectionModel = new BlightSelectionModel(title, blightModels, max, callback);
+            var selectionModel = new BlightSelectionModel(title, blightModels, max);
             return selectionModel;
         }
     }

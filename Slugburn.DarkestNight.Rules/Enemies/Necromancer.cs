@@ -31,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
         public int? Fight => 7;
         public int? Elude => 6;
 
-        void IConflict.Win(Hero hero)
+        async void IConflict.Win(Hero hero)
         {
             if (hero.ConflictState.SelectedTactic.Type == TacticType.Elude) return;
             var blights = hero.GetBlights();
@@ -44,9 +44,10 @@ namespace Slugburn.DarkestNight.Rules.Enemies
                 }
                 else
                 {
-                    var callback = Callback.For(hero, new DestroyBlightHandler());
-                    var model = BlightSelectionModel.Create("Destroy Blight", blights, 1, callback);
-                    hero.SelectBlights(model);
+                    var model = BlightSelectionModel.Create("Destroy Blight", blights, 1);
+                    var blightIds = await hero.SelectBlights(model);
+                    var blightId = blightIds.Single();
+                    hero.Game.DestroyBlight(hero, blightId);
                 }
             }
             else if (hero.HasHolyRelic())
@@ -151,15 +152,6 @@ namespace Slugburn.DarkestNight.Rules.Enemies
             if (!isWin)
                 return "Wound";
             return tacticType == TacticType.Fight ? "Sacrifice blight or (with holy relic) Necromancer slain" : "No effect";
-        }
-
-        private class DestroyBlightHandler : ICallbackHandler<IEnumerable<int>>
-        {
-            public void HandleCallback(Hero hero, IEnumerable<int> blightIds)
-            {
-                var blightId = blightIds.Single();
-                hero.Game.DestroyBlight(hero, blightId);
-            }
         }
     }
 }

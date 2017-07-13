@@ -16,6 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         private object _callback;
         private TaskCompletionSource<string> _submitAnswer;
         private TaskCompletionSource<Location> _locationSource;
+        private TaskCompletionSource<IEnumerable<int>> _blightsSource;
 
         public FakePlayer(Game game)
         {
@@ -49,10 +50,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             _callback = callback;
         }
 
-        public void DisplayBlightSelection(BlightSelectionModel model)
+        public Task<IEnumerable<int>> SelectBlights(BlightSelectionModel model)
         {
             BlightSelection = model;
-            _callback = model.Callback;
+            _blightsSource = new TaskCompletionSource<IEnumerable<int>>();
+            return _blightsSource.Task;
         }
 
         public Task<Location> SelectLocation(ICollection<string> locations)
@@ -172,9 +174,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public void SelectBlight(int blightId)
         {
-            var data = new[] {blightId};
-            var callback = (Callback<IEnumerable<int>>) _callback;
-            callback.Handle(data);
+            _blightsSource.SetResult(new [] {blightId});
         }
 
         public void FinishNecromancerTurn()
@@ -190,8 +190,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public void SelectBlights(IEnumerable<int> blightIds)
         {
-            var callback = (Callback<IEnumerable<int>>) _callback;
-            callback.Handle(blightIds);
+            _blightsSource.SetResult(blightIds);
         }
 
         public void SelectHero(string heroName)
