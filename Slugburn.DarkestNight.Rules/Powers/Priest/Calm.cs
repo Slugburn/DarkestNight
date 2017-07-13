@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Slugburn.DarkestNight.Rules.Actions;
+﻿using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Triggers;
 
@@ -42,9 +41,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
                 Text = _pray.Text;
             }
 
-            public override Task ExecuteAsync(Hero hero)
+            public override void Execute(Hero hero)
             {
-                return _pray.ExecuteAsync(hero);
+                _pray.Execute(hero);
             }
         }
 

@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Slugburn.DarkestNight.Rules.Commands;
+﻿using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Players;
 
@@ -12,11 +11,10 @@ namespace Slugburn.DarkestNight.Rules.Items
             Text = "Discard at any time to draw a new power card.";
         }
 
-        public Task ExecuteAsync(Hero hero)
+        public void Execute(Hero hero)
         {
             Owner.RemoveFromInventory(this);
             hero.DrawPower();
-            return Task.CompletedTask;
         }
 
         public bool IsAvailable(Hero hero)

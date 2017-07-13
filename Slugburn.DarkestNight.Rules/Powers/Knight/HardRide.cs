@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Heroes;
 
@@ -24,10 +23,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             {
             }
 
-            public override Task ExecuteAsync(Hero hero)
+            public override void Execute(Hero hero)
             {
                 hero.AvailableMovement = 2;
-                return TravelHandler.UseAvailableMovement(hero);
+                TravelHandler.UseAvailableMovement(hero);
             }
 
         }

@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
@@ -34,14 +33,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             {
             }
 
-            public override Task ExecuteAsync(Hero hero)
+            public override void Execute(Hero hero)
             {
                 var roll = Die.Roll();
                 if (roll == 1)
                     hero.Game.IncreaseDarkness();
                 hero.CurrentRoll.ActualRoll.Add(roll);
                 hero.CurrentRoll.AdjustRoll();
-                return Task.CompletedTask;
             }
         }
     }

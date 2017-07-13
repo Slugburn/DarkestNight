@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Commands;
@@ -37,12 +36,11 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                 return base.IsAvailable(hero) && hero.IsTakingTurn && hero.State == HeroState.TakingTurn;
             }
 
-            public override Task ExecuteAsync(Hero hero)
+            public override void Execute(Hero hero)
             {
                 hero.Game.AddBlightSupression(this);
                 hero.Triggers.Add(HeroTrigger.StartedTurn, Name, this);
                 Power.Exhaust(hero);
-                return Task.CompletedTask;
             }
 
             public bool IsSupressed(IBlight blight, Hero hero = null)
@@ -63,14 +61,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             {
             }
 
-            public override Task ExecuteAsync(Hero hero)
+            public override void Execute(Hero hero)
             {
                 var power = hero.GetPower(PowerName);
                 if (!IsAvailable(hero))
                     throw new CommandNotAvailableException(hero, this);
                 hero.ConflictState.SelectedTargets.First().IgnoreFailure();
                 power.Exhaust(hero);
-                return Task.CompletedTask;
             }
 
             public override bool IsAvailable(Hero hero)

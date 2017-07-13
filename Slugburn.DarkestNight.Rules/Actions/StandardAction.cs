@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Slugburn.DarkestNight.Rules.Heroes;
+﻿using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Actions
 {
@@ -13,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
         public string Name { get; protected set; }
         public string Text { get; set; }
         public bool RequiresAction => true;
-        public abstract Task ExecuteAsync(Hero hero);
+        public abstract void Execute(Hero hero);
 
         public virtual bool IsAvailable(Hero hero)
         {

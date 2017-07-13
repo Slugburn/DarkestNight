@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Models;
@@ -21,7 +20,7 @@ namespace Slugburn.DarkestNight.Rules.Items.Artifacts
                        || hero.CanSpendSecrecy && hero.Grace < hero.DefaultGrace);
         }
 
-        public async Task ExecuteAsync(Hero hero)
+        public async void Execute(Hero hero)
         {
             var question = new QuestionModel(Name, Text, new[] {"Spend Grace", "Spend Secrecy"});
             var answer = await hero.Player.AskQuestion(question);

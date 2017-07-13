@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Items;
@@ -23,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             return hasKeys;
         }
 
-        public override Task ExecuteAsync(Hero hero)
+        public override void Execute(Hero hero)
         {
             if (!IsAvailable(hero))
                 throw new CommandNotAvailableException(hero, this);
@@ -35,7 +34,6 @@ namespace Slugburn.DarkestNight.Rules.Actions
             var space = hero.Space;
             space.HasRelic = false;
             space.RemoveAction(Name);
-            return Task.CompletedTask;
         }
 
     }

@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -23,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             return base.IsAvailable(hero) && hero.GetBlights().Any();
         }
 
-        public override Task ExecuteAsync(Hero hero)
+        public override void Execute(Hero hero)
         {
             hero.State = HeroState.Attacking;
             hero.SetRoll(RollBuilder.Create<AttackRoll>());
@@ -38,7 +37,6 @@ namespace Slugburn.DarkestNight.Rules.Actions
             // hero.ConflictState.ConflictType needs to be set before calling hero.GetAvailableFightTactics()
             conflictState.AvailableTactics = hero.GetAvailableFightTactics().GetInfo(hero);
             hero.DisplayConflictState();
-            return Task.CompletedTask;
         }
 
 

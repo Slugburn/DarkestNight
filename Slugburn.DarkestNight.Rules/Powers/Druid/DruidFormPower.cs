@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Heroes;
 
@@ -44,10 +43,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             {
             }
 
-            public override Task ExecuteAsync(Hero hero)
+            public override void Execute(Hero hero)
             {
                 DeactivateAllForms(hero);
-                return base.ExecuteAsync(hero);
+                base.Execute(hero);
             }
         }
 
@@ -60,10 +59,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
                 Text = "Deactivate all Forms.";
             }
 
-            public override Task ExecuteAsync(Hero hero)
+            public override void Execute(Hero hero)
             {
                 DeactivateAllForms(hero);
-                return Task.CompletedTask;
             }
 
             public override bool IsAvailable(Hero hero)

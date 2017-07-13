@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -35,7 +34,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             {
             }
 
-            public override Task ExecuteAsync(Hero hero)
+            public override void Execute(Hero hero)
             {
                 if (!IsAvailable(hero))
                     throw new CommandNotAvailableException(hero, this);
@@ -45,7 +44,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                 necromancer.DetermineDestination();
 
                 Power.Exhaust(hero);
-                return Task.CompletedTask;
             }
         }
     }

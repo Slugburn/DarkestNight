@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Slugburn.DarkestNight.Rules.Commands;
+﻿using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Modifiers;
 
@@ -18,13 +17,12 @@ namespace Slugburn.DarkestNight.Rules.Items
             return hero.State == HeroState.FacingEnemy && roll?.AdjustedRoll != null && !roll.Win && roll.ModifierType == ModifierType.EludeDice;
         }
 
-        public Task ExecuteAsync(Hero hero)
+        public void Execute(Hero hero)
         {
             Owner.RemoveFromInventory(this);
             hero.CurrentRoll.ForceWin();
             hero.ConflictState.Resolve(hero);
             hero.AcceptRoll();
-            return Task.CompletedTask;
         }
 
     }

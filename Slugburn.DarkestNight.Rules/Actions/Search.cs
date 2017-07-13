@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Modifiers;
@@ -24,7 +23,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             return base.IsAvailable(hero) && hero.Location != Location.Monastery;
         }
 
-        public override Task ExecuteAsync(Hero hero)
+        public override void Execute(Hero hero)
         {
             hero.State = HeroState.Searching;
             var space = hero.Space;
@@ -35,7 +34,6 @@ namespace Slugburn.DarkestNight.Rules.Actions
             hero.Triggers.Send(HeroTrigger.Searched);
             state.Roll();
             hero.DisplaySearch(CallbackHandler);
-            return Task.CompletedTask;
         }
 
         public class SearchRollHandler : IRollHandler

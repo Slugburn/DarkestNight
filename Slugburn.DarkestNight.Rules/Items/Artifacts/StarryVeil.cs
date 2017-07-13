@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Slugburn.DarkestNight.Rules.Commands;
+﻿using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Items.Artifacts
@@ -20,11 +19,10 @@ namespace Slugburn.DarkestNight.Rules.Items.Artifacts
             return hero.CurrentEvent.Fate >= 5;
         }
 
-        public Task ExecuteAsync(Hero hero)
+        public void Execute(Hero hero)
         {
             hero.EndEvent();
             hero.DrawEvent();
-            return Task.CompletedTask;
         }
     }
 }

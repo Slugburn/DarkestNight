@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -23,13 +22,12 @@ namespace Slugburn.DarkestNight.Rules.Items.Artifacts
             return hero.Game.GetBlights().Any();
         }
 
-        public Task ExecuteAsync(Hero hero)
+        public void Execute(Hero hero)
         {
             var blights = hero.Game.GetBlights();
             var callback = Callback.For(hero, this);
             var selection = BlightSelectionModel.Create("Ignore Blight [Vanishing Cowl]", blights, 1, callback);
             hero.SelectBlights(selection);
-            return Task.CompletedTask;
         }
 
         public void HandleCallback(Hero hero, IEnumerable<int> data)

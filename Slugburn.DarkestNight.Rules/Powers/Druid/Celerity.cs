@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -27,7 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             {
             }
 
-            public override async Task ExecuteAsync(Hero hero)
+            public override async void Execute(Hero hero)
             {
                 DruidFormPower.DeactivateAllForms(hero);
                 hero.GainSecrecy(1, 5);
