@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Heroes;
 
@@ -9,11 +10,12 @@ namespace Slugburn.DarkestNight.Rules.Powers
         {
         }
 
-        public override void Execute(Hero hero)
+        public override Task ExecuteAsync(Hero hero)
         {
             var power = (IActivateable)Power;
             power.Activate(hero);
             hero.ContinueTurn();
+            return Task.CompletedTask;
         }
     }
 }

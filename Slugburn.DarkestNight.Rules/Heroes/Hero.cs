@@ -543,7 +543,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             if (State != HeroState.TakingTurn) return;
             if (AvailableCommands.Count != 1) return;
             var endTurn = AvailableCommands.Single() as EndTurn;
-            endTurn?.Execute(this);
+            endTurn?.ExecuteAsync(this);
         }
 
         public void RollEventDice(IRollHandler rollHandler)
@@ -690,7 +690,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             var command = GetCommand(commandName);
             if (!command.IsAvailable(this))
                 throw new CommandNotAvailableException(this, command);
-            command.Execute(this);
+            command.ExecuteAsync(this);
             if (command is IAction)
                 IsActionAvailable = false;
             UpdateAvailableCommands();

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Modifiers;
@@ -14,11 +15,12 @@ namespace Slugburn.DarkestNight.Rules.Actions
             Text = "Roll 2d, and gain 1 Grace (up to default) for each die that rolls a 3 or higher. Also refresh your powers.";
         }
 
-        public override void Execute(Hero hero)
+        public override Task ExecuteAsync(Hero hero)
         {
             hero.State = HeroState.Praying;
             var rollState = hero.SetRoll(RollBuilder.Create<PrayerRoll>().Type(ModifierType.PrayDice).Base("Pray", 2).Target(3));
             rollState.Roll();
+            return Task.CompletedTask;
         }
 
         public override bool IsAvailable(Hero hero)

@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -37,7 +38,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             {
             }
 
-            public override void Execute(Hero hero)
+            public override Task ExecuteAsync(Hero hero)
             {
                 hero.AddModifier(StaticRollBonus.Create(Name, ModifierType.FightDice, 1));
                 hero.SetRoll(RollBuilder.Create<CallToDeathRoll>());
@@ -50,6 +51,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                     MaxTarget = 2
                 };
                 hero.DisplayConflictState();
+                return Task.CompletedTask;
             }
         }
 

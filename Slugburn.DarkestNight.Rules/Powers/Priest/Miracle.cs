@@ -1,4 +1,5 @@
-﻿using Slugburn.DarkestNight.Rules.Actions;
+﻿using System.Threading.Tasks;
+using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
 
@@ -28,12 +29,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             {
             }
 
-            public override void Execute(Hero hero)
+            public override Task ExecuteAsync(Hero hero)
             {
                 hero.SpendGrace(1);
                 var roll = Die.Roll();
                 hero.CurrentRoll.ActualRoll.Add(roll);
                 hero.CurrentRoll.AdjustRoll();
+                return Task.CompletedTask;
             }
         }
     }

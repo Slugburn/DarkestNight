@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Models;
@@ -30,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
             private Location Destination { get; set; } // This gets set by the location selected handler
 
-            public override async void Execute(Hero hero)
+            public override async Task ExecuteAsync(Hero hero)
             {
                 var space = hero.Space;
                 var potentialDestinations = space.AdjacentLocations.Select(x => x.ToString()).ToList();

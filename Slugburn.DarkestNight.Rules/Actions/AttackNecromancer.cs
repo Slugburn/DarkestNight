@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
@@ -19,7 +20,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
                    + "slays him and wins the game—but only if you are holding a holy relic when you do so.";
         }
 
-        public override void Execute(Hero hero)
+        public override Task ExecuteAsync(Hero hero)
         {
             var necromancer = hero.Game.Necromancer;
             var availableTargets = new [] {necromancer}.GetTargetInfo();
@@ -37,6 +38,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             // hero.ConflictState.ConflictType needs to be set before calling hero.GetAvailableFightTactics()
             conflictState.AvailableTactics = hero.GetAvailableFightTactics().GetInfo(hero);
             hero.DisplayConflictState();
+            return Task.CompletedTask;
         }
 
         public override bool IsAvailable(Hero hero)

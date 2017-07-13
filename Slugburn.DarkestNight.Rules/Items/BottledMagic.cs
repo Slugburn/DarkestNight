@@ -1,4 +1,5 @@
-﻿using Slugburn.DarkestNight.Rules.Commands;
+﻿using System.Threading.Tasks;
+using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tactics;
@@ -12,12 +13,13 @@ namespace Slugburn.DarkestNight.Rules.Items
             Text = "Discard after a fight roll to add 3d to that roll.";
         }
 
-        public void Execute(Hero hero)
+        public Task ExecuteAsync(Hero hero)
         {
             Owner.RemoveFromInventory(this);
             var roll = Die.Roll(3);
             hero.CurrentRoll.ActualRoll.AddRange(roll);
             hero.CurrentRoll.AdjustRoll();
+            return Task.CompletedTask;
         }
 
         public bool IsAvailable(Hero hero)

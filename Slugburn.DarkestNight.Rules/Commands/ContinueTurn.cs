@@ -1,4 +1,5 @@
-﻿using Slugburn.DarkestNight.Rules.Heroes;
+﻿using System.Threading.Tasks;
+using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Commands
 {
@@ -13,9 +14,10 @@ namespace Slugburn.DarkestNight.Rules.Commands
             return hero.IsTakingTurn && hero.State == HeroState.TurnStarted;
         }
 
-        public void Execute(Hero hero)
+        public Task ExecuteAsync(Hero hero)
         {
             hero.ContinueTurn();
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Commands
@@ -10,10 +11,11 @@ namespace Slugburn.DarkestNight.Rules.Commands
         public string Text => null;
         public bool RequiresAction => false;
 
-        public void Execute(Hero hero)
+        public Task ExecuteAsync(Hero hero)
         {
-            if (!IsAvailable(hero)) return;
-            hero.StartTurn();
+            if (IsAvailable(hero))
+                hero.StartTurn();
+            return Task.CompletedTask;
         }
 
         public bool IsAvailable(Hero hero)
