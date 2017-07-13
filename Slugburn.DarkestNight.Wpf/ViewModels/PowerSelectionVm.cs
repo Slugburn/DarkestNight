@@ -2,11 +2,11 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Slugburn.DarkestNight.Rules;
 using Slugburn.DarkestNight.Rules.Models;
-using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Wpf.Annotations;
 
 namespace Slugburn.DarkestNight.Wpf.ViewModels
@@ -69,7 +69,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public void Update(IEnumerable<PowerModel> models, Callback<string> callback)
+        public void Update(IEnumerable<PowerModel> models, TaskCompletionSource<string> source)
         {
             Visibility = Visibility.Visible;
             Cards = models.Select(PowerCardVm.Create).ToList();
@@ -77,7 +77,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             Command = new CommandHandler(() =>
             {
                 Visibility = Visibility.Hidden;
-                callback.Handle(SelectedCard.Name);
+                source.SetResult(SelectedCard.Name);
             });
         }
 

@@ -181,9 +181,11 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             Conflict.Update(model);
         }
 
-        public void DisplayPowers(ICollection<PowerModel> models, Callback<string> callback)
+        public Task<string> SelectPower(ICollection<PowerModel> models)
         {
-            PowerSelection.Update(models, callback);
+            var source = new TaskCompletionSource<string>();
+            PowerSelection.Update(models, source);
+            return source.Task;
         }
 
         public Task<IEnumerable<int>> SelectBlights(BlightSelectionModel model)
@@ -215,25 +217,6 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         public void DisplayNecromancer(NecromancerModel model)
         {
             Necromancer.Update(model);
-        }
-
-        public void DisplayHeroSelection(HeroSelectionModel model, Callback<Hero> callback)
-        {
-            var valid = (from name in model.Heroes join hero in Heroes on name equals hero.Name select hero).ToList();
-            foreach (var hero in valid)
-            {
-                hero.Highlight = new SolidColorBrush(Colors.Orange);
-                hero.SelectCommand = new CommandHandler(() =>
-                {
-                    foreach (var inner in valid)
-                    {
-                        inner.Highlight = new SolidColorBrush(Colors.White);
-                        inner.SelectCommand = null;
-                    }
-                    var selectedHero = Game.GetHero(hero.Name);
-                    callback.Handle(selectedHero);
-                });
-            }
         }
 
         public Task<Hero> SelectHero(HeroSelectionModel model)

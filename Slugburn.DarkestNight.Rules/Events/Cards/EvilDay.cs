@@ -6,7 +6,7 @@ using Slugburn.DarkestNight.Rules.Players;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class EvilDay : IEventCard, ICallbackHandler<string>
+    public class EvilDay : IEventCard
     {
         public EventDetail Detail => EventDetail.Create("Evil Day", 5,
             x => x
@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 .Option("exhaust", "Exhaust Power", hero => hero.Powers.Any(power => !power.Exhausted))
                 .Option("draw", "Draw Events"));
 
-        public void Resolve(Hero hero, string option)
+        public async void Resolve(Hero hero, string option)
         {
             switch (option)
             {
@@ -22,7 +22,10 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                     var powers = hero.Powers.Where(x => !x.Exhausted).Select(PowerModel.Create).ToList();
                     var player = hero.Player;
                     player.State = PlayerState.SelectPower;
-                    player.DisplayPowers(powers, Callback.For<string>(hero, this));
+                    var selectedName = await player.SelectPower(powers);
+                    var power = hero.GetPower(selectedName);
+                    power.Exhaust(hero);
+                    hero.EndEvent();
                     break;
                 case "draw":
                     var newEvents = hero.Game.Events.Draw(2);
@@ -35,14 +38,6 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                 default:
                     throw new ArgumentOutOfRangeException(nameof(option), option);
             }
-        }
-
-        public void HandleCallback(Hero hero, string data)
-        {
-            var powerName = data;
-            var power = hero.GetPower(powerName);
-            power.Exhaust(hero);
-            hero.EndEvent();
         }
     }
 }

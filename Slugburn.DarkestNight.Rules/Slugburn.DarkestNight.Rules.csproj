@@ -138,7 +138,6 @@
     <Compile Include="IO\GameData.cs" />
     <Compile Include="IO\GameSerializer.cs" />
     <Compile Include="Heroes\ActionFilter.cs" />
-    <Compile Include="Heroes\ContinueTurnHandler.cs" />
     <Compile Include="Heroes\DefenseRollHandler.cs" />
     <Compile Include="Heroes\HeroFactory.cs" />
     <Compile Include="Heroes\HeroState.cs" />

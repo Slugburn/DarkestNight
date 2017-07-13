@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Players;
@@ -50,52 +49,28 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             hero.ContinueTurn();
         }
 
-        private static void SuppyCache(Hero hero)
+        private static async void SuppyCache(Hero hero)
         {
             var powerNames = hero.PowerDeck.Draw(2);
             var powers = powerNames.Select(PowerFactory.Create).ToList();
             var viewModel = PowerModel.Create(powers).ToList();
-            hero.Player.DisplayPowers(viewModel, Callback.For(hero, new SupplyCacheCallback(powerNames)));
+            var selectedName = await hero.Player.SelectPower(viewModel);
+            var notSelectedName = powerNames.Single(x => x != selectedName);
+            hero.LearnPower(PowerFactory.Create(selectedName));
+            hero.PowerDeck.Add(notSelectedName);
+            hero.ContinueTurn();
         }
 
-        private static void Epiphany(Hero hero)
+        private static async void Epiphany(Hero hero)
         {
             var powerNames = hero.PowerDeck;
             var powers = powerNames.Select(PowerFactory.Create).ToList();
             var viewModel = PowerModel.Create(powers).ToList();
-            hero.Player.DisplayPowers(viewModel, Callback.For(hero, new EpiphanyCallback()));
+            var selectedName = await hero.Player.SelectPower(viewModel);
+            hero.PowerDeck.Remove(selectedName);
+            hero.ShufflePowerDeck();
+            hero.LearnPower(PowerFactory.Create(selectedName));
+            hero.ContinueTurn();
         }
-
-        internal class SupplyCacheCallback : ICallbackHandler<string>
-        {
-            private readonly List<string> _powerNames;
-
-            public SupplyCacheCallback(List<string> powerNames)
-            {
-                _powerNames = powerNames;
-            }
-
-            public void HandleCallback(Hero hero, string data)
-            {
-                var selectedName = data;
-                var notSelectedName = _powerNames.Single(x => x != selectedName);
-                hero.LearnPower(PowerFactory.Create(selectedName));
-                hero.PowerDeck.Add(notSelectedName);
-                hero.ContinueTurn();
-            }
-        }
-
-        private class EpiphanyCallback : ICallbackHandler<string>
-        {
-            public void HandleCallback(Hero hero, string data)
-            {
-                var selectedName = (string)data;
-                hero.PowerDeck.Remove(selectedName);
-                hero.ShufflePowerDeck();
-                hero.LearnPower(PowerFactory.Create(selectedName));
-                hero.ContinueTurn();
-            }
-        }
-
     }
 }

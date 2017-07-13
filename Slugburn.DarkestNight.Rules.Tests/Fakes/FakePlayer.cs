@@ -18,6 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         private TaskCompletionSource<Location> _locationSource;
         private TaskCompletionSource<IEnumerable<int>> _blightsSource;
         private TaskCompletionSource<Hero> _heroSource;
+        private TaskCompletionSource<string> _powerSource;
 
         public FakePlayer(Game game)
         {
@@ -45,10 +46,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             Conflict = conflict;
         }
 
-        public void DisplayPowers(ICollection<PowerModel> models, Callback<string> callback)
+        public Task<string> SelectPower(ICollection<PowerModel> models)
         {
             Powers = models;
-            _callback = callback;
+            _powerSource = new TaskCompletionSource<string>();
+            return _powerSource.Task;
         }
 
         public Task<IEnumerable<int>> SelectBlights(BlightSelectionModel model)
@@ -68,12 +70,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         public void DisplayNecromancer(NecromancerModel model)
         {
             Necromancer = model;
-        }
-
-        public void DisplayHeroSelection(HeroSelectionModel model, Callback<Hero> callback)
-        {
-            HeroSelection = model;
-            _callback = callback;
         }
 
         public Task<Hero> SelectHero(HeroSelectionModel model)
@@ -157,15 +153,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public void SelectLocation(Location location)
         {
-            if (_locationSource != null)
-            {
-                _locationSource.SetResult(location);
-            }
-            else
-            {
-                var callback = (Callback<Location>)_callback;
-                callback.Handle(location);
-            }
+            _locationSource.SetResult(location);
         }
 
         public void ResolveConflict( string tacticName, ICollection<int> targetIds)
@@ -176,8 +164,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public void SelectPower(string powerName)
         {
-            var callback = (Callback<string>) _callback;
-            callback.Handle(powerName);
+            _powerSource.SetResult(powerName);
         }
 
         public void SelectBlight(int blightId)

@@ -316,12 +316,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             Player.UpdateHeroStatus(Name, HeroStatusModel.FromHero(this));
         }
 
-        public void DrawPower()
+        public async void DrawPower()
         {
             var powerName = PowerDeck.First();
             var power = LearnPower(powerName);
-            Player.DisplayPowers(new[] { power }.ToPlayerPowers(), Callback.For(this, new ContinueTurnHandler<string>()));
             Player.State = PlayerState.SelectPower;
+            await Player.SelectPower(new[] {power}.ToPlayerPowers());
+            ContinueTurn();
         }
 
         public IPower LearnPower(string name)
