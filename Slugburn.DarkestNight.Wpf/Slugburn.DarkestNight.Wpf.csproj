@@ -68,6 +68,12 @@
     </ApplicationDefinition>
     <Compile Include="CommandHandler.cs" />
     <Compile Include="Commands\SelectBlightsCommand.cs" />
+    <Compile Include="Controls\HeroControl.xaml.cs">
+      <DependentUpon>HeroControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ItemControl.xaml.cs">
+      <DependentUpon>ItemControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="ViewModels\BlightVm.cs" />
@@ -82,7 +88,7 @@
     <Compile Include="ViewModels\LocationVm.cs" />
     <Compile Include="ViewModels\NecromancerVm.cs" />
     <Compile Include="ViewModels\PlayerVm.cs" />
-    <Compile Include="ViewModels\HeroPowerVm.cs" />
+    <Compile Include="ViewModels\PowerVm.cs" />
     <Compile Include="ViewModels\PowerCardVm.cs" />
     <Compile Include="ViewModels\PowerSelectionVm.cs" />
     <Compile Include="ViewModels\PrayerVm.cs" />
@@ -92,6 +98,14 @@
     <Compile Include="ViewModels\ConflictTargetVm.cs" />
     <Compile Include="ViewModels\TacticVm.cs" />
     <Compile Include="ViewModels\TargetVm.cs" />
+    <Page Include="Controls\HeroControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ItemControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="DataTemplates\Blight.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -132,6 +146,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </DesignData>
+    <Page Include="DesignData\HeroData.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="DesignData\SearchData.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

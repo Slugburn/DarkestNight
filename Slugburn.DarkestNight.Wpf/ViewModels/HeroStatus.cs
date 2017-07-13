@@ -10,6 +10,10 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             Secrecy = new HeroValue(model.Secrecy);
         }
 
+        public HeroStatus()
+        {
+        }
+
         public HeroValue Grace { get; set; }
         public HeroValue Secrecy { get; set; }
     }

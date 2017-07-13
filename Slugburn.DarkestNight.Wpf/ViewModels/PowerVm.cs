@@ -5,24 +5,28 @@ using Slugburn.DarkestNight.Rules.Models;
 
 namespace Slugburn.DarkestNight.Wpf.ViewModels
 {
-    public class HeroPowerVm
+    public class PowerVm
     {
-        public static HeroPowerVm Create(PowerModel model)
+        public static PowerVm Create(PowerModel model)
         {
-            return new HeroPowerVm(model);
+            return new PowerVm(model);
         }
 
-        public static List<HeroPowerVm> Create(IEnumerable<PowerModel> models)
+        public static List<PowerVm> Create(IEnumerable<PowerModel> models)
         {
             return models.Select(Create).ToList();
         }
 
-        private HeroPowerVm(PowerModel model)
+        private PowerVm(PowerModel model)
         {
             Name = model.Name;
             Decorations = model.IsExhausted ? TextDecorations.Strikethrough : null;
             Style = model.IsActive ? FontStyles.Italic : FontStyles.Normal;
             Card = PowerCardVm.Create(model);
+        }
+
+        public PowerVm()
+        {
         }
 
         public string Name { get; set; }

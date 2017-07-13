@@ -205,7 +205,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         {
             var fromHero = _game.GetHero(fromHeroName);
             var toHero = _game.GetHero(toHeroName);
-            fromHero.TradeItemTo(itemId, toHero);
+            fromHero.TradeItemTo(toHero, itemId);
         }
     }
 }

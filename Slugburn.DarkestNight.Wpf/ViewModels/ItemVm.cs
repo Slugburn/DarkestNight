@@ -8,12 +8,20 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
     {
         public ItemVm(ItemModel model)
         {
+            Id = model.Id;
             Name = model.Name;
             Text = model.Text;
+            Owner = model.Owner;
         }
 
+        public ItemVm()
+        {
+        }
+
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Text { get; set; }
+        public string Owner { get; set; }
 
         public static List<ItemVm> Create(IEnumerable<ItemModel> models)
         {

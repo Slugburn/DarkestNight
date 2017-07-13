@@ -818,7 +818,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             return _rollModifiers.Concat(itemModifiers);
         }
 
-        public void TradeItemTo(int itemId, Hero toHero)
+        public void TradeItemTo(Hero toHero, int itemId)
         {
             if (toHero.Location != Location) return;
             var item = GetItem(itemId);

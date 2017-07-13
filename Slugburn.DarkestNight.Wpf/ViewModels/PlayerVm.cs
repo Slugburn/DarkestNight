@@ -260,8 +260,8 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         public void UpdateHeroCommands(HeroActionModel model)
         {
             var hero = Heroes.Single(x => x.Name == model.HeroName);
-            hero.Commands = HeroCommand.Create(Game, model.HeroName, model.Commands);
-            hero.Powers = HeroPowerVm.Create(model.Powers);
+            hero.Commands = CommandVm.Create(Game, model.HeroName, model.Commands);
+            hero.Powers = PowerVm.Create(model.Powers);
             hero.Items = ItemVm.Create(model.Items);
         }
 

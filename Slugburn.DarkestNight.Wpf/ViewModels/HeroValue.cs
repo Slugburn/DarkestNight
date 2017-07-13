@@ -11,6 +11,10 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             Default = model.Default;
         }
 
+        public HeroValue()
+        {
+        }
+
         public int Default { get; set; }
 
         public int Value { get; set; }

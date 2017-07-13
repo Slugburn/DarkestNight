@@ -13,11 +13,11 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
     public class HeroVm : INotifyPropertyChanged
     {
         private readonly Game _game;
-        private List<HeroCommand> _commands;
+        private List<CommandVm> _commands;
         private SolidColorBrush _highlight;
         private ICommand _selectCommand;
         private HeroStatus _status;
-        private List<HeroPowerVm> _powers;
+        private List<PowerVm> _powers;
         private List<ItemVm> _items;
 
         public HeroVm(Game game, HeroModel model)
@@ -25,14 +25,22 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             _game = game;
             Name = model.Name;
             Status = new HeroStatus(model.Status);
-            Powers = HeroPowerVm.Create(model.Powers);
+            Powers = PowerVm.Create(model.Powers);
             if (model.Commands != null)
-                Commands = model.Commands.Select(c => new HeroCommand(_game, model.Name, c)).ToList();
+                Commands = model.Commands.Select(c => new CommandVm(_game, model.Name, c)).ToList();
+        }
+
+        public HeroVm()
+        {
+            Powers = new List<PowerVm>();
+            Commands = new List<CommandVm>();
+            Items = new List<ItemVm>();
+            Highlight = new SolidColorBrush(Colors.White);
         }
 
         public string Name { get; set; }
 
-        public List<HeroCommand> Commands
+        public List<CommandVm> Commands
         {
             get { return _commands; }
             set
@@ -54,7 +62,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public List<HeroPowerVm> Powers
+        public List<PowerVm> Powers
         {
             get { return _powers; }
             set
@@ -98,6 +106,13 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
+        public void ReceiveItem(string fromName, int itemId)
+        {
+            var fromHero = _game.GetHero(fromName);
+            var toHero = _game.GetHero(Name);
+            fromHero.TradeItemTo(toHero, itemId);
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
@@ -107,18 +122,22 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         }
     }
 
-    public class HeroCommand
+    public class CommandVm
     {
         private readonly Game _game;
         private readonly string _heroName;
 
-        public HeroCommand(Game game, string heroName, CommandModel model)
+        public CommandVm(Game game, string heroName, CommandModel model)
         {
             _game = game;
             _heroName = heroName;
             Name = model.Name;
             Text = model.Text;
             Command = new CommandHandler(Execute);
+        }
+
+        public CommandVm()
+        {
         }
 
         public string Name { get; set; }
@@ -131,9 +150,9 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             _game.GetHero(_heroName).ExecuteCommand(Name);
         }
 
-        public static List<HeroCommand> Create(Game game, string heroName, IEnumerable<CommandModel> commands)
+        public static List<CommandVm> Create(Game game, string heroName, IEnumerable<CommandModel> commands)
         {
-            return commands.Select(c=>new HeroCommand(game, heroName, c)).ToList();
+            return commands.Select(c=>new CommandVm(game, heroName, c)).ToList();
         }
     }
 
