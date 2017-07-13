@@ -1,9 +1,7 @@
-using System.Collections.Generic;
 using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Players;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Druid
 {
@@ -22,25 +20,19 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
             Owner.AddCommand(new CelerityAction(this));
         }
 
-        private class CelerityAction : PowerAction, ICallbackHandler<Location>
+        private class CelerityAction : PowerAction
         {
             public CelerityAction(IActionPower power) : base(power)
             {
             }
 
-            public override void Execute(Hero hero)
+            public override async void Execute(Hero hero)
             {
                 DruidFormPower.DeactivateAllForms(hero);
                 hero.GainSecrecy(1, 5);
                 var validDestinations = hero.GetValidMovementLocations().Select(x=>x.ToString()).ToList();
                 hero.State = HeroState.Moving;
-                hero.SelectLocation(validDestinations, this);
-            }
-
-            public void HandleCallback(Hero hero, Location data)
-            {
-                // Move to selected location
-                var destination = data;
+                var destination = await hero.SelectLocation(validDestinations);
                 hero.MoveTo(destination);
                 hero.State = HeroState.FinishedMoving;
 

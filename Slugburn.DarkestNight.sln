@@ -5,8 +5,6 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slugburn.DarkestNight.Rules", "Slugburn.DarkestNight.Rules\Slugburn.DarkestNight.Rules.csproj", "{77CC5DFA-6085-4EB0-ABEE-057BEC7FE7B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slugburn.DarkestNight.Ninject", "Slugburn.DarkestNight.Ninject\Slugburn.DarkestNight.Ninject.csproj", "{4D06D4E7-5963-4FC1-AAE7-1EC68B8708ED}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slugburn.DarkestNight.Rules.Tests", "Slugburn.DarkestNight.Rules.Tests\Slugburn.DarkestNight.Rules.Tests.csproj", "{F04F649B-BC16-407E-8095-A702C245BD29}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slugburn.DarkestNight.Wpf", "Slugburn.DarkestNight.Wpf\Slugburn.DarkestNight.Wpf.csproj", "{C08B93AD-7FF6-49E8-AB40-91FD77812600}"
@@ -21,10 +19,6 @@ Global
 		{77CC5DFA-6085-4EB0-ABEE-057BEC7FE7B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77CC5DFA-6085-4EB0-ABEE-057BEC7FE7B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77CC5DFA-6085-4EB0-ABEE-057BEC7FE7B8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4D06D4E7-5963-4FC1-AAE7-1EC68B8708ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4D06D4E7-5963-4FC1-AAE7-1EC68B8708ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4D06D4E7-5963-4FC1-AAE7-1EC68B8708ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4D06D4E7-5963-4FC1-AAE7-1EC68B8708ED}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F04F649B-BC16-407E-8095-A702C245BD29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F04F649B-BC16-407E-8095-A702C245BD29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F04F649B-BC16-407E-8095-A702C245BD29}.Release|Any CPU.ActiveCfg = Release|Any CPU

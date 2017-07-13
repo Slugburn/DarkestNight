@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using Slugburn.DarkestNight.Rules;
@@ -189,8 +191,9 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             new SelectBlightsCommand(this, model).Execute();
         }
 
-        public void DisplayLocationSelection(ICollection<string> locations, Callback<Location> callback)
+        public Task<Location> SelectLocation(ICollection<string> locations)
         {
+            var source = new TaskCompletionSource<Location>();
             var valid = (from name in locations join loc in Locations on name equals loc.Name select loc).ToList();
             foreach (var location in valid)
             {
@@ -202,9 +205,11 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
                         inner.Highlight = new SolidColorBrush(Colors.White);
                         inner.SelectCommand = null;
                     }
-                    callback.Handle(location.Name.ToEnum<Location>());
+                    var result = location.Name.ToEnum<Location>();
+                    source.SetResult(result);
                 });
             }
+            return source.Task;
         }
 
         public void DisplayNecromancer(NecromancerModel model)
@@ -231,9 +236,9 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public void DisplayAskQuestion(QuestionModel model, Callback<string> callback)
+        public Task<string> AskQuestion(QuestionModel model)
         {
-            Question.Update(model, callback);
+            throw new NotImplementedException();
         }
 
         public void DisplaySearch(SearchModel model, Callback<Find> callback)

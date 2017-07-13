@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Models;
 
@@ -11,10 +13,10 @@ namespace Slugburn.DarkestNight.Rules.Players
         void DisplayConflict(ConflictModel conflict);
         void DisplayPowers(ICollection<PowerModel> models, Callback<string> callback);
         void DisplayBlightSelection(BlightSelectionModel model);
-        void DisplayLocationSelection(ICollection<string> locations, Callback<Location> callback);
+        Task<Location> SelectLocation(ICollection<string> locations);
         void DisplayNecromancer(NecromancerModel model);
         void DisplayHeroSelection(HeroSelectionModel model, Callback<Hero> callback);
-        void DisplayAskQuestion(QuestionModel model, Callback<string> callback);
+        Task<string> AskQuestion(QuestionModel model);
         void DisplaySearch(SearchModel model, Callback<Find> callback);
         void DisplayPrayer(PrayerModel model);
         void AddHero(HeroModel view);

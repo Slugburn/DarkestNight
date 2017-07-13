@@ -1,11 +1,11 @@
-﻿using Slugburn.DarkestNight.Rules.Commands;
+﻿using System;
+using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Models;
-using Slugburn.DarkestNight.Rules.Players;
 
 namespace Slugburn.DarkestNight.Rules.Items.Artifacts
 {
-    public class GhostMail : Artifact, IStartOfTurnCommand, ICallbackHandler<string>
+    public class GhostMail : Artifact, IStartOfTurnCommand
     {
         public GhostMail() : base("Ghost Mail")
         {
@@ -20,24 +20,22 @@ namespace Slugburn.DarkestNight.Rules.Items.Artifacts
                        || hero.CanSpendSecrecy && hero.Grace < hero.DefaultGrace);
         }
 
-        public void Execute(Hero hero)
+        public async void Execute(Hero hero)
         {
             var question = new QuestionModel(Name, Text, new[] {"Spend Grace", "Spend Secrecy"});
-            hero.Player.DisplayAskQuestion(question, Callback.For(hero, this));
-        }
-
-        public void HandleCallback(Hero hero, string data)
-        {
-            var answer = data;
-            if (answer == "Spend Grace")
+            var answer = await hero.Player.AskQuestion(question);
+            switch (answer)
             {
-                hero.SpendGrace(1);
-                hero.GainSecrecy(1, hero.DefaultSecrecy);
-            }
-            else if (answer == "Spend Secrecy")
-            {
-                hero.SpendSecrecy(1);
-                hero.GainGrace(1, hero.DefaultGrace);
+                case "Spend Grace":
+                    hero.SpendGrace(1);
+                    hero.GainSecrecy(1, hero.DefaultSecrecy);
+                    break;
+                case "Spend Secrecy":
+                    hero.SpendSecrecy(1);
+                    hero.GainGrace(1, hero.DefaultGrace);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(answer), answer);
             }
             hero.ContinueTurn();
         }

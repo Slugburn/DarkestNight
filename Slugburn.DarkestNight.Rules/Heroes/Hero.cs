@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Blights.Implementations;
@@ -176,11 +177,14 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 power.Exhaust(this);
         }
 
-        public void LoseGrace(int amount = 1, bool canIntercede = true)
+        public async void LoseGrace(int amount = 1, bool canIntercede = true)
         {
             if (amount == 0) return;
-            var interceded = canIntercede && (Intercession?.IntercedeForLostGrace(this, amount) ?? false);
-            if (interceded) return;
+            if (Intercession !=  null)
+            {
+                var interceded = canIntercede && await Intercession.IntercedeForLostGrace(this, amount);
+                if (interceded) return;
+            }
             var before = Grace;
             Grace = Math.Max(Grace - amount, 0);
             if (Grace == before) return;
@@ -188,10 +192,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             UpdateAvailableCommands();
         }
 
-        public void SpendGrace(int amount, bool canIntercede = true)
+        public async void SpendGrace(int amount, bool canIntercede = true)
         {
-            var interceded = canIntercede && (Intercession?.IntercedeForSpentGrace(this, amount) ?? false);
-            if (interceded) return;
+            if (Intercession != null)
+            {
+                var interceded = canIntercede && await Intercession.IntercedeForSpentGrace(this, amount);
+                if (interceded) return;
+            }
             if (Grace - amount < 0)
                 throw new Exception("Insufficient Grace.");
             Grace -= amount;
@@ -840,10 +847,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             Player.DisplaySearch(SearchModel.Create(this, finds), Callback.For(this, callbackHandler));
         }
 
-        public void SelectLocation(List<string> validDestinations, ICallbackHandler<Location> callbackHandler )
+        public Task<Location> SelectLocation(List<string> choices)
         {
             State = HeroState.SelectingLocation;
-            Player.DisplayLocationSelection(validDestinations, Callback.For(this, callbackHandler));
+            return Player.SelectLocation(choices);
         }
 
         public void SelectBlights(BlightSelectionModel selection)

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Shouldly;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -13,6 +14,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         private readonly Game _game;
 
         private object _callback;
+        private TaskCompletionSource<string> _submitAnswer;
+        private TaskCompletionSource<Location> _locationSource;
 
         public FakePlayer(Game game)
         {
@@ -52,10 +55,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             _callback = model.Callback;
         }
 
-        public void DisplayLocationSelection(ICollection<string> locations, Callback<Location> callback)
+        public Task<Location> SelectLocation(ICollection<string> locations)
         {
             ValidLocations = locations;
-            _callback = callback;
+            _locationSource = new TaskCompletionSource<Location>();
+            return _locationSource.Task;
         }
 
         public void DisplayNecromancer(NecromancerModel model)
@@ -69,10 +73,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             _callback = callback;
         }
 
-        public void DisplayAskQuestion(QuestionModel model, Callback<string> callback)
+        Task<string> IPlayer.AskQuestion(QuestionModel model)
         {
             AskQuestion = model;
-            _callback = callback;
+            _submitAnswer = new TaskCompletionSource<string>();
+            return _submitAnswer.Task;
         }
 
         public void DisplaySearch(SearchModel model, Callback<Find> callback)
@@ -142,8 +147,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public void SelectLocation(Location location)
         {
-            var callback = (Callback<Location>) _callback;
-            callback.Handle(location);
+            if (_locationSource != null)
+            {
+                _locationSource.SetResult(location);
+            }
+            else
+            {
+                var callback = (Callback<Location>)_callback;
+                callback.Handle(location);
+            }
         }
 
         public void ResolveConflict( string tacticName, ICollection<int> targetIds)
@@ -191,8 +203,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public void AnswerQuestion(string answer)
         {
-            var callback = (Callback<string>) _callback;
-            callback.Handle(answer);
+            if (_submitAnswer != null)
+            {
+                _submitAnswer.SetResult(answer);
+            }
+            else if (_callback != null)
+            {
+                var callback = (Callback<string>)_callback;
+                callback.Handle(answer);
+            }
         }
 
         public void SelectSearchResult(Find code)

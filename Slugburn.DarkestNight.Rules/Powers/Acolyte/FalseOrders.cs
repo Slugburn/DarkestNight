@@ -22,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             Owner.AddCommand(new FalseOrdersAction(this));
         }
 
-        private class FalseOrdersAction : PowerAction, ICallbackHandler<Location>, ICallbackHandler<IEnumerable<int>>
+        private class FalseOrdersAction : PowerAction, ICallbackHandler<IEnumerable<int>>
         {
             public FalseOrdersAction(IActionPower power) : base(power)
             {
@@ -30,22 +30,17 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
             private Location Destination { get; set; } // This gets set by the location selected handler
 
-            public override void Execute(Hero hero)
+            public override async void Execute(Hero hero)
             {
                 var space = hero.Space;
                 var potentialDestinations = space.AdjacentLocations.Select(x => x.ToString()).ToList();
-                hero.SelectLocation(potentialDestinations, this);
-            }
-
-            public void HandleCallback(Hero hero, Location location)
-            {
+                var location = await hero.SelectLocation(potentialDestinations);
                 var game = hero.Game;
                 var action = (FalseOrdersAction)hero.GetCommand(PowerName);
                 action.Destination = location;
 
                 var destinationSpace = game.Board[location];
                 var maxMoveCount = 4 - destinationSpace.Blights.Count;
-                var space = hero.Space;
                 var callback = Callback.For<IEnumerable<int>>(hero, this);
                 var selection = BlightSelectionModel.Create(Name, space.Blights, maxMoveCount, callback);
                 hero.SelectBlights(selection);

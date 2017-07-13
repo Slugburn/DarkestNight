@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards.Enemies

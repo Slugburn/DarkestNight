@@ -1,7 +1,7 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Models;
-using Slugburn.DarkestNight.Rules.Players;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Priest
 {
@@ -29,18 +29,22 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             return Owner.Location == other.Location;
         }
 
-        public bool IntercedeForLostGrace(Hero other, int amount)
+        public async Task<bool> IntercedeForLostGrace(Hero other, int amount)
         {
             if (Owner.Location != other.Location) return false;
             if (!Owner.CanSpendGrace) return false;
             if (Owner.Grace < amount) return false;
             var question = new QuestionModel("Intercession",
                 $"Should {Owner.Name} spend {amount} Grace instead of {other.Name} losing {amount} Grace?", new[] {"Yes", "No"});
-            other.Player.DisplayAskQuestion(question, Callback.For(other, new IntercessionCallbackHandler(Owner, "loss", amount)));
+            var answer = await other.Player.AskQuestion(question);
+            if (answer == "Yes")
+                Owner.SpendGrace(amount);
+            else
+                other.LoseGrace(amount, false);
             return true;
         }
 
-        public bool IntercedeForSpentGrace(Hero other, int amount)
+        public async Task<bool> IntercedeForSpentGrace(Hero other, int amount)
         {
             if (Owner.Location != other.Location) return false;
             if (!CanIntercedeFor(other)) return false;
@@ -52,44 +56,12 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             }
             var question = new QuestionModel("Intercession",
                 $"Should {Owner.Name} spend {amount} Grace instead of {other.Name} spending {amount} Grace?", new [] {"Yes", "No"});
-            other.Player.DisplayAskQuestion(question, Callback.For(other, new IntercessionCallbackHandler(Owner, "spent", amount)));
+            var answer = await other.Player.AskQuestion(question);
+            if (answer == "Yes")
+                Owner.SpendGrace(amount);
+            else
+                other.SpendGrace(amount, false);
             return true;
-        }
-
-
-        private class IntercessionCallbackHandler : ICallbackHandler<string>
-        {
-            private readonly Hero _owner;
-            private readonly string _op;
-            private readonly int _amount;
-
-            public IntercessionCallbackHandler(Hero owner, string op, int amount)
-            {
-                _owner = owner;
-                _op = op;
-                _amount = amount;
-            }
-
-            public void HandleCallback(Hero hero, string data)
-            {
-                var other = hero;
-                var answer = (string)data;
-                switch (_op)
-                {
-                    case "loss":
-                        if (answer == "Yes")
-                            _owner.SpendGrace(_amount);
-                        else
-                            other.LoseGrace(_amount, false);
-                        break;
-                    case "spent":
-                        if (answer == "Yes")
-                            _owner.SpendGrace(_amount);
-                        else
-                            other.SpendGrace(_amount, false);
-                        break;
-                }
-            }
         }
     }
 }

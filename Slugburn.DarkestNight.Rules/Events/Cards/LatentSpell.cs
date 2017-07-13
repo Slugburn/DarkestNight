@@ -7,7 +7,7 @@ using Slugburn.DarkestNight.Rules.Players;
 
 namespace Slugburn.DarkestNight.Rules.Events.Cards
 {
-    public class LatentSpell : IEventCard, ICallbackHandler<Location>, ICallbackHandler<IEnumerable<int>>
+    public class LatentSpell : IEventCard, ICallbackHandler<IEnumerable<int>>
     {
         public EventDetail Detail { get; } = EventDetail.Create("Latent Spell", 2, x => x
             .Text("Lose 1 Secrecy. Then, spend 1 Grace or discard this event without further effect.\nRoll 1d and take the highest")
@@ -18,7 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             .Option("spend-grace", "Spend Grace", hero => hero.CanSpendGrace)
             .Option("discard-event", "Discard Event"));
 
-        public void Resolve(Hero hero, string option)
+        public async void Resolve(Hero hero, string option)
         {
             switch (option)
             {
@@ -40,8 +40,10 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                     break;
                 case "move":
                     var locations = Game.GetAllLocations().Except(new[] {hero.Location}).Select(x=>x.ToString()).ToList();
-                    hero.SelectLocation(locations, this);
                     hero.Player.State = PlayerState.SelectLocation;
+                    var location = await hero.SelectLocation(locations);
+                    hero.MoveTo(location);
+                    hero.ContinueTurn();
                     break;
                 case "no-effect":
                     break;
@@ -49,12 +51,6 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
                     throw new ArgumentOutOfRangeException(nameof(option), option);
             }
             hero.EndEvent();
-        }
-
-        public void HandleCallback(Hero hero, Location data)
-        {
-            hero.MoveTo(data);
-            hero.ContinueTurn();
         }
 
         public void HandleCallback(Hero hero, IEnumerable<int> data)
