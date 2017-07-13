@@ -236,6 +236,27 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
+        public Task<Hero> SelectHero(HeroSelectionModel model)
+        {
+            var source = new TaskCompletionSource<Hero>();
+            var valid = (from name in model.Heroes join hero in Heroes on name equals hero.Name select hero).ToList();
+            foreach (var hero in valid)
+            {
+                hero.Highlight = new SolidColorBrush(Colors.Orange);
+                hero.SelectCommand = new CommandHandler(() =>
+                {
+                    foreach (var inner in valid)
+                    {
+                        inner.Highlight = new SolidColorBrush(Colors.White);
+                        inner.SelectCommand = null;
+                    }
+                    var selectedHero = Game.GetHero(hero.Name);
+                    source.SetResult(selectedHero);
+                });
+            }
+            return source.Task;
+        }
+
         public Task<string> AskQuestion(QuestionModel model)
         {
             throw new NotImplementedException();

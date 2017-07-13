@@ -15,7 +15,9 @@ namespace Slugburn.DarkestNight.Rules.Players
         Task<IEnumerable<int>> SelectBlights(BlightSelectionModel model);
         Task<Location> SelectLocation(ICollection<string> locations);
         void DisplayNecromancer(NecromancerModel model);
+        [Obsolete("Kill it with fire!", true)]
         void DisplayHeroSelection(HeroSelectionModel model, Callback<Hero> callback);
+        Task<Hero> SelectHero(HeroSelectionModel model);
         Task<string> AskQuestion(QuestionModel model);
         void DisplaySearch(SearchModel model, Callback<Find> callback);
         void DisplayPrayer(PrayerModel model);

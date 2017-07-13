@@ -15,6 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         Moving,
         FinishedMoving,
         SelectingLocation,
-        SelectingBlights
+        SelectingBlights,
+        SelectingHero
     }
 }

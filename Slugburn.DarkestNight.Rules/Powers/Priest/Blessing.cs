@@ -2,23 +2,18 @@
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.IO;
 using Slugburn.DarkestNight.Rules.Models;
-using Slugburn.DarkestNight.Rules.Players;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Priest
 {
-    abstract class Blessing:ActivateablePower, ICallbackHandler<Hero>, IRestorable
+    abstract class Blessing:ActivateablePower, IRestorable
     {
-        public override void Activate(Hero hero)
+        public override async void Activate(Hero hero)
         {
             base.Activate(hero);
             var validHeroes = hero.Game.Heroes.Where(h => h.Location == hero.Location);
-            var view = new HeroSelectionModel(validHeroes);
-            hero.Player.DisplayHeroSelection(view, Callback.For(hero, this));
-        }
-
-        public void HandleCallback(Hero hero, Hero data)
-        {
-            Target = data;
+            var model = new HeroSelectionModel(validHeroes);
+            hero.State = HeroState.SelectingHero;
+            Target = await hero.Player.SelectHero(model);
             ActivateOnTarget();
         }
 

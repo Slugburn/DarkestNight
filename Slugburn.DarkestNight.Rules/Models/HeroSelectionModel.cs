@@ -9,7 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Models
 
         public ICollection<string> Heroes { get; set; }
 
-        public HeroSelectionModel(IEnumerable<Hero> heroes) : base()
+        public HeroSelectionModel(IEnumerable<Hero> heroes) 
         {
             Heroes = heroes.Select(h=>h.Name).ToList();
         }

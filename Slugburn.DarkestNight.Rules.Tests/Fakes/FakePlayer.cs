@@ -17,6 +17,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         private TaskCompletionSource<string> _submitAnswer;
         private TaskCompletionSource<Location> _locationSource;
         private TaskCompletionSource<IEnumerable<int>> _blightsSource;
+        private TaskCompletionSource<Hero> _heroSource;
 
         public FakePlayer(Game game)
         {
@@ -73,6 +74,13 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         {
             HeroSelection = model;
             _callback = callback;
+        }
+
+        public Task<Hero> SelectHero(HeroSelectionModel model)
+        {
+            HeroSelection = model;
+            _heroSource = new TaskCompletionSource<Hero>();
+            return _heroSource.Task;
         }
 
         Task<string> IPlayer.AskQuestion(QuestionModel model)
@@ -196,8 +204,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         public void SelectHero(string heroName)
         {
             var selectedHero = _game.GetHero(heroName);
-            var callback = (Callback<Hero>)_callback;
-            callback.Handle(selectedHero);
+            _heroSource.SetResult(selectedHero);
         }
 
         public void AnswerQuestion(string answer)
