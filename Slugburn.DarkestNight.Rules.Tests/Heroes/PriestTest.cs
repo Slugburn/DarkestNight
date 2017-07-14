@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tests.Fluent;
 using Slugburn.DarkestNight.Rules.Tests.Fluent.Actions;
 

@@ -45,6 +45,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             _blightSelectionView?.Verify(root);
             _necromancerView?.Verify(root);
             _searchView?.Verify(root);
+            _prayerView?.Verify(root);
         }
 
         public EventViewVerification EventView

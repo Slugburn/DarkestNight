@@ -73,7 +73,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WithHero("Knight").HasPowers("Holy Mantle").Grace(0)
                 .Then(Verify.Hero().DefaultGrace(6).Grace(0))
                 .When.Player.TakesAction("Pray", Fake.Rolls(2, 3))
-                .Then(Verify.Player.PrayerView.Roll(3,4))
+                .Then(Verify.Player.PrayerView.Roll(3,4).Before(0).After(2))
                 .When.Player.AcceptsRoll()
                 .Then(Verify.Player.Hero("Knight").Grace(2).DefaultGrace(6));
         }
