@@ -2,7 +2,6 @@ using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Models;
-using Slugburn.DarkestNight.Rules.Players;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 {
@@ -27,16 +26,12 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
             {
             }
 
-            private Location Destination { get; set; } // This gets set by the location selected handler
-
             public override async void Execute(Hero hero)
             {
                 var space = hero.Space;
                 var potentialDestinations = space.AdjacentLocations.Select(x => x.ToString()).ToList();
                 var destination = await hero.SelectLocation(potentialDestinations);
                 var game = hero.Game;
-                var action = (FalseOrdersAction)hero.GetCommand(PowerName);
-                action.Destination = destination;
 
                 var destinationSpace = game.Board[destination];
                 var maxMoveCount = 4 - destinationSpace.Blights.Count;

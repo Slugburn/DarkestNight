@@ -143,7 +143,10 @@
     <Compile Include="Heroes\HeroState.cs" />
     <Compile Include="Heroes\IActionFilter.cs" />
     <Compile Include="Heroes\IHeroFactory.cs" />
-    <Compile Include="Heroes\Impl\Prince.cs" />
+    <Compile Include="Powers\Prince\Chapel.cs" />
+    <Compile Include="Powers\Prince\DivineRight.cs" />
+    <Compile Include="Powers\Prince\Inspire.cs" />
+    <Compile Include="Powers\Prince\Loyalty.cs" />
     <Compile Include="Heroes\Impl\Rogue.cs" />
     <Compile Include="Heroes\Impl\Scholar.cs" />
     <Compile Include="Heroes\Impl\Seer.cs" />
@@ -239,6 +242,12 @@
     <Compile Include="Powers\Priest\Sanctuary.cs" />
     <Compile Include="Modifiers\ModifierSummary.cs" />
     <Compile Include="Modifiers\ModifierDetail.cs" />
+    <Compile Include="Powers\Prince\Rebellion.cs" />
+    <Compile Include="Powers\Prince\Resistance.cs" />
+    <Compile Include="Powers\Prince\SafeHouse.cs" />
+    <Compile Include="Powers\Prince\Scouts.cs" />
+    <Compile Include="Powers\Prince\SecretPassage.cs" />
+    <Compile Include="Powers\Prince\Strategy.cs" />
     <Compile Include="Rolls\Die.cs" />
     <Compile Include="Rolls\IDie.cs" />
     <Compile Include="Rolls\IRollHandler.cs" />
