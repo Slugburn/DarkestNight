@@ -15,9 +15,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
             _power = power;
         }
 
-        public IPowerContext IsActive()
+        public IPowerContext IsActive(string target = null)
         {
-            ((IActivateable) _power).Activate(_hero);
+            var targetable = _power as ITargetable;
+            targetable?.SetTarget(target);
+            var activatable = _power as IActivateable;
+            activatable?.Activate(_hero);
             _hero.IsActionAvailable = true;
             return this;
         }

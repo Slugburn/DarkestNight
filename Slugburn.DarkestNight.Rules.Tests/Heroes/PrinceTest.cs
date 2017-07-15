@@ -23,9 +23,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Chapel_UseAction()
         {
             TestScenario.Game
+                .WithHero("Prince").HasPowers("Chapel").Power("Chapel").IsActive("Village")
                 .WithHero("Knight").Grace(0).At("Village")
-                .WithHero("Prince").At("Village").HasPowers("Chapel")
-                .When.Player.TakesAction("Chapel")
                 .Given.Hero("Knight").IsTakingTurn()
                 .Then(Verify.Player.Hero("Knight").Commands.Includes("Pray [Chapel]"))
                 .When.Player.TakesAction("Knight", "Pray [Chapel]", Fake.Rolls(3, 3))
@@ -34,5 +33,32 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Then(Verify.Player.Hero("Knight").Grace(2));
         }
 
+        // Divine Right (Bonus): +1 to default Grace. Add 1 to each die when praying.
+        [Test]
+        public void DivineRight()
+        {
+            TestScenario.Game
+                .WithHero("Prince").HasPowers("Divine Right").Grace(0)
+                .Then(Verify.Hero().DefaultGrace(5).Grace(0))
+                .When.Player.TakesAction("Pray", Fake.Rolls(2, 3))
+                .Then(Verify.Player.PrayerView.Roll(3, 4).Before(0).After(2))
+                .When.Player.AcceptsRoll()
+                .Then(Verify.Player.Hero("Prince").Grace(2).DefaultGrace(5));
+        }
+
+        // Inspire (Action): Activate on a hero in your location. Deactivate before any die roll for +3d.
+        [Test]
+        public void Inspire()
+        {
+            TestScenario.Game
+                .WithHero("Prince").At("Mountains").HasPowers("Inspire")
+                .WithHero("Knight").At("Mountains")
+                .Given.Hero("Prince").IsTakingTurn()
+                .When.Player.TakesAction("Inspire").SelectsHero("Knight")
+                .Given.Hero("Knight").IsTakingTurn()
+                .When.Player.TakesAction("Search", Fake.Rolls(1))
+                .When.Player.TakesAction("Prince", "Deactivate Inspire", Fake.Rolls(2, 4, 6))
+                .Then(Verify.Player.SearchView.Roll(1, 2, 4, 6));
+        }
     }
 }

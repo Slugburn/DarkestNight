@@ -1,5 +1,10 @@
-﻿namespace Slugburn.DarkestNight.Rules.Powers.Prince {
-    class DivineRight : BonusPower
+﻿using System.Collections.Generic;
+using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
+
+namespace Slugburn.DarkestNight.Rules.Powers.Prince
+{
+    internal class DivineRight : BonusPower, IRollModifier
     {
         public DivineRight()
         {
@@ -7,20 +12,17 @@
             Text = "+1 to default Grace. Add 1 to each die when praying.";
         }
 
-        //            public override void Activate()
-        //            {
-        //                Hero.DefaultGrace++;
-        //                var bonus = new RollBonus(RollType.Pray, BonusType.Results, 1, this);
-        //                Hero.Add(bonus);
-        //                Stash.Set(bonus);
-        //            }
-        //
-        //            public override void Deactivate()
-        //            {
-        //                base.Deactivate();
-        //                Hero.DefaultGrace--;
-        //                var bonus = Stash.Get<RollBonus>();
-        //                Hero.Remove(bonus);
-        //            }
+        protected override void OnLearn()
+        {
+            AddModifier(ModifierType.DefaultGrace, 1);
+            Owner.AddRollModifier(this);
+        }
+
+        public ICollection<int> Modify(Hero hero, ModifierType modifierType, ICollection<int> roll)
+        {
+            return modifierType == ModifierType.PrayDice && IsUsable(hero)
+                ? roll.AddOneToEach()
+                : roll;
+        }
     }
 }

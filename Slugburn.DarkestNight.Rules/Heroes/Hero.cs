@@ -873,5 +873,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 Inventory = Inventory.Select(x => x.Name).ToList(),
             };
         }
+
+        public async Task<Hero> SelectHero(IEnumerable<Hero> validTargets)
+        {
+            var model = new HeroSelectionModel(validTargets);
+            State = HeroState.SelectingHero;
+            var selectedHero = await Player.SelectHero(model);
+            return selectedHero;
+        }
     }
 }

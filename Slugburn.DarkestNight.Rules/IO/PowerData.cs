@@ -12,15 +12,15 @@ namespace Slugburn.DarkestNight.Rules.IO
 
         public static PowerData Create(IPower power)
         {
-            var active = power as IActivateable;
+            var activateable = power as IActivateable;
+            var targetable = power as ITargetable;
             var data = new PowerData
             {
                 Name = power.Name,
                 Exhausted = power.Exhausted,
-                IsActive = active?.IsActive
+                IsActive = activateable?.IsActive,
+                Target = targetable?.GetTarget()
             };
-            var restorable = power as IRestorable;
-            restorable?.Save(data);
             return data;
         }
 
@@ -30,16 +30,12 @@ namespace Slugburn.DarkestNight.Rules.IO
             hero.LearnPower(power);
             if (Exhausted)
                 power.Exhaust(hero);
-            var restorable = power as IRestorable;
-            if (restorable != null)
-            {
-                restorable.Restore(this);
-            }
-            else if (IsActive ?? false)
-            {
-                var activatable = power as IActivateable;
+            var targetable = power as ITargetable;
+            if (Target != null)
+                targetable?.SetTarget(Target);
+            var activatable = power as IActivateable;
+            if (IsActive ?? false)
                 activatable?.Activate(hero);
-            }
         }
     }
 }

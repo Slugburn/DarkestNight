@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.IO
                 NecromancerLocation = game.Necromancer.Location,
                 Spaces = game.Board.Spaces.Select(SpaceData.Create).ToList(),
                 EventDeck = game.Events.ToList(),
-                MapDeck = game.Maps.Select(x => MapData.Create(x)).ToList(),
+                MapDeck = game.Maps.Select(MapData.Create).ToList(),
                 ArtifactDeck = game.ArtifactDeck.ToList()
             };
             return data;

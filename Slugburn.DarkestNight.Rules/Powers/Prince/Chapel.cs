@@ -1,10 +1,13 @@
 ﻿using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Spaces;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Prince
 {
-    class Chapel : ActivateablePower
+    class Chapel : ActivateablePower, ITargetable
     {
+        private Space _target;
+
         public Chapel()
         {
             Name = "Chapel";
@@ -21,10 +24,12 @@ namespace Slugburn.DarkestNight.Rules.Powers.Prince
         {
             base.Activate(hero);
             var action = new ChapelPray(this);
-            hero.Space.AddAction(action);
-            hero.SpendSecrecy(1);
-//            foreach (var h in hero.Space.GetHeroes(hero.Game))
-//                h.UpdateAvailableCommands();
+            if (_target == null)
+            {
+                hero.SpendSecrecy(1);
+                _target = hero.Space;
+            }
+            _target.AddAction(action);
         }
 
         internal class ChapelPray : StandardAction
@@ -50,6 +55,17 @@ namespace Slugburn.DarkestNight.Rules.Powers.Prince
             {
                 _pray.Execute(hero);
             }
+        }
+
+        public void SetTarget(string targetName)
+        {
+            var location = targetName.ToEnum<Location>();
+            _target = Owner.Game.Board[location];
+        }
+
+        public string GetTarget()
+        {
+            return _target.Location.ToString();
         }
     }
 }

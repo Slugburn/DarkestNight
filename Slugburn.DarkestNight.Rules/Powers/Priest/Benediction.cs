@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -49,9 +51,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
 
                 var validTargets = hero.Game.Heroes.Where(target => IsValidTarget(hero, target)).ToList();
 
-                var model = new HeroSelectionModel(validTargets);
-                hero.State = HeroState.SelectingHero;
-                var selectedHero = await hero.Player.SelectHero(model);
+                var selectedHero = await hero.SelectHero(validTargets);
                 if (!IsValidTarget(hero, selectedHero))
                     throw new InvalidOperationException($"{selectedHero.Name} is not a valid target for {PowerName}.");
                 selectedHero.GainGrace(1, selectedHero.DefaultGrace);

@@ -2,7 +2,7 @@
 {
     public interface IPowerContext : IHeroContext
     {
-        IPowerContext IsActive();
+        IPowerContext IsActive(string target = null);
         IPowerContext IsExhausted(bool exhausted = true);
     }
 }
