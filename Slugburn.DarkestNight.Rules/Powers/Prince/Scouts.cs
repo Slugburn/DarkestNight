@@ -1,7 +1,10 @@
 ﻿using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
+using Slugburn.DarkestNight.Rules.Rolls;
 
-namespace Slugburn.DarkestNight.Rules.Powers.Prince {
-    class Scouts : ActionPower
+namespace Slugburn.DarkestNight.Rules.Powers.Prince
+{
+    internal class Scouts : ActivateOnSpacePower
     {
         public Scouts()
         {
@@ -12,23 +15,17 @@ namespace Slugburn.DarkestNight.Rules.Powers.Prince {
 
         public override bool IsUsable(Hero hero)
         {
-            return base.IsUsable(hero) && hero.Secrecy > 0;
+            return base.IsUsable(hero) && hero.CanSpendSecrecy;
         }
 
-        //            public override void Activate()
-        //            {
-        //                var space = Hero.GetSpace();
-        //                var bonus = new RollBonus(RollType.Search, BonusType.Dice, 1, this);
-        //                Stash.Add(space, bonus);
-        //                space.Add(bonus);
-        //                Hero.LoseSecrecy();
-        //            }
-        //
-        //            public override void Deactivate()
-        //            {
-        //                var space = Stash.Get<ISpace>();
-        //                var bonus = Stash.Get<RollBonus>();
-        //                space.Remove(bonus);
-        //            }
+        protected override void PayActivationCost()
+        {
+            Owner.SpendSecrecy(1);
+        }
+
+        protected override void ActivateEffect()
+        {
+            Target.AddModifier(new PowerRollBonus(this, ModifierType.SearchDice, 1));
+        }
     }
 }

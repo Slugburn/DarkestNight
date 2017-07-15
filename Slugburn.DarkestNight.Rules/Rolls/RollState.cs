@@ -76,5 +76,13 @@ namespace Slugburn.DarkestNight.Rules.Rolls
         {
             _primaryRollHandler = handler;
         }
+
+        public List<int> AddDice(int count)
+        {
+            var roll = Die.Roll(count);
+            ActualRoll.AddRange(roll);
+            AdjustRoll();
+            return roll;
+        }
     }
 }

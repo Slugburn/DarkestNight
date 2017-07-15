@@ -16,6 +16,7 @@ using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Powers.Priest;
+using Slugburn.DarkestNight.Rules.Powers.Prince;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Spaces;
 using Slugburn.DarkestNight.Rules.Tactics;
@@ -433,7 +434,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public IEnumerable<IModifier> GetModifiers()
         {
-            return _modifiers.Concat(Inventory.OfType<IModifier>());
+            return _modifiers
+                .Concat(Inventory.OfType<IModifier>())
+                .Concat(Space.GetModifiers());
         }
 
         public void AssignDiceToTargets(ICollection<TargetDieAssignment> assignments)
@@ -774,6 +777,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             Game.ActingHero = null;
             HasTakenTurn = true;
             Triggers.Send(HeroTrigger.TurnEnded);
+            Game.Triggers.Send(GameTrigger.HeroTurnEnded, this);
             if (Game.Heroes.All(x => x.HasTakenTurn))
                 Game.Necromancer.StartTurn();
             else
@@ -880,6 +884,12 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             State = HeroState.SelectingHero;
             var selectedHero = await Player.SelectHero(model);
             return selectedHero;
+        }
+
+        public void RemoveCommand(ICommand command)
+        {
+            _commands.Remove(command.Name);
+            UpdateAvailableCommands();
         }
     }
 }

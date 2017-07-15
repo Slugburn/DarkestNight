@@ -60,5 +60,133 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .When.Player.TakesAction("Prince", "Deactivate Inspire", Fake.Rolls(2, 4, 6))
                 .Then(Verify.Player.SearchView.Roll(1, 2, 4, 6));
         }
+
+        // Loyalty (Bonus): +1d when eluding.
+        [Test]
+        public void Loyalty()
+        {
+            TestScenario.Game
+                .WithHero("Prince").HasPowers("Loyalty")
+                .Then(Verify.Hero("Prince").EludeDice(2));
+        }
+
+        // Rebellion (Tactic): Fight with 3d when attacking a blight or the Necromancer
+        [Test]
+        public void Rebellion_AttackingBlight()
+        {
+            TestScenario.Game
+                .WithHero("Prince").HasPowers("Rebellion").At("Village")
+                .Location("Village").HasBlights("Skeletons")
+                .When.Player.TakesAction("Attack")
+                .Then(Verify.Player.ConflictModel.HasTactics("Fight","Rebellion"))
+                .When.Player.Targets("Skeletons").UsesTactic("Rebellion").ResolvesConflict()
+                .Then(Verify.Player.ConflictModel.Rolled(6, 6, 6));
+        }
+
+        [Test]
+        public void Rebellion_Necromancer()
+        {
+            TestScenario.Game
+                .WithHero("Prince").Secrecy(0).HasPowers("Rebellion").At("Village").IsTakingTurn(false)
+                .Necromancer.At("Village")
+                .When.Player.TakesAction("Prince", "Start Turn")
+                .Targets("Necromancer").UsesTactic("Rebellion").ResolvesConflict()
+                .Then(Verify.Player.ConflictModel.Rolled(6, 6, 6));
+        }
+
+        [Test]
+        public void Rebellion_Enemies()
+        {
+            TestScenario.Game
+                .WithHero("Prince").HasPowers("Rebellion").IsFacingEnemy("Skeleton")
+                .Then(Verify.Player.ConflictModel.HasTactics("Fight", "Elude"));
+        }
+
+        // Resistance (Action): Spend 1 Secrecy to activate in your location. Heroes gain +1d in fights when attacking blights there.
+        [Test]
+        public void Resistance_Activate()
+        {
+            TestScenario.Game
+                .WithHero("Prince").At("Village").HasPowers("Resistance")
+                .When.Player.TakesAction("Resistance")
+                .Then(Verify.Power("Resistance").IsActive())
+                .Then(Verify.Player.Hero("Prince").LostSecrecy(1));
+        }
+
+        [Test]
+        public void Resistance_Bonus()
+        {
+            TestScenario.Game
+                .WithHero("Prince").HasPowers("Resistance").Power("Resistance").IsActive("Village")
+                .WithHero("Knight").At("Village")
+                .Location("Village").HasBlights("Skeletons")
+                .When.Player.TakesAction("Knight", "Attack").Targets("Skeletons").UsesTactic("Fight").ResolvesConflict()
+                .Then(Verify.Player.ConflictModel.Rolled(6, 6));
+        }
+
+        [Test]
+        public void Resistance_BonusDoesNotApplyToEnemies()
+        {
+            TestScenario.Game
+                .WithHero("Prince").HasPowers("Resistance").Power("Resistance").IsActive("Village")
+                .WithHero("Knight").At("Village")
+                .Given.Hero("Knight").IsFacingEnemy("Skeleton")
+                .When.Player.Targets("Skeleton").UsesTactic("Fight").ResolvesConflict()
+                .Then(Verify.Player.ConflictModel.Rolled(6));
+        }
+
+        // Safe House (Action): Spend 2 Secrecy to activate in your location.
+        //   Heroes gain 1 Secrecy (up to 5) when ending a turn there, and +1d when eluding there.
+        [Test]
+        public void SafeHouse_Activate()
+        {
+            TestScenario.Game
+                .WithHero("Prince").NotAt("Monastery").HasPowers("Safe House")
+                .When.Player.TakesAction("Safe House")
+                .Then(Verify.Power("Safe House").IsActive())
+                .Then(Verify.Player.Hero("Prince").LostSecrecy(1)); // Spent 2 but gained 1 back
+        }
+
+        [Test]
+        public void SafeHouse_EndTurn()
+        {
+            TestScenario.Game
+                .WithHero("Prince").HasPowers("Safe House").Power("Safe House").IsActive("Village")
+                .WithHero("Knight").At("Village").Secrecy(0)
+                .When.Player.TakesAction("Knight", "End Turn")
+                .Then(Verify.Player.Hero("Knight").Secrecy(1));
+        }
+
+        [Test]
+        public void SafeHouse_EludeBonus()
+        {
+            TestScenario.Game
+                .WithHero("Prince").HasPowers("Safe House").Power("Safe House").IsActive("Village")
+                .WithHero("Knight").At("Village")
+                .Given.Hero("Knight").IsFacingEnemy("Skeleton")
+                .When.Player.Targets("Skeleton").UsesTactic("Elude").ResolvesConflict()
+                .Then(Verify.Player.ConflictModel.Rolled(6, 6));
+        }
+
+        // Scouts (Action): Spend 1 Secrecy to activate in your location.
+        [Test]
+        public void Scouts_Activate()
+        {
+            TestScenario.Game
+                .WithHero("Prince").NotAt("Monastery").HasPowers("Scouts")
+                .When.Player.TakesAction("Scouts")
+                .Then(Verify.Power("Scouts").IsActive())
+                .Then(Verify.Player.Hero("Prince").LostSecrecy(1));
+        }
+
+        [Test]
+        public void Scouts_SearchBonus()
+        {
+            TestScenario.Game
+                .WithHero("Prince").HasPowers("Scouts").Power("Scouts").IsActive("Village")
+                .WithHero("Knight").At("Village")
+                .When.Player.TakesAction("Knight", "Search")
+                .Then(Verify.Player.SearchView.Roll(6, 6));
+        }
     }
 }

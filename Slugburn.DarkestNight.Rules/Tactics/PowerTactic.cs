@@ -5,14 +5,22 @@ namespace Slugburn.DarkestNight.Rules.Tactics
 {
     internal class PowerTactic : ITactic
     {
-        public string PowerName { get; set; }
-        public int DiceCount { get; set; }
+        public PowerTactic(ITacticPower power, TacticType type, int diceCount)
+        {
+            Power = power;
+            DiceCount = diceCount;
+            Type = type;
+        }
 
-        public virtual string Name => $"{PowerName}";
-        public TacticType Type { get; set; } 
+        public ITacticPower Power { get; }
+        public string PowerName { get; set; }
+        public int DiceCount { get; }
+
+        public virtual string Name => Power.Name;
+        public TacticType Type { get;  } 
         public virtual void Use(Hero hero) { }
 
-        public bool IsAvailable(Hero hero) => hero.GetPower(PowerName).IsUsable(hero);
+        public bool IsAvailable(Hero hero) => Power.IsUsable(hero);
         public int GetDiceCount() => DiceCount;
 
     }

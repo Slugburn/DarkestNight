@@ -13,7 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         }
         protected override void OnLearn()
         {
-            Owner.AddTactic(new PowerTactic { PowerName = Name, Type = TacticType.Elude, DiceCount = 2 });
+            Owner.AddTactic(new PowerTactic(this, TacticType.Elude, 2));
         }
     }
 }

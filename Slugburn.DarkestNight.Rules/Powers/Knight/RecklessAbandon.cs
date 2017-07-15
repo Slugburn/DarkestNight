@@ -15,15 +15,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
 
         protected override void OnLearn()
         {
-            Owner.AddTactic(new RecklessAbandonTactic {PowerName = Name} );
+            Owner.AddTactic(new RecklessAbandonTactic(this));
         }
 
         internal class RecklessAbandonTactic : PowerTactic
         {
-            public RecklessAbandonTactic()
+            public RecklessAbandonTactic(RecklessAbandon power) : base(power, TacticType.Fight, 4)
             {
-                Type = TacticType.Fight;
-                DiceCount = 4;
             }
 
             public override void Use(Hero hero)

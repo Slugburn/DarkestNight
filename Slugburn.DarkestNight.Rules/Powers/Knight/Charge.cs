@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
 
         protected override void OnLearn()
         {
-            Owner.AddTactic(new PowerTactic { PowerName = PowerName, Type = TacticType.Fight, DiceCount = 2 });
+            Owner.AddTactic(new PowerTactic(this, TacticType.Fight, 2));
         }
     }
 }

@@ -18,19 +18,17 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
         protected override void OnLearn()
         {
-            Owner.AddTactic(new FinalRestTactic {DiceCount = 2});
-            Owner.AddTactic(new FinalRestTactic {DiceCount = 3});
+            Owner.AddTactic(new FinalRestTactic(this, 2));
+            Owner.AddTactic(new FinalRestTactic(this, 3));
         }
 
         private class FinalRestTactic : PowerTactic
         {
-            public FinalRestTactic()
+            public FinalRestTactic(FinalRest power, int count) : base(power, TacticType.Fight, count)
             {
-                PowerName = FinalRest.PowerName;
-                Type = TacticType.Fight;
             }
 
-            public override string Name => $"{PowerName} [{DiceCount}d]";
+            public override string Name => $"{Power.Name} [{DiceCount}d]";
 
             public override void Use(Hero hero)
             {

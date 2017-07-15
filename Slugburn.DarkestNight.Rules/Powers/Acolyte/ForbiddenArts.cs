@@ -1,3 +1,4 @@
+using System.Linq;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
@@ -35,11 +36,9 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
             public override void Execute(Hero hero)
             {
-                var roll = Die.Roll();
-                if (roll == 1)
+                var roll = hero.CurrentRoll.AddDice(1);
+                if (roll.Single() == 1)
                     hero.Game.IncreaseDarkness();
-                hero.CurrentRoll.ActualRoll.Add(roll);
-                hero.CurrentRoll.AdjustRoll();
             }
         }
     }

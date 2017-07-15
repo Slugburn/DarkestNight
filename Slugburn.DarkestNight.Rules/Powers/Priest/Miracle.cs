@@ -31,9 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             public override void Execute(Hero hero)
             {
                 hero.SpendGrace(1);
-                var roll = Die.Roll();
-                hero.CurrentRoll.ActualRoll.Add(roll);
-                hero.CurrentRoll.AdjustRoll();
+                hero.CurrentRoll.AddDice(1);
             }
         }
     }

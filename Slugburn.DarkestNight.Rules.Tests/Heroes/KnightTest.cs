@@ -299,7 +299,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario
                 .Game.WithHero("Knight").HasPowers("Sprint")
                 .Given.Hero().IsFacingEnemy("Skeleton")
-                .When.Player.CompletesConflict("Skeleton", "Sprint", Fake.Rolls(4))
+                .When.Player.CompletesConflict("Skeleton", "Sprint", Fake.Rolls(1,4))
                 .Then(Verify.Hero().RolledNumberOfDice(2));
         }
     }

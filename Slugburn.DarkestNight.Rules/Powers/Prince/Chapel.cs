@@ -4,15 +4,16 @@ using Slugburn.DarkestNight.Rules.Spaces;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Prince
 {
-    class Chapel : ActivateablePower, ITargetable
+    class Chapel : ActivateOnSpacePower
     {
-        private Space _target;
+        private readonly ChapelPray _action;
 
         public Chapel()
         {
             Name = "Chapel";
             Text = "Spend 1 Secrecy to activate in your location.";
             ActiveText = "Heroes may pray there.";
+            _action = new ChapelPray(this);
         }
 
         public override bool IsUsable(Hero hero)
@@ -20,16 +21,14 @@ namespace Slugburn.DarkestNight.Rules.Powers.Prince
             return base.IsUsable(hero) && hero.CanSpendSecrecy;
         }
 
-        public override void Activate(Hero hero)
+        protected override void PayActivationCost()
         {
-            base.Activate(hero);
-            var action = new ChapelPray(this);
-            if (_target == null)
-            {
-                hero.SpendSecrecy(1);
-                _target = hero.Space;
-            }
-            _target.AddAction(action);
+            Owner.SpendSecrecy(1);
+        }
+
+        protected override void ActivateEffect()
+        {
+            Target.AddAction(_action);
         }
 
         internal class ChapelPray : StandardAction
@@ -55,17 +54,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Prince
             {
                 _pray.Execute(hero);
             }
-        }
-
-        public void SetTarget(string targetName)
-        {
-            var location = targetName.ToEnum<Location>();
-            _target = Owner.Game.Board[location];
-        }
-
-        public string GetTarget()
-        {
-            return _target.Location.ToString();
         }
     }
 }

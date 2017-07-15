@@ -15,9 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Items
         public void Execute(Hero hero)
         {
             Owner.RemoveFromInventory(this);
-            var roll = Die.Roll(3);
-            hero.CurrentRoll.ActualRoll.AddRange(roll);
-            hero.CurrentRoll.AdjustRoll();
+            hero.CurrentRoll.AddDice(3);
         }
 
         public bool IsAvailable(Hero hero)

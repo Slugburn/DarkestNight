@@ -5,6 +5,8 @@ using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Blights.Implementations;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
+using Slugburn.DarkestNight.Rules.Rolls;
 
 namespace Slugburn.DarkestNight.Rules.Spaces
 {
@@ -12,6 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Spaces
     {
         private readonly List<IBlight> _blights = new List<IBlight>();
         private readonly Dictionary<string, IAction> _actions = new Dictionary<string, IAction>();
+        private readonly List<IModifier> _modifiers = new List<IModifier>();
         private int? _baseSearchTarget;
 
 
@@ -90,5 +93,12 @@ namespace Slugburn.DarkestNight.Rules.Spaces
             if (!_actions.Remove(actionName))
                 throw new ArgumentOutOfRangeException(actionName);
         }
+
+        public void AddModifier(IModifier modifier)
+        {
+            _modifiers.Add(modifier);
+        }
+
+        public IEnumerable<IModifier> GetModifiers() => _modifiers.ToList();
     }
 }

@@ -4,8 +4,9 @@ using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Prince
 {
-    class Inspire : ActivateablePower, ITargetable
+    internal class Inspire : ActivateablePower, ITargetable
     {
+        private readonly DeactivateInspireCommand _deactivateCommand;
         private Hero _target;
 
         public Inspire()
@@ -14,23 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Prince
             StartingPower = true;
             Text = "Activate on a hero in your location.";
             ActiveText = "Deactivate before any die roll for +3d.";
-        }
-
-        public override async void Activate(Hero hero)
-        {
-            base.Activate(hero);
-            if (_target == null)
-            {
-                var validHeroes = hero.Game.Heroes.Where(h => h.Location == hero.Location);
-                _target = await hero.SelectHero(validHeroes);
-            }
-            hero.AddCommand(new DeactivateInspireCommand(this));
-        }
-
-        public override bool Deactivate(Hero hero)
-        {
-            return base.Deactivate(hero);
-//            _target.CurrentRoll.ActualRoll
+            _deactivateCommand = new DeactivateInspireCommand(this);
         }
 
         public void SetTarget(string targetName)
@@ -41,6 +26,26 @@ namespace Slugburn.DarkestNight.Rules.Powers.Prince
         public string GetTarget()
         {
             return _target?.Name;
+        }
+
+        public override async void Activate(Hero hero)
+        {
+            base.Activate(hero);
+            if (_target == null)
+            {
+                var validHeroes = hero.Game.Heroes.Where(h => h.Location == hero.Location);
+                _target = await hero.SelectHero(validHeroes);
+            }
+            hero.AddCommand(_deactivateCommand);
+        }
+
+        public override bool Deactivate(Hero hero)
+        {
+            if (!base.Deactivate(hero))
+                return false;
+            hero.RemoveCommand(_deactivateCommand);
+            _target.CurrentRoll.AddDice(3);
+            return true;
         }
 
         internal class DeactivateInspireCommand : ICommand
@@ -55,6 +60,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Prince
             public string Name => "Deactivate Inspire";
             public string Text => _inspire.ActiveText;
             public bool RequiresAction => false;
+
             public bool IsAvailable(Hero hero)
             {
                 return _inspire._target.CurrentRoll != null;

@@ -5,7 +5,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 {
     class Camouflage : TacticPower
     {
-        public Camouflage() : base()
+        public Camouflage()
         {
             Name = "Camouflage";
             StartingPower = true;
@@ -14,17 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 
         protected override void OnLearn()
         {
-            Owner.AddTactic(new CamouflageTactic());
-        }
-
-        private class CamouflageTactic : PowerTactic
-        {
-            public CamouflageTactic()
-            {
-                PowerName = "Camouflage";
-                Type = TacticType.Elude;
-                DiceCount = 2;
-            }
+            Owner.AddTactic(new PowerTactic(this, TacticType.Elude, 2));
         }
     }
 }

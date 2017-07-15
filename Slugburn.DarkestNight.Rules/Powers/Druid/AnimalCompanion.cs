@@ -17,16 +17,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 
         protected override void OnLearn()
         {
-            Owner.AddTactic(new AnimalCompanionTactic());
+            Owner.AddTactic(new AnimalCompanionTactic(this));
         }
 
         private class AnimalCompanionTactic : PowerTactic
         {
-            public AnimalCompanionTactic()
+            public AnimalCompanionTactic(AnimalCompanion power) : base(power, TacticType.Fight, 2)
             {
-                PowerName = AnimalCompanion.PowerName;
-                Type = TacticType.Fight;
-                DiceCount = 2;
             }
 
             public override void Use(Hero hero)

@@ -2,7 +2,7 @@ namespace Slugburn.DarkestNight.Rules.Conflicts
 {
     public enum ConflictType
     {
-        Attack,
-        Defend
+        Attack = 1,
+        Defend = 2
     }
 }

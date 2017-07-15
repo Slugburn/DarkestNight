@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
 
         protected override void OnLearn()
         {
-            Owner.AddTactic(new PowerTactic { PowerName = Name, Type = TacticType.Fight, DiceCount = 2 });
+            Owner.AddTactic(new PowerTactic(this, TacticType.Fight, 2));
         }
     }
 }

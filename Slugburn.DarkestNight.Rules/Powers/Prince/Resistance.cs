@@ -1,7 +1,11 @@
-﻿using Slugburn.DarkestNight.Rules.Heroes;
+﻿using Slugburn.DarkestNight.Rules.Conflicts;
+using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Modifiers;
+using Slugburn.DarkestNight.Rules.Rolls;
 
-namespace Slugburn.DarkestNight.Rules.Powers.Prince {
-    class Resistance : ActionPower
+namespace Slugburn.DarkestNight.Rules.Powers.Prince
+{
+    internal class Resistance : ActivateOnSpacePower
     {
         public Resistance()
         {
@@ -11,26 +15,31 @@ namespace Slugburn.DarkestNight.Rules.Powers.Prince {
             ActiveText = "Heroes gain +1d in fights when attacking blights there.";
         }
 
+        protected override void PayActivationCost()
+        {
+            Owner.SpendSecrecy(1);
+        }
+
+        protected override void ActivateEffect()
+        {
+            Target.AddModifier(new ResistanceRollBonus(this));
+        }
+
+        internal class ResistanceRollBonus : PowerRollBonus
+        {
+            public ResistanceRollBonus(Resistance resistance) :base(resistance, ModifierType.FightDice, 1 ) { }
+
+            public override int GetModifier(Hero hero, ModifierType modifierType)
+            {
+                var modifier = base.GetModifier(hero, modifierType);
+                if (modifier == 0) return 0;
+                return hero.ConflictState?.ConflictType == ConflictType.Attack ? modifier : 0;
+            }
+        }
+
         public override bool IsUsable(Hero hero)
         {
             return base.IsUsable(hero) && hero.Secrecy > 0;
         }
-
-        //            public override void Activate()
-        //            {
-        //                Hero.LoseSecrecy();
-        //                var space = Hero.GetSpace();
-        //                var bonus = new RollBonus(RollType.Fight, BonusType.Dice, 1, this) { Restriction = hero => hero.State == HeroState.AttackingBlight };
-        //                space.Add(bonus);
-        //                Stash.Add(space, bonus);
-        //            }
-        //
-        //            public override void Deactivate()
-        //            {
-        //                base.Deactivate();
-        //                var space = Stash.Get<ISpace>();
-        //                var bonus = Stash.Get<RollBonus>();
-        //                space.Remove(bonus);
-        //            }
     }
 }

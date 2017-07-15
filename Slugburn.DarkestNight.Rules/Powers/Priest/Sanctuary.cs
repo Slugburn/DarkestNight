@@ -18,16 +18,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
 
         protected override void OnLearn()
         {
-            Owner.AddTactic(new SanctuaryTactic());
+            Owner.AddTactic(new SanctuaryTactic(this));
         }
 
         internal class SanctuaryTactic : PowerTactic
         {
-            public SanctuaryTactic()
+            public SanctuaryTactic(Sanctuary power) :base(power, TacticType.Elude, 4)
             {
-                PowerName = Sanctuary.PowerName;
-                Type = TacticType.Elude;
-                DiceCount = 4;
             }
 
             public override void Use(Hero hero)

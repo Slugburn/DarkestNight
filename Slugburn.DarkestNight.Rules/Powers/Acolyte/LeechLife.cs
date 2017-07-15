@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
         protected override void OnLearn()
         {
             Owner.Add(new PreventMovementEffect(location => location == Location.Monastery && Exhausted));
-            Owner.AddTactic(new LeechLifeTactic());
+            Owner.AddTactic(new LeechLifeTactic(this));
         }
 
         public override bool IsUsable(Hero hero)
@@ -26,18 +26,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
         private class LeechLifeTactic : PowerTactic
         {
-            public LeechLifeTactic()
-            {
-                PowerName = "Leech Life";
-                Type = TacticType.Fight;
-                DiceCount = 3;
-            }
+            public LeechLifeTactic(LeechLife power) :base(power, TacticType.Fight, 3) { }
 
             public override void Use(Hero hero)
             {
                 base.Use(hero);
                 hero.CurrentRoll.AddRollHandler<LeechLifeRoll>();
-                hero.GetPower(PowerName).Exhaust(hero);
+                Power.Exhaust(hero);
             }
         }
 

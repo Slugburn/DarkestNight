@@ -144,6 +144,7 @@
     <Compile Include="Heroes\IActionFilter.cs" />
     <Compile Include="Heroes\IHeroFactory.cs" />
     <Compile Include="Powers\ITargetable.cs" />
+    <Compile Include="Powers\ActivateOnSpacePower.cs" />
     <Compile Include="Powers\Prince\Chapel.cs" />
     <Compile Include="Powers\Prince\DivineRight.cs" />
     <Compile Include="Powers\Prince\Inspire.cs" />
