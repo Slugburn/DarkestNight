@@ -42,7 +42,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Prince
             public void HandleTrigger(Game game, string source, TriggerContext context)
             {
                 var hero = context.GetState<Hero>();
-                if (!_power.Exhausted && hero.Location == _power.Target.Location)
+                if (!_power.IsExhausted && hero.Location == _power.Target.Location)
                     hero.GainSecrecy(1, 5);
             }
         }

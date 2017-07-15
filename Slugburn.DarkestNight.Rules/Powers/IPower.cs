@@ -9,7 +9,7 @@ namespace Slugburn.DarkestNight.Rules.Powers
         string Html { get; }
         bool StartingPower { get; }
 
-        bool Exhausted { get; }
+        bool IsExhausted { get; }
         Hero Owner { get; }
         bool IsUsable(Hero hero);
 

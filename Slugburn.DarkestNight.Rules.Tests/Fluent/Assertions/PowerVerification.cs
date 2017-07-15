@@ -20,7 +20,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         {
             var game = ((TestRoot) root).GetGame();
             var power = game.GetPower(_powerName);
-            power.Exhausted.ShouldBe(_exhausted);
+            power.IsExhausted.ShouldBe(_exhausted);
             var activateable = power as IActivateable;
             activateable?.IsActive.ShouldBe(_isActive);
         }

@@ -15,7 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
         protected override void OnLearn()
         {
-            Owner.Add(new PreventMovementEffect(location => location == Location.Monastery && Exhausted));
+            Owner.Add(new PreventMovementEffect(location => location == Location.Monastery && IsExhausted));
             Owner.AddTactic(new LeechLifeTactic(this));
         }
 

@@ -17,7 +17,7 @@ namespace Slugburn.DarkestNight.Rules.IO
             var data = new PowerData
             {
                 Name = power.Name,
-                Exhausted = power.Exhausted,
+                Exhausted = power.IsExhausted,
                 IsActive = activateable?.IsActive,
                 Target = targetable?.GetTarget()
             };

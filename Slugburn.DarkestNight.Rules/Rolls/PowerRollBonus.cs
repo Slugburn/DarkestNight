@@ -20,7 +20,7 @@ namespace Slugburn.DarkestNight.Rules.Rolls
 
         public virtual int GetModifier(Hero hero, ModifierType modifierType)
         {
-            if (_power.Exhausted) return 0;
+            if (_power.IsExhausted) return 0;
             return _modifierType == modifierType ? _dieCount : 0;
         }
 

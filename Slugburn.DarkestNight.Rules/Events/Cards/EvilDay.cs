@@ -11,7 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
         public EventDetail Detail => EventDetail.Create("Evil Day", 5,
             x => x
                 .Text("Exhaust a power or draw 2 more events.")
-                .Option("exhaust", "Exhaust Power", hero => hero.Powers.Any(power => !power.Exhausted))
+                .Option("exhaust", "Exhaust Power", hero => hero.Powers.Any(power => !power.IsExhausted))
                 .Option("draw", "Draw Events"));
 
         public async void Resolve(Hero hero, string option)
@@ -19,7 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
             switch (option)
             {
                 case "exhaust":
-                    var powers = hero.Powers.Where(x => !x.Exhausted).Select(PowerModel.Create).ToList();
+                    var powers = hero.Powers.Where(x => !x.IsExhausted).Select(PowerModel.Create).ToList();
                     var player = hero.Player;
                     player.State = PlayerState.SelectPower;
                     var selectedName = await player.SelectPower(powers);

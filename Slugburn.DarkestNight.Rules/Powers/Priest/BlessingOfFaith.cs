@@ -31,7 +31,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
 
             public void HandleTrigger(Hero hero, string source, TriggerContext context)
             {
-                if (!hero.Game.GetHero(_ownerName).GetPower(PowerName).Exhausted)
+                if (!hero.Game.GetHero(_ownerName).GetPower(PowerName).IsExhausted)
                     hero.GainGrace(1, hero.DefaultGrace);
             }
         }

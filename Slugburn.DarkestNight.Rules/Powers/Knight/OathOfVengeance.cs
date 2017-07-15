@@ -62,7 +62,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
 
         public ICollection<int> Modify(Hero hero, ModifierType modifierType, ICollection<int> roll)
         {
-            if (modifierType != ModifierType.FightDice || Exhausted || !IsActive) return roll;
+            if (modifierType != ModifierType.FightDice || IsExhausted || !IsActive) return roll;
             return hero.IsTargetNecromancer() ? roll.AddOneToHighest() : roll;
         }
     }

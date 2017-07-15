@@ -12,21 +12,21 @@ namespace Slugburn.DarkestNight.Rules.Powers
         public abstract string Html { get; }
         public bool StartingPower { get; protected set; }
 
-        public bool Exhausted { get; set; }
+        public bool IsExhausted { get; set; }
 
         public virtual bool IsUsable(Hero hero)
         {
-            return !Exhausted;
+            return !IsExhausted;
         }
 
         public virtual void Exhaust(Hero hero)
         {
-            Exhausted = true;
+            IsExhausted = true;
         }
 
         public void Refresh()
         {
-            Exhausted = false;
+            IsExhausted = false;
         }
 
         public void Learn(Hero hero)

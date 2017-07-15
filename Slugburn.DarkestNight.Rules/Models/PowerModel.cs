@@ -24,7 +24,7 @@ namespace Slugburn.DarkestNight.Rules.Models
                 Name = power.Name,
                 Text = power.Text,
                 Html = power.Html,
-                IsExhausted = power.Exhausted,
+                IsExhausted = power.IsExhausted,
                 IsActive = (power as IActivateable)?.IsActive ?? false
             };
         }
