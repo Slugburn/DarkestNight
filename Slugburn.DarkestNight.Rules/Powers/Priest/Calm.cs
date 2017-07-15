@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
 
         protected override void OnLearn()
         {
-            _action = new CalmPray();
+            _action = new CalmPray(this);
             var space = Owner.Space;
             space.AddAction(_action);
             Owner.Triggers.Add(HeroTrigger.Moving, Name, this );
@@ -33,12 +33,22 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
 
         internal class CalmPray : StandardAction
         {
+            private readonly Calm _power;
             private readonly Pray _pray;
 
-            public CalmPray() :base ("Pray [Calm]")
+            public CalmPray(Calm power) :base ("Pray [Calm]")
             {
+                _power = power;
                 _pray = new Pray();
                 Text = _pray.Text;
+            }
+
+            public override bool IsAvailable(Hero hero)
+            {
+                return base.IsAvailable(hero)
+                       && hero.Grace < hero.DefaultGrace
+                       && hero.CanGainGrace()
+                       && !_power.IsExhausted;
             }
 
             public override void Execute(Hero hero)

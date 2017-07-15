@@ -29,7 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Powers
 
         public string GetTarget()
         {
-            return Target.Location.ToString();
+            return Target?.Location.ToString();
         }
     }
 }

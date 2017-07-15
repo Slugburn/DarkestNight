@@ -37,7 +37,7 @@ namespace Slugburn.DarkestNight.Wpf
         private static void CreateGame(Game game, IPlayer player)
         {
             game.PopulateInitialBlights();
-            var heroes = new[] {"Acolyte", "Druid", "Knight", "Priest"}.Select(HeroFactory.Create);
+            var heroes = new[] {"Acolyte", "Druid", "Knight", "Prince"}.Select(HeroFactory.Create);
             foreach (var hero in heroes)
             {
                 game.AddHero(hero, player);

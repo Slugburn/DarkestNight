@@ -130,7 +130,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         public void Calm()
         {
             TestScenario.Game
-                .WithHero("Knight").At("Mountains")
+                .WithHero("Knight").At("Mountains").Grace(0)
                 .WithHero("Priest").At("Mountains").HasPowers("Calm")
                 .Then(Verify.Location("Mountains").HasAction("Pray [Calm]"))
                 .Given.Hero("Knight").IsTakingTurn()

@@ -47,6 +47,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Prince
             {
                 return base.IsAvailable(hero)
                        && hero.Grace < hero.DefaultGrace 
+                       && hero.CanGainGrace()
                        && !_power.IsExhausted;
             }
 
