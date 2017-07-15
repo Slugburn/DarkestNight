@@ -13,6 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Triggers
         FightWon,
         Eluding,
         Searched,
-        Moving
+        Moving,
+        RollAccepted
     }
 }

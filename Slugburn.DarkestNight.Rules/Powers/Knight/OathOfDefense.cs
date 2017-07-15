@@ -30,7 +30,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
                 hero.Game.Triggers.Add(GameTrigger.BlightDestroyed, Name, new OathOfDefenseFulfilled { HeroName = hero.Name });
                 hero.Triggers.Add(HeroTrigger.Moved, Name, new OathOfDefenseBroken());
             }
-            hero.IsActionAvailable = false;
         }
 
         private class OathOfDefenseFulfilled : ITriggerHandler<Game>

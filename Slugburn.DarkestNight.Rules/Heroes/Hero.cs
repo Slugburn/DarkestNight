@@ -417,7 +417,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void AcceptRoll()
         {
-            CurrentRoll.Accept();
+            var roll = CurrentRoll.Accept();
+            Triggers.Send(HeroTrigger.RollAccepted, roll);
             if (CurrentRoll?.TargetNumber > 0)
                 CurrentRoll = null;
         }
@@ -460,7 +461,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 ResolveAttack(target);
         }
 
-        public void RemoveRollModifiers(string name)
+        public void RemoveModifiers(string name)
         {
             _modifiers.RemoveAll(x => x.Name == name);
         }

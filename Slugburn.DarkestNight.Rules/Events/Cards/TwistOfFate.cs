@@ -42,7 +42,7 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards
         {
             public void HandleTrigger(Hero registrar, string source, TriggerContext context)
             {
-                registrar.RemoveRollModifiers(EventName);
+                registrar.RemoveModifiers(EventName);
                 registrar.Triggers.Remove(HeroTrigger.TurnEnded, EventName);
             }
 

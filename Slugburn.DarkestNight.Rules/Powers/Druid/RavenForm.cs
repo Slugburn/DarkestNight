@@ -24,7 +24,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
         {
             if (!base.Deactivate(hero)) return false;
             hero.TravelSpeed = 1;
-            hero.RemoveRollModifiers(Name);
+            hero.RemoveModifiers(Name);
             return true;
         }
     }

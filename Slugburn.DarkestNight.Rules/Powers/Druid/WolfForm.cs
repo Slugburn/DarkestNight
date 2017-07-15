@@ -25,7 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
         public override bool Deactivate(Hero hero)
         {
             if (!base.Deactivate(hero)) return false;
-            hero.RemoveRollModifiers(PowerName);
+            hero.RemoveModifiers(PowerName);
             return true;
         }
     }

@@ -56,9 +56,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Given.Hero("Prince").IsTakingTurn()
                 .When.Player.TakesAction("Inspire").SelectsHero("Knight")
                 .Given.Hero("Knight").IsTakingTurn()
-                .When.Player.TakesAction("Search", Fake.Rolls(1))
-                .When.Player.TakesAction("Prince", "Deactivate Inspire", Fake.Rolls(2, 4, 6))
-                .Then(Verify.Player.SearchView.Roll(1, 2, 4, 6));
+                .When.Player.TakesAction("Knight", "Deactivate Inspire")
+                .When.Player.TakesAction("Search", Fake.Rolls(1, 2, 4, 6))
+                .Then(Verify.Player.SearchView.Roll(1, 2, 4, 6))
+                .When.Player.AcceptsRoll()
+                .Then(Verify.Hero("Knight").FightDice(1).EludeDice(1).SearchDice(1));
         }
 
         // Loyalty (Bonus): +1d when eluding.

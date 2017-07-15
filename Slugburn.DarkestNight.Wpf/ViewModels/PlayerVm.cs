@@ -242,7 +242,9 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
 
         public Task<string> AskQuestion(QuestionModel model)
         {
-            throw new NotImplementedException();
+            var source = new TaskCompletionSource<string>();
+            Question.Update(model, source);
+            return source.Task;
         }
 
         public void DisplaySearch(SearchModel model, Callback<Find> callback)

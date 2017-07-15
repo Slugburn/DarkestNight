@@ -82,7 +82,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
             public void AcceptRoll(Hero hero, RollState rollState)
             {
-                hero.RemoveRollModifiers(PowerName);
+                hero.RemoveModifiers(PowerName);
                 foreach (var target in hero.ConflictState.SelectedTargets)
                     hero.ResolveAttack(target);
                 hero.ResolveCurrentConflict();

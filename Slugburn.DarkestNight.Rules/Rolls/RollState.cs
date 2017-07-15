@@ -40,11 +40,13 @@ namespace Slugburn.DarkestNight.Rules.Rolls
             Hero.Triggers.Send(HeroTrigger.Rolled, ModifierType);
         }
 
-        public void Accept()
+        public List<int> Accept()
         {
+            var finalRoll = AdjustedRoll;
             IsAccepted = true;
             _rollHandlers.ForEach(x => x.AcceptRoll(Hero, this));
             _primaryRollHandler.AcceptRoll(Hero, this);
+            return finalRoll;
         }
 
         public void AddRollHandler<THandler>() where THandler : IRollHandler, new()

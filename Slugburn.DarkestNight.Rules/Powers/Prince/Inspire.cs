@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Rolls;
+using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Prince
 {
@@ -36,16 +38,27 @@ namespace Slugburn.DarkestNight.Rules.Powers.Prince
                 var validHeroes = hero.Game.Heroes.Where(h => h.Location == hero.Location);
                 _target = await hero.SelectHero(validHeroes);
             }
-            hero.AddCommand(_deactivateCommand);
+            _target.AddCommand(_deactivateCommand);
         }
 
         public override bool Deactivate(Hero hero)
         {
             if (!base.Deactivate(hero))
                 return false;
-            hero.RemoveCommand(_deactivateCommand);
-            _target.CurrentRoll.AddDice(3);
+            _target.RemoveCommand(_deactivateCommand);
+            _target.AddModifier(StaticRollBonus.AnyRoll(Name, 3));
+            _target.Triggers.Add(HeroTrigger.RollAccepted, Name, new RemoveInspireBonus() );
+            _target = null;
             return true;
+        }
+
+        internal class RemoveInspireBonus : ITriggerHandler<Hero>
+        {
+            public void HandleTrigger(Hero hero, string source, TriggerContext context)
+            {
+                hero.RemoveModifiers(source);
+                hero.Triggers.RemoveBySource(source);
+            }
         }
 
         internal class DeactivateInspireCommand : ICommand
@@ -63,7 +76,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Prince
 
             public bool IsAvailable(Hero hero)
             {
-                return _inspire._target.CurrentRoll != null;
+                return _inspire._target.IsTakingTurn && !_inspire.IsExhausted;
             }
 
             public void Execute(Hero hero)

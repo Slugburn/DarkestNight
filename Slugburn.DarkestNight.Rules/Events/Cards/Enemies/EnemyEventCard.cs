@@ -17,7 +17,8 @@ namespace Slugburn.DarkestNight.Rules.Events.Cards.Enemies
         {
             if (option != "cont") return;
             var enemy = Detail.GetEnemyName(hero);
-            hero.EndEvent();
+            hero.CurrentEvent = null;
+            hero.DisplayCurrentEvent();
             hero.FaceEnemy(enemy);
         }
     }

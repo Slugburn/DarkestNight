@@ -30,7 +30,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         public override bool Deactivate(Hero hero)
         {
             if (!base.Deactivate(hero)) return false;
-            hero.RemoveRollModifiers(Name);
+            hero.RemoveModifiers(Name);
             return true;
         }
 

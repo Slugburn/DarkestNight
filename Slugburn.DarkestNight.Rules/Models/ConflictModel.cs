@@ -26,7 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Models
             {
                 model.TargetCount = state.MaxTarget;
                 model.Targets = state.AvailableTargets.Select(CreateTarget).ToList();
-                model.Tactics = state.AvailableTactics.Select(CreateTactic).ToList();
+                model.Tactics = state.AvailableTactics.Select(CreateTactic).OrderByDescending(t=>t.DiceCount).ToList();
             }
             else
             {

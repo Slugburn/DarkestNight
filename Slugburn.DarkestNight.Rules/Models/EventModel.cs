@@ -13,6 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Models
 
         public static EventModel From(HeroEvent obj)
         {
+            if (obj == null) return null;
             var e = new EventModel
             {
                 Title = obj.Title,

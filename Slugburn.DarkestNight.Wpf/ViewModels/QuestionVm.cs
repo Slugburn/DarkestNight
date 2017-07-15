@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Slugburn.DarkestNight.Rules;
@@ -69,20 +70,20 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public void Update(QuestionModel model, Callback<string> callback)
+        public void Update(QuestionModel model, TaskCompletionSource<string> source)
         {
             Visibility = Visibility.Visible;
             Title = model.Title;
             Text = model.Text;
-            Answers = model.Answers.Select(answer => CreateQuestionAnswer(answer, callback)).ToList();
+            Answers = model.Answers.Select(answer => CreateQuestionAnswer(answer, source)).ToList();
         }
 
-        private QuestionAnswer CreateQuestionAnswer(string answer, Callback<string> callback)
+        private QuestionAnswer CreateQuestionAnswer(string answer, TaskCompletionSource<string> source)
         {
             var command = new CommandHandler(() =>
             {
                 Visibility = Visibility.Hidden;
-                callback.Handle(answer);
+                source.SetResult(answer);
             });
             return new QuestionAnswer(answer, command);
         }
