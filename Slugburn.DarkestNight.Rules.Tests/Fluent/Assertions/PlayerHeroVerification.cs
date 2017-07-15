@@ -38,8 +38,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             view.Status.Grace.Value.ShouldBeIfNotNull(_grace, "Grace");
             view.Status.Grace.Default.ShouldBeIfNotNull(_defaultGrace, "Default Grace");
             view.Status.Secrecy.Value.ShouldBeIfNotNull(_secrecy, "Secrecy");
-            view.Status.Secrecy.Default.ShouldBe(hero.DefaultSecrecy);
-            view.Status.Location.ShouldBe(hero.Location.ToString());
+            view.Status.Secrecy.Default.ShouldBeIfNotNull(_defaultSecrecy, "Default Secrecy");
+            view.Status.Location.ShouldBe(_location);
             if (_inventory != null)
                 view.Inventory.Select(x=>x.Name).ShouldBeEquivalent(_inventory);
             _commands.Verify(root);
@@ -51,6 +51,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             _grace = _grace ?? (hero.DefaultGrace - _lostGrace ?? hero.Grace);
             _defaultSecrecy = _defaultSecrecy ?? hero.DefaultSecrecy;
             _secrecy = _secrecy ?? (hero.DefaultSecrecy - _lostSecrecy ?? hero.Secrecy);
+            _location = _location ?? hero.Location.ToString();
         }
 
         public PlayerHeroVerification DefaultGrace(int expected)
@@ -86,6 +87,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         public PlayerHeroVerification Inventory(params string[] expected)
         {
             _inventory = expected;
+            return this;
+        }
+
+        public PlayerHeroVerification Location(string expected)
+        {
+            _location = expected;
             return this;
         }
     }

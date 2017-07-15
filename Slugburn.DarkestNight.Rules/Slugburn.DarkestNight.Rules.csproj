@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\IAction.cs" />
+    <Compile Include="Actions\PowerCommand.cs" />
     <Compile Include="Actions\TravelHandler.cs" />
     <Compile Include="Blights\BlightFactory.cs" />
     <Compile Include="Commands\CommandNotAvailableException.cs" />

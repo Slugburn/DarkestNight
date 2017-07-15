@@ -23,10 +23,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
             {
             }
 
-            public override void Execute(Hero hero)
+            public override async void Execute(Hero hero)
             {
                 hero.AvailableMovement = 2;
-                TravelHandler.UseAvailableMovement(hero);
+                await TravelHandler.UseAvailableMovement(hero);
             }
 
         }

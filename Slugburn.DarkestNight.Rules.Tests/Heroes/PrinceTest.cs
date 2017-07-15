@@ -188,5 +188,29 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .When.Player.TakesAction("Knight", "Search")
                 .Then(Verify.Player.SearchView.Roll(6, 6));
         }
+
+        // Secret Passage (Action): Move to an adjacent location and gain 2 Secrecy (up to 5).
+        [Test]
+        public void SecretPassage()
+        {
+            TestScenario.Game
+                .WithHero("Prince").At("Castle").Secrecy(0).HasPowers("Secret Passage")
+                .When.Player.TakesAction("Secret Passage")
+                .Then(Verify.Player.LocationSelectionView("Village", "Mountains", "Swamp"))
+                .When.Player.SelectsLocation("Village")
+                .Then(Verify.Player.Hero("Prince").Location("Village").Secrecy(2));
+        }
+
+        // Strategy (Tactic): Fight with 2d.
+        [Test]
+        public void Strategy()
+        {
+            TestScenario.Game
+                .WithHero("Prince").HasPowers("Strategy")
+                .Given.Hero("Prince").IsFacingEnemy("Skeleton")
+                .Then(Verify.Player.ConflictModel.HasTactics("Fight", "Elude", "Strategy"))
+                .When.Player.Targets("Skeleton").UsesTactic("Strategy").ResolvesConflict()
+                .Then(Verify.Player.ConflictModel.Rolled(6, 6));
+        }
     }
 }

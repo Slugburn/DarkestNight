@@ -1,24 +1,21 @@
 ﻿using Slugburn.DarkestNight.Rules.Heroes;
+using Slugburn.DarkestNight.Rules.Tactics;
 
-namespace Slugburn.DarkestNight.Rules.Powers.Prince {
-    class Strategy : TacticPower
+namespace Slugburn.DarkestNight.Rules.Powers.Prince
+{
+    internal class Strategy : TacticPower
     {
         public Strategy()
-            : base()
         {
             Name = "Strategy";
             StartingPower = true;
             Text = "Fight with 2d.";
         }
 
-        public override bool IsUsable(Hero hero)
+        protected override void OnLearn()
         {
-            return base.IsUsable(hero);
+            base.OnLearn();
+            Owner.AddTactic(new PowerTactic(this, TacticType.Fight, 2));
         }
-
-        //            public override void Activate()
-        //            {
-        //                Hero.SetDice(RollType.Fight, 2);
-        //            }
     }
 }
