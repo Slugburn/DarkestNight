@@ -15,17 +15,33 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 
         public override void Activate(Hero hero)
         {
-            base.Activate(hero);
-            hero.TravelSpeed = 2;
-            hero.AddModifier(StaticRollBonus.Create(Name, ModifierType.SearchDice, 1));
+            base.Activate(Owner);
+            Owner.AddModifier(new RavenFormTravelBonus(this));
+            Owner.AddModifier(StaticRollBonus.Create(Name, ModifierType.SearchDice, 1));
         }
 
         public override bool Deactivate(Hero hero)
         {
             if (!base.Deactivate(hero)) return false;
-            hero.TravelSpeed = 1;
             hero.RemoveModifiers(Name);
             return true;
+        }
+
+        internal class RavenFormTravelBonus : IModifier
+        {
+            private readonly IPower _power;
+
+            public RavenFormTravelBonus(IPower power)
+            {
+                _power = power;
+            }
+
+            public int GetModifier(Hero hero, ModifierType modifierType)
+            {
+                return modifierType == ModifierType.TravelSpeed && !_power.IsExhausted ? 1: 0;
+            }
+
+            public string Name => _power.Name;
         }
     }
 }

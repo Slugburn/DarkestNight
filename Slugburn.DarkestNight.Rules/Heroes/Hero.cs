@@ -16,7 +16,6 @@ using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Powers;
 using Slugburn.DarkestNight.Rules.Powers.Priest;
-using Slugburn.DarkestNight.Rules.Powers.Prince;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Spaces;
 using Slugburn.DarkestNight.Rules.Tactics;
@@ -54,7 +53,6 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             _actionFilters = new List<IActionFilter>();
 
             Location = Location.Monastery;
-            TravelSpeed = 1;
             Enemies = new List<IEnemy>();
         }
 
@@ -118,7 +116,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public List<IEnemy> Enemies { get; set; }
 
-        public int TravelSpeed { get; set; }
+        public int TravelSpeed => this.GetModifiedTotal(1, ModifierType.TravelSpeed);
 
         public HeroEvent CurrentEvent { get; set; }
 
@@ -433,11 +431,12 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             _modifiers.Add(rollModifier);
         }
 
-        public IEnumerable<IModifier> GetModifiers()
+        public List<IModifier> GetModifiers()
         {
             return _modifiers
                 .Concat(Inventory.OfType<IModifier>())
-                .Concat(Space.GetModifiers());
+                .Concat(Space.GetModifiers())
+                .ToList();
         }
 
         public void AssignDiceToTargets(ICollection<TargetDieAssignment> assignments)

@@ -7,6 +7,7 @@
         SearchDice,
         PrayDice,
         EventDice,
-        DefaultGrace
+        DefaultGrace,
+        TravelSpeed
     }
 }
