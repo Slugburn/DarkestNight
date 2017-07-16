@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Slugburn.DarkestNight.Rules.Tests.Fluent;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Heroes
 {
@@ -6,6 +7,25 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
     public class RogueTest
     {
         // Ambush (Tactic): Spend 1 Secrecy to fight with 3 dice.
+        [Test]
+        public void Ambush()
+        {
+            TestScenario.Game
+                .WithHero("Rogue").HasPowers("Ambush").IsFacingEnemy("Skeleton")
+                .Then(Verify.Player.ConflictModel.HasTactics("Ambush", "Fight", "Elude"))
+                .When.Player.Targets("Skeleton").UsesTactic("Ambush").ResolvesConflict()
+                .Then(Verify.Player.Hero("Rogue").LostSecrecy(1))
+                .Then(Verify.Player.ConflictModel.Rolled(6, 6, 6));
+        }
+
+        [Test]
+        public void Ambush_RequiresSecrecy()
+        {
+            TestScenario.Game
+                .WithHero("Rogue").Secrecy(0).HasPowers("Ambush").IsFacingEnemy("Skeleton")
+                .Then(Verify.Player.ConflictModel.HasTactics("Fight", "Elude"));
+        }
+
         // Contacts (Bonus): Exhaust at any time to gain 1 Secrecy (up to 7).
         // Diversion (Action): Spend 1 Secrecy to negate the effects of one blight in your location until the Necromancer ends a turn there.
         // Eavesdrop (Action): Spend 1 Secrecy to search with 2 dice.
