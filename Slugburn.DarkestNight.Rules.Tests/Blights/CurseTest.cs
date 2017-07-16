@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Blights
             TestScenario.Game
                 .WithHero().Location("Monastery")
                 .Location("Village").HasBlights("Curse")
-                .When.Player.TakesAction("Travel").SelectsLocation("Village")
+                .When.Player.TakesAction("Travel").SelectsDestination("Village")
                 .Then(Verify.Hero().LostGrace().HasUsedAction());
         }
 

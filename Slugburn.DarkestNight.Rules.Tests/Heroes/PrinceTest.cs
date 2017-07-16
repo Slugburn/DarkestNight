@@ -199,7 +199,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .WithHero("Prince").At("Castle").Secrecy(0).HasPowers("Secret Passage")
                 .When.Player.TakesAction("Secret Passage")
                 .Then(Verify.Player.LocationSelectionView("Village", "Mountains", "Swamp"))
-                .When.Player.SelectsLocation("Village")
+                .When.Player.SelectsDestination("Village")
                 .Then(Verify.Player.Hero("Prince").Location("Village").Secrecy(2));
         }
 

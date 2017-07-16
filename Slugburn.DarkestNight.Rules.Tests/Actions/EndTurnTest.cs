@@ -21,7 +21,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
             TestScenario.Game
                 .WithHero().Secrecy(0).At("Monastery").HasItems("Waystone")
                 .When.Player.TakesAction("Waystone").SelectsLocation("Village")
-                .When.Player.TakesAction("Travel").SelectsLocation("Monastery")
+                .When.Player.TakesAction("Travel").SelectsDestination("Monastery")
                 .Then(Verify.Hero().HasUsedAction()
                     .Secrecy(2)); // gained 1 from using Waystone and 1 from Travel
         }

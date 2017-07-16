@@ -23,5 +23,7 @@ namespace Slugburn.DarkestNight.Rules.Players
         void UpdateHeroCommands(HeroActionModel model);
         void UpdateHeroStatus(string heroName, HeroStatusModel status);
         void OnNewDay();
+        void StopMoving();
+        Task<MoveResponse> SelectDestination(List<string> validLocations);
     }
 }

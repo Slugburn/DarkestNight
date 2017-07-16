@@ -13,7 +13,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
                 .WithHero().At("Monastery").Secrecy(4)
                 .When.Player.TakesAction("Travel")
                 .Then(Verify.Player.LocationSelectionView("Mountains", "Village", "Forest"))
-                .When.Player.SelectsLocation("Forest")
+                .When.Player.SelectsDestination("Forest")
                 .Then(Verify.Hero().HasUsedAction().Location("Forest").Secrecy(5));
         }
         [Test]
@@ -26,7 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
                 .WithHero().At("Monastery").Secrecy(secrecy)
                 .When.Player.TakesAction("Travel")
                 .Then(Verify.Player.LocationSelectionView("Mountains", "Village", "Forest"))
-                .When.Player.SelectsLocation("Forest")
+                .When.Player.SelectsDestination("Forest")
                 .Then(Verify.Hero().HasUsedAction().Location("Forest").Secrecy(secrecy));
         }
 
@@ -38,10 +38,24 @@ namespace Slugburn.DarkestNight.Rules.Tests.Actions
                 .WithHero("Druid").At("Monastery").HasPowers("Raven Form").Power("Raven Form").IsActive().Secrecy(0)
                 .When.Player.TakesAction("Travel")
                 .Then(Verify.Player.LocationSelectionView("Mountains", "Village", "Forest"))
-                .When.Player.SelectsLocation("Mountains")
+                .When.Player.SelectsDestination("Mountains")
                 .Then(Verify.Player.LocationSelectionView("Monastery", "Village", "Castle"))
-                .When.Player.SelectsLocation("Castle")
+                .When.Player.SelectsDestination("Castle")
                 .Then(Verify.Hero().HasUsedAction().Location("Castle").CanGainGrace(false).Secrecy(1));
+        }
+
+        [Test]
+        public void Travel_CanMoveTwoButOnlyWantToMoveOne()
+        {
+            TestScenario.Game
+                .WithHero("Druid").At("Monastery").HasPowers("Raven Form").Power("Raven Form").IsActive().Secrecy(0)
+                .When.Player.TakesAction("Travel")
+                .Then(Verify.Player.LocationSelectionView("Mountains", "Village", "Forest"))
+                .When.Player.SelectsDestination("Mountains")
+                .Then(Verify.Player.LocationSelectionView("Monastery", "Village", "Castle"))
+                .Then(Verify.Player.Hero("Druid").Commands.Exactly("Done Moving"))
+                .When.Player.TakesAction("Done Moving")
+                .Then(Verify.Hero().HasUsedAction().Location("Mountains").CanGainGrace(false).Secrecy(1));
         }
     }
 }

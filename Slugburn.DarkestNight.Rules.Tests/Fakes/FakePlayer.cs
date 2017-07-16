@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
@@ -19,6 +20,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         private TaskCompletionSource<IEnumerable<int>> _blightsSource;
         private TaskCompletionSource<Hero> _heroSource;
         private TaskCompletionSource<string> _powerSource;
+        private TaskCompletionSource<MoveResponse> _moveResponseSource;
 
         public FakePlayer(Game game)
         {
@@ -123,6 +125,18 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         {
         }
 
+        public void StopMoving()
+        {
+            _moveResponseSource.SetResult(new MoveResponse {Stop = true});
+        }
+
+        public Task<MoveResponse> SelectDestination(List<string> validLocations)
+        {
+            ValidLocations = validLocations;
+            _moveResponseSource = new TaskCompletionSource<MoveResponse>();
+            return _moveResponseSource.Task;
+        }
+
         public QuestionModel AskQuestion { get; set; }
         public SearchModel Search { get; set; }
         public PrayerModel Prayer { get; set; }
@@ -211,6 +225,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
         {
             var callback = (Callback<Find>) _callback;
             callback.Handle(code);
+        }
+
+        internal void SelectDestination(Location location)
+        {
+            _moveResponseSource.SetResult(new MoveResponse {Destination = location});
         }
 
         public void TradeItem(int itemId, string fromHeroName, string toHeroName)

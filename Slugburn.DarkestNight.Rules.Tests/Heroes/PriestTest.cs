@@ -143,7 +143,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
             TestScenario.Game
                 .WithHero("Priest").At("Mountains").HasPowers("Calm")
                 .Then(Verify.Location("Mountains").HasAction("Pray [Calm]"))
-                .When.Player.TakesAction("Travel").SelectsLocation("Village")
+                .When.Player.TakesAction("Travel").SelectsDestination("Village")
                 .Then(Verify.Location("Village").HasAction("Pray [Calm]"))
                 .Then(Verify.Location("Mountains").DoesNotHaveAction("Pray [Calm]"));
         }

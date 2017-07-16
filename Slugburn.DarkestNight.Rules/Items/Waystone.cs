@@ -26,7 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Items
 
         public bool IsAvailable(Hero hero)
         {
-            return hero.IsTakingTurn;
+            return hero.IsTakingTurn && hero.State == HeroState.TakingTurn;
         }
     }
 }

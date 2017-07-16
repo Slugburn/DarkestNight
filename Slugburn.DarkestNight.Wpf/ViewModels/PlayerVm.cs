@@ -31,6 +31,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         private PrayerVm _prayer;
         private ICommand _command;
         private NecromancerVm _necromancer;
+        private TaskCompletionSource<MoveResponse> _moveResponseSource;
 
         public Game Game
         {
@@ -196,22 +197,33 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         public Task<Location> SelectLocation(ICollection<string> locations)
         {
             var source = new TaskCompletionSource<Location>();
+            void OnResult(Location loc) => source.SetResult(loc);
+            DisplayLocationSelection(locations, OnResult);
+            return source.Task;
+        }
+
+        private void DisplayLocationSelection(ICollection<string> locations, Action<Location> onLocationSelected)
+        {
             var valid = (from name in locations join loc in Locations on name equals loc.Name select loc).ToList();
             foreach (var location in valid)
             {
                 location.Highlight = new SolidColorBrush(Colors.Orange);
                 location.SelectCommand = new CommandHandler(() =>
                 {
-                    foreach (var inner in valid)
-                    {
-                        inner.Highlight = new SolidColorBrush(Colors.White);
-                        inner.SelectCommand = null;
-                    }
+                    ClearLocationSelection();
                     var result = location.Name.ToEnum<Location>();
-                    source.SetResult(result);
+                    onLocationSelected(result);
                 });
             }
-            return source.Task;
+        }
+
+        private void ClearLocationSelection()
+        {
+            foreach (var inner in Locations)
+            {
+                inner.Highlight = new SolidColorBrush(Colors.White);
+                inner.SelectCommand = null;
+            }
         }
 
         public void DisplayNecromancer(NecromancerModel model)
@@ -285,6 +297,20 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         public void OnNewDay()
         {
             SaveGame();
+        }
+
+        public void StopMoving()
+        {
+            ClearLocationSelection();
+            _moveResponseSource.SetResult(new MoveResponse {Stop = true});
+        }
+
+        public Task<MoveResponse> SelectDestination(List<string> validLocations)
+        {
+            _moveResponseSource = new TaskCompletionSource<MoveResponse>();
+            void OnLocationSelected(Location loc) => _moveResponseSource.SetResult(new MoveResponse {Destination = loc});
+            DisplayLocationSelection(validLocations, OnLocationSelected);
+            return _moveResponseSource.Task;
         }
 
         private void SaveGame()

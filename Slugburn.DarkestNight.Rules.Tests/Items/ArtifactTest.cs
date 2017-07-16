@@ -42,7 +42,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Items
                 .WithHero().At("Village").HasItems("Vanishing Cowl")
                 .Location("Castle").HasBlights("Curse")
                 .When.Player.TakesAction("Vanishing Cowl").SelectsBlight("Castle", "Curse")
-                .When.Player.TakesAction("Travel").SelectsLocation("Castle")
+                .When.Player.TakesAction("Travel").SelectsDestination("Castle")
                 .Then(Verify.Player.Hero().LostGrace(0));
         }
     }

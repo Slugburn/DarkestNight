@@ -888,8 +888,15 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public void RemoveCommand(ICommand command)
         {
+            if (command == null || !_commands.ContainsKey(command.Name)) return;
             _commands.Remove(command.Name);
             UpdateAvailableCommands();
+        }
+
+        public Task<MoveResponse> SelectMoveDestination(List<string> validLocations)
+        {
+            State = HeroState.Moving;
+            return Player.SelectDestination(validLocations);
         }
     }
 }

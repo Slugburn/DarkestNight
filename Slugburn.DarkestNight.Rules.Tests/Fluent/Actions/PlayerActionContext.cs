@@ -177,5 +177,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Actions
             GetPlayer().TradeItem(itemId, fromHeroName, toHeroName);
             return this;
         }
+
+        public IPlayerActionContext SelectsDestination(string destination)
+        {
+            var player = GetPlayer();
+            player.SelectDestination(destination.ToEnum<Location>());
+            return this;
+        }
     }
 }

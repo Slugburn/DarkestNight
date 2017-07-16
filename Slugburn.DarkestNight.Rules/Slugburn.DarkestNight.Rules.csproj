@@ -136,6 +136,7 @@
     <Compile Include="Extensions\EventExtension.cs" />
     <Compile Include="Extensions\SpaceExtension.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Heroes\MoveResponse.cs" />
     <Compile Include="IO\GameData.cs" />
     <Compile Include="IO\GameSerializer.cs" />
     <Compile Include="Heroes\ActionFilter.cs" />
