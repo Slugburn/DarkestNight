@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Shouldly;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Models;
 
@@ -10,6 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private readonly PlayerHeroVerification _parent;
         private IEnumerable<string> _expected;
         private string[] _includes;
+        private string[] _excludes;
 
         public PlayerHeroCommandVerification(IVerifiable parent) : base(parent)
         {
@@ -24,6 +26,11 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             commandNames.ShouldBeEquivalent(_expected);
             if (_includes != null)
                 commandNames.Intersect(_includes).ShouldBeEquivalent(_includes);
+            if (_excludes != null)
+            {
+                var excludedCommands = commandNames.Intersect(_excludes).ToList();
+                excludedCommands.ShouldBeEmpty();
+            }
         }
 
         public PlayerHeroCommandVerification None()
@@ -41,6 +48,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         public PlayerHeroCommandVerification Includes(params string[] expected)
         {
             _includes = expected;
+            return this;
+        }
+
+        public PlayerHeroCommandVerification Excludes(params string[] expected)
+        {
+            _excludes = expected;
             return this;
         }
     }

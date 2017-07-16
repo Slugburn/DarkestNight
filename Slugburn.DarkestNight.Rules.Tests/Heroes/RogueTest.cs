@@ -27,6 +27,24 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         }
 
         // Contacts (Bonus): Exhaust at any time to gain 1 Secrecy (up to 7).
+        [Test]
+        public void Contacts()
+        {
+            TestScenario.Game
+                .WithHero("Rogue").Secrecy(0).HasPowers("Contacts")
+                .When.Player.TakesAction("Contacts")
+                .Then(Verify.Power("Contacts").IsExhausted())
+                .Then(Verify.Player.Hero("Rogue").Secrecy(1));
+        }
+
+        [Test]
+        public void Contacts_NotUsuableAtMaxSecrecy()
+        {
+            TestScenario.Game
+                .WithHero("Rogue").Secrecy(7).HasPowers("Contacts")
+                .Then(Verify.Player.Hero("Rogue").Commands.Excludes("Contacts"));
+        }
+
         // Diversion (Action): Spend 1 Secrecy to negate the effects of one blight in your location until the Necromancer ends a turn there.
         // Eavesdrop (Action): Spend 1 Secrecy to search with 2 dice.
         // Sabotage (Action): Spend 1 Secrecy in the Necromancer's location to cause -1 Darkness.
