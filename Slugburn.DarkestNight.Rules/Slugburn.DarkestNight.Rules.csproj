@@ -151,7 +151,6 @@
     <Compile Include="Powers\Prince\DivineRight.cs" />
     <Compile Include="Powers\Prince\Inspire.cs" />
     <Compile Include="Powers\Prince\Loyalty.cs" />
-    <Compile Include="Heroes\Impl\Rogue.cs" />
     <Compile Include="Heroes\Impl\Scholar.cs" />
     <Compile Include="Heroes\Impl\Seer.cs" />
     <Compile Include="Heroes\Impl\Wizard.cs" />
@@ -251,6 +250,16 @@
     <Compile Include="Powers\Prince\Scouts.cs" />
     <Compile Include="Powers\Prince\SecretPassage.cs" />
     <Compile Include="Powers\Prince\Strategy.cs" />
+    <Compile Include="Powers\Rogue\Ambush.cs" />
+    <Compile Include="Powers\Rogue\Contacts.cs" />
+    <Compile Include="Powers\Rogue\Diversion.cs" />
+    <Compile Include="Powers\Rogue\Eavesdrop.cs" />
+    <Compile Include="Powers\Rogue\Sabotage.cs" />
+    <Compile Include="Powers\Rogue\Sap.cs" />
+    <Compile Include="Powers\Rogue\ShadowCloak.cs" />
+    <Compile Include="Powers\Rogue\Skulk.cs" />
+    <Compile Include="Powers\Rogue\Stealth.cs" />
+    <Compile Include="Powers\Rogue\Vanish.cs" />
     <Compile Include="Rolls\Die.cs" />
     <Compile Include="Rolls\IDie.cs" />
     <Compile Include="Rolls\IRollHandler.cs" />
