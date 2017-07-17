@@ -103,6 +103,7 @@
     <Compile Include="Fluent\Arrangements\IPowerContext.cs" />
     <Compile Include="Fluent\Arrangements\NecromancerContext.cs" />
     <Compile Include="Fluent\Assertions\BlightSelectionViewVerification.cs" />
+    <Compile Include="Fluent\Assertions\BoardLocationBlightModelVerification.cs" />
     <Compile Include="Fluent\Assertions\BoardLocationViewVerification.cs" />
     <Compile Include="Fluent\Assertions\SelectedTargetModelVerification.cs" />
     <Compile Include="Fluent\Assertions\ConflictModelVerification.cs" />

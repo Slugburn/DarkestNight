@@ -167,6 +167,33 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         }
 
         // Sap (Bonus): Exhaust during your turn to reduce the might of a blight in your location by 1 until your next turn.
+        [Test]
+        public void Sap()
+        {
+            TestScenario.Game
+                .Location("Village").HasBlights("Desecration", "Confusion")
+                .WithHero("Rogue").HasPowers("Sap").At("Village")
+                .Then(Verify.Player.Hero("Rogue").Commands.Includes("Sap"))
+                .When.Player.TakesAction("Sap")
+                .Then(Verify.Player.BlightSelectionView.Location("Village")
+                    .WithBlights("Desecration", "Confusion"))
+                .When.Player.SelectsBlight("Village", "Desecration")
+                .Then(Verify.Player.BoardView.Location("Village").Blight("Desecration").Might(3))
+                .Then(Verify.Power("Sap").IsExhausted())
+                .Given.Hero("Rogue").IsTakingTurn(false)
+                .When.Player.TakesAction("Rogue", "Start Turn")
+                .Then(Verify.Player.BoardView.Location("Village").Blight("Desecration").Might(4));
+        }
+
+        [Test]
+        public void Sap_MustBeBlightAtHeroLocation()
+        {
+            TestScenario.Game
+                .Location("Village").HasBlights()
+                .WithHero("Rogue").HasPowers("Sap").At("Village")
+                .Then(Verify.Player.Hero("Rogue").Commands.Excludes("Sap"));
+        }
+
         // Shadow Cloak (Bonus): +1 die when eluding.
         // Skulk (Tactic): Elude with 2 dice and add 1 to the highest die.
         // Stealth (Bonus): Any time you lose or spend Secrecy, you can spend 1 Grace instead.

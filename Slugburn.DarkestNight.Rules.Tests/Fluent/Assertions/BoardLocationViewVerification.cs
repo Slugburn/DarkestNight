@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Shouldly;
-using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
@@ -49,31 +47,6 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             var blight = new BoardLocationBlightModelVerification(this, blightName);
             _blights.Add(blight);
             return blight;
-        }
-    }
-
-    public class BoardLocationBlightModelVerification : ChildVerification
-    {
-        private readonly string _blightName;
-        private bool _isSupressed;
-
-        public BoardLocationBlightModelVerification(IVerifiable parent, string blightName) 
-            : base(parent)
-        {
-            _blightName = blightName;
-        }
-
-        public override void Verify(ITestRoot root)
-        {
-            var location = root.Get<LocationModel>();
-            var blight = location.Blights.Single(x => x.Name == _blightName);
-            blight.IsSupressed.ShouldBe(_isSupressed, "IsSupressed");
-        }
-
-        public BoardLocationBlightModelVerification IsSupressed(bool expected = true)
-        {
-            _isSupressed = expected;
-            return this;
         }
     }
 }

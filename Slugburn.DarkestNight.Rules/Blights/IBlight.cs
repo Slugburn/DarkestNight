@@ -11,5 +11,7 @@ namespace Slugburn.DarkestNight.Rules.Blights
         string EffectText { get; }
         string DefenseText { get;  }
         bool IsSupressed { get; }
+        void ReduceMight();
+        void RestoreMight();
     }
 }

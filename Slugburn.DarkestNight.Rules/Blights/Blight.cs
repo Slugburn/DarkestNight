@@ -36,6 +36,16 @@ namespace Slugburn.DarkestNight.Rules.Blights
             }
         }
 
+        public void ReduceMight()
+        {
+            _might--;
+        }
+
+        public void RestoreMight()
+        {
+            _might++;
+        }
+
         public Location Location => _space.Location;
 
         public void Win(Hero hero)
