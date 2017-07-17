@@ -12,18 +12,14 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 {
     public class TestRoot : ITestRoot
     {
-        private readonly Game _game;
-        private readonly FakePlayer _player;
         private readonly Dictionary<Type, object> _state = new Dictionary<Type, object>();
 
-        public Game GetGame() => _game;
+        public Game GetGame() => Get<Game>();
 
-        public FakePlayer GetPlayer() => _player;
+        public FakePlayer GetPlayer() => Get<FakePlayer>();
 
         public TestRoot(Game game, FakePlayer player)
         {
-            _game = game;
-            _player = player;
             Set(game);
             Set(player);
         }
@@ -57,14 +53,15 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent
 
         public Hero GetHero(string heroName)
         {
+            var game = GetGame();
             if (heroName != null)
-                return _game.GetHero(heroName);
-            return _game.Heroes.Count == 1 ? _game.Heroes.Single() : _game.ActingHero;
+                return game.GetHero(heroName);
+            return game.Heroes.Count == 1 ? game.Heroes.Single() : game.ActingHero;
         }
 
         protected int GetBlightId(string location, string blightType)
         {
-            var space = _game.Board[location.ToEnum<Location>()];
+            var space = GetGame().Board[location.ToEnum<Location>()];
             var blight = space.Blights.First(x => x.Type == blightType.ToEnum<BlightType>());
             return blight.Id;
         }

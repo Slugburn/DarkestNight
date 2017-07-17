@@ -27,6 +27,15 @@ namespace Slugburn.DarkestNight.Rules.Blights
 
         public string EffectText { get; protected set; }
         public string DefenseText { get; protected set; }
+        public bool IsSupressed
+        {
+            get
+            {
+                var game = _space.Game;
+                return game.IsBlightSupressed(this, game.ActingHero);
+            }
+        }
+
         public Location Location => _space.Location;
 
         public void Win(Hero hero)

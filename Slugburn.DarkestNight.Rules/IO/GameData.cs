@@ -10,9 +10,10 @@ namespace Slugburn.DarkestNight.Rules.IO
             var data = new GameData
             {
                 Darkness = game.Darkness,
-                Heroes = game.Heroes.Select(h => h.GetData()).ToList(),
                 NecromancerLocation = game.Necromancer.Location,
                 Spaces = game.Board.Spaces.Select(SpaceData.Create).ToList(),
+                Blights = game.GetBlights().Select(BlightData.Create).ToList(),
+                Heroes = game.Heroes.Select(h => h.GetData()).ToList(),
                 EventDeck = game.Events.ToList(),
                 MapDeck = game.Maps.Select(MapData.Create).ToList(),
                 ArtifactDeck = game.ArtifactDeck.ToList()
@@ -22,9 +23,10 @@ namespace Slugburn.DarkestNight.Rules.IO
 
 
         public int Darkness { get; set; }
-        public List<HeroData> Heroes { get; set; }
         public Location NecromancerLocation { get; set; }
         public List<SpaceData> Spaces { get; set; }
+        public List<BlightData> Blights { get; set; }
+        public List<HeroData> Heroes { get; set; }
         public List<string> EventDeck { get; set; }
         public List<MapData> MapDeck { get; set; }
         public List<string> ArtifactDeck { get; set; }

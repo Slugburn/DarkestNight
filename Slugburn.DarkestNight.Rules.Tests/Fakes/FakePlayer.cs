@@ -12,7 +12,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 {
     public class FakePlayer : IPlayer
     {
-        private readonly Game _game;
+        public Game Game { get; set; }
 
         private object _callback;
         private TaskCompletionSource<string> _submitAnswer;
@@ -24,7 +24,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public FakePlayer(Game game)
         {
-            _game = game;
+            Game = game;
         }
 
         public BlightSelectionModel BlightSelection { get; set; }
@@ -148,20 +148,20 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
             var matching = Event.Options.SingleOrDefault(x => x.Text == option);
             matching.ShouldNotBeNull($"No matching event with Text '{option}'.");
             var code = matching?.Code ?? "<unknown>";
-            _game.ActingHero.SelectEventOption(code);
+            Game.ActingHero.SelectEventOption(code);
         }
 
         public void AcceptRoll()
         {
-            AcceptedRoll = _game.ActingHero.CurrentRoll.AdjustedRoll;
-            _game.ActingHero.AcceptRoll();
+            AcceptedRoll = Game.ActingHero.CurrentRoll.AdjustedRoll;
+            Game.ActingHero.AcceptRoll();
         }
 
         public List<int> AcceptedRoll { get; set; }
 
         public void ExecuteCommand(string heroName, string commandName)
         {
-            var hero = _game.GetHero(heroName);
+            var hero = Game.GetHero(heroName);
             hero.ExecuteCommand(commandName);
         }
 
@@ -172,7 +172,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public void ResolveConflict( string tacticName, ICollection<int> targetIds)
         {
-            var hero = _game.ActingHero;
+            var hero = Game.ActingHero;
             hero.SelectTactic(tacticName, targetIds);
         }
 
@@ -188,12 +188,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public void FinishNecromancerTurn()
         {
-            _game.Necromancer.CompleteTurn();
+            Game.Necromancer.CompleteTurn();
         }
 
         public void AssignDiceToTargets(List<TargetDieAssignment> diceAssignment)
         {
-            var hero = _game.ActingHero;
+            var hero = Game.ActingHero;
             hero.AssignDiceToTargets(diceAssignment);
         }
 
@@ -204,7 +204,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public void SelectHero(string heroName)
         {
-            var selectedHero = _game.GetHero(heroName);
+            var selectedHero = Game.GetHero(heroName);
             _heroSource.SetResult(selectedHero);
         }
 
@@ -234,8 +234,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fakes
 
         public void TradeItem(int itemId, string fromHeroName, string toHeroName)
         {
-            var fromHero = _game.GetHero(fromHeroName);
-            var toHero = _game.GetHero(toHeroName);
+            var fromHero = Game.GetHero(fromHeroName);
+            var toHero = Game.GetHero(toHeroName);
             fromHero.TradeItemTo(toHero, itemId);
         }
     }

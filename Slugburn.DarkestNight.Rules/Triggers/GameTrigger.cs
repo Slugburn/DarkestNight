@@ -6,6 +6,7 @@
         NecromancerDetectsHeroes,
         EventDrawn,
         EventOptionSelected,
-        HeroTurnEnded
+        HeroTurnEnded,
+        NecromancerTurnEnded
     }
 }

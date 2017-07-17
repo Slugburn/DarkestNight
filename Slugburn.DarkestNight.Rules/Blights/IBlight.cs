@@ -10,5 +10,6 @@ namespace Slugburn.DarkestNight.Rules.Blights
         int Might { get; }
         string EffectText { get; }
         string DefenseText { get;  }
+        bool IsSupressed { get; }
     }
 }

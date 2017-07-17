@@ -7,6 +7,7 @@ using Slugburn.DarkestNight.Rules.Models;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Tactics;
+using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Enemies
 {
@@ -101,6 +102,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
 
             _game.CreateBlights(Location, blightsToCreate);
             IsTakingTurn = false;
+            _game.Triggers.Send(GameTrigger.NecromancerTurnEnded);
             _game.UpdatePlayerBoard();
             _game.StartNewDay();
         }

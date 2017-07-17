@@ -93,6 +93,13 @@ namespace Slugburn.DarkestNight.Rules
         public void CreateBlight(Location location, BlightType blightType)
         {
             var id = NextId();
+            AddBlight(id, blightType, location);
+        }
+
+        internal void AddBlight(int id, BlightType blightType, Location location)
+        {
+            if (_id < id)
+                _id = id;
             var blight = BlightFactory.Create(id, blightType);
             _blights[id] = blight;
             var space = Board[location];
@@ -157,6 +164,7 @@ namespace Slugburn.DarkestNight.Rules
         public void AddBlightSupression(IBlightSupression blightSupression)
         {
             _blightSupressions.Add(blightSupression.Name, blightSupression);
+            UpdatePlayerBoard();
         }
 
         public void RemoveBlightSupression(string name)
@@ -258,10 +266,12 @@ namespace Slugburn.DarkestNight.Rules
         public void RestoreFrom(GameData data)
         {
             Darkness = data.Darkness;
-            foreach (var heroData in data.Heroes)
-                heroData.Restore(this);
             foreach (var spaceData in data.Spaces)
                 spaceData.Restore(this);
+            foreach (var blightData in data.Blights)
+                blightData.Restore(this);
+            foreach (var heroData in data.Heroes)
+                heroData.Restore(this);
             ArtifactDeck = data.ArtifactDeck;
             Events = data.EventDeck;
             Necromancer.Location = data.NecromancerLocation;

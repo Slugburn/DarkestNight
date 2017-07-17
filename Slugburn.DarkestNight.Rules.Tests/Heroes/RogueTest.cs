@@ -46,6 +46,64 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         }
 
         // Diversion (Action): Spend 1 Secrecy to negate the effects of one blight in your location until the Necromancer ends a turn there.
+        [Test]
+        public void Diversion()
+        {
+            TestScenario.Game
+                .Location("Village").HasBlights("Desecration", "Confusion")
+                .WithHero("Rogue").HasPowers("Diversion").At("Village")
+                .Then(Verify.Player.Hero("Rogue").Commands.Includes("Diversion"))
+                .When.Player.TakesAction("Diversion")
+                .Then(Verify.Player.BlightSelectionView.Location("Village")
+                    .WithBlights("Desecration", "Confusion"))
+                .When.Player.SelectsBlight("Village", "Desecration")
+                .Then(Verify.Player.BoardView.Location("Village").Blight("Desecration").IsSupressed());
+        }
+
+        [Test]
+        public void Diversion_EndsWhenNecromancerEndsTurnAtLocation()
+        {
+            TestScenario.Game
+                .Location("Village").HasBlights("Desecration")
+                .WithHero("Rogue").HasPowers("Diversion").At("Village")
+                .When.Player.TakesAction("Diversion")
+                .When.Player.SelectsBlight("Village", "Desecration")
+                .Given.Game.Necromancer.At("Village")
+                .When.Game.NecromancerActs(Fake.Rolls(6)) // stays at village
+                .When.Player.AcceptsNecromancerTurn()
+                .Then(Verify.Player.BoardView.Location("Village").Blight("Desecration").IsSupressed(false));
+        }
+
+        [Test]
+        public void Diversion_RequiresSecrecry()
+        {
+            TestScenario.Game
+                .Location("Village").HasBlights("Desecration")
+                .WithHero("Rogue").Secrecy(0).HasPowers("Diversion").At("Village")
+                .Then(Verify.Player.Hero("Rogue").Commands.Excludes("Diversion"));
+        }
+
+        [Test]
+        public void Diversion_RequiresTarget()
+        {
+            TestScenario.Game
+                .Location("Village").HasBlights()
+                .WithHero("Rogue").HasPowers("Diversion").At("Village")
+                .Then(Verify.Player.Hero("Rogue").Commands.Excludes("Diversion"));
+        }
+
+        [Test]
+        public void Diversion_Restored()
+        {
+            TestScenario.Game
+                .Location("Village").HasBlights("Desecration")
+                .WithHero("Rogue").HasPowers("Diversion").At("Village")
+                .When.Player.TakesAction("Diversion")
+                .When.Player.SelectsBlight("Village", "Desecration")
+                .When.Game.Saved().Restored()
+                .Then(Verify.Player.BoardView.Location("Village").Blight("Desecration").IsSupressed());
+        }
+
         // Eavesdrop (Action): Spend 1 Secrecy to search with 2 dice.
         // Sabotage (Action): Spend 1 Secrecy in the Necromancer's location to cause -1 Darkness.
         // Sap (Bonus): Exhaust during your turn to reduce the might of a blight in your location by 1 until your next turn.

@@ -15,6 +15,7 @@ namespace Slugburn.DarkestNight.Rules.Models
             Might = blight.Might;
             Effect = blight.EffectText;
             Defense = blight.DefenseText;
+            IsSupressed = blight.IsSupressed;
         }
 
         public BlightModel()
@@ -28,6 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Models
         public int Might { get; set; }
         public string Effect { get; set; }
         public string Defense { get; set; }
+        public bool IsSupressed { get; set; }
 
         public static List<BlightModel> Create(IEnumerable<IBlight> blights)
         {
