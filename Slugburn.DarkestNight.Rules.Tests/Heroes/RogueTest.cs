@@ -133,6 +133,39 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         }
 
         // Sabotage (Action): Spend 1 Secrecy in the Necromancer's location to cause -1 Darkness.
+        [Test]
+        public void Sabotage()
+        {
+            TestScenario.Game
+                .Darkness(10)
+                .Necromancer.At("Ruins")
+                .WithHero("Rogue").At("Ruins").HasPowers("Sabotage")
+                .WithHero() // add another hero to prevent necromancer's turn from starting
+                .Given.Hero("Rogue").IsTakingTurn()
+                .Then(Verify.Player.Hero("Rogue").Commands.Includes("Sabotage"))
+                .When.Player.TakesAction("Rogue", "Sabotage")
+                .Then(Verify.Player.BoardView.Darkness(9))
+                .Then(Verify.Player.Hero("Rogue").LostSecrecy(1));
+        }
+
+        [Test]
+        public void Sabotage_RequiresSecrecy()
+        {
+            TestScenario.Game
+                .Necromancer.At("Ruins")
+                .WithHero("Rogue").Secrecy(0).At("Ruins").HasPowers("Sabotage")
+                .Then(Verify.Player.Hero("Rogue").Commands.Excludes("Sabotage"));
+        }
+
+        [Test]
+        public void Sabotage_OnlyInNecromancerLocation()
+        {
+            TestScenario.Game
+                .Necromancer.At("Ruins")
+                .WithHero("Rogue").At("Village").HasPowers("Sabotage")
+                .Then(Verify.Player.Hero("Rogue").Commands.Excludes("Sabotage"));
+        }
+
         // Sap (Bonus): Exhaust during your turn to reduce the might of a blight in your location by 1 until your next turn.
         // Shadow Cloak (Bonus): +1 die when eluding.
         // Skulk (Tactic): Elude with 2 dice and add 1 to the highest die.
