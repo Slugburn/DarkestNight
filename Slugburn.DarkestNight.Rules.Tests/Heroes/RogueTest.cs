@@ -105,6 +105,33 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
         }
 
         // Eavesdrop (Action): Spend 1 Secrecy to search with 2 dice.
+        [Test]
+        public void Eavesdrop()
+        {
+            TestScenario.Game
+                .WithHero("Rogue").NotAt("Monastery").HasPowers("Eavesdrop")
+                .Then(Verify.Player.Hero("Rogue").Commands.Includes("Eavesdrop"))
+                .When.Player.TakesAction("Eavesdrop")
+                .Then(Verify.Player.SearchView.Roll(6,6))
+                .Then(Verify.Player.Hero("Rogue").LostSecrecy(1));
+        }
+
+        [Test]
+        public void Eavesdrop_RequiresSecrecy()
+        {
+            TestScenario.Game
+                .WithHero("Rogue").Secrecy(0).NotAt("Monastery").HasPowers("Eavesdrop")
+                .Then(Verify.Player.Hero("Rogue").Commands.Excludes("Eavesdrop"));
+        }
+
+        [Test]
+        public void Eavesdrop_NotAtMonastery()
+        {
+            TestScenario.Game
+                .WithHero("Rogue").At("Monastery").HasPowers("Eavesdrop")
+                .Then(Verify.Player.Hero("Rogue").Commands.Excludes("Eavesdrop"));
+        }
+
         // Sabotage (Action): Spend 1 Secrecy in the Necromancer's location to cause -1 Darkness.
         // Sap (Bonus): Exhaust during your turn to reduce the might of a blight in your location by 1 until your next turn.
         // Shadow Cloak (Bonus): +1 die when eluding.

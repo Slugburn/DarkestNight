@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Slugburn.DarkestNight.Rules.Heroes;
-using Slugburn.DarkestNight.Rules.Models;
+﻿using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Players;
 using Slugburn.DarkestNight.Rules.Rolls;
@@ -25,11 +23,16 @@ namespace Slugburn.DarkestNight.Rules.Actions
 
         public override void Execute(Hero hero)
         {
+            DoSearch(hero, 1);
+        }
+
+        internal static void DoSearch(Hero hero, int diceCount)
+        {
             hero.State = HeroState.Searching;
             var space = hero.Space;
             var state = hero.SetRoll(RollBuilder.Create<SearchRollHandler>()
                 .Type(ModifierType.SearchDice)
-                .Base("Search", 1)
+                .Base("Search", diceCount)
                 .Target(space.GetSearchTarget(hero) ?? 0));
             hero.Triggers.Send(HeroTrigger.Searched);
             state.Roll();
