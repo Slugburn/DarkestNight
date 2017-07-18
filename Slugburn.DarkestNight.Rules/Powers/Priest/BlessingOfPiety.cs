@@ -1,4 +1,5 @@
-﻿using Slugburn.DarkestNight.Rules.Heroes;
+﻿using System.Threading.Tasks;
+using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Priest
@@ -26,10 +27,11 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
                 _power = power;
             }
 
-            public void HandleTrigger(Hero hero, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Hero hero, string source, TriggerContext context)
             {
                 if (!_power.IsExhausted)
                     hero.GainGrace(1, hero.DefaultGrace);
+                return Task.CompletedTask;
             }
         }
     }

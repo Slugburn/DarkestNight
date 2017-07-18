@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Triggers;
@@ -44,9 +45,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
 
         private class TreeFormStartTurnHandler : ITriggerHandler<Hero>
         {
-            public void HandleTrigger(Hero hero, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Hero hero, string source, TriggerContext context)
             {
                 hero.GainGrace(2, hero.DefaultGrace);
+                return Task.CompletedTask;
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using Slugburn.DarkestNight.Rules.Heroes;
+﻿using System.Threading.Tasks;
+using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Triggers;
 
 namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
@@ -21,14 +22,15 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
 
         private class DeathMaskTriggerHandler : ITriggerHandler<Hero>
         {
-            public void HandleTrigger(Hero registrar, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Hero registrar, string source, TriggerContext context)
             {
                 var hero = registrar;
                 var power = hero.GetPower(PowerName);
-                if (!power.IsUsable(hero)) return;
+                if (!power.IsUsable(hero)) return Task.CompletedTask;
                 var sourceName = context.GetState<string>();
                 if (sourceName == "Attack" || sourceName == "Necromancer")
                     context.Cancel = true;
+                return Task.CompletedTask;
             }
 
         }

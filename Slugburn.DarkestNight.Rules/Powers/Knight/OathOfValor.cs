@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -49,19 +50,21 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
 
         private class OathOfValorFulfilled : ITriggerHandler<Hero>
         {
-            public void HandleTrigger(Hero hero, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Hero hero, string source, TriggerContext context)
             {
                 var oath = (IOath)hero.GetPower(source);
                 oath.Fulfill(hero);
+                return Task.CompletedTask;
             }
         }
 
         private class OathOfValorBroken : ITriggerHandler<Hero>
         {
-            public void HandleTrigger(Hero hero, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Hero hero, string source, TriggerContext context)
             {
                 var oath = (IOath)hero.GetPower(source);
                 oath.Break(hero);
+                return Task.CompletedTask;
             }
         }
 

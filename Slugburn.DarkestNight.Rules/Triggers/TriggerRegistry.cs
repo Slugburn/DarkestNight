@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.IO;
 
 namespace Slugburn.DarkestNight.Rules.Triggers
@@ -28,7 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Triggers
             _bySource[source].Add(item);
         }
 
-        public bool Send(TTrigger trigger, object state = null)
+        public async Task<bool> Send(TTrigger trigger, object state = null)
         {
             if (!_byTrigger.ContainsKey(trigger)) return true;
             var items = _byTrigger[trigger];
@@ -36,7 +37,7 @@ namespace Slugburn.DarkestNight.Rules.Triggers
             foreach (var item in items.ToList())
             {
                 var context = new TriggerContext(state, trigger);
-                item.Handler.HandleTrigger(_registrar, item.Source, context);
+                await item.Handler.HandleTriggerAsync(_registrar, item.Source, context);
                 cancel = cancel || context.Cancel;
             }
             return !cancel;

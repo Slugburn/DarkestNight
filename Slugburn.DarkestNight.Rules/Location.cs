@@ -2,6 +2,7 @@
 {
     public enum Location
     {
+        Unknown = 0,
         Monastery = 1,
         Castle = 2,
         Forest = 3,

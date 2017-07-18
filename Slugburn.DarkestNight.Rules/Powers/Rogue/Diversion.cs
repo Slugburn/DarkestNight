@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -16,23 +17,6 @@ namespace Slugburn.DarkestNight.Rules.Powers.Rogue
             Text = "Spend 1 Secrecy to negate the effects of one blight in your location until the Necromancer ends a turn there.";
         }
 
-        public List<IBlight> Targets { get; } = new List<IBlight>();
-
-        public void SetTarget(string targetName)
-        {
-            var targetIds = targetName.Split(',').Select(int.Parse);
-            foreach (var targetId in targetIds)
-            {
-                var blight = Owner.Game.GetBlight(targetId);
-                UseOn(blight);
-            }
-        }
-
-        public string GetTarget()
-        {
-            return Targets.Select(x => x.Id.ToString()).ToCsv();
-        }
-
         public override bool IsUsable(Hero hero)
         {
             return base.IsUsable(hero)
@@ -44,6 +28,24 @@ namespace Slugburn.DarkestNight.Rules.Powers.Rogue
         {
             base.OnLearn();
             Owner.AddCommand(new DiversionCommand(this));
+        }
+
+        public List<IBlight> Targets { get; } = new List<IBlight>();
+
+        public void SetTarget(string targetName)
+        {
+            if (string.IsNullOrEmpty(targetName)) return;
+            var targetIds = targetName.Split(',').Select(int.Parse);
+            foreach (var targetId in targetIds)
+            {
+                var blight = Owner.Game.GetBlight(targetId);
+                UseOn(blight);
+            }
+        }
+
+        public string GetTarget()
+        {
+            return Targets.Select(x => x.Id.ToString()).ToCsv();
         }
 
         private void UseOn(IBlight blight)
@@ -60,6 +62,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Rogue
 
             public override async void Execute(Hero hero)
             {
+                hero.SpendSecrecy(1);
                 var validBlights = hero.Space.Blights;
                 var blightIds = await hero.Player.SelectBlights(BlightSelectionModel.Create(Name, validBlights, 1));
                 var blightId = blightIds.Single();
@@ -98,13 +101,14 @@ namespace Slugburn.DarkestNight.Rules.Powers.Rogue
                 _supression = supression;
             }
 
-            public void HandleTrigger(Game game, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Game game, string source, TriggerContext context)
             {
-                if (game.Necromancer.Location != _supression.Blight.Location) return;
+                if (game.Necromancer.Location != _supression.Blight.Location) return Task.CompletedTask;
 
                 _supression.Power.Targets.Remove(_supression.Blight);
                 game.RemoveBlightSupression(_supression.Name);
                 game.Triggers.RemoveBySource(_supression.Name);
+                return Task.CompletedTask;
             }
         }
 
@@ -119,9 +123,10 @@ namespace Slugburn.DarkestNight.Rules.Powers.Rogue
                 _blightId = blightId;
             }
 
-            public void HandleTrigger(Game game, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Game game, string source, TriggerContext context)
             {
                 _power.Targets.RemoveAll(x => x.Id == _blightId);
+                return Task.CompletedTask;
             }
         }
     }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Triggers;
@@ -43,20 +44,22 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
 
         private class OathFulfilled : ITriggerHandler<Hero>
         {
-            public void HandleTrigger(Hero hero, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Hero hero, string source, TriggerContext context)
             {
-                if (!hero.IsTargetNecromancer()) return;
+                if (!hero.IsTargetNecromancer()) return Task.CompletedTask;
                 var oath = (IOath) hero.GetPower(source);
                 oath.Fulfill(hero);
+                return Task.CompletedTask;
             }
         }
 
         private class OathBroken : ITriggerHandler<Hero>
         {
-            public void HandleTrigger(Hero hero, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Hero hero, string source, TriggerContext context)
             {
                 var oath = (IOath)hero.GetPower(source);
                 oath.Break(hero);
+                return Task.CompletedTask;
             }
         }
 

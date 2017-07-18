@@ -57,7 +57,8 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Then(Verify.Player.BlightSelectionView.Location("Village")
                     .WithBlights("Desecration", "Confusion"))
                 .When.Player.SelectsBlight("Village", "Desecration")
-                .Then(Verify.Player.BoardView.Location("Village").Blight("Desecration").IsSupressed());
+                .Then(Verify.Player.BoardView.Location("Village").Blight("Desecration").IsSupressed())
+                .Then(Verify.Player.Hero("Rogue").LostSecrecy(1));
         }
 
         [Test]
@@ -194,9 +195,89 @@ namespace Slugburn.DarkestNight.Rules.Tests.Heroes
                 .Then(Verify.Player.Hero("Rogue").Commands.Excludes("Sap"));
         }
 
+        [Test]
+        public void Sap_MustBeUsedDuringTurn()
+        {
+            TestScenario.Game
+                .Location("Village").HasBlights("Desecration")
+                .WithHero("Rogue").HasPowers("Sap").At("Village").IsTakingTurn(false)
+                .Then(Verify.Player.Hero("Rogue").Commands.Excludes("Sap"));
+        }
+
         // Shadow Cloak (Bonus): +1 die when eluding.
+        [Test]
+        public void ShadowCloak()
+        {
+            TestScenario.Game
+                .WithHero("Rogue").HasPowers("Shadow Cloak")
+                .Then(Verify.Hero("Rogue").EludeDice(2));
+        }
+
         // Skulk (Tactic): Elude with 2 dice and add 1 to the highest die.
+        [Test]
+        public void Skulk()
+        {
+            TestScenario.Game
+                .WithHero("Rogue").HasPowers("Skulk").IsFacingEnemy("Skeleton")
+                .Then(Verify.Player.ConflictModel.HasTactics("Skulk", "Fight", "Elude"))
+                .When.Player.Targets("Skeleton").UsesTactic("Skulk").ResolvesConflict(Fake.Rolls(2, 2))
+                .Then(Verify.Player.ConflictModel.Rolled(3, 2));
+        }
+
         // Stealth (Bonus): Any time you lose or spend Secrecy, you can spend 1 Grace instead.
+        [Test]
+        public void Stealth()
+        {
+            TestScenario.Game
+                .WithHero("Rogue").HasPowers("Stealth", "Eavesdrop").NotAt("Monastery")
+                .When.Player.TakesAction("Eavesdrop")
+                .Then(Verify.Player.Question("Spend 1 Grace instead of Secrecy?", "Yes", "No"))
+                .When.Player.AnswersQuestion("Stealth", "Yes")
+                .Then(Verify.Player.SearchView.Roll(6, 6))
+                .Then(Verify.Player.Hero("Rogue").LostSecrecy(0).LostGrace(1));
+        }
+
+        [Test]
+        public void Stealth_CanSpendSecrecy()
+        {
+            TestScenario.Game
+                .WithHero("Rogue").Secrecy(0).HasPowers("Stealth")
+                .Then(Verify.Hero("Rogue").CanSpendSecrecy());
+        }
+
         // Vanish (Tactic): Elude with 2 dice. Gain 1 Secrecy (up to 7) if you roll 2 successes.
+        [Test]
+        public void Vanish()
+        {
+            TestScenario.Game
+                .WithHero("Rogue").Secrecy(0).HasPowers("Vanish").IsFacingEnemy("Zombie")
+                .Then(Verify.Player.ConflictModel.HasTactics("Vanish", "Fight", "Elude"))
+                .When.Player.Targets("Zombie").UsesTactic("Vanish").ResolvesConflict(Fake.Rolls(3, 3))
+                .Then(Verify.Player.ConflictModel.Rolled(3, 3))
+                .When.Player.AcceptsRoll()
+                .Then(Verify.Player.Hero("Rogue").Secrecy(1));
+        }
+
+        [Test]
+        public void Vanish_NoEffectWithLessThanTwoSuccesses()
+        {
+            TestScenario.Game
+                .WithHero("Rogue").Secrecy(0).HasPowers("Vanish").IsFacingEnemy("Zombie")
+                .Then(Verify.Player.ConflictModel.HasTactics("Vanish", "Fight", "Elude"))
+                .When.Player.Targets("Zombie").UsesTactic("Vanish").ResolvesConflict(Fake.Rolls(2, 3))
+                .When.Player.AcceptsRoll()
+                .Then(Verify.Player.Hero("Rogue").Secrecy(0));
+        }
+
+        [Test]
+        public void Vanish_MaximumOf7()
+        {
+            TestScenario.Game
+                .WithHero("Rogue").Secrecy(7).HasPowers("Vanish").IsFacingEnemy("Zombie")
+                .Then(Verify.Player.ConflictModel.HasTactics("Vanish", "Fight", "Elude"))
+                .When.Player.Targets("Zombie").UsesTactic("Vanish").ResolvesConflict(Fake.Rolls(3, 3))
+                .When.Player.AcceptsRoll()
+                .Then(Verify.Player.Hero("Rogue").Secrecy(7));
+        }
     }
 }

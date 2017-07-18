@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Triggers;
 
@@ -30,14 +31,15 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
                 _visions = visions;
             }
 
-            public void HandleTrigger(Game game, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Game game, string source, TriggerContext context)
             {
                 var hero = _visions.Owner;
-                if (hero != game.ActingHero) return;
-                if (!_visions.IsUsable(hero)) return;
+                if (hero != game.ActingHero) return Task.CompletedTask;
+                if (!_visions.IsUsable(hero)) return Task.CompletedTask;
                 var card = hero.CurrentEvent;
-                if (!card.IsIgnorable) return;
+                if (!card.IsIgnorable) return Task.CompletedTask;
                 card.AddOption(PowerName, $"Ignore [{PowerName}]");
+                return Task.CompletedTask;
             }
         }
 
@@ -50,20 +52,21 @@ namespace Slugburn.DarkestNight.Rules.Powers.Druid
                 _visions = visions;
             }
 
-            public void HandleTrigger(Game game, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Game game, string source, TriggerContext context)
             {
                 var hero = _visions.Owner;
-                if (hero.CurrentEvent == null) return;
+                if (hero.CurrentEvent == null) return Task.CompletedTask;
                 var selectedOption = hero.CurrentEvent.SelectedOption;
-                if (selectedOption != PowerName) return;
+                if (selectedOption != PowerName) return Task.CompletedTask;
 
-                if (!_visions.IsUsable(hero)) return;
+                if (!_visions.IsUsable(hero)) return Task.CompletedTask;
                 var card = hero.CurrentEvent;
-                if (!card.IsIgnorable) return;
+                if (!card.IsIgnorable) return Task.CompletedTask;
 
                 context.Cancel = true;
                 hero.EndEvent();
                 _visions.Exhaust(hero);
+                return Task.CompletedTask;
             }
         }
     }

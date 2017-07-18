@@ -1,4 +1,5 @@
-﻿using Slugburn.DarkestNight.Rules.Heroes;
+﻿using System.Threading.Tasks;
+using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Modifiers;
 using Slugburn.DarkestNight.Rules.Rolls;
 using Slugburn.DarkestNight.Rules.Triggers;
@@ -39,11 +40,12 @@ namespace Slugburn.DarkestNight.Rules.Powers.Prince
                 _power = power;
             }
 
-            public void HandleTrigger(Game game, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Game game, string source, TriggerContext context)
             {
                 var hero = context.GetState<Hero>();
                 if (!_power.IsExhausted && hero.Location == _power.Target.Location)
                     hero.GainSecrecy(1, 5);
+                return Task.CompletedTask;
             }
         }
     }

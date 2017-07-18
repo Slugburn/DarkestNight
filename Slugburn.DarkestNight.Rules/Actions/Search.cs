@@ -26,7 +26,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
             DoSearch(hero, 1);
         }
 
-        internal static void DoSearch(Hero hero, int diceCount)
+        internal static async void DoSearch(Hero hero, int diceCount)
         {
             hero.State = HeroState.Searching;
             var space = hero.Space;
@@ -34,7 +34,7 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 .Type(ModifierType.SearchDice)
                 .Base("Search", diceCount)
                 .Target(space.GetSearchTarget(hero) ?? 0));
-            hero.Triggers.Send(HeroTrigger.Searched);
+            await hero.Triggers.Send(HeroTrigger.Searched);
             state.Roll();
             hero.DisplaySearch(CallbackHandler);
         }

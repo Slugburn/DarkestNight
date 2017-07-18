@@ -90,7 +90,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
                 hero.UpdateAvailableCommands();
         }
 
-        public void CompleteTurn()
+        public async void CompleteTurn()
         {
             Location = Destination;
 
@@ -102,7 +102,7 @@ namespace Slugburn.DarkestNight.Rules.Enemies
 
             _game.CreateBlights(Location, blightsToCreate);
             IsTakingTurn = false;
-            _game.Triggers.Send(GameTrigger.NecromancerTurnEnded);
+            await _game.Triggers.Send(GameTrigger.NecromancerTurnEnded);
             _game.UpdatePlayerBoard();
             _game.StartNewDay();
         }

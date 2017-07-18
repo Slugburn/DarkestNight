@@ -16,13 +16,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             return rollState;
         }
 
-        public void AcceptRoll(Hero hero, RollState rollState)
+        public async void AcceptRoll(Hero hero, RollState rollState)
         {
             var conflictState = hero.ConflictState;
             conflictState.IsRollAccepted = true;
             var tacticType = conflictState.GetTacticType();
             if (tacticType == TacticType.Elude)
-                hero.Triggers.Send(HeroTrigger.Eluding);
+                await hero.Triggers.Send(HeroTrigger.Eluding);
             hero.ResolveCurrentConflict();
         }
     }

@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Commands;
@@ -48,10 +49,11 @@ namespace Slugburn.DarkestNight.Rules.Powers.Acolyte
                 return Power.Owner == hero;
             }
 
-            public void HandleTrigger(Hero hero, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Hero hero, string source, TriggerContext context)
             {
                 hero.Game.RemoveBlightSupression(source);
                 hero.Triggers.Remove(HeroTrigger.StartedTurn, source);
+                return Task.CompletedTask;
             }
         }
 

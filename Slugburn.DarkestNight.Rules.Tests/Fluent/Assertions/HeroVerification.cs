@@ -42,6 +42,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private string[] _facingEnemies;
         private bool _hasFreeAction;
         private bool? _isTakingTurn;
+        private bool? _canSpendSecrecy;
 
         public IVerifiable Parent => null;
 
@@ -83,6 +84,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
                 Assert.That(hero.Secrecy, Is.EqualTo(_secrecy), "Unexpected Secrecy.");
             hero.IsActionAvailable.ShouldBeIfNotNull(_isActionAvailable, "IsActionAvailable");
             Assert.That(hero.CanGainGrace(), Is.EqualTo(_expectedCanGainGrace), "Unexpected CanGainGrace");
+            hero.CanSpendSecrecy.ShouldBeIfNotNull(_canSpendSecrecy, "CanSpendSecrecy");
             Assert.That(hero.Location, Is.EqualTo(_location));
             var validLocations = hero.GetValidMovementLocations().ToList();
             var disallowedMovement = validLocations.Intersect(_invalidLocations);
@@ -363,6 +365,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         public HeroVerification IsTakingTurn(bool expected = true)
         {
             _isTakingTurn = expected;
+            return this;
+        }
+
+        public HeroVerification CanSpendSecrecy(bool expected = true)
+        {
+            _canSpendSecrecy = expected;
             return this;
         }
     }

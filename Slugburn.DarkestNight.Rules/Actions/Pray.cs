@@ -36,12 +36,12 @@ namespace Slugburn.DarkestNight.Rules.Actions
                 return rollState;
             }
 
-            public void AcceptRoll(Hero hero, RollState rollState)
+            public async void AcceptRoll(Hero hero, RollState rollState)
             {
                 var successes = rollState.Successes;
                 hero.GainGrace(successes, hero.DefaultGrace);
                 hero.RefreshPowers();
-                hero.Triggers.Send(HeroTrigger.Prayed);
+                await hero.Triggers.Send(HeroTrigger.Prayed);
                 hero.CurrentRoll = null;
                 hero.ContinueTurn();
             }

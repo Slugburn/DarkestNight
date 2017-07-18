@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Rolls;
@@ -54,10 +55,11 @@ namespace Slugburn.DarkestNight.Rules.Powers.Prince
 
         internal class RemoveInspireBonus : ITriggerHandler<Hero>
         {
-            public void HandleTrigger(Hero hero, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Hero hero, string source, TriggerContext context)
             {
                 hero.RemoveModifiers(source);
                 hero.Triggers.RemoveBySource(source);
+                return Task.CompletedTask;
             }
         }
 

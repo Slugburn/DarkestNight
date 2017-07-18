@@ -1,4 +1,5 @@
-﻿using Slugburn.DarkestNight.Rules.Actions;
+﻿using System.Threading.Tasks;
+using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Triggers;
 
@@ -23,12 +24,13 @@ namespace Slugburn.DarkestNight.Rules.Powers.Priest
             Owner.Triggers.Add(HeroTrigger.Moved, Name, this);
         }
 
-        public void HandleTrigger(Hero hero, string source, TriggerContext context)
+        public Task HandleTriggerAsync(Hero hero, string source, TriggerContext context)
         {
             if (context.WasTriggeredBy(HeroTrigger.Moving))
                 hero.Space.RemoveAction(_action.Name);
             else if (context.WasTriggeredBy(HeroTrigger.Moved))
                 hero.Space.AddAction(_action);
+            return Task.CompletedTask;
         }
 
         internal class CalmPray : StandardAction

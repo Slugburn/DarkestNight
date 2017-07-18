@@ -11,12 +11,12 @@ namespace Slugburn.DarkestNight.Rules.Actions
             Text = "Refresh your powers and gain 1 Secrecy (up to 5).";
         }
 
-        public override void Execute(Hero hero)
+        public override async void Execute(Hero hero)
         {
             hero.RefreshPowers();
             if (hero.Secrecy < 5)
                 hero.GainSecrecy(1, 5);
-            hero.Triggers.Send(HeroTrigger.Hidden);
+            await hero.Triggers.Send(HeroTrigger.Hidden);
         }
     }
 }

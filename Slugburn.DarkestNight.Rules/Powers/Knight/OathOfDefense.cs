@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Triggers;
 
@@ -36,31 +37,35 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         {
             public string HeroName { get; set; }
 
-            public void HandleTrigger(Game game, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Game game, string source, TriggerContext context)
             {
                 var location = context.GetState<Location>();
                 var hero = game.GetHero(HeroName);
-                if (location != hero.Location) return;
+                if (location != hero.Location) return Task.CompletedTask;
                 var space = game.Board[location];
-                if (space.Blights.Any()) return;
+                if (space.Blights.Any()) return Task.CompletedTask;
                 var power = (IOath)hero.GetPower(PowerName);
                 power.Fulfill(hero);
+                return Task.CompletedTask;
             }
         }
 
         private class OathOfDefenseActive : ITriggerHandler<Hero>
         {
-            public void HandleTrigger(Hero hero, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Hero hero, string source, TriggerContext context)
             {
                 hero.GainGrace(1, hero.DefaultGrace);
+                return Task.CompletedTask;
             }
         }
+
         private class OathOfDefenseBroken : ITriggerHandler<Hero>
         {
-            public void HandleTrigger(Hero hero, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Hero hero, string source, TriggerContext context)
             {
                 var oath = (IOath)hero.GetPower(source);
                 oath.Break(hero);
+                return Task.CompletedTask;
             }
         }
 

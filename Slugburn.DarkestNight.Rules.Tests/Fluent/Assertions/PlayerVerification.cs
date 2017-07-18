@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Shouldly;
 using Slugburn.DarkestNight.Rules.Tests.Fakes;
 
 namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
@@ -17,6 +19,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
         private SearchViewVerification _searchView;
         private PrayerViewVerification _prayerView;
         private readonly Dictionary<string, PlayerHeroVerification>  _heroViews = new Dictionary<string, PlayerHeroVerification>();
+        private PlayerQuestionVerification _question;
 
 
         public PlayerVerification()
@@ -46,6 +49,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             _necromancerView?.Verify(root);
             _searchView?.Verify(root);
             _prayerView?.Verify(root);
+            _question?.Verify(root);
         }
 
         public EventViewVerification EventView
@@ -127,6 +131,32 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             var verification = new PlayerHeroVerification(this, heroName);
             _heroViews.Add(heroName, verification);
             return verification;
+        }
+
+        public IVerifiable Question(string text, params string[] answers)
+        {
+            return _question = new PlayerQuestionVerification(this, text, answers);
+        }
+    }
+
+    public class PlayerQuestionVerification : ChildVerification
+    {
+        private readonly string _text;
+        private readonly string[] _answers;
+
+        public PlayerQuestionVerification(IVerifiable parent, string text, string[] answers) : base(parent)
+        {
+            _text = text;
+            _answers = answers;
+        }
+
+        public override void Verify(ITestRoot root) 
+        {
+            var player = root.Get<FakePlayer>();
+            var model = player.AskQuestion;
+            model.ShouldNotBeNull();
+            model.Text.ShouldBe(_text);
+            model.Answers.ShouldBeEquivalent(_answers);
         }
     }
 }

@@ -32,12 +32,12 @@ namespace Slugburn.DarkestNight.Rules.Rolls
 
         public bool IsAccepted { get; set; }
 
-        public void Roll()
+        public async void Roll()
         {
             var total = Hero.GetModifiedTotal(BaseDiceCount, ModifierType);
             ActualRoll = Die.Roll(total);
             AdjustRoll();
-            Hero.Triggers.Send(HeroTrigger.Rolled, ModifierType);
+            await Hero.Triggers.Send(HeroTrigger.Rolled, ModifierType);
         }
 
         public List<int> Accept()

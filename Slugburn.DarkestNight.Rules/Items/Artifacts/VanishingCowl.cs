@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Commands;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -32,9 +33,10 @@ namespace Slugburn.DarkestNight.Rules.Items.Artifacts
             hero.ContinueTurn();
         }
 
-        public void HandleTrigger(Hero hero, string source, TriggerContext context)
+        public Task HandleTriggerAsync(Hero hero, string source, TriggerContext context)
         {
             hero.Game.RemoveBlightSupression(Name);
+            return Task.CompletedTask;
         }
 
         internal class VanishingCowlBlightSupression : IBlightSupression

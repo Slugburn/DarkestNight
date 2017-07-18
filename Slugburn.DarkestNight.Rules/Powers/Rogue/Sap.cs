@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Actions;
 using Slugburn.DarkestNight.Rules.Blights;
 using Slugburn.DarkestNight.Rules.Heroes;
@@ -17,7 +18,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Rogue
 
         public override bool IsUsable(Hero hero)
         {
-            return base.IsUsable(hero) && hero.GetBlights().Any();
+            return base.IsUsable(hero) && hero.GetBlights().Any() && hero.IsTakingTurn;
         }
 
         protected override void OnLearn()
@@ -39,6 +40,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Rogue
                 blight.ReduceMight();
                 hero.Game.UpdatePlayerBoard();
                 hero.Triggers.Add(HeroTrigger.StartedTurn, Name, new SapOnStartedTurn(blight));
+                hero.ContinueTurn();
             }
         }
 
@@ -51,10 +53,11 @@ namespace Slugburn.DarkestNight.Rules.Powers.Rogue
                 _blight = blight;
             }
 
-            public void HandleTrigger(Hero hero, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Hero hero, string source, TriggerContext context)
             {
                 _blight.RestoreMight();
                 hero.Game.UpdatePlayerBoard();
+                return Task.CompletedTask;
             }
         }
     }

@@ -38,6 +38,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         private bool _movedDuringTurn;
         private bool _endingTurn;
         private int _baseDefaultGrace;
+        private Func<Hero, bool> _canSpendSecrecy;
 
         public Hero()
         {
@@ -54,6 +55,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
             Location = Location.Monastery;
             Enemies = new List<IEnemy>();
+            _canSpendSecrecy = hero => hero.Secrecy > 0;
         }
 
         public HeroState State { get; set; }
@@ -66,8 +68,8 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public int DefaultGrace
         {
-            get { return this.GetModifiedTotal(_baseDefaultGrace, ModifierType.DefaultGrace); }
-            set { _baseDefaultGrace = value; }
+            get => this.GetModifiedTotal(_baseDefaultGrace, ModifierType.DefaultGrace);
+            set => _baseDefaultGrace = value;
         }
 
         public int DefaultSecrecy { get; set; }
@@ -84,10 +86,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public bool IsActionAvailable
         {
-            get
-            {
-                return _isActionAvailable || _hasFreeAction;
-            }
+            get => _isActionAvailable || _hasFreeAction;
             set
             {
                 if (!value && _hasFreeAction)
@@ -237,12 +236,12 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             DoEvent(eventName);
         }
 
-        private void DoEvent(string eventName)
+        private async void DoEvent(string eventName)
         {
             State = HeroState.ResolvingEvent;
             var card = EventFactory.CreateCard(eventName);
             CurrentEvent = card.Detail.GetHeroEvent(this);
-            Game.Triggers.Send(GameTrigger.EventDrawn);
+            await Game.Triggers.Send(GameTrigger.EventDrawn);
             State = HeroState.EventDrawn;
             UpdateAvailableCommands();
             DisplayCurrentEvent();
@@ -253,26 +252,24 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             LoseSecrecy(1, sourceName);
         }
 
-        public void LoseSecrecy(int amount, string sourceName = null)
+        public async void LoseSecrecy(int amount, string sourceName = null)
         {
             if (amount == 0) return;
-            if (!Triggers.Send(HeroTrigger.LosingSecrecy, sourceName)) return;
+            if (!await Triggers.Send(HeroTrigger.LosingSecrecy, sourceName)) return;
             Secrecy = Math.Max(Secrecy - amount, 0);
-            UpdateHeroStatus();
-        }
-
-        public void SpendSecrecy(int amount)
-        {
-            if (Secrecy - amount < 0)
-                throw new ArgumentOutOfRangeException(nameof(amount));
-            Secrecy -= amount;
             UpdateHeroStatus();
             UpdateAvailableCommands();
         }
 
-        public void ChooseAction()
+        public async void SpendSecrecy(int amount)
         {
-            throw new NotImplementedException();
+            if (!CanSpendSecrecy)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            if (!await Triggers.Send(HeroTrigger.LosingSecrecy))
+                return;
+            Secrecy -= amount;
+            UpdateHeroStatus();
+            UpdateAvailableCommands();
         }
 
         public void Add<T>(T item)
@@ -280,9 +277,9 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             _stash.Add(item);
         }
         
-        public void MoveTo(Location location)
+        public async void MoveTo(Location location)
         {
-            if (!Triggers.Send(HeroTrigger.Moving))
+            if (!await Triggers.Send(HeroTrigger.Moving))
                 return;
             Location = location;
             var curses = GetBlights().Count(b => b is Curse && !Game.IsBlightSupressed(b, this));
@@ -292,7 +289,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             UpdateHeroStatus();
             UpdateAvailableCommands();
             Game.UpdatePlayerBoard();
-            Triggers.Send(HeroTrigger.Moved);
+            await Triggers.Send(HeroTrigger.Moved);
         }
 
         public void GainSecrecy(int amount, int max)
@@ -413,10 +410,10 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             DisplayConflictState();
         }
 
-        public void AcceptRoll()
+        public async void AcceptRoll()
         {
-            var roll = CurrentRoll.Accept();
-            Triggers.Send(HeroTrigger.RollAccepted, roll);
+            await Triggers.Send(HeroTrigger.RollAccepted, CurrentRoll);
+            CurrentRoll.Accept();
             if (CurrentRoll?.TargetNumber > 0)
                 CurrentRoll = null;
         }
@@ -576,13 +573,13 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             DefendAgainst(Enemies);
         }
 
-        public void SelectEventOption(string optionCode)
+        public async void SelectEventOption(string optionCode)
         {
             var validCodes = CurrentEvent.Options.Select(x=>x.Code).ToList();
             if (!validCodes.Contains(optionCode))
                 throw new ArgumentOutOfRangeException(nameof(optionCode), optionCode, $"Valid codes: {validCodes.ToCsv()}");
             CurrentEvent.SelectedOption = optionCode;
-            if (!Game.Triggers.Send(GameTrigger.EventOptionSelected))
+            if (!await Game.Triggers.Send(GameTrigger.EventOptionSelected))
                 return;
             ResolveSelectedEventOption();
         }
@@ -643,7 +640,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             }
         }
 
-        public void ResolveCurrentConflict()
+        public async void ResolveCurrentConflict()
         {
             var targets = ConflictState.SelectedTargets;
             if (targets.Any(x=>x.ResultDie == 0))
@@ -654,7 +651,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             foreach (var target in prioritizedTargets)
             {
                 if (target.TacticType == TacticType.Fight &&  target.IsWin)
-                    Triggers.Send(HeroTrigger.FightWon);
+                    await Triggers.Send(HeroTrigger.FightWon);
 
                 target.Resolve(this);
                 var enemy = target.Conflict as IEnemy;
@@ -669,7 +666,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
 
         public bool CanSpendGrace => Grace > 0 || (Intercession?.CanIntercedeFor(this) ?? false);
 
-        public bool CanSpendSecrecy => Secrecy > 0;
+        public bool CanSpendSecrecy => _canSpendSecrecy(this);
 
         internal Intercession Intercession { get; set; }
 
@@ -725,7 +722,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             ContinueStartTurn();
         }
 
-        private void ContinueStartTurn()
+        private async void ContinueStartTurn()
         {
             var necromancer = Game.Necromancer;
             var withNecromancer = Location == necromancer.Location;
@@ -733,7 +730,7 @@ namespace Slugburn.DarkestNight.Rules.Heroes
                 LoseSecrecy("Necromancer");
             if (GetInventory().Any(item => item is HolyRelic))
                 LoseSecrecy("Holy Relic");
-            Triggers.Send(HeroTrigger.StartedTurn);
+            await Triggers.Send(HeroTrigger.StartedTurn);
 
             if (withNecromancer && Secrecy == 0)
             {
@@ -769,15 +766,15 @@ namespace Slugburn.DarkestNight.Rules.Heroes
             ContinueEndTurn();
         }
 
-        private void ContinueEndTurn()
+        private async void ContinueEndTurn()
         {
             _endingTurn = false;
             if (Location == Location.Monastery && !_movedDuringTurn)
                 GainSecrecy(1, DefaultSecrecy);
             Game.ActingHero = null;
             HasTakenTurn = true;
-            Triggers.Send(HeroTrigger.TurnEnded);
-            Game.Triggers.Send(GameTrigger.HeroTurnEnded, this);
+            await Triggers.Send(HeroTrigger.TurnEnded);
+            await Game.Triggers.Send(GameTrigger.HeroTurnEnded, this);
             if (Game.Heroes.All(x => x.HasTakenTurn))
                 Game.Necromancer.StartTurn();
             else
@@ -897,6 +894,11 @@ namespace Slugburn.DarkestNight.Rules.Heroes
         {
             State = HeroState.Moving;
             return Player.SelectDestination(validLocations);
+        }
+
+        public void OverrideCanSpendSecrecy(Func<Hero, bool> func)
+        {
+            _canSpendSecrecy = func;
         }
     }
 }

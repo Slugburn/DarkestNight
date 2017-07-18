@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Slugburn.DarkestNight.Rules.Conflicts;
 using Slugburn.DarkestNight.Rules.Heroes;
 using Slugburn.DarkestNight.Rules.Modifiers;
@@ -62,20 +63,22 @@ namespace Slugburn.DarkestNight.Rules.Powers.Knight
         private class OathOfPurgingFulfilled : ITriggerHandler<Hero>
         {
 
-            public void HandleTrigger(Hero hero, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Hero hero, string source, TriggerContext context)
             {
                 var oath = (IOath)hero.GetPower(source);
                 oath.Fulfill(hero);
+                return Task.CompletedTask;
             }
         }
 
         private class OathOfPurgingBroken : ITriggerHandler<Hero>
         {
-            public void HandleTrigger(Hero hero, string source, TriggerContext context)
+            public Task HandleTriggerAsync(Hero hero, string source, TriggerContext context)
             {
-                if (hero.Location != Location.Monastery) return;
+                if (hero.Location != Location.Monastery) return Task.CompletedTask;
                 var oath = (IOath) hero.GetPower(source);
                 oath.Break(hero);
+                return Task.CompletedTask;
             }
         }
     }

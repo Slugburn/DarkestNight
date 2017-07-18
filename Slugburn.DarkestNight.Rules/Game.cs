@@ -177,7 +177,7 @@ namespace Slugburn.DarkestNight.Rules
             Darkness = Math.Max(0, Darkness - 1);
         }
 
-        public void DestroyBlight(Hero hero, int blightId)
+        public async void DestroyBlight(Hero hero, int blightId)
         {
             var blight = _blights[blightId];
             var location = blight.Location;
@@ -189,7 +189,7 @@ namespace Slugburn.DarkestNight.Rules
             _blights.Remove(blightId);
             space.RemoveBlight(blight);
             UpdatePlayerBoard();
-            Triggers.Send(GameTrigger.BlightDestroyed, location);
+            await Triggers.Send(GameTrigger.BlightDestroyed, location);
         }
 
         public static ICollection<Location> GetAllLocations()

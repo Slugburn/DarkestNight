@@ -46,12 +46,12 @@ namespace Slugburn.DarkestNight.Rules.Blights
             _might++;
         }
 
-        public Location Location => _space.Location;
+        public Location Location => _space?.Location ?? Location.Unknown;
 
-        public void Win(Hero hero)
+        public async void Win(Hero hero)
         {
             hero.Game.DestroyBlight(hero, Id);
-            hero.Triggers.Send(HeroTrigger.DestroyedBlight);
+            await hero.Triggers.Send(HeroTrigger.DestroyedBlight);
         }
 
         public abstract void Failure(Hero hero);
