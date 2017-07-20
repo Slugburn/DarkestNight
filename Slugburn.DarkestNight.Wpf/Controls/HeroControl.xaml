@@ -12,7 +12,9 @@
                 <MouseBinding Gesture="LeftClick" Command="{Binding SelectCommand}" />
             </Border.InputBindings>
             <StackPanel Margin="5" >
-                <TextBlock Text="{Binding Name}" FontWeight="Bold" HorizontalAlignment="Center" />
+                <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                <ProgressBar Height="10" Maximum="{Binding Status.Grace.Default}" Value="{Binding Status.Grace.Value}" />
+                <ProgressBar Height="10" Maximum="{Binding Status.Secrecy.Default}" Value="{Binding Status.Secrecy.Value}"  />
                 <StackPanel>
                     <TextBlock ><Run Text="{Binding Status.Grace.Name}" /><Run Text=" "/><Run Text="{Binding Status.Grace.Value}" /><Run Text=" "/><Run Text="/" /><Run Text=" "/><Run Text ="{Binding Status.Grace.Default}" /></TextBlock>
                     <TextBlock><Run Text="{Binding Status.Secrecy.Name}" /><Run Text=" "/><Run Text="{Binding Status.Secrecy.Value}" /><Run Text=" "/><Run Text="/" /><Run Text=" "/><Run Text ="{Binding Status.Secrecy.Default}" /></TextBlock>

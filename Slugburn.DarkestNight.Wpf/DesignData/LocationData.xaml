@@ -1,0 +1,13 @@
+﻿<m:LocationVm xmlns:m="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels"
+              xmlns:system="clr-namespace:System;assembly=mscorlib"
+              Name="Village" SearchTarget="3+" RelicVisiblity="Visible" >
+    <m:LocationVm.Tokens>
+        <system:String>Priest</system:String>
+        <system:String>Knight</system:String>
+    </m:LocationVm.Tokens>
+    <m:LocationVm.Blights>
+        <m:BlightVm Name="Desecration" Might="4" IsSelectable="True" IsSelected="True" Defense="Blah blah blah." Effect="Yada yada yada."/>
+        <m:BlightVm Name="Corruption" Might="5" IsSelectable="True" IsSelected="True" Defense="Blah blah blah." Effect="Yada yada yada."/>
+        <m:BlightVm Name="Vampire" Might="6" IsSelectable="True" IsSelected="True" Defense="Blah blah blah." Effect="Yada yada yada."/>
+    </m:LocationVm.Blights>
+</m:LocationVm>

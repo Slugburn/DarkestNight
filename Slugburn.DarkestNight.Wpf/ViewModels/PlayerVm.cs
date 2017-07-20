@@ -32,6 +32,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         private ICommand _command;
         private NecromancerVm _necromancer;
         private TaskCompletionSource<MoveResponse> _moveResponseSource;
+        private BoardVm _board;
 
         public Game Game
         {
@@ -89,6 +90,17 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             {
                 if (Equals(value, _locations)) return;
                 _locations = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public BoardVm Board
+        {
+            get => _board;
+            set
+            {
+                if (Equals(value, _board)) return;
+                _board = value;
                 OnPropertyChanged();
             }
         }
@@ -278,6 +290,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         {
             Darkness = model.Darkness;
             Locations = LocationVm.CreateLocations(model.Locations);
+            Board = BoardVm.Create(Locations);
         }
 
         public void UpdateHeroCommands(HeroActionModel model)

@@ -14,7 +14,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
     {
         private string _searchTarget;
         private List<string> _tokens;
-        private List<BlightVm> _blights;
+        private List<BlightVm> _blights = new List<BlightVm>();
         private Brush _highlight = new SolidColorBrush(Colors.White);
         private ICommand _selectCommand;
         private Visibility _relicVisiblity;

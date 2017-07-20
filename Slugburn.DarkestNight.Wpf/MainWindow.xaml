@@ -5,8 +5,9 @@
         xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels"
+        xmlns:controls="clr-namespace:Slugburn.DarkestNight.Wpf.Controls"
         mc:Ignorable="d"
-        Title="Darkest Night" Height="600" Width="800" SizeToContent="WidthAndHeight" >
+        Title="Darkest Night" Height="807.15" Width="1056" SizeToContent="WidthAndHeight" >
     <Window.DataContext>
         <vm:PlayerVm />
     </Window.DataContext>
@@ -25,7 +26,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid Width="1024" Height="768" >
+    <Grid Width="1024" Height="768" Background="Black" >
         <Grid.RowDefinitions>
             <RowDefinition MaxHeight="20" />
             <RowDefinition Height="Auto" />
@@ -37,9 +38,15 @@
                 <Run FontWeight="Bold" Text ="{Binding Darkness}" />
             </TextBlock.Inlines>
         </TextBlock>
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding Locations}" Style="{StaticResource HorizontalItemsControl}"/>
         <Button Grid.Row="1" Content="Continue" Command="{Binding Command}" VerticalAlignment="Bottom" 
                 HorizontalAlignment="Center" Visibility="{Binding Command, Converter={StaticResource NullToVisibilityConverter}}" />
+        <controls:LocationControl Grid.Row="0" Grid.RowSpan="3" DataContext="{Binding Board.Monastery}" HorizontalAlignment="Left" />
+        <controls:LocationControl Grid.Row="0" Grid.RowSpan="3" DataContext="{Binding Board.Mountains}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="175,0,0,0" />
+        <controls:LocationControl Grid.Row="0" Grid.RowSpan="3" DataContext="{Binding Board.Castle}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,175,0" />
+        <controls:LocationControl Grid.Row="0" Grid.RowSpan="3" DataContext="{Binding Board.Swamp}" HorizontalAlignment="Right"/>
+        <controls:LocationControl Grid.Row="0" Grid.RowSpan="3" DataContext="{Binding Board.Ruins}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,175,0" />
+        <controls:LocationControl Grid.Row="0" Grid.RowSpan="3" DataContext="{Binding Board.Forest}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="175,0,0,0" />
+        <controls:LocationControl Grid.Row="0" Grid.RowSpan="3" DataContext="{Binding Board.Village}"/>
         <ItemsControl Grid.Row="2" ItemsSource="{Binding Heroes}" Style="{StaticResource HorizontalItemsControl}" />
         <ContentControl Grid.Row="0" Grid.RowSpan="2" Content="{Binding Event}" />
         <ContentControl Grid.Row="0" Grid.RowSpan="2" Content="{Binding Conflict}" />

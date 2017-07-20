@@ -16,13 +16,16 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         private Brush _highlight;
         private ICommand _command;
 
-        public BlightVm(BlightModel model)
+        public static BlightVm Create(BlightModel model)
         {
-            Id = model.Id;
-            Name = model.Name;
-            Effect = model.Effect;
-            Might = model.Might;
-            Defense = model.Defense;
+            return new BlightVm
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Effect = model.Effect,
+                Might = model.Might,
+                Defense = model.Defense
+            };
         }
 
         public int Id { get; set; }
@@ -79,7 +82,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
 
         public static List<BlightVm> CreateBlights(IEnumerable<BlightModel> models)
         {
-            return models.Select(b => new BlightVm(b)).ToList();
+            return models.Select(Create).ToList();
         }
 
         [NotifyPropertyChangedInvocator]
