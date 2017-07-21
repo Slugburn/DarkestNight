@@ -16,7 +16,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         private List<CommandVm> _commands;
         private SolidColorBrush _highlight;
         private ICommand _selectCommand;
-        private HeroStatus _status;
+        private HeroStatusVm _status;
         private List<PowerVm> _powers;
         private List<ItemVm> _items;
 
@@ -24,7 +24,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         {
             _game = game;
             Name = model.Name;
-            Status = new HeroStatus(model.Status);
+            UpdateStatus(model.Status);
             Powers = PowerVm.Create(model.Powers);
             if (model.Commands != null)
                 Commands = model.Commands.Select(c => new CommandVm(_game, model.Name, c)).ToList();
@@ -51,7 +51,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             }
         }
 
-        public HeroStatus Status
+        public HeroStatusVm Status
         {
             get { return _status; }
             set
@@ -113,6 +113,11 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             fromHero.TradeItemTo(toHero, itemId);
         }
 
+        public void UpdateStatus(HeroStatusModel model)
+        {
+            Status = HeroStatusVm.Create(model);
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
@@ -120,40 +125,6 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
     }
-
-    public class CommandVm
-    {
-        private readonly Game _game;
-        private readonly string _heroName;
-
-        public CommandVm(Game game, string heroName, CommandModel model)
-        {
-            _game = game;
-            _heroName = heroName;
-            Name = model.Name;
-            Text = model.Text;
-            Command = new CommandHandler(Execute);
-        }
-
-        public CommandVm()
-        {
-        }
-
-        public string Name { get; set; }
-        public string Text { get; set; }
-
-        public ICommand Command { get; set; }
-
-        private void Execute()
-        {
-            _game.GetHero(_heroName).ExecuteCommand(Name);
-        }
-
-        public static List<CommandVm> Create(Game game, string heroName, IEnumerable<CommandModel> commands)
-        {
-            return commands.Select(c=>new CommandVm(game, heroName, c)).ToList();
-        }
-    }
-
 }

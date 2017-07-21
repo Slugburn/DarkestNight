@@ -1,14 +1,14 @@
 ﻿<m:HeroVm xmlns:m="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels"
           Name="Hero Name" >
     <m:HeroVm.Status>
-        <m:HeroStatus>
-            <m:HeroStatus.Grace >
+        <m:HeroStatusVm>
+            <m:HeroStatusVm.Grace >
                 <m:HeroValue Name="Grace" Value="3" Default="6" />
-            </m:HeroStatus.Grace>
-            <m:HeroStatus.Secrecy >
+            </m:HeroStatusVm.Grace>
+            <m:HeroStatusVm.Secrecy >
                 <m:HeroValue Name="Secrecy" Value="6" Default="5" />
-            </m:HeroStatus.Secrecy>
-        </m:HeroStatus>
+            </m:HeroStatusVm.Secrecy>
+        </m:HeroStatusVm>
     </m:HeroVm.Status>
     <m:HeroVm.Powers>
         <m:PowerVm Name="Power 1" Style="Normal" Decorations="Strikethrough">
@@ -31,3 +31,4 @@
         <m:ItemVm Name="Item 2" Text="This is item 2" />
     </m:HeroVm.Items>
 </m:HeroVm>
+

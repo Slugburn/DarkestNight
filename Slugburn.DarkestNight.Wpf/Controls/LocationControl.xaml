@@ -7,54 +7,137 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignData Source=../DesignData/LocationData.xaml}"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../DataTemplates/Blight.xaml"/>
+                <ResourceDictionary Source="../DataTemplates/Hero.xaml"/>
+                <ResourceDictionary Source="../DataTemplates/Location.xaml"/>
+                <ResourceDictionary Source="../DataTemplates/Power.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <Border Width="300" Height="300"  Background="GhostWhite" CornerRadius="150" >
             <Border.InputBindings>
                 <MouseBinding Gesture="LeftClick" Command="{Binding SelectCommand}" />
             </Border.InputBindings>
             <Grid Margin="5" >
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0">
-                    <TextBlock Text="{Binding Name}" FontWeight="Bold" HorizontalAlignment="Center" />
-                    <ItemsControl ItemsSource="{Binding Tokens}" />
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Margin="10" />
                     <TextBlock Visibility="{Binding RelicVisiblity}" FontStyle="Italic"><Run Text="Relic"/></TextBlock>
                 </StackPanel>
-                <Label Grid.Row="1" Content="{Binding SearchTarget}" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
-                <ItemsControl Grid.Row="0" ItemsSource="{Binding Blights}" Margin="10" RenderTransformOrigin="0.8,0.801" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" HorizontalAlignment="Right" VerticalContentAlignment="Center" Width="130" Height="130" FontSize="10" FontWeight="Bold">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel  ItemHeight="65" ItemWidth="65" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Background="DarkSlateGray">
-                                <Grid.InputBindings>
-                                    <MouseBinding MouseAction="LeftClick" Command="{Binding Command}" />
-                                </Grid.InputBindings>
-                                <Grid.ToolTip>
-                                    <StackPanel>
-                                        <Label Content="{Binding Name}" FontWeight="Bold" HorizontalAlignment="Center" />
-                                        <TextBlock TextWrapping="Wrap" MaxWidth="200" Text="{Binding Effect}" TextAlignment="Left" />
-                                        <TextBlock TextAlignment="Left"><Run FontStyle="Italic" Text="Might:"/><Run Text=" "/><Run Text="{Binding Might}"/><Run Text=" "/><Run FontStyle="Italic" Text="Defense:"/><Run Text=" "/><Run Text="{Binding Defense}"/></TextBlock>
-                                    </StackPanel>
-                                </Grid.ToolTip>
-                                <CheckBox IsChecked="{Binding IsSelected}" Visibility="{Binding IsSelectable, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Bottom" Margin="5"/>
-                                <TextBlock Text="{Binding Name}" Foreground="White" TextAlignment="Center" />
-                                <TextBlock Text="{Binding Might}" Foreground="White" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="5" />
-                                <Rectangle Height="75" Width="75" StrokeThickness="5" Stroke="{Binding Highlight}" />
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <Label Content="{Binding SearchTarget}" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <ItemsControl Grid.Column="0" ItemsSource="{Binding Heroes}" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <ItemsControl Grid.Column="1" ItemsSource="{Binding Blights}" Margin="5" VerticalAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Center" FontSize="10" FontWeight="Bold">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="DarkSlateGray" CornerRadius="5" Height="65" Width="65">
+                                    <Grid >
+                                        <Grid.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" Command="{Binding Command}" />
+                                        </Grid.InputBindings>
+                                        <Grid.ToolTip>
+                                            <StackPanel>
+                                                <Label Content="{Binding Name}" FontWeight="Bold"
+                                                       HorizontalAlignment="Center" />
+                                                <TextBlock TextWrapping="Wrap" MaxWidth="200" Text="{Binding Effect}"
+                                                           TextAlignment="Left" />
+                                                <TextBlock TextAlignment="Left">
+                                                    <Run FontStyle="Italic" Text="Might:" /><Run Text=" " />
+                                                    <Run Text="{Binding Might}" /><Run Text=" " />
+                                                    <Run FontStyle="Italic" Text="Defense:" /><Run Text=" " />
+                                                    <Run Text="{Binding Defense}" />
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Grid.ToolTip>
+                                        <CheckBox IsChecked="{Binding IsSelected}"
+                                                  Visibility="{Binding IsSelectable, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                  VerticalAlignment="Bottom" Margin="5" />
+                                        <TextBlock Text="{Binding Name}" Foreground="White" TextAlignment="Center" />
+                                        <TextBlock Text="{Binding Might}" Foreground="White" VerticalAlignment="Bottom"
+                                                   HorizontalAlignment="Right" Margin="5" />
+                                        <Rectangle Height="75" Width="75" StrokeThickness="5" Stroke="{Binding Highlight}" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
             </Grid>
         </Border>
         <Ellipse Width="300" Height="300" StrokeThickness="10" Stroke="{Binding Highlight}" Opacity="0.5" />
     </Grid>
 </UserControl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

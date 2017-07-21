@@ -289,7 +289,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         public void UpdateBoard(BoardModel model)
         {
             Darkness = model.Darkness;
-            Locations = LocationVm.CreateLocations(model.Locations);
+            Locations = LocationVm.Create(model.Locations, Heroes);
             Board = BoardVm.Create(Locations);
         }
 
@@ -304,7 +304,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         public void UpdateHeroStatus(string heroName, HeroStatusModel status)
         {
             var hero = Heroes.Single(x => x.Name == heroName);
-            hero.Status = new HeroStatus(status);
+            hero.UpdateStatus(status);
         }
 
         public void OnNewDay()

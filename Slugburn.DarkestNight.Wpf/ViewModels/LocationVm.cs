@@ -19,7 +19,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         private ICommand _selectCommand;
         private Visibility _relicVisiblity;
 
-        private static LocationVm Create(LocationModel model)
+        private static LocationVm Create(LocationModel model, IEnumerable<HeroVm> heroes)
         {
             var vm = new LocationVm
             {
@@ -27,14 +27,17 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
                 SearchTarget = model.SearchTarget != null ? $"{model.SearchTarget}+" : null,
                 Tokens = model.Tokens,
                 Blights = BlightVm.CreateBlights(model.Blights),
-                RelicVisiblity = model.HasRelic ? Visibility.Visible : Visibility.Collapsed
+                RelicVisiblity = model.HasRelic ? Visibility.Visible : Visibility.Collapsed,
+                Heroes = heroes.ToList()
             };
             return vm;
         }
 
-        public static List<LocationVm> CreateLocations(IEnumerable<LocationModel> locationModels)
+        public List<HeroVm> Heroes { get; set; } = new List<HeroVm>();
+
+        public static List<LocationVm> Create(IEnumerable<LocationModel> locationModels, List<HeroVm> heroes)
         {
-            return locationModels.Select(Create).ToList();
+            return locationModels.Select(model => Create(model, heroes.Where(x=>x.Status.Location == model.Name))).ToList();
         }
         
         public Visibility RelicVisiblity

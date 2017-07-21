@@ -7,7 +7,7 @@
                     xmlns:controls="clr-namespace:Slugburn.DarkestNight.Wpf.Controls"
                     mc:Ignorable="d">
     <DataTemplate DataType="{x:Type vm:HeroVm}">
-        <controls:HeroControl Width="175"/>
+        <controls:HeroControl />
     </DataTemplate>
     <DataTemplate  DataType="{x:Type vm:CommandVm}">
         <Button Content="{Binding Name}" Command="{Binding Command}" Margin="5, 2" />

@@ -47,7 +47,6 @@
         <controls:LocationControl Grid.Row="0" Grid.RowSpan="3" DataContext="{Binding Board.Ruins}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,175,0" />
         <controls:LocationControl Grid.Row="0" Grid.RowSpan="3" DataContext="{Binding Board.Forest}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="175,0,0,0" />
         <controls:LocationControl Grid.Row="0" Grid.RowSpan="3" DataContext="{Binding Board.Village}"/>
-        <ItemsControl Grid.Row="2" ItemsSource="{Binding Heroes}" Style="{StaticResource HorizontalItemsControl}" />
         <ContentControl Grid.Row="0" Grid.RowSpan="2" Content="{Binding Event}" />
         <ContentControl Grid.Row="0" Grid.RowSpan="2" Content="{Binding Conflict}" />
         <!-- , diag:PresentationTraceSources.TraceLevel=High -->

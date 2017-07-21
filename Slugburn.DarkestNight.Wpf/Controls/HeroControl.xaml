@@ -5,34 +5,160 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:controls="clr-namespace:Slugburn.DarkestNight.Wpf.Controls" x:Class="Slugburn.DarkestNight.Wpf.Controls.HeroControl"
              mc:Ignorable="d" 
-             d:DesignHeight="170.64" d:DesignWidth="175" d:DataContext="{d:DesignData Source=../DesignData/HeroData.xaml}" Drop="UserControl_Drop" AllowDrop="True" >
-    <Grid >
-        <Border Background="{Binding Highlight}" BorderBrush="Black" BorderThickness="1" Margin="5"  >
+             d:DesignWidth="100" d:DataContext="{d:DesignData Source=../DesignData/HeroData.xaml}" Drop="UserControl_Drop" AllowDrop="True" >
+    <Grid Width="100" >
+        <Border Background="{Binding Highlight}" BorderBrush="Black" BorderThickness="1" Margin="2"  >
+            <StackPanel Margin="2" >
+                <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                <ItemsControl ItemsSource="{Binding Status.Grace, Converter={StaticResource HeroValueToBarConverter}}" Style="{StaticResource Bar}" />
+                <ItemsControl ItemsSource="{Binding Status.Secrecy, Converter={StaticResource HeroValueToBarConverter}}" Style="{StaticResource Bar}" />
+            </StackPanel>
             <Border.InputBindings>
                 <MouseBinding Gesture="LeftClick" Command="{Binding SelectCommand}" />
             </Border.InputBindings>
-            <StackPanel Margin="5" >
-                <TextBlock Text="{Binding Name}" FontWeight="Bold" />
-                <ProgressBar Height="10" Maximum="{Binding Status.Grace.Default}" Value="{Binding Status.Grace.Value}" />
-                <ProgressBar Height="10" Maximum="{Binding Status.Secrecy.Default}" Value="{Binding Status.Secrecy.Value}"  />
-                <StackPanel>
-                    <TextBlock ><Run Text="{Binding Status.Grace.Name}" /><Run Text=" "/><Run Text="{Binding Status.Grace.Value}" /><Run Text=" "/><Run Text="/" /><Run Text=" "/><Run Text ="{Binding Status.Grace.Default}" /></TextBlock>
-                    <TextBlock><Run Text="{Binding Status.Secrecy.Name}" /><Run Text=" "/><Run Text="{Binding Status.Secrecy.Value}" /><Run Text=" "/><Run Text="/" /><Run Text=" "/><Run Text ="{Binding Status.Secrecy.Default}" /></TextBlock>
-                </StackPanel>
-                <Separator />
+        </Border>
+        <ToggleButton x:Name="ToggleButton" Height="20" Width="20" HorizontalAlignment="Right" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+        <Popup PlacementTarget="{Binding ElementName=ToggleButton}" IsOpen="{Binding ElementName=ToggleButton, Path=IsChecked}">
+            <StackPanel Background="White" Margin="2">
                 <ItemsControl ItemsSource="{Binding Powers}" />
                 <Separator />
                 <ItemsControl ItemsSource="{Binding Items}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <controls:ItemControl/>
+                            <controls:ItemControl />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
                 <Separator />
                 <ItemsControl ItemsSource="{Binding Commands}" />
             </StackPanel>
-        </Border>
-
+        </Popup>
     </Grid>
 </UserControl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

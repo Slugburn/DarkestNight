@@ -75,18 +75,21 @@
       <DependentUpon>ItemControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\HeroValueToBarConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Controls\LocationControl.xaml.cs">
       <DependentUpon>LocationControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\BarSegment.cs" />
     <Compile Include="ViewModels\BlightVm.cs" />
     <Compile Include="ViewModels\BoardVm.cs" />
+    <Compile Include="ViewModels\CommandVm.cs" />
     <Compile Include="ViewModels\ConflictVm.cs" />
     <Compile Include="ViewModels\EventOptionVm.cs" />
     <Compile Include="ViewModels\EventRowVm.cs" />
     <Compile Include="ViewModels\EventVm.cs" />
     <Compile Include="ViewModels\HeroVm.cs" />
-    <Compile Include="ViewModels\HeroStatus.cs" />
+    <Compile Include="ViewModels\HeroStatusVm.cs" />
     <Compile Include="ViewModels\HeroValue.cs" />
     <Compile Include="ViewModels\ItemVm.cs" />
     <Compile Include="ViewModels\LocationVm.cs" />
