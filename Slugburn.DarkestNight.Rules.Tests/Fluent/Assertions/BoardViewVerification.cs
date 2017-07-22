@@ -9,12 +9,12 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
     {
         private int? _darkness;
         private string _necromancerAt;
-        private List<BoardLocationViewVerification> _locations;
+        private List<BoardLocationModelVerification> _locations;
 
         public BoardViewVerification(IVerifiable parent) : base(parent)
         {
             _locations = new[] {"Monastery", "Mountains", "Castle", "Village", "Ruins", "Swamp", "Forest"}
-                .Select(x => new BoardLocationViewVerification(this, x)).ToList();
+                .Select(x => new BoardLocationModelVerification(this, x)).ToList();
         }
 
         public override void Verify(ITestRoot root)
@@ -34,7 +34,7 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Assertions
             return this;
         }
 
-        public BoardLocationViewVerification Location(string location)
+        public BoardLocationModelVerification Location(string location)
         {
             return _locations.Single(x=>x.Name == location);
         }

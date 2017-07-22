@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Slugburn.DarkestNight.Rules.Heroes;
 
 namespace Slugburn.DarkestNight.Rules.Models
@@ -11,7 +10,6 @@ namespace Slugburn.DarkestNight.Rules.Models
         public List<PowerModel> Powers { get; set; }
         public List<CommandModel> Commands { get; set; }
         public List<ItemModel> Inventory { get; set; }
-
 
         public static HeroModel Create(Hero hero)
         {

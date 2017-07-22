@@ -8,12 +8,12 @@
     <DataTemplate DataType="{x:Type vm:EventVm}" >
         <Grid Visibility="{Binding Visibility}" d:DataContext="{d:DesignData Source=../DesignData/EventData.xaml}" d:DesignHeight="250" d:DesignWidth="450" >
             <Border Background="DarkGray" Opacity="0.50" Width="Auto" Height="Auto"/>
-            <Border Width="300" Background="White" BorderBrush="Black" BorderThickness="1">
+            <Border Height="500" Width="300" Background="White" BorderBrush="Black" BorderThickness="1">
                 <Grid Margin="5" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0" d:LayoutOverrides="Height" Margin="0,0,0,5" Background="Black">

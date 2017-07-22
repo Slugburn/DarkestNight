@@ -25,7 +25,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Prince
 
         protected override void ActivateEffect()
         {
-            Target.AddModifier(new PowerRollBonus(this, ModifierType.SearchDice, 1));
+            Target.AddModifier(new PowerRollBonus(this, ModifierType.SearchDice, 1), ActiveText);
         }
     }
 }

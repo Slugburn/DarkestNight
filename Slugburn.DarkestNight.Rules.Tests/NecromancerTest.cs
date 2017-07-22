@@ -29,7 +29,7 @@ namespace Slugburn.DarkestNight.Rules.Tests
                 .Necromancer.At(start)
                 .When.Game.NecromancerActs(Fake.Rolls(roll))
                 .Player.AcceptsNecromancerTurn()
-                .Then(Verify.Player.BoardView.Location(end).Token("Necromancer"));
+                .Then(Verify.Player.BoardView.Location(end).IsNecromancerHere(true));
         }
 
         [Test]

@@ -12,8 +12,8 @@ namespace Slugburn.DarkestNight.Wpf.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var hv = (HeroValue) value;
-            return BarSegment.CreateHeroValueBar(hv.Name == "Grace" ? Colors.White : Colors.Black, hv.Value, hv.Default);
+            var hv = (HeroValueVm) value;
+            return BarSegment.CreateHeroValueBar(hv.Text == "Grace" ? Colors.White : Colors.Black, hv.Value, hv.Default);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

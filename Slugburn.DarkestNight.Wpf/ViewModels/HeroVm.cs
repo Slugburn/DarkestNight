@@ -27,7 +27,11 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             UpdateStatus(model.Status);
             Powers = PowerVm.Create(model.Powers);
             if (model.Commands != null)
+            {
                 Commands = model.Commands.Select(c => new CommandVm(_game, model.Name, c)).ToList();
+            }
+            var hero = game.GetHero(Name);
+            StartTurnCommand = new CommandHandler(() => hero.ExecuteCommand("Start Turn"), () => hero.HasCommand("Start Turn"));
         }
 
         public HeroVm()
@@ -105,6 +109,8 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public CommandHandler StartTurnCommand { get; set; }
 
         public void ReceiveItem(string fromName, int itemId)
         {

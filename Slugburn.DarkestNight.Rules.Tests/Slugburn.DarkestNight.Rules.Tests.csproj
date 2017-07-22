@@ -104,7 +104,7 @@
     <Compile Include="Fluent\Arrangements\NecromancerContext.cs" />
     <Compile Include="Fluent\Assertions\BlightSelectionViewVerification.cs" />
     <Compile Include="Fluent\Assertions\BoardLocationBlightModelVerification.cs" />
-    <Compile Include="Fluent\Assertions\BoardLocationViewVerification.cs" />
+    <Compile Include="Fluent\Assertions\BoardLocationModelVerification.cs" />
     <Compile Include="Fluent\Assertions\SelectedTargetModelVerification.cs" />
     <Compile Include="Fluent\Assertions\ConflictModelVerification.cs" />
     <Compile Include="Fluent\Assertions\EventViewVerification.cs" />
@@ -140,6 +140,7 @@
     <Compile Include="Heroes\PriestTest.cs" />
     <Compile Include="Heroes\PrinceTest.cs" />
     <Compile Include="Heroes\RogueTest.cs" />
+    <Compile Include="Heroes\ScholarTest.cs" />
     <Compile Include="Items\ArtifactTest.cs" />
     <Compile Include="Items\BottledMagicTest.cs" />
     <Compile Include="Items\GhostMailTest.cs" />

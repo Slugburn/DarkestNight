@@ -87,6 +87,7 @@
     <Compile Include="Conflicts\ConflictType.cs" />
     <Compile Include="Conflicts\IConflict.cs" />
     <Compile Include="Conflicts\TargetInfo.cs" />
+    <Compile Include="Effect.cs" />
     <Compile Include="Enemies\Cultist.cs" />
     <Compile Include="Enemies\Enemy.cs" />
     <Compile Include="Enemies\GuardedTrove.cs" />
@@ -146,6 +147,7 @@
     <Compile Include="Heroes\HeroState.cs" />
     <Compile Include="Heroes\IActionFilter.cs" />
     <Compile Include="Heroes\IHeroFactory.cs" />
+    <Compile Include="Models\EffectModel.cs" />
     <Compile Include="Powers\ITargetable.cs" />
     <Compile Include="Powers\ActivateOnSpacePower.cs" />
     <Compile Include="Powers\Prince\Chapel.cs" />

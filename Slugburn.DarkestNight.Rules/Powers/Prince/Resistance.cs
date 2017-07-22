@@ -22,7 +22,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Prince
 
         protected override void ActivateEffect()
         {
-            Target.AddModifier(new ResistanceRollBonus(this));
+            Target.AddModifier(new ResistanceRollBonus(this), ActiveText);
         }
 
         internal class ResistanceRollBonus : PowerRollBonus

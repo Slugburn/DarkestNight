@@ -5,16 +5,20 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
     public class HeroStatusVm
     {
         public string Location { get; set; }
-        public HeroValue Grace { get; set; }
-        public HeroValue Secrecy { get; set; }
+        public HeroValueVm Grace { get; set; }
+        public HeroValueVm Secrecy { get; set; }
+        public bool CanStartTurn { get; set; }
+        public bool HasTakenTurn { get; set; }
 
         public static HeroStatusVm Create(HeroStatusModel model)
         {
             return new HeroStatusVm
             {
                 Location = model.Location,
-                Grace = new HeroValue(model.Grace),
-                Secrecy = new HeroValue(model.Secrecy)
+                Grace = HeroValueVm.Create(model.Grace),
+                Secrecy = HeroValueVm.Create(model.Secrecy),
+                CanStartTurn = model.CanStartTurn,
+                HasTakenTurn = model.HasTakenTurn
             };
         }
     }

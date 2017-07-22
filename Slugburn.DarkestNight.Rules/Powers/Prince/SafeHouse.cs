@@ -27,7 +27,7 @@ namespace Slugburn.DarkestNight.Rules.Powers.Prince
 
         protected override void ActivateEffect()
         {
-            Target.AddModifier(new PowerRollBonus(this, ModifierType.EludeDice, 1));
+            Target.AddModifier(new PowerRollBonus(this, ModifierType.EludeDice, 1), ActiveText);
             Owner.Game.Triggers.Add(GameTrigger.HeroTurnEnded, Name, new SafeHouseTurnEndedHandler(this));
         }
 

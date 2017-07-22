@@ -18,6 +18,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
         private Brush _highlight = new SolidColorBrush(Colors.White);
         private ICommand _selectCommand;
         private Visibility _relicVisiblity;
+        private bool _isNecromancerHere;
 
         private static LocationVm Create(LocationModel model, IEnumerable<HeroVm> heroes)
         {
@@ -25,10 +26,11 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             {
                 Name = model.Name,
                 SearchTarget = model.SearchTarget != null ? $"{model.SearchTarget}+" : null,
-                Tokens = model.Tokens,
                 Blights = BlightVm.CreateBlights(model.Blights),
                 RelicVisiblity = model.HasRelic ? Visibility.Visible : Visibility.Collapsed,
-                Heroes = heroes.ToList()
+                IsNecromancerHere = model.IsNecromancerHere,
+                Heroes = heroes.ToList(),
+                Effects =  EffectVm.Create(model.Effects)
             };
             return vm;
         }
@@ -60,17 +62,6 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             {
                 if (value == _searchTarget) return;
                 _searchTarget = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public List<string> Tokens
-        {
-            get { return _tokens; }
-            set
-            {
-                if (Equals(value, _tokens)) return;
-                _tokens = value;
                 OnPropertyChanged();
             }
         }
@@ -107,6 +98,19 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public bool IsNecromancerHere
+        {
+            get { return _isNecromancerHere; }
+            set
+            {
+                if (value == _isNecromancerHere) return;
+                _isNecromancerHere = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public List<EffectVm> Effects { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

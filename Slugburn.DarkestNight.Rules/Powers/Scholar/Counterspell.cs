@@ -1,5 +1,6 @@
-﻿namespace Slugburn.DarkestNight.Rules.Powers.Scholar {
-    class Counterspell : ActionPower
+﻿namespace Slugburn.DarkestNight.Rules.Powers.Scholar
+{
+    internal class Counterspell : ActionPower
     {
         public Counterspell()
         {

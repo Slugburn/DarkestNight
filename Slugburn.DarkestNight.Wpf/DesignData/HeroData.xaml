@@ -3,10 +3,10 @@
     <m:HeroVm.Status>
         <m:HeroStatusVm>
             <m:HeroStatusVm.Grace >
-                <m:HeroValue Name="Grace" Value="3" Default="6" />
+                <m:HeroValueVm Text="Grace" Value="3" Default="6" />
             </m:HeroStatusVm.Grace>
             <m:HeroStatusVm.Secrecy >
-                <m:HeroValue Name="Secrecy" Value="6" Default="5" />
+                <m:HeroValueVm Text="Secrecy" Value="6" Default="5" />
             </m:HeroStatusVm.Secrecy>
         </m:HeroStatusVm>
     </m:HeroVm.Status>

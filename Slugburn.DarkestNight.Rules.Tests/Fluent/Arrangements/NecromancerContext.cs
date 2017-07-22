@@ -16,7 +16,9 @@ namespace Slugburn.DarkestNight.Rules.Tests.Fluent.Arrangements
 
         public INecromancerContext At(string location)
         {
-            GetGame().Necromancer.Location = location.ToEnum<Location>();
+            var game = GetGame();
+            game.Necromancer.Location = location.ToEnum<Location>();
+            game.UpdatePlayerBoard();
             return this;
         }
 

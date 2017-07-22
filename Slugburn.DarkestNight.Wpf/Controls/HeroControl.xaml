@@ -4,11 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:controls="clr-namespace:Slugburn.DarkestNight.Wpf.Controls" x:Class="Slugburn.DarkestNight.Wpf.Controls.HeroControl"
-             mc:Ignorable="d" 
-             d:DesignWidth="100" d:DataContext="{d:DesignData Source=../DesignData/HeroData.xaml}" Drop="UserControl_Drop" AllowDrop="True" >
-    <Grid Width="100" >
-        <Border Background="{Binding Highlight}" BorderBrush="Black" BorderThickness="1" Margin="2"  >
-            <StackPanel Margin="2" >
+             mc:Ignorable="d" d:DataContext="{d:DesignData Source=../DesignData/HeroData.xaml}" Drop="UserControl_Drop" AllowDrop="True" >
+    <Grid Width="130" >
+        <Border Background="{Binding Highlight}" BorderBrush="Black" BorderThickness="1" Margin="15,0,0,0"  >
+            <StackPanel Margin="15,0,0,0" >
                 <TextBlock Text="{Binding Name}" FontWeight="Bold" />
                 <ItemsControl ItemsSource="{Binding Status.Grace, Converter={StaticResource HeroValueToBarConverter}}" Style="{StaticResource Bar}" />
                 <ItemsControl ItemsSource="{Binding Status.Secrecy, Converter={StaticResource HeroValueToBarConverter}}" Style="{StaticResource Bar}" />
@@ -18,23 +17,170 @@
             </Border.InputBindings>
         </Border>
         <ToggleButton x:Name="ToggleButton" Height="20" Width="20" HorizontalAlignment="Right" VerticalAlignment="Top" VerticalContentAlignment="Center" />
-        <Popup PlacementTarget="{Binding ElementName=ToggleButton}" IsOpen="{Binding ElementName=ToggleButton, Path=IsChecked}">
-            <StackPanel Background="White" Margin="2">
-                <ItemsControl ItemsSource="{Binding Powers}" />
-                <Separator />
-                <ItemsControl ItemsSource="{Binding Items}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <controls:ItemControl />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <Separator />
-                <ItemsControl ItemsSource="{Binding Commands}" />
-            </StackPanel>
+        <Popup PlacementTarget="{Binding ElementName=ToggleButton}" IsOpen="{Binding ElementName=ToggleButton, Path=IsChecked}" Width="150">
+            <Border Background="White">
+                <StackPanel Margin="5">
+                    <ItemsControl ItemsSource="{Binding Powers}" />
+                    <Separator />
+                    <ItemsControl ItemsSource="{Binding Items}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <controls:ItemControl />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Separator />
+                    <ItemsControl ItemsSource="{Binding Commands}" />
+                </StackPanel>
+            </Border>
         </Popup>
+        <Button Height="30" Width="30" HorizontalAlignment="Left" IsEnabled="{Binding Status.CanStartTurn}" Command="{Binding StartTurnCommand}">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Grid >
+                        <Path Stretch="Uniform" UseLayoutRounding="False" StrokeThickness="1" Stroke="Black">
+                            <Path.Fill>
+                                <ImageBrush ImageSource="../Images/sun.png" />
+                            </Path.Fill>
+                            <Path.Data>
+                                <EllipseGeometry RadiusX="1" RadiusY="1"/>
+                            </Path.Data>
+                        </Path>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
     </Grid>
 </UserControl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

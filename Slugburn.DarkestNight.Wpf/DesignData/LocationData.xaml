@@ -1,19 +1,15 @@
 ﻿<m:LocationVm xmlns:m="clr-namespace:Slugburn.DarkestNight.Wpf.ViewModels"
               xmlns:system="clr-namespace:System;assembly=mscorlib"
-              Name="Village" SearchTarget="3+" RelicVisiblity="Visible" >
-    <m:LocationVm.Tokens>
-        <system:String>Priest</system:String>
-        <system:String>Knight</system:String>
-    </m:LocationVm.Tokens>
+              Name="Village" SearchTarget="3+" RelicVisiblity="Visible" IsNecromancerHere="True" >
     <m:LocationVm.Heroes>
         <m:HeroVm Name="Hero Name" >
             <m:HeroVm.Status>
                 <m:HeroStatusVm>
                     <m:HeroStatusVm.Grace >
-                        <m:HeroValue Name="Grace" Value="3" Default="6" />
+                        <m:HeroValueVm Text="Grace" Value="3" Default="6" />
                     </m:HeroStatusVm.Grace>
                     <m:HeroStatusVm.Secrecy >
-                        <m:HeroValue Name="Secrecy" Value="6" Default="5" />
+                        <m:HeroValueVm Text="Secrecy" Value="6" Default="5" />
                     </m:HeroStatusVm.Secrecy>
                 </m:HeroStatusVm>
             </m:HeroVm.Status>
@@ -44,5 +40,6 @@
         <m:BlightVm Name="Desecration" Might="4" IsSelectable="True" IsSelected="True" Defense="Blah blah blah." Effect="Yada yada yada."/>
         <m:BlightVm Name="Corruption" Might="5" IsSelectable="True" IsSelected="True" Defense="Blah blah blah." Effect="Yada yada yada."/>
         <m:BlightVm Name="Vampire" Might="6" IsSelectable="True" IsSelected="True" Defense="Blah blah blah." Effect="Yada yada yada."/>
+        <m:BlightVm Name="Skeletons" Might="5" Defense="Blah blah blah." Effect="Yada yada yada."/>
     </m:LocationVm.Blights>
 </m:LocationVm>

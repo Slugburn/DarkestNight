@@ -16,6 +16,7 @@ namespace Slugburn.DarkestNight.Rules.Spaces
         private readonly Dictionary<string, IAction> _actions = new Dictionary<string, IAction>();
         private readonly List<IModifier> _modifiers = new List<IModifier>();
         private int? _baseSearchTarget;
+        private readonly List<Effect> _effects = new List<Effect>();
 
 
         public Location Location { get; protected set; }
@@ -86,19 +87,30 @@ namespace Slugburn.DarkestNight.Rules.Spaces
         public void AddAction(IAction action)
         {
             _actions.Add(action.Name, action);
+            AddEffect(action.Name, action.Text);
         }
 
         public void RemoveAction(string actionName)
         {
             if (!_actions.Remove(actionName))
                 throw new ArgumentOutOfRangeException(actionName);
+            _effects.RemoveAll(x => x.Name == actionName);
         }
 
-        public void AddModifier(IModifier modifier)
+        public void AddModifier(IModifier modifier, string effectText)
         {
             _modifiers.Add(modifier);
+            AddEffect(modifier.Name, effectText);
         }
 
         public IEnumerable<IModifier> GetModifiers() => _modifiers.ToList();
+
+        public void AddEffect(string name, string text)
+        {
+            _effects.Add(new Effect {Name = name, Text = text});
+            Game?.UpdatePlayerBoard();
+        }
+
+        public IEnumerable<Effect> GetEffects() => _effects;
     }
 }

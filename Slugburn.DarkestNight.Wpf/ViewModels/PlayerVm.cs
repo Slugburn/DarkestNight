@@ -299,6 +299,7 @@ namespace Slugburn.DarkestNight.Wpf.ViewModels
             hero.Commands = CommandVm.Create(Game, model.HeroName, model.Commands);
             hero.Powers = PowerVm.Create(model.Powers);
             hero.Items = ItemVm.Create(model.Items);
+            hero.StartTurnCommand.OnCanExecuteChanged();
         }
 
         public void UpdateHeroStatus(string heroName, HeroStatusModel status)
